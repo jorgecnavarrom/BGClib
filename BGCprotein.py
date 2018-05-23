@@ -24,11 +24,18 @@ class BGCProtein:
     
     
     def __init__(self):
-        # NCBI accession
-        self.accession = ""
+        # original NCBI accession
+        self.Accession = ""
+        
+        # NCBI reference accession e.g. "RefSeq Selected Product"
+        # Reference given by the Identical Protein Groups NCBI database
+        self.RefAccession = ""
             
-        # NCBI internal id
+        # NCBI internal id in the Protein database
         self.NCBI_id = ""
+        
+        # NCBI internal id in the Identical Protein Group database. Should be unique
+        self.NCBI_ipg_id = ""
         
         #self.Sequence = None
         self.length = 0
@@ -62,7 +69,7 @@ class BGCProtein:
         # From original file
         self.Organism = ""
         
-        self.TaxId = 0
+        self.TaxId = ""
         
         self.forward = True
         
@@ -105,13 +112,17 @@ class BGCProtein:
         self.length = len(seq)
     
     def annotations(self):
-        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(self.parentCluster, 
-                self.accession, self.NCBI_id, self.CBP_type, self.GCF, self.sGCF, 
-                self.ssGCF, self.CompoundFamily, self.Compound, self.Source, 
-                self.Organism, self.TaxId)
+        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+            self.parentCluster, self.Accession, self.RefAccession, self.NCBI_id, 
+            self.NCBI_ipg_id, self.CBP_type, self.GCF, self.sGCF, self.ssGCF, 
+            self.CompoundFamily, self.Compound, self.Source, self.Organism, 
+            self.TaxId)
     
     def fastasizedSeq(self):
         return "\n".join([self._Sequence[i:i+80] for i in range(0, self.length, 80)])
             
     def fasta(self):
-        return ">{}\n{}".format(self.accession, self.fastasizedSeq())
+        if self.RefAccession != "":
+            return ">{}\n{}".format(self.RefAccession, self.fastasizedSeq())
+        else:
+            return ">{}\n{}".format(self.Accession, self.fastasizedSeq())
