@@ -19,7 +19,7 @@ with warnings.catch_warnings():
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.2"
+__version__ = "0.2.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -29,16 +29,14 @@ valid_CBP_types = set({"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
 
 class HMM_DB:
     """
-    This class basically keeps a list of hmm databases to be used later
+    This class keeps information about HMM databases to be used by the other
+    classes
     """
     
     def __init__(self):
-        # list of paths to hmm databases
-        self.db_list = []
-        
-        # TODO should also contain alias for important models and dictionaries
-        # to go from AC to ID or AC to DESC
-        self.alias = {}
+        self.db_list = []           # list of paths to hmm databases
+        self.alias = {}             # ID to alias
+        self.colors = {}            # ID to tuple(r,g,b)
         
         return
     
@@ -81,6 +79,25 @@ class HMM_DB:
         except FileNotFoundError:
             print("Could not open domain alias file ({})".format(alias_file))
 
+    def read_domain_colors(self, colors_file):
+        """
+        Expects the input file to be in a tsv with two columns:
+        hmm_ID \t r,g,b
+        """
+        try:
+            with open(colors_file,"r") as f:
+                for line in f:
+                    if line[0] == "#" or line.strip() == "":
+                        continue
+                    
+                    hmm_ID, colors = line.strip().split("\t")
+                    self.colors[hmm_ID] = tuple(colors.split(","))
+        except FileNotFoundError:
+            print("Could not open domain colors file ({})".format(colors_file))
+        pass
+
+
+
 class BGCCollection:
     """
     This class will allow implementarion of collection-wide functions such as 
@@ -89,15 +106,17 @@ class BGCCollection:
     
     def __init__(self):
         pass
-    
-    
+
+
+
 class BGC:
     def __init__(self):
         self.identifier = ""    # usually the file name
         self.gca = []       # Gene Cluster Architecture. List of CBP types in the cluster
         self.gcf = []       # should be a list of CBP signatures (numbers?)
-        
-    
+
+
+
 class BGCLocus:
     """
     BGC might be divided in more than one locus (because of sequencing, or, as
@@ -108,7 +127,8 @@ class BGCLocus:
     def __init__(self):
         proteins = []
         pass
-    
+
+
 
 class BGCProtein:
     """
@@ -116,7 +136,7 @@ class BGCProtein:
     """
         
     def __init__(self):
-        self.parent_cluster = None    # Should point to an object of the BGC class
+        self.parent_cluster = None  # Should point to an object of the BGC class
         
         self.identifier = ""        # Should be unique. In principle:
                                     # BGCname:CDS#:ref_accession
@@ -258,10 +278,16 @@ class BGCProtein:
             else:
                 domain_alias_list.append(d)
         
+        tag = self.identifier
+        if self.organism != "":
+            tag += "_[{}]".format(self.organism)
+        if self.compound != "":
+            tag += "_[{}]".format(self.compound)
+        
         if self.forward:
-            return "|--[" + "]-[".join(domain_alias_list) + "]-->\t{}".format(self.identifier)
+            return "|--[" + "]-[".join(domain_alias_list) + "]-->\t{}".format(tag)
         else:
-            return "<--["+ "]-[".join(list(reversed(domain_alias_list))) + "]--|\t{}".format(self.identifier)
+            return "<--["+ "]-[".join(list(reversed(domain_alias_list))) + "]--|\t{}".format(tag)
         
         
     def recursive_interval(self, interval_list):
@@ -455,20 +481,21 @@ class BGCProtein:
 
         # pks/nrps hybrid
         if len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
-            if self.domain_list[0] in PKS_domains:
+            if self.domain_list[0].ID in PKS_domains:
                 sequence_type = "PKS-NRPS_hybrid"
-            elif self.domain_list[0] in NRPS_domains:
+            elif self.domain_list[0].ID in NRPS_domains:
                 sequence_type = "NRPS-PKS_hybrid"
             else:
                 print("PKS/NRPS or NRPS/PKS hybrid?")
-                print(" - ".join(self.domain_list))
+                print(self.domain_string({}))
                 sequence_type = "NRPS-PKS_hybrid"
         # nrPKS or (hr/prPKS)
-        elif len(domain_set & PKS_domains) > 0:
+        elif len(self.domain_set & PKS_domains) > 0:
             # this is not expected
-            if len(domain_set & set({"TIGR04532","SAT"})) > 0 and len(domain_set & reducing_domains) > 0:
-                sequence_type = "unknown_PKS"
-            elif len(domain_set & set({"TIGR04532","SAT"})) > 0:
+            #if len(self.domain_set & set({"TIGR04532","SAT"})) > 0 and len(self.domain_set & reducing_domains) > 0:
+                #sequence_type = "unknown_PKS"
+            
+            if len(self.domain_set & set({"TIGR04532","SAT"})) > 0:
                 # assume that having a SAT domain is enough for labeling as nrPKS
                 # but note that in this category, there seem to be three cases for PT:
                 # - PT detected by TIGR04532
@@ -477,13 +504,13 @@ class BGCProtein:
                 # There are either several types of PT domains or not a general model
                 # to detect all three+ cases
                 sequence_type = "nrPKS"
-            elif len(domain_set & reducing_domains) > 0:
+            elif len(self.domain_set & reducing_domains) > 0:
                 sequence_type = "rPKS"
             else:
                 sequence_type = "other_PKS"
-        elif len(domain_set & PKS3_domains) > 0:
+        elif len(self.domain_set & PKS3_domains) > 0:
             sequence_type = "PKS_III"
-        elif len(domain_set & NRPS_domains) > 0:
+        elif len(self.domain_set & NRPS_domains) > 0:
             sequence_type = "NRPS"
         else:
             sequence_type = "other"
@@ -492,6 +519,54 @@ class BGCProtein:
         
         return
 
+
+    def domain_SVG(self, filename, hmmdb):
+        """Creates an SVG figure with the domains as boxes
+    
+        in:
+            name: name of the file including path
+            hmmdb: contains alias and color information
+            
+        out:
+            an svg file
+        """
+    
+        scaling = 2
+        H = 20
+        h = H/2
+        stripe_thickness = 2
+        curve_radius = int(H/10)
+        
+        data = []
+        data.append("<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" width=\"{}\" height=\"{}\">\n".format(int(self.length/scaling), (2*h + H)))
+        
+        data.append("\t<g>\n")
+        data.append("\t<title>{}</title>\n".format(self.identifier))
+        data.append("\t<line x1=\"0\" y1=\"{:d}\" x2=\"{:2}\" y2=\"{:2}\" style=\"stroke:rgb({}); stroke-width:{:d}\" />\n".format(int(h+H/2), int(self.length/scaling), int(h+H/2), "10,10,10", stripe_thickness))
+        
+        for domain in self.domain_list:            
+            try:
+                color = ",".join([str(x) for x in hmmdb.colors[domain.ID]])
+            except KeyError:
+                color = "150,150,150"
+                
+            try:
+                title = hmmdb.alias[domain.ID]
+            except KeyError:
+                title = domain.ID
+                
+            data.append("\t\t<g>\n")
+            data.append("\t\t<title>{}</title>\n".format(title))
+            data.append("\t\t\t<rect x=\"{}\" y=\"0\" rx=\"{}\" ry=\"{}\" width=\"{}\" height=\"{}\" fill=\"rgb({})\"/>\n".format(int(domain.ali_from/scaling), curve_radius, curve_radius, int((domain.ali_to - domain.ali_from)/scaling), 2*H, color))
+            data.append("\t\t</g>\n")
+                
+        data.append("\t</g>\n")
+        data.append("</svg>\n")
+        
+        with open(filename, "w") as f:
+            for row in data:
+                f.write(row)
+    
 
 class BGCDomain:
     def __init__(self, protein, ID, env_from, env_to, ali_from, ali_to, hmm_from, hmm_to, score, Evalue):
