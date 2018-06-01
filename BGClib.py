@@ -19,7 +19,7 @@ with warnings.catch_warnings():
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.1"
+__version__ = "0.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -38,10 +38,11 @@ class HMM_DB:
         
         # TODO should also contain alias for important models and dictionaries
         # to go from AC to ID or AC to DESC
+        self.alias = {}
         
         return
     
-    def addDatabase(self, db_path):
+    def add_database(self, db_path):
         if not db_path.is_file():
             print("Not able to add hmm database (not a file. Wrong path?)")
             return
@@ -65,8 +66,27 @@ class HMM_DB:
         self.db_list.append(db_path)
         return
 
+    def read_alias_file(self, alias_file):
+        try:
+            with open(alias_file,"r") as f:
+                for line in f:
+                    if line[0] == "#" or line.strip() == "":
+                        continue
+                    
+                    line = line.split("\t")
+                    hmm_alias = line[2]
+                    hmm_ID = line[3]
+                    
+                    self.alias[hmm_ID] = hmm_alias
+        except FileNotFoundError:
+            print("Could not open domain alias file ({})".format(alias_file))
 
 class BGCCollection:
+    """
+    This class will allow implementarion of collection-wide functions such as 
+    single-step prediction of domains and comparisons between collections
+    """
+    
     def __init__(self):
         pass
     
@@ -77,7 +97,6 @@ class BGC:
         self.gca = []       # Gene Cluster Architecture. List of CBP types in the cluster
         self.gcf = []       # should be a list of CBP signatures (numbers?)
         
-    
     
 class BGCLocus:
     """
@@ -99,10 +118,13 @@ class BGCProtein:
     def __init__(self):
         self.parent_cluster = None    # Should point to an object of the BGC class
         
-        self.identifier = ""        # Defined by user. should be unique
+        self.identifier = ""        # Should be unique. In principle:
+                                    # BGCname:CDS#:ref_accession
+                                    # (use _accession if ref_accession not available)
+
         
-        self.accession = ""         # original NCBI accession if possible
-        self.ref_accession = ""     # "RefSeq Selected Product" from NCBI's IPG DB
+        self._accession = ""        # original NCBI accession if possible
+        self._ref_accession = ""    # "RefSeq Selected Product" from NCBI's IPG DB
         self.ncbi_id = ""           # NCBI internal id in the Protein database
         
         # NCBI internal id in the Identical Protein Group database. Should be unique
@@ -131,17 +153,34 @@ class BGCProtein:
         
         self.forward = True
         
-        self.hmm_db = None
-        self.domain_list = []
-        self.domain_set = set()
+        self.domain_list = []       # list of BGCDomain objects
+        self.domain_set = set()     # set of unique domain IDs
         self.attempted_domain_prediction = False
         
         return
     
+    # always try to have an identifier. Either the reference accession or the 
+    # original accession
+    @property
+    def accession(self):
+        return self._accession
+    @accession.setter
+    def accession(self, acc):
+        self._accession = acc
+        if self.identifier == "":
+            self.identifier = acc
+            
+    @property
+    def ref_accession(self):
+        return self._ref_accession
+    @ref_accession.setter
+    def ref_accession(self, ra):
+        self._ref_accession = ra
+        self.identifier = ra
+    
     @property
     def CBP_type(self):
-        return self._CBP_type
-    
+        return self._CBP_type    
     @CBP_type.setter
     def CBP_type(self, cbptype):
         try:
@@ -154,8 +193,7 @@ class BGCProtein:
     
     @property
     def gca(self):
-        return "+".join((self._gca))
-    
+        return "+".join((self._gca))    
     @gca.setter
     def gca(self, gca_in):
         if isinstance(gca_in, list):
@@ -165,13 +203,13 @@ class BGCProtein:
     
     @property
     def sequence(self):
-        return self._sequence
-        
+        return self._sequence        
     @sequence.setter
     def sequence(self, seq):
         # note: does not check if contains valid amino acid characters yet
         self._sequence = seq.replace("\n", "").strip().replace(" ", "").upper()
         self.length = len(seq)
+    
     
     def get_annotations(self):
         return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
@@ -180,9 +218,11 @@ class BGCProtein:
             self.compound_family, self.compound, self.source, self.organism, 
             self.TaxId)
     
+    
     def fastasizedSeq(self):
-        return "\n".join([self._Sequence[i:i+80] for i in range(0, self.length, 80)])
-            
+        return "\n".join([self._sequence[i:i+80] for i in range(0, self.length, 80)])
+        
+        
     def fasta(self):
         compound = ""
         if self.compound != "":
@@ -192,16 +232,8 @@ class BGCProtein:
         else:
             return ">{}{}\n{}".format(self.accession, compound, self.fastasizedSeq())
 
-    def set_hmmdb(self, hmmdb):
-        assert(isinstance(hmmdb, HMM_DB))
-        self.hmm_db = hmmdb
-        return
 
-    def predict_domains(self, hmmdb):
-        assert(isinstance(hmmdb, HMM_DB))
-        return
-    
-    def domain_string(domain_alias, domains, seq_id):
+    def domain_string(self, domain_alias):
         """Returns a basic domain-organization string
         
         - It uses the hmm model name (not accession number)
@@ -216,7 +248,7 @@ class BGCProtein:
         """
         
         # get names
-        domain_name_list = [x.ID for x in domain_list]
+        domain_name_list = [x.ID for x in self.domain_list]
         
         # try to convert names to alias
         domain_alias_list = []
@@ -226,7 +258,167 @@ class BGCProtein:
             else:
                 domain_alias_list.append(d)
         
-        return "|--[" + "]-[".join(domain_alias_list) + "]-->\t{}".format(seq_id)
+        if self.forward:
+            return "|--[" + "]-[".join(domain_alias_list) + "]-->\t{}".format(self.identifier)
+        else:
+            return "<--["+ "]-[".join(list(reversed(domain_alias_list))) + "]--|\t{}".format(self.identifier)
+        
+        
+    def recursive_interval(self, interval_list):
+        """every interval in interval_list is a tuple of 
+        (original index, score, start, end)
+        
+        Returns: a list of the original indices that need to be deleted using the 
+        score as defining criteria
+        
+        Inspired by the Interval Tree algorithm
+        
+        Sort by score, descending.
+        Take strongest member (first). It will not be deleted.
+        Populate 3 lists:
+        - elements at the right of strongest:   right_list
+        - elements at the left of strongest:    left_list
+        - elements overlapping with strongest:  center_list
+        - analyze center_list against strongest:
+            If weaker contains strongest, or strongest contains weaker (complete
+                overlap), mark for deletion
+            If overlap is small, (less than or equal to 5% of the shortest 
+                between weaker and strongest), allow it to survive. Put in either
+                left_list or right_list
+        - Repeat until you only have a single element
+        """
+        if len(interval_list) < 2:
+            return []
+        
+        interval_list.sort(key=lambda x:x[1], reverse=True)
+        
+        left_list = []
+        right_list = []
+        center_list = []
+        
+        # as the list is already sorted, the first interval should have the best
+        # score
+        strongest = interval_list[0]
+        for interval in interval_list[1:]:
+            if interval[3] <= strongest[2]:
+                left_list.append(interval)
+            elif interval[2] >= strongest[3]:
+                right_list.append(interval)
+            else:
+                # some overlap
+                center_list.append(interval)
+        
+        delete_indices = []
+        # analyze overlapping list. They are all deleted unless the overlap is small
+        for interval in center_list:
+            # start is at the left
+            if interval[2] <= strongest[2]:
+                if interval[3] >= strongest[3]:
+                    # interval is longer or equal than strongest on both sides
+                    delete_indices.append(interval[0])
+                else:
+                    # check if overlap < 5% of the shortest interval
+                    if interval[3]-strongest[2] > 0.05*min(interval[3]-interval[2], strongest[3]-strongest[2]):
+                        delete_indices.append(interval[0])
+                    else:
+                        # has to compete with other intervals at the left
+                        left_list.append(interval)
+            else:
+                if interval[3] <= strongest[3]:
+                    # interval is embedded in strongest, delete
+                    delete_indices.append(interval[0])
+                else:
+                    # check if overlap < 5% of the shortest interval
+                    if strongest[3]-interval[2] > 0.05*min(interval[3]-interval[2], strongest[3]-strongest[2]):
+                        delete_indices.append(interval[0])
+                    else:
+                        # has to compete with other intervals at the right
+                        right_list.append(interval)
+                        
+        delete_indices.extend(self.recursive_interval(left_list))
+        delete_indices.extend(self.recursive_interval(right_list))
+            
+        return delete_indices
+        
+        
+    def filter_domains(self):
+        """
+        Filters domains which overlap with other, higher-scoring ones
+        Also re-orders self.domain_list according to hmm hit _alignment_ 
+        coordinates
+        """
+        
+        if len(self.domain_list) < 2:
+            return
+        
+        interval_list = []
+        for idx in range(len(self.domain_list)):
+            domain = self.domain_list[idx]
+            
+            interval_list.append((idx, domain.score, domain.ali_from, domain.ali_to))
+            
+        deletion_list = sorted(self.recursive_interval(interval_list), reverse=True)
+    
+        for d in deletion_list:
+            del self.domain_list[d]
+            
+        # finally, sort by env_from
+        self.domain_list.sort(key=lambda x:x.ali_from)
+        
+        return
+    
+    
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=0):
+        """
+        domtblout_path is the path where the domtableout file will be deposited. If
+        present, a Path-like object is expected
+        """
+        assert(isinstance(hmmdb, HMM_DB))
+        if domtblout_path != "":
+            assert(isinstance(domtblout_path, Path))
+        
+        for db in hmmdb.db_list:
+            command = ['hmmscan', '--cpu', str(cpus), '--cut_tc', '--noali', '--notextw']
+            if domtblout_path != "":
+                path = str(domtblout_path / (self.identifier + "_" + db.stem + ".domtable"))
+                command.extend(['--domtblout', path ])
+            dbpath = str(db)
+            command.extend([ dbpath, '-'])
+            
+            proc_hmmscan = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            out, err = proc_hmmscan.communicate(input=self.fasta().encode("utf-8"))
+            
+            # "SearchIO parses a search output file's contents into a hierarchy of four 
+            # nested objects: QueryResult, Hit, HSP, and HSPFragment"
+            # http://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
+            results = SearchIO.parse(StringIO(out.decode()), 'hmmer3-text')
+            for qresult in results:
+                for hit in qresult:
+                    for hsp in hit:
+                        hspf = hsp[0] # access to HSPFragment
+
+                        seq_id = qresult.id
+                        hmm_id = hit.id
+                        ali_from = hspf.query_start
+                        ali_to = hspf.query_end
+                        hmm_from = hspf.hit_start
+                        hmm_to = hspf.hit_end
+                        env_from = hsp.env_start
+                        env_to = hsp.env_end
+                        
+                        Evalue = hsp.evalue
+                        score = hsp.bitscore
+                        
+                        domain = BGCDomain(self, hmm_id, env_from, env_to, ali_from, 
+                                           ali_to, hmm_from, hmm_to, score, Evalue)
+                        
+                        self.domain_list.append(domain)
+        
+        self.filter_domains()
+        self.domain_set = set([d.ID for d in self.domain_list])
+        
+        return
+    
     
     def classify_sequence(self):
         """Classifies a sequence based on its predicted domains according to a 
@@ -302,9 +494,9 @@ class BGCProtein:
 
 
 class BGCDomain:
-    def __init__(self, protein, AC, env_from, env_to, ali_from, ali_to, hmm_from, hmm_to, score, Evalue):
+    def __init__(self, protein, ID, env_from, env_to, ali_from, ali_to, hmm_from, hmm_to, score, Evalue):
         self.protein = protein
-        self.AC = AC                # e.g. PF00501.27
+        self.ID = ID                # e.g. PF00501.27
         self.env_from = env_from    # Pos. in target seq. at which surr. envelope 
         self.env_to = env_to        #   starts/ends.
         self.ali_from = ali_from    # Position in target sequence at which the 
