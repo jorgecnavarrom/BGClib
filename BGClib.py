@@ -19,7 +19,7 @@ with warnings.catch_warnings():
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -37,6 +37,8 @@ class HMM_DB:
         self.db_list = []           # list of paths to hmm databases
         self.alias = {}             # ID to alias
         self.colors = {}            # ID to tuple(r,g,b)
+        self.cores = 0              # for hmmer. Remember that it always uses an
+                                    # extra core for reading the database
         
         return
     
@@ -100,7 +102,7 @@ class HMM_DB:
 
 class BGCCollection:
     """
-    This class will allow implementarion of collection-wide functions such as 
+    This class will allow implementation of collection-wide functions such as 
     single-step prediction of domains and comparisons between collections
     """
     
@@ -115,7 +117,10 @@ class BGC:
         self.gca = []       # Gene Cluster Architecture. List of CBP types in the cluster
         self.gcf = []       # should be a list of CBP signatures (numbers?)
 
+        self.contig_edge = False    # BGC is probably fragmented (antiSMASH v4+ annotation)
 
+        self.organism = ""
+        self.TaxId = ""
 
 class BGCLocus:
     """
@@ -125,8 +130,8 @@ class BGCLocus:
     This class can be used to organize proteins
     """
     def __init__(self):
-        proteins = []
-        pass
+        self.proteins = []
+        
 
 
 
@@ -151,7 +156,7 @@ class BGCProtein:
         self.ncbi_ipg_id = ""
         
         self._sequence = ""
-        self.length = 0
+        self.length = 0             # automatically calculated when sequence is added
         
         self.role = "unknown"       # e.g. biosynthetic, transporter, tailoring, 
                                     #   resistance, unknown
@@ -232,25 +237,33 @@ class BGCProtein:
     
     
     def get_annotations(self):
-        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
-            self.parent_cluster, self.gca, self.accession, self.ref_accession, self.ncbi_id, 
-            self.ncbi_ipg_id, self.CBP_type, self.s_cbp, self.ss_cbp, 
-            self.compound_family, self.compound, self.source, self.organism, 
-            self.TaxId)
+        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+            self.parent_cluster, self.gca, self.identifier, self.accession, 
+            self.ref_accession, self.ncbi_id, self.ncbi_ipg_id, self.CBP_type, 
+            self.s_cbp, self.ss_cbp, self.compound_family, self.compound, 
+            self.source, self.organism, self.TaxId)
     
     
-    def fastasizedSeq(self):
+    def sequence80(self):
         return "\n".join([self._sequence[i:i+80] for i in range(0, self.length, 80)])
         
         
     def fasta(self):
+        """
+        Returns a fasta-formatted data
+        Tries to use reference accession for header. If not present, falls back
+        to original accession. If either are absent, use identifier (should
+        always be present)
+        """
         compound = ""
         if self.compound != "":
             compound = " {}".format(self.compound)
         if self.ref_accession != "":
-            return ">{}{}\n{}".format(self.ref_accession, compound, self.fastasizedSeq())
+            return ">{}{}\n{}".format(self.ref_accession, compound, self.sequence80())
+        elif self.accession != "":
+            return ">{}{}\n{}".format(self.accession, compound, self.sequence80())
         else:
-            return ">{}{}\n{}".format(self.accession, compound, self.fastasizedSeq())
+            return ">{}{}\n{}".format(self.identifier, compound, self.sequence80())
 
 
     def domain_string(self, domain_alias):
@@ -442,6 +455,7 @@ class BGCProtein:
         
         self.filter_domains()
         self.domain_set = set([d.ID for d in self.domain_list])
+        self.attempted_domain_prediction = True
         
         return
     
@@ -451,14 +465,10 @@ class BGCProtein:
         set of rules
         """
         
-        if len(self.domain_list) == 0:
-            if self.attempted_domain_prediction:
-                print(" Domain prediction already tried, but no hits found")
-                self._CBP_type = "no_domains"
-                return
-            else:
-                self.predict_domains()
-                self.attempted_domain_prediction = True
+        #if len(self.domain_list) == 0:
+            #if self.attempted_domain_prediction:
+                #print(" Warning: Domain prediction already tried, but no hits were found")
+            #self.predict_domains() # <- needs hmmdb and domtblout_path
         
         # Basic filtering
         if len(self.domain_set) == 1:
@@ -486,8 +496,8 @@ class BGCProtein:
             elif self.domain_list[0].ID in NRPS_domains:
                 sequence_type = "NRPS-PKS_hybrid"
             else:
-                print("PKS/NRPS or NRPS/PKS hybrid?")
-                print(self.domain_string({}))
+                print(" PKS/NRPS or NRPS/PKS hybrid?")
+                print(" " + self.domain_string({}))
                 sequence_type = "NRPS-PKS_hybrid"
         # nrPKS or (hr/prPKS)
         elif len(self.domain_set & PKS_domains) > 0:
@@ -509,7 +519,7 @@ class BGCProtein:
             else:
                 sequence_type = "other_PKS"
         elif len(self.domain_set & PKS3_domains) > 0:
-            sequence_type = "PKS_III"
+            sequence_type = "t3PKS"
         elif len(self.domain_set & NRPS_domains) > 0:
             sequence_type = "NRPS"
         else:
