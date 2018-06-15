@@ -19,7 +19,7 @@ with warnings.catch_warnings():
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -107,9 +107,77 @@ class BGCCollection:
     """
     
     def __init__(self):
-        pass
+        bgcs = {}
+        
+    # TODO: break work on sets of 4 cpus
+    # TODO: evaluate whether hmmsearch is better than hmmscan
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1):
+        """
+        Compile the protein sequences of the whole collection and apply hmmscan
+        on them to predict domains. Assign predicted domains to each protein
+        and filter
+        """
+        assert(isinstance(hmmdb, HMM_DB))
+        if domtblout_path != "":
+            assert(isinstance(domtblout_path, Path))
+        
+        protein_list = []
+        for b in bgcs:
+            bgc = bgcs[b]
+            for locus in bgc.loci:
+                for protein in locus.proteins:
+                    protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
+                    
+        if len(protein_list) == 0:
+            return
 
+        
+        for db in hmmdb.db_list:
+            command = ['hmmscan', '--cpu', str(cpus), '--cut_tc', '--noali', '--notextw']
+            if domtblout_path != "":
+                path = str(domtblout_path / (self.identifier + "_" + db.stem + ".domtable"))
+                command.extend(['--domtblout', path ])
+            dbpath = str(db)
+            command.extend([ dbpath, '-'])
+            
+            proc_hmmscan = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            out, err = proc_hmmscan.communicate(input="\n".join(protein_list).encode("utf-8"))
+            
+            # "SearchIO parses a search output file's contents into a hierarchy of four 
+            # nested objects: QueryResult, Hit, HSP, and HSPFragment"
+            # http://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
+            results = SearchIO.parse(StringIO(out.decode()), 'hmmer3-text')
+            for qresult in results:
+                for hit in qresult:
+                    for hsp in hit:
+                        hspf = hsp[0] # access to HSPFragment
 
+                        seq_id = qresult.id
+                        hmm_id = hit.id
+                        ali_from = hspf.query_start
+                        ali_to = hspf.query_end
+                        hmm_from = hspf.hit_start
+                        hmm_to = hspf.hit_end
+                        env_from = hsp.env_start
+                        env_to = hsp.env_end
+                        
+                        Evalue = hsp.evalue
+                        score = hsp.bitscore
+                        
+                        domain = BGCDomain(self, hmm_id, env_from, env_to, ali_from, 
+                                           ali_to, hmm_from, hmm_to, score, Evalue)
+                        
+                        self.domain_list.append(domain)
+        
+        # TODO
+        # each sequence is bgclabel:proteinnumber so it can be splitted quickly,
+        # the bgc object located superquick in the dictionary as well as the protein
+        
+        self.filter_domains()
+        self.domain_set = set([d.ID for d in self.domain_list])
+        self.attempted_domain_prediction = True
+        
+        return
 
 class BGC:
     def __init__(self):
@@ -118,6 +186,9 @@ class BGC:
         self.gcf = []       # should be a list of CBP signatures (numbers?)
 
         self.contig_edge = False    # BGC is probably fragmented (antiSMASH v4+ annotation)
+    
+        self.proteins = []      # should also be present in loci
+        self.loci = []
 
         self.organism = ""
         self.TaxId = ""
@@ -201,7 +272,8 @@ class BGCProtein:
     @ref_accession.setter
     def ref_accession(self, ra):
         self._ref_accession = ra
-        self.identifier = ra
+        if self.identifier == "":
+            self.identifier = ra
     
     @property
     def CBP_type(self):
@@ -257,7 +329,8 @@ class BGCProtein:
         """
         compound = ""
         if self.compound != "":
-            compound = " {}".format(self.compound)
+            compound = " {}".format(self.compound.replace("/",""))
+            
         if self.ref_accession != "":
             return ">{}{}\n{}".format(self.ref_accession, compound, self.sequence80())
         elif self.accession != "":
@@ -480,7 +553,7 @@ class BGCProtein:
         
         # this should all have an alias in CBP_domains.tsv
         PKS_domains = set({"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
-                        "Acyl_transf_1", "TIGR04532", "Thioesterase", "Methyltransf_12"})
+                        "Acyl_transf_1", "TIGR04532", "Methyltransf_12"})
         PKS3_domains = set({"Chal_sti_synt_N", "Chal_sti_synt_C"})
         NRPS_domains = set({"Condensation", "AMP-binding", "AMP-binding_C"})
         reducing_domains = set({"PKS_ER_names_mod", "KR", "PS-DH"})
@@ -491,14 +564,16 @@ class BGCProtein:
 
         # pks/nrps hybrid
         if len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
-            if self.domain_list[0].ID in PKS_domains:
-                sequence_type = "PKS-NRPS_hybrid"
-            elif self.domain_list[0].ID in NRPS_domains:
-                sequence_type = "NRPS-PKS_hybrid"
-            else:
-                print(" PKS/NRPS or NRPS/PKS hybrid?")
-                print(" " + self.domain_string({}))
-                sequence_type = "NRPS-PKS_hybrid"
+            for d in self.domain_list:
+                if d.ID in PKS_domains:
+                    self._CBP_type = "PKS-NRPS_hybrid"
+                    return
+                elif d.ID in NRPS_domains:
+                    self._CBP_type = "NRPS-PKS_hybrid"
+                    return
+                else:
+                    pass
+            
         # nrPKS or (hr/prPKS)
         elif len(self.domain_set & PKS_domains) > 0:
             # this is not expected
