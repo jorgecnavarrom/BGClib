@@ -17,15 +17,26 @@ with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonExperimentalWarning)
     from Bio import SearchIO
 from Bio import SeqIO
+from multiprocessing import Pool, cpu_count
 
 __author__ = "Jorge Navarro"
-__version__ = "0.2.3"
+__version__ = "0.3.0"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
 valid_CBP_types = set({"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
         "PKS-NRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", "unknown_PKS", 
         "no_domains"})
+
+# this should all have an alias in CBP_domains.tsv
+PKS_domains = set({"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
+                "Acyl_transf_1", "TIGR04532", "Methyltransf_12"})
+PKS3_domains = set({"Chal_sti_synt_N", "Chal_sti_synt_C"})
+NRPS_domains = set({"Condensation", "AMP-binding", "AMP-binding_C"})
+reducing_domains = set({"PKS_ER_names_mod", "KR", "PS-DH"})
+#Terpene_domains = set({"Terpene_synth", "Terpene_synth_C"})
+#Squalene_domains = set({"SQHop_cyclase_N", "SQHop_cyclase_C"})
+
 
 class HMM_DB:
     """
@@ -99,6 +110,25 @@ class HMM_DB:
         pass
 
 
+class ArrowerOpts():
+    """
+    Options for Arrower-like figures. Colors will be elsewhere.
+    """
+    def __init__(self):
+        self.scaling = 30                    # px per bp
+        
+        self.arrow_height = 30               # H: Height of arrows' body
+        self.arrow_head_height = 15          # aH: Additional width of arrows' head
+                                        #  (i.e. total arrow head = H + 2*aH)
+        self.arrow_head_length = 30
+        
+        self.gene_contour_thickness = 2      # note: thickness grows outwards
+        
+        self.internal_domain_margin = 2
+        self.domain_contour_thickness = 1
+        
+        self.fontsize = 30
+
 
 class BGCCollection:
     """
@@ -107,10 +137,10 @@ class BGCCollection:
     """
     
     def __init__(self):
-        bgcs = {}
-        
-    # TODO: break work on sets of 4 cpus
-    # TODO: evaluate whether hmmsearch is better than hmmscan
+        self.bgcs = {}
+        self.name = ""
+    
+    
     def predict_domains(self, hmmdb, domtblout_path="", cpus=1):
         """
         Compile the protein sequences of the whole collection and apply hmmscan
@@ -121,21 +151,231 @@ class BGCCollection:
         if domtblout_path != "":
             assert(isinstance(domtblout_path, Path))
         
+        pc = ProteinCollection()
+        
         protein_list = []
-        for b in bgcs:
-            bgc = bgcs[b]
-            for locus in bgc.loci:
-                for protein in locus.proteins:
-                    protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
+        missing_identifier = False
+        for b in self.bgcs:
+            bgc = self.bgcs[b]
+            for protein in bgc.protein_list:
+                if protein.identifier != "":
+                    pc.protein_collection[protein.identifier] = protein
+                else:
+                    missing_identifier = True
+        
+        if missing_identifier:
+            print("Warning: one or more proteins don't have a valid identifier")
+            
+        pc.predict_domains(hmmdb, domtblout_path, cpus)
+        
+        return
+
+
+class BGC:
+    def __init__(self, gbkfile=None):
+        self.identifier = ""    # usually the file name
+        self.gca = []           # Gene Cluster Architecture. List of CBP types 
+                                #  in the cluster
+        self.gcf = []           # should be a list of CBP signatures (numbers?)
+        self.products = set()   # All different 'product' qualifiers annotated 
+                                #  by antiSMASH
+        self.contig_edge = False    # antiSMASH v4+ was not able to fully 
+                                    #  complete the extension phase. BGC *might*
+                                    #  be fragmented
+    
+        self.protein_list = []      # should also be present in loci
+        self.loci = []
+
+        self.accession = ""
+        self.definition = ""
+        self.organism = ""
+        self.TaxId = ""
+        
+        # try to initialize object with GenBank content
+        if gbkfile is not None:
+            self.load(gbkfile)
+        
+        
+    def load(self, _gbk):
+        """
+        Initializes the object by reading all CDS fields from a GenBank file
+        
+        Input is intended to be a Path() object (but it should work with a string)
+        """
+        
+        if isinstance(_gbk, Path):
+            gbk = _gbk
+        else:
+            gbk = Path(_path)
+        clusterName = gbk.stem
+        
+        self.identifier = clusterName
+        
+        try:
+            records = list(SeqIO.parse(str(gbk), "genbank"))
+        except ValueError as e:
+            print("Error, not able to parse file {}: {}".format(str(e)))
+        else:
+            self.accession = records[0].id
+            self.definition = records[0].description
+            self.organism = records[0].annotations["organism"]
+            
+            # traverse all possible records in the file. There's usually only 1
+            for record in records:
+                locus = BGCLocus()
+                locus.length = len(record.seq)
+                
+                cds_num = 0
+                product = ""
+
+                for feature in record.features:
+                    if feature.type == "cluster":
+                        if "product" in feature.qualifiers:
+                            # I don't think this'll every happen...
+                            if len(feature.qualifiers["product"]) > 1:
+                                print("  WARNING: more than product annotated in {}".format(gbk.name))
+                            for product in feature.qualifiers["product"]:
+                                for p in product.split("-"):
+                                    self.products.add(p.replace(" ",""))
+                                
+                        if "contig_edge" in feature.qualifiers:
+                            if feature.qualifiers["contig_edge"][0] == "True":
+                                self.contig_edge = True
+                                
+                        continue
+                                
+                    if feature.type == "CDS":
+                        cds_num += 1
+                        
+                        CDS = feature
+                        
+                        cds_start = max(0, int(CDS.location.start))
+                        cds_end = max(0, int(CDS.location.end))
+                        
+                        
+                        accession = ""
+                        if "protein_id" in CDS.qualifiers:
+                            accession = CDS.qualifiers["protein_id"][0]
+                        
+                            
+                        identifier = clusterName + "~" + "CDS" + str(cds_num)
+                        if accession != "":
+                            identifier += "~" + accession
+                            
+                        protein = BGCProtein()
+                        protein.identifier = identifier
+                        protein.accession = accession
+                        protein.sequence = CDS.qualifiers["translation"][0]
+                        
+                        if CDS.location.strand != 1:
+                            protein.forward = False
+                        
+                        # should only point to BGC objects but we're still
+                        # not outputting self.identifier into the annotation file
+                        protein.parent_cluster = clusterName
+                        
+                        self.protein_list.append(protein)
+                        locus.protein_list.append(protein)
+                        locus.gene_coordinates.append((cds_start,cds_end))
+              
+                self.loci.append(locus)
+
+
+    def SVG(self, file_path=Path("./"), svg_options=ArrowerOpts(), write_label=False):
+        """
+        Writes an SVG figure for the cluster
+        """
+        
+        h = svg_options.arrow_head_height
+        H = svg_options.arrow_height
+        scaling = svg_options.scaling
+        hl = svg_options.arrow_head_length
+        gene_contour_thickness = svg_options.gene_contour_thickness
+        idm = svg_options.internal_domain_margin
+        dct = svg_options.domain_contour_thickness
+        fontsize = svg_options.fontsize
+        
+        svg_data = []
+
+        space_for_labels = 0
+        if write_label:
+            space_for_labels = fontsize
+            
+        
+        # TODO: still produce a figure is no loci were annotated but we do have
+        # proteins (i.e. consider every protein to be within a "mini-locus")
+        #if len(self.loci) == 0 and len(self.protein_list) > 0:
+        
+        max_width = sum([x.length for x in self.loci])
+        # give some space for inter-loci separator
+        if len(self.loci) > 1:
+            max_width += (len(self.loci)-1)*H
+            
+        svg_data.append("<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" width=\"{:d}\" height=\"{:d}\">".format(int((max_width)/scaling), (2*h + H + space_for_labels)))
+        
+        svg_data.append("\t<g>\n")
+        svg_data.append("\t<title>{}</title>\n".format(self.identifier))
+        if write_label:
+            svg_data.append("\t<text x=\"10\" y=\"{}\" font-size=\"{}\">\n".format(fontsize, fontsize))
+            svg_data.append("\t\t{}\n".format(self.identifier))
+            svg_data.append("\t</text>\n")
+        x = 0
+        
+        for locus in self.loci:
+            pass
+        
+        svg_data.append("\t</g>\n")
+        svg_data.append("</svg>")
+        
+        
+        # get this BGC written
+        with open(file_path / (self.identifier + ".svg"), "w") as f:
+            f.write("{}".format("\n".join(svg_data)))
+            
+        return
+    
+
+class BGCLocus:
+    """
+    BGC might be divided in more than one locus (because of sequencing, or, as
+    is more often the case in fungi, because of genomics)
+    
+    This class can be used to organize proteins
+    """
+    def __init__(self):
+        self.protein_list = []
+        self.gene_coordinates = []  # a list of tuples. end-start might not match
+                                    # the corresponding protein lenght due to 
+                                    # splicing, but will be useful for inter-
+                                    # protein region length when making arrower
+                                    # figure.
+        self.length = 0
+
+class ProteinCollection:
+    """
+    Intended for mass-prediction of domains
+    """
+    
+    def __init__(self):
+        self.protein_collection = {}    # key = identifier
+        
+        
+    # TODO: break work on sets of 4 cpus
+    # TODO: evaluate whether hmmsearch is better than hmmscan
+    # TODO: TEST!
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1):
+        protein_list = []
+        for protein_id in self.protein_collection:
+            protein = self.protein_collection[protein_id]
+            protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
                     
         if len(protein_list) == 0:
             return
-
         
         for db in hmmdb.db_list:
             command = ['hmmscan', '--cpu', str(cpus), '--cut_tc', '--noali', '--notextw']
             if domtblout_path != "":
-                path = str(domtblout_path / (self.identifier + "_" + db.stem + ".domtable"))
+                path = str(domtblout_path / ("output_" + db.stem + ".domtable"))
                 command.extend(['--domtblout', path ])
             dbpath = str(db)
             command.extend([ dbpath, '-'])
@@ -152,7 +392,7 @@ class BGCCollection:
                     for hsp in hit:
                         hspf = hsp[0] # access to HSPFragment
 
-                        seq_id = qresult.id
+                        seq_identifier = qresult.id
                         hmm_id = hit.id
                         ali_from = hspf.query_start
                         ali_to = hspf.query_end
@@ -164,47 +404,22 @@ class BGCCollection:
                         Evalue = hsp.evalue
                         score = hsp.bitscore
                         
-                        domain = BGCDomain(self, hmm_id, env_from, env_to, ali_from, 
+                        domain = BGCDomain(self.protein_collection[seq_identifier], 
+                                           hmm_id, env_from, env_to, ali_from, 
                                            ali_to, hmm_from, hmm_to, score, Evalue)
                         
-                        self.domain_list.append(domain)
+                        self.protein_collection[seq_identifier].domain_list.append(domain)
         
-        # TODO
-        # each sequence is bgclabel:proteinnumber so it can be splitted quickly,
-        # the bgc object located superquick in the dictionary as well as the protein
-        
-        self.filter_domains()
-        self.domain_set = set([d.ID for d in self.domain_list])
-        self.attempted_domain_prediction = True
-        
+        with Pool(cpus) as pool:
+            for p in self.protein_collection:
+                protein = self.protein_collection[p]
+                pool.apply_async(protein.filter_domains())
+                protein.attempted_domain_prediction = True
+            pool.close()
+            pool.join()
+    
         return
-
-class BGC:
-    def __init__(self):
-        self.identifier = ""    # usually the file name
-        self.gca = []       # Gene Cluster Architecture. List of CBP types in the cluster
-        self.gcf = []       # should be a list of CBP signatures (numbers?)
-
-        self.contig_edge = False    # BGC is probably fragmented (antiSMASH v4+ annotation)
     
-        self.proteins = []      # should also be present in loci
-        self.loci = []
-
-        self.organism = ""
-        self.TaxId = ""
-
-class BGCLocus:
-    """
-    BGC might be divided in more than one locus (because of sequencing, or, as
-    is more often the case in fungi, because of genomics)
-    
-    This class can be used to organize proteins
-    """
-    def __init__(self):
-        self.proteins = []
-        
-
-
 
 class BGCProtein:
     """
@@ -229,8 +444,8 @@ class BGCProtein:
         self._sequence = ""
         self.length = 0             # automatically calculated when sequence is added
         
-        self.role = "unknown"       # e.g. biosynthetic, transporter, tailoring, 
-                                    #   resistance, unknown
+        self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
+                                    #   resistance, unknown]
         self._CBP_type = "unknown"  # should be one from "valid_CBP_types"
         self.s_cbp = ""             # Sub classes of CBP e.g.: Group V
         self.ss_cbp = ""            # e.g.: Group V2
@@ -331,12 +546,12 @@ class BGCProtein:
         if self.compound != "":
             compound = " {}".format(self.compound.replace("/",""))
             
-        if self.ref_accession != "":
-            return ">{}{}\n{}".format(self.ref_accession, compound, self.sequence80())
-        elif self.accession != "":
-            return ">{}{}\n{}".format(self.accession, compound, self.sequence80())
-        else:
-            return ">{}{}\n{}".format(self.identifier, compound, self.sequence80())
+        #if self.ref_accession != "":
+            #return ">{}{}\n{}".format(self.ref_accession, compound, self.sequence80())
+        #elif self.accession != "":
+            #return ">{}{}\n{}".format(self.accession, compound, self.sequence80())
+        #else:
+        return ">{}{}\n{}".format(self.identifier, compound, self.sequence80())
 
 
     def domain_string(self, domain_alias):
@@ -453,6 +668,7 @@ class BGCProtein:
         return delete_indices
         
         
+    # TODO merge splitted domains
     def filter_domains(self):
         """
         Filters domains which overlap with other, higher-scoring ones
@@ -474,8 +690,11 @@ class BGCProtein:
         for d in deletion_list:
             del self.domain_list[d]
             
-        # finally, sort by env_from
+        # sort by env_from
         self.domain_list.sort(key=lambda x:x.ali_from)
+        
+        # finally, set up the domain set
+        self.domain_set = set([x.ID for x in self.domain_list])
         
         return
     
@@ -527,7 +746,6 @@ class BGCProtein:
                         self.domain_list.append(domain)
         
         self.filter_domains()
-        self.domain_set = set([d.ID for d in self.domain_list])
         self.attempted_domain_prediction = True
         
         return
@@ -535,30 +753,23 @@ class BGCProtein:
     
     def classify_sequence(self):
         """Classifies a sequence based on its predicted domains according to a 
-        set of rules
+        set of rules.
+        
+        This will be a work in progress as new rules are discovered
         """
         
-        #if len(self.domain_list) == 0:
-            #if self.attempted_domain_prediction:
-                #print(" Warning: Domain prediction already tried, but no hits were found")
-            #self.predict_domains() # <- needs hmmdb and domtblout_path
+        self._CBP_type = "unknown"
+        self.role = "unknown"
         
         # Basic filtering
         if len(self.domain_set) == 1:
-            return "other"
+            self._CBP_type = "unknown"
+            self.role = "unknown"
+            return
             #if "Trp_DMAT" in domain_set:
                 #return "DMAT"
             #else:
                 #return "other"
-        
-        # this should all have an alias in CBP_domains.tsv
-        PKS_domains = set({"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
-                        "Acyl_transf_1", "TIGR04532", "Methyltransf_12"})
-        PKS3_domains = set({"Chal_sti_synt_N", "Chal_sti_synt_C"})
-        NRPS_domains = set({"Condensation", "AMP-binding", "AMP-binding_C"})
-        reducing_domains = set({"PKS_ER_names_mod", "KR", "PS-DH"})
-        #Terpene_domains = set({"Terpene_synth", "Terpene_synth_C"})
-        #Squalene_domains = set({"SQHop_cyclase_N", "SQHop_cyclase_C"})
         
         sequence_type = ""
 
@@ -567,9 +778,11 @@ class BGCProtein:
             for d in self.domain_list:
                 if d.ID in PKS_domains:
                     self._CBP_type = "PKS-NRPS_hybrid"
+                    self.role = "biosynthetic"
                     return
                 elif d.ID in NRPS_domains:
                     self._CBP_type = "NRPS-PKS_hybrid"
+                    self.role = "biosynthetic"
                     return
                 else:
                     pass
@@ -589,16 +802,22 @@ class BGCProtein:
                 # There are either several types of PT domains or not a general model
                 # to detect all three+ cases
                 sequence_type = "nrPKS"
+                self.role = "biosynthetic"
             elif len(self.domain_set & reducing_domains) > 0:
                 sequence_type = "rPKS"
+                self.role = "biosynthetic"
             else:
                 sequence_type = "other_PKS"
+                self.role = "biosynthetic"
         elif len(self.domain_set & PKS3_domains) > 0:
             sequence_type = "t3PKS"
+            self.role = "biosynthetic"
         elif len(self.domain_set & NRPS_domains) > 0:
             sequence_type = "NRPS"
+            self.role = "biosynthetic"
         else:
             sequence_type = "other"
+            self.role = "unknown"
 
         self._CBP_type = sequence_type
         
@@ -666,3 +885,5 @@ class BGCDomain:
         self.score = score          # Only depends on profile HMM and target seq.
         self.Evalue = Evalue        # Based on score and DB size
         
+    def get_sequence(self):
+        return self.protein.sequence[ali_from:ali_to+1]
