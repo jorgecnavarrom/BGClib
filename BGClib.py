@@ -11,16 +11,20 @@ import sys
 from pathlib import Path
 from subprocess import PIPE, Popen
 import warnings
-from io import StringIO
-from Bio import BiopythonExperimentalWarning
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio import SearchIO
-from Bio import SeqIO
 from multiprocessing import Pool, cpu_count
 
+try:
+    from io import StringIO
+    from Bio import BiopythonExperimentalWarning
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+        from Bio import SearchIO
+    from Bio import SeqIO
+except ModuleNotFoundError:
+    sys.exit("BGC lib did not find all needed dependencies")
+
 __author__ = "Jorge Navarro"
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -56,10 +60,10 @@ class HMM_DB:
     def add_database(self, db_path):
         if not db_path.is_file():
             print("Not able to add hmm database (not a file. Wrong path?)")
-            return
+            return False
         elif db_path.suffix.lower() != ".hmm":
             print("Not able to add hmm datase (not a .hmm file)")
-            return
+            return False
         # make sure database is already "pressed" for hmmscan
         try:
             assert Path(db_path.parent / (db_path.name + ".h3i")).is_file()
@@ -75,7 +79,7 @@ class HMM_DB:
             sys.exit("Not able to hmmpress the database file")
         
         self.db_list.append(db_path)
-        return
+        return True
 
     def read_alias_file(self, alias_file):
         try:
@@ -313,18 +317,31 @@ class BGC:
             
         svg_data.append("<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" width=\"{:d}\" height=\"{:d}\">".format(int((max_width)/scaling), (2*h + H + space_for_labels)))
         
-        svg_data.append("\t<g>\n")
-        svg_data.append("\t<title>{}</title>\n".format(self.identifier))
+        tabs = 1
+        
+        svg_data.append("{}<g>".format(tabs*"\t"))
+        svg_data.append("{}<title>{}</title>".format(tabs*"\t",self.identifier))
         if write_label:
-            svg_data.append("\t<text x=\"10\" y=\"{}\" font-size=\"{}\">\n".format(fontsize, fontsize))
-            svg_data.append("\t\t{}\n".format(self.identifier))
-            svg_data.append("\t</text>\n")
-        x = 0
-        
+            svg_data.append("{}<text x=\"10\" y=\"{}\" font-size=\"{}\">".format(tabs*"\t",fontsize, fontsize))
+            tabs += 1
+            svg_data.append("{}{}\n".format(tabs*"\t",self.identifier))
+            tabs -= 1
+            svg_data.append("{}</text>".format(tabs*"\t"))
+            
+        x = 0        
         for locus in self.loci:
-            pass
+            svg_data.append("{}<g>".format(tabs*"\t"))
+            tabs += 1
+            
+            tabs -= 1
+            x += locus.length
+            
+            if len(self.loci) > 1:
+                # TODO print locus separator fig
+                pass
         
-        svg_data.append("\t</g>\n")
+        tabs -= 1
+        svg_data.append("</g>".format(tabs*"\t"))
         svg_data.append("</svg>")
         
         
