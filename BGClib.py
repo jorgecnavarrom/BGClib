@@ -30,7 +30,7 @@ __email__ = "j.navarro@westerdijkinstitute.nl"
 
 valid_CBP_types = set({"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
         "PKS-NRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", "unknown_PKS", 
-        "no_domains"})
+        "no_domains", "NIS"})
 
 # this should all have an alias in CBP_domains.tsv
 PKS_domains = set({"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
@@ -38,6 +38,7 @@ PKS_domains = set({"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
 PKS3_domains = set({"Chal_sti_synt_N", "Chal_sti_synt_C"})
 NRPS_domains = set({"Condensation", "AMP-binding", "AMP-binding_C"})
 reducing_domains = set({"PKS_ER_names_mod", "KR", "PS-DH"})
+NRPS_Independent_Siderophore_domains = set({"IucA_IucC"})
 #Terpene_domains = set({"Terpene_synth", "Terpene_synth_C"})
 #Squalene_domains = set({"SQHop_cyclase_N", "SQHop_cyclase_C"})
 
@@ -779,10 +780,10 @@ class BGCProtein:
         self.role = "unknown"
         
         # Basic filtering
-        if len(self.domain_set) == 1:
-            self._CBP_type = "unknown"
-            self.role = "unknown"
-            return
+        #if len(self.domain_set) == 1:
+            #self._CBP_type = "unknown"
+            #self.role = "unknown"
+            #return
             #if "Trp_DMAT" in domain_set:
                 #return "DMAT"
             #else:
@@ -814,7 +815,7 @@ class BGCProtein:
                 # assume that having a SAT domain is enough for labeling as nrPKS
                 # but note that in this category, there seem to be three cases for PT:
                 # - PT detected by TIGR04532
-                # - DH detected by pfam PF14765 (TIGR doesn't pass --cut_tc
+                # - DH detected by pfam PF14765 (TIGR doesn't pass --cut_tc)
                 # - no detection
                 # There are either several types of PT domains or not a general model
                 # to detect all three+ cases
@@ -832,6 +833,11 @@ class BGCProtein:
         elif len(self.domain_set & NRPS_domains) > 0:
             sequence_type = "NRPS"
             self.role = "biosynthetic"
+            
+        elif len(self.domain_set & NRPS_Independent_Siderophore_domains) > 0:
+            sequence_type = "NIS"
+            self.role = "biosynthetic"
+            
         else:
             sequence_type = "other"
             self.role = "unknown"
