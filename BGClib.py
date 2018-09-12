@@ -29,7 +29,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -193,7 +193,7 @@ class BGCCollection:
             bgc = self.bgcs[b]
             for protein in bgc.protein_list:
                 if protein.identifier != "":
-                    pc.protein_collection[protein.identifier] = protein
+                    pc.proteins[protein.identifier] = protein
                 else:
                     missing_identifier = True
         
@@ -682,7 +682,7 @@ class ProteinCollection:
     """
     
     def __init__(self):
-        self.protein_collection = {}    # key = identifier
+        self.proteins = {}    # key = identifier
         
         
     # TODO: break work on sets of 4 cpus
@@ -690,8 +690,8 @@ class ProteinCollection:
     # TODO: TEST!
     def predict_domains(self, hmmdb, domtblout_path="", cpus=1):
         protein_list = []
-        for protein_id in self.protein_collection:
-            protein = self.protein_collection[protein_id]
+        for protein_id in self.proteins:
+            protein = self.proteins[protein_id]
             protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
                     
         if len(protein_list) == 0:
@@ -729,15 +729,15 @@ class ProteinCollection:
                         Evalue = hsp.evalue
                         score = hsp.bitscore
                         
-                        domain = BGCDomain(self.protein_collection[seq_identifier], 
+                        domain = BGCDomain(self.proteins[seq_identifier], 
                                            hmm_id, env_from, env_to, ali_from, 
                                            ali_to, hmm_from, hmm_to, score, Evalue)
                         
-                        self.protein_collection[seq_identifier].domain_list.append(domain)
+                        self.proteins[seq_identifier].domain_list.append(domain)
         
         with Pool(cpus) as pool:
-            for p in self.protein_collection:
-                protein = self.protein_collection[p]
+            for p in self.proteins:
+                protein = self.proteins[p]
                 pool.apply_async(protein.filter_domains())
                 protein.attempted_domain_prediction = True
             pool.close()
