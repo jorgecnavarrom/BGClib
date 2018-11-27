@@ -29,21 +29,21 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
-valid_CBP_types = set({"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
-        "PKS-NRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", "unknown_PKS", 
-        "no_domains", "NIS"})
+valid_CBP_types = {"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
+        "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", "unknown_PKS", 
+        "no_domains", "NIS"}
 
 # this should all have an alias in CBP_domains.tsv
-PKS_domains = set({"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
-                "Acyl_transf_1", "TIGR04532"})
-PKS3_domains = set({"Chal_sti_synt_N", "Chal_sti_synt_C"})
-NRPS_domains = set({"Condensation", "AMP-binding", "AMP-binding_C"})
-reducing_domains = set({"PKS_ER_names_mod", "KR", "PS-DH"})
-NRPS_Independent_Siderophore_domains = set({"IucA_IucC"})
+PKS_domains = {"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
+                "Acyl_transf_1", "TIGR04532"}
+PKS3_domains = {"Chal_sti_synt_N", "Chal_sti_synt_C"}
+NRPS_domains = {"Condensation", "AMP-binding", "AMP-binding_C"}
+reducing_domains = {"PKS_ER_names_mod", "KR", "PS-DH"}
+NRPS_Independent_Siderophore_domains = {"IucA_IucC"}
 #Terpene_domains = set({"Terpene_synth", "Terpene_synth_C"})
 #Squalene_domains = set({"SQHop_cyclase_N", "SQHop_cyclase_C"})
 
@@ -148,7 +148,7 @@ class ArrowerOpts():
         
         self.write_id = True
         self._color_mode = "white"
-        self.valid_color_modes = set({"white", "gray", "random-pastel", "random-dark", "random"})
+        self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", "random"}
                                             
         self.outline = True
 
@@ -248,7 +248,7 @@ class BGC:
         try:
             records = list(SeqIO.parse(str(gbk), "genbank"))
         except ValueError as e:
-            print("Error, not able to parse file {}: {}".format(str(e)))
+            print("Error, not able to parse file {}: {}".format(str(gbk), str(e)))
         else:
             self.accession = records[0].id
             self.definition = records[0].description
@@ -689,6 +689,12 @@ class ProteinCollection:
     # TODO: evaluate whether hmmsearch is better than hmmscan
     # TODO: TEST!
     def predict_domains(self, hmmdb, domtblout_path="", cpus=1):
+        if domtblout_path != "":
+            try:
+                assert not domtblout_path.is_file()
+            except AssertionError:
+                sys.exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
+            
         protein_list = []
         for protein_id in self.proteins:
             protein = self.proteins[protein_id]
@@ -1102,7 +1108,14 @@ class BGCProtein:
         if len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
             for d in self.domain_list:
                 if d.ID in PKS_domains:
-                    self._CBP_type = "PKS-NRPS_hybrid"
+                    # Detect PKS/multi-modular NRPS. Count both C and A domains 
+                    # just in case there is a broken domain counted twice
+                    A_domains = len([a.ID for a in self.domain_list if a.ID == "AMP-binding"])
+                    C_domains = len([c.ID for c in self.domain_list if c.ID == "Condensation"])
+                    if A_domains > 1 and C_domains > 1:
+                        self._CBP_type = "PKS-mmNRPS_hybrid"
+                    else:
+                        self._CBP_type = "PKS-NRPS_hybrid"
                     self.role = "biosynthetic"
                     return
                 elif d.ID in NRPS_domains:
@@ -1119,7 +1132,7 @@ class BGCProtein:
                 sequence_type = "unknown_PKS"
                 self.role = "unknown"
                 
-            elif len(self.domain_set & set({"TIGR04532","SAT"})) > 0:
+            elif len(self.domain_set & {"TIGR04532","SAT"}) > 0:
                 # assume that having a SAT domain is enough for labeling as nrPKS
                 # but note that in this category, there seem to be three cases for PT:
                 # - PT detected by TIGR04532
