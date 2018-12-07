@@ -17,6 +17,8 @@ from colorsys import hsv_to_rgb
 from colorsys import rgb_to_hsv
 from collections import defaultdict
 from math import sin, pi, atan2
+from lxml import etree
+from operator import itemgetter
 
 try:
     from io import StringIO
@@ -29,7 +31,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -92,7 +94,7 @@ class HMM_DB:
 
     def read_alias_file(self, alias_file):
         try:
-            with open(alias_file,"r") as f:
+            with open(alias_file, "r") as f:
                 for line in f:
                     if line[0] == "#" or line.strip() == "":
                         continue
@@ -111,7 +113,7 @@ class HMM_DB:
         hmm_ID \t r,g,b
         """
         try:
-            with open(colors_file,"r") as f:
+            with open(colors_file, "r") as f:
                 for line in f:
                     if line[0] == "#" or line.strip() == "":
                         continue
@@ -149,8 +151,13 @@ class ArrowerOpts():
         self.write_id = True
         self._color_mode = "white"
         self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", "random"}
-                                            
+        
         self.outline = True
+        self.draw_domains = True
+        
+        self.intron_break = True # Show a dashed line where the intron breaks gene
+                                # This means that this is not an actual 
+        self.intron_region = False # Show the actual gap where the intron is
 
     @property
     def color_mode(self):
@@ -187,7 +194,6 @@ class BGCCollection:
         
         pc = ProteinCollection()
         
-        protein_list = []
         missing_identifier = False
         for b in self.bgcs:
             bgc = self.bgcs[b]
@@ -240,7 +246,7 @@ class BGC:
         if isinstance(_gbk, Path):
             gbk = _gbk
         else:
-            gbk = Path(_path)
+            gbk = Path(_gbk)
         clusterName = gbk.stem
         
         self.identifier = clusterName
@@ -253,6 +259,8 @@ class BGC:
             self.accession = records[0].id
             self.definition = records[0].description
             self.organism = records[0].annotations["organism"]
+            
+            cds_list = []
             
             # traverse all possible records in the file. There's usually only 1
             for record in records:
@@ -307,6 +315,11 @@ class BGC:
                         # should only point to BGC objects but we're still
                         # not outputting self.identifier into the annotation file
                         protein.parent_cluster = clusterName
+                        
+                        del cds_list[:]
+                        for x in CDS.location.parts:
+                            cds_list.append((int(x.start), int(x.end)))
+                        protein.cds_regions = tuple(sorted(cds_list, key=itemgetter(0)))
                         
                         self.protein_list.append(protein)
                         locus.protein_list.append(protein)
@@ -363,7 +376,7 @@ class BGC:
             the edges are ABCDEFG starting from (X,Y)     
         """
         
-        # remember protein objects' lenght is in aminoacids
+        # remember protein objects' length is in aminoacids
         L = (protein.length*3)/svg_options.scaling
         X = offsetx/svg_options.scaling
         h = svg_options.arrow_head_height
@@ -438,123 +451,123 @@ class BGC:
         
         arrow.append("{}\t<polygon points=\"{}\" fill=\"rgb({})\" {}stroke-width=\"{:d}\" />".format(tabs*"\t", " ".join(points_coords), ",".join([str(x) for x in self.gene_colors(svg_options.color_mode)]), outline, gene_contour_thickness ))
         
-        dH = H - 2*internal_domain_margin
-        for domain in protein.domain_list:
-            # domain coordinates are also in aminoacids!
-            dX = (3*domain.ali_from)/svg_options.scaling
-            dL = 3*(domain.ali_to - domain.ali_from)/svg_options.scaling
-            
-            # Try to get colors from external file
-            try:
-                domain_color = models.colors[domain.ID]
-            except KeyError:
-                domain_color = ('255', '255', '255')
-                domain_color_outline = ('200', '200', '200')
-                print(domain.ID)
-            else:
-                h_, s, v = rgb_to_hsv(float(domain_color[0])/255.0, 
-                        float(domain_color[1])/255.0, float(domain_color[2])/255.0)
-                domain_color = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h_, s*0.7, v*1.1))
-                domain_color_outline = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h_, s, 0.8*v))
-            
-            arrow.append("{}<g>".format(tabs*"\t"))
-            tabs += 1
-            
-            arrow.append("{}<title>{} (acc)\ndesc</title>".format(tabs*"\t", domain.ID))
-            if protein.forward:
-                # calculate how far from head_start we (the horizontal guide at 
-                #  y=Y+internal_domain_margin) would crash with the slope
-                # Using similar triangles (triangle with head_length as base vs
-                #  triangle with collision_x as base):
-                collision_x = head_length * (h + internal_domain_margin)
-                collision_x /= (h + H/2.0)
-                collision_x = round(collision_x)
+        if svg_options.draw_domains:
+            dH = H - 2*internal_domain_margin
+            for domain in protein.domain_list:
+                # domain coordinates are also in aminoacids!
+                dX = (3*domain.ali_from)/svg_options.scaling
+                dL = 3*(domain.ali_to - domain.ali_from)/svg_options.scaling
                 
-                # either option for 'x_margin_offset' works
-                #  m = -float(h + H/2)/(head_length) #slope of right line
-                #  x_margin_offset = (internal_domain_margin*sqrt(1+m*m))/m
-                #  x_margin_offset = -(x_margin_offset)
-                #x_margin_offset = internal_domain_margin/sin(pi - atan2(h+H/2.0,-head_length))
-
-                # does the domain fit completely before the arrow head's diagonal?
-                if (dX + dL) < head_start + collision_x:
-                    d = "{}<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", int(round(X+dX)), 
-                        int(round(Y+internal_domain_margin)), dL, dH, ",".join(domain_color), 
-                        ",".join(domain_color_outline), domain_contour_thickness)
-                    arrow.append(d)
-                else:
-                    del points[:]
-                    
-                    # left part of the domain
-                    if dX < head_start + collision_x:
-                        # add point A
-                        points.append((round(X + dX), round(Y + internal_domain_margin)))
-                        
-                        # add point B
-                        points.append((round(X + head_start + collision_x), round(Y + internal_domain_margin)))
-                    else:
-                        # Domain is a triangle; add point A'
-                        start_y_offset = (h + H/2)*(L - dX)
-                        start_y_offset /= head_length
-                        start_y_offset = int(start_y_offset)
-                        points.append((round(X + dX), round(Y + H/2 - start_y_offset)))
-                        
-                    # handle the rightmost part of the domain
-                    if dX + dL >= head_end: # could happen more easily with the scaling
-                        # head of the domain's triangle
-                        points.append((round(X + head_end), round(Y + H/2)))
-                    else:
-                        # add points C and D
-                        end_y_offset = (2*h + H)*(L - dX - dL)
-                        end_y_offset /= 2*head_length
-                        end_y_offset = round(end_y_offset)
-
-                        points.append((round(X + dX + dL), round(Y + H/2 - end_y_offset)))
-                        points.append((round(X + dX + dL), round(Y + H/2 + end_y_offset)))
-                
-                    # handle lower part
-                    if dX < head_start + collision_x:
-                        # add points E and F
-                        points.append((round(X + head_start + collision_x), round(Y + H - internal_domain_margin)))
-                        points.append((round(X + dX), round(Y + H - internal_domain_margin)))
-                    else:
-                        # add point F'
-                        points.append((round(X + dX), round(Y + H/2 + start_y_offset)))
-                
-                    del points_coords[:]
-                    for point in points:
-                        points_coords.append(str(int(point[0])) + "," + str(int(point[1])))
-                        
-                    d = "{}<polygon points=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", " ".join(points_coords), ",".join(domain_color), ",".join(domain_color_outline),
-                        domain_contour_thickness)
-                    arrow.append(d)
-            else:
-                # Reverse orientation. Note that dX is relative to the _start_
-                #  of the protein (now on the right!)
-                # calculate how far from head_start we (the horizontal guide at 
-                #  y=Y+internal_domain_margin) would crash with the slope
-                # Using similar triangles:
-                collision_x = head_length * ((H/2) - internal_domain_margin)
-                collision_x /= (h + H/2.0)
-                collision_x = round(collision_x)
-                
-                # The whole domain can be represented with a single block
-                if L-dX-dL > collision_x:
-                    d = "{}<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", int(round(X+L-dX-dL)), 
-                        int(round(Y+internal_domain_margin)), dL, dH, ",".join(domain_color), 
-                        ",".join(domain_color_outline), domain_contour_thickness)
-                    arrow.append(d)
-                else:
-                    del points[:]
-                    
+                # Try to get colors from external file
+                try:
+                    domain_color = models.colors[domain.ID]
+                except KeyError:
+                    domain_color = ('255', '255', '255')
+                    domain_color_outline = ('200', '200', '200')
                     print(domain.ID)
-                    print(X, collision_x, int(round(X+L-dX-dL)))
-                    print()
+                else:
+                    h_, s, v = rgb_to_hsv(float(domain_color[0])/255.0, 
+                            float(domain_color[1])/255.0, float(domain_color[2])/255.0)
+                    domain_color = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h_, s*0.7, v*1.1))
+                    domain_color_outline = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h_, s, 0.8*v))
                 
-            tabs -= 1
-            arrow.append("{}</g>".format(tabs*"\t"))
-            
-            
+                arrow.append("{}<g>".format(tabs*"\t"))
+                tabs += 1
+                
+                arrow.append("{}<title>{} (acc)\ndesc</title>".format(tabs*"\t", domain.ID))
+                if protein.forward:
+                    # calculate how far from head_start we (the horizontal guide at 
+                    #  y=Y+internal_domain_margin) would crash with the slope
+                    # Using similar triangles (triangle with head_length as base vs
+                    #  triangle with collision_x as base):
+                    collision_x = head_length * (h + internal_domain_margin)
+                    collision_x /= (h + H/2.0)
+                    collision_x = round(collision_x)
+                    
+                    # either option for 'x_margin_offset' works
+                    #  m = -float(h + H/2)/(head_length) #slope of right line
+                    #  x_margin_offset = (internal_domain_margin*sqrt(1+m*m))/m
+                    #  x_margin_offset = -(x_margin_offset)
+                    #x_margin_offset = internal_domain_margin/sin(pi - atan2(h+H/2.0,-head_length))
+
+                    # does the domain fit completely before the arrow head's diagonal?
+                    if (dX + dL) < head_start + collision_x:
+                        d = "{}<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", int(round(X+dX)), 
+                            int(round(Y+internal_domain_margin)), dL, dH, ",".join(domain_color), 
+                            ",".join(domain_color_outline), domain_contour_thickness)
+                        arrow.append(d)
+                    else:
+                        del points[:]
+                        
+                        # left part of the domain
+                        if dX < head_start + collision_x:
+                            # add point A
+                            points.append((round(X + dX), round(Y + internal_domain_margin)))
+                            
+                            # add point B
+                            points.append((round(X + head_start + collision_x), round(Y + internal_domain_margin)))
+                        else:
+                            # Domain is a triangle; add point A'
+                            start_y_offset = (h + H/2)*(L - dX)
+                            start_y_offset /= head_length
+                            start_y_offset = int(start_y_offset)
+                            points.append((round(X + dX), round(Y + H/2 - start_y_offset)))
+                            
+                        # handle the rightmost part of the domain
+                        if dX + dL >= head_end: # could happen more easily with the scaling
+                            # head of the domain's triangle
+                            points.append((round(X + head_end), round(Y + H/2)))
+                        else:
+                            # add points C and D
+                            end_y_offset = (2*h + H)*(L - dX - dL)
+                            end_y_offset /= 2*head_length
+                            end_y_offset = round(end_y_offset)
+
+                            points.append((round(X + dX + dL), round(Y + H/2 - end_y_offset)))
+                            points.append((round(X + dX + dL), round(Y + H/2 + end_y_offset)))
+                    
+                        # handle lower part
+                        if dX < head_start + collision_x:
+                            # add points E and F
+                            points.append((round(X + head_start + collision_x), round(Y + H - internal_domain_margin)))
+                            points.append((round(X + dX), round(Y + H - internal_domain_margin)))
+                        else:
+                            # add point F'
+                            points.append((round(X + dX), round(Y + H/2 + start_y_offset)))
+                    
+                        del points_coords[:]
+                        for point in points:
+                            points_coords.append(str(int(point[0])) + "," + str(int(point[1])))
+                            
+                        d = "{}<polygon points=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", " ".join(points_coords), ",".join(domain_color), ",".join(domain_color_outline),
+                            domain_contour_thickness)
+                        arrow.append(d)
+                else:
+                    # Reverse orientation. Note that dX is relative to the _start_
+                    #  of the protein (now on the right!)
+                    # calculate how far from head_start we (the horizontal guide at 
+                    #  y=Y+internal_domain_margin) would crash with the slope
+                    # Using similar triangles:
+                    collision_x = head_length * ((H/2) - internal_domain_margin)
+                    collision_x /= (h + H/2.0)
+                    collision_x = round(collision_x)
+                    
+                    # The whole domain can be represented with a single block
+                    if L-dX-dL > collision_x:
+                        d = "{}<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", int(round(X+L-dX-dL)), 
+                            int(round(Y+internal_domain_margin)), dL, dH, ",".join(domain_color), 
+                            ",".join(domain_color_outline), domain_contour_thickness)
+                        arrow.append(d)
+                    else:
+                        del points[:]
+                        
+                        print(domain.ID)
+                        print(X, collision_x, int(round(X+L-dX-dL)))
+                        print()
+                    
+                tabs -= 1
+                arrow.append("{}</g>".format(tabs*"\t"))
+        
         tabs -= 1
         arrow.append("{}</g>".format(tabs*"\t"))
         
@@ -669,7 +682,7 @@ class BGCLocus:
     def __init__(self):
         self.protein_list = []
         self.gene_coordinates = []  # a list of tuples. end-start might not match
-                                    # the corresponding protein lenght due to 
+                                    # the corresponding protein length due to 
                                     # splicing, but will be useful for inter-
                                     # protein region length when making arrower
                                     # figure.
@@ -795,6 +808,8 @@ class BGCProtein:
         
         self.forward = True
         
+        self.cds_regions = tuple()  # collection of start/stop CDS regions (to draw intron position)
+        
         self.domain_list = []       # list of BGCDomain objects
         self.domain_set = set()     # set of unique domain IDs
         self.attempted_domain_prediction = False
@@ -836,7 +851,7 @@ class BGCProtein:
     
     @property
     def gca(self):
-        return "+".join((self._gca))    
+        return "+".join(self._gca)
     @gca.setter
     def gca(self, gca_in):
         if isinstance(gca_in, list):
@@ -846,7 +861,7 @@ class BGCProtein:
     
     @property
     def sequence(self):
-        return self._sequence        
+        return self._sequence
     @sequence.setter
     def sequence(self, seq):
         # note: does not check if contains valid amino acid characters yet
@@ -917,9 +932,9 @@ class BGCProtein:
             tag += "_[{}]".format(self.compound)
         
         if self.forward:
-            return "|--[" + "]-[".join(domain_alias_list) + "]-->\t{}".format(tag)
+            return "|--[{}]-->\t{}".format("]-[".join(domain_alias_list), tag)
         else:
-            return "<--["+ "]-[".join(list(reversed(domain_alias_list))) + "]--|\t{}".format(tag)
+            return "<--[{}]--|\t{}".format("]-[".join(list(reversed(domain_alias_list))), tag)
         
         
     def recursive_interval(self, interval_list):
@@ -1007,7 +1022,12 @@ class BGCProtein:
         coordinates
         """
         
-        if len(self.domain_list) < 2:
+        # No need to filter anything if we only have one or no domains
+        if len(self.domain_list) == 0:
+            return
+            
+        if len(self.domain_list) == 1:
+            self.domain_set = {self.domain_list[0]}
             return
         
         interval_list = []
@@ -1168,31 +1188,51 @@ class BGCProtein:
         return
 
 
-    def domain_SVG(self, filename, hmmdb):
+    def domain_SVG(self, filename, hmmdb, svg_options=ArrowerOpts()):
         """Creates an SVG figure with the domains as boxes
     
         in:
             name: name of the file including path
             hmmdb: contains alias and color information
+            introns: make a dashed line signaling intron position (if there's any)
             
         out:
             an svg file
         """
     
-        scaling = 2
-        H = 20
+        H = svg_options.arrow_height
         h = H/2
-        stripe_thickness = 2
+        stripe_thickness = svg_options.stripe_thickness
         curve_radius = int(H/10)
+        scaling = svg_options.scaling
+        intron_break = svg_options.intron_break
+        intron_region = svg_options.intron_region
+
+        # main node
+        base_attribs = {"version":"1.1", 
+                        "baseProfile":"full",
+                        "width":str(int(self.length/scaling)),
+                        "height":str(int(2*h + H))}
+        root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
+        main_group = etree.SubElement(root, "g")
         
-        data = []
-        data.append("<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" width=\"{}\" height=\"{}\">\n".format(int(self.length/scaling), (2*h + H)))
+        # add title
+        title = etree.Element("title")
+        title.text = self.identifier
+        main_group.append(title)
         
-        data.append("\t<g>\n")
-        data.append("\t<title>{}</title>\n".format(self.identifier))
-        data.append("\t<line x1=\"0\" y1=\"{:d}\" x2=\"{:2}\" y2=\"{:2}\" style=\"stroke:rgb({}); stroke-width:{:d}\" />\n".format(int(h+H/2), int(self.length/scaling), int(h+H/2), "10,10,10", stripe_thickness))
-        
-        for domain in self.domain_list:            
+        # genomic locus line
+        genomic_locus_attribs = {"x1":"0", 
+                                 "y1":str(int(h+H/2)),
+                                 "x2":str(int(self.length/scaling)),
+                                 "y2":str(int(h+H/2)),
+                                 "style":"stroke:#0a0a0a; stroke-width:{}".format(stripe_thickness)}
+        genomic_locus = etree.Element("line", attrib=genomic_locus_attribs)
+        main_group.append(genomic_locus)
+
+
+        for domain in self.domain_list:
+            # General properties of the domain: color and title
             try:
                 color = ",".join([str(x) for x in hmmdb.colors[domain.ID]])
             except KeyError:
@@ -1202,19 +1242,68 @@ class BGCProtein:
                 title = hmmdb.alias[domain.ID]
             except KeyError:
                 title = domain.ID
+            
+            domain_title = etree.Element("title")
+            domain_title.text = title
+            
+            domain_box_attribs = {"x":str(int(domain.ali_from/scaling)),
+                                  "y":"0",
+                                  "rx":str(curve_radius),
+                                  "ry":str(curve_radius),
+                                  "width":str(int((domain.ali_to - domain.ali_from)/scaling)),
+                                  "height":str(int(2*H)),
+                                  "fill":"rgb({})".format(color)}
+            domain_box = etree.Element("rect", attrib = domain_box_attribs)
+            
+            domain_node_main = etree.Element("g")
+            domain_node_main.append(domain_title)
+            domain_node_main.append(domain_box)
+            main_group.append(domain_node_main)
+            
+
+        if intron_break and len(self.cds_regions) > 1:
+            l = 0
+            if not self.forward:
+                l = int(self.length / scaling)
+            
+            start = int(self.cds_regions[0][0]/(3*scaling))
+            end = int(self.cds_regions[0][1]/(3*scaling))
+            
+            offset = start
+            current_x = end
+            for i in self.cds_regions[1:]:
+                start = int(i[0]/(3*scaling))
+                end = int(i[1]/(3*scaling))
                 
-            data.append("\t\t<g>\n")
-            data.append("\t\t<title>{}</title>\n".format(title))
-            data.append("\t\t\t<rect x=\"{}\" y=\"0\" rx=\"{}\" ry=\"{}\" width=\"{}\" height=\"{}\" fill=\"rgb({})\"/>\n".format(int(domain.ali_from/scaling), curve_radius, curve_radius, int((domain.ali_to - domain.ali_from)/scaling), 2*H, color))
-            data.append("\t\t</g>\n")
+                intron_main = etree.Element("g")
                 
-        data.append("\t</g>\n")
-        data.append("</svg>\n")
+                # intron background
+                if self.forward:
+                    intron_attribs = {"d":"M {:d} 0 L {:d} {:d}".format(current_x-offset, current_x-offset, 2*H),
+                                    "stroke":"#ffffff",
+                                    "stroke-width":"2"}
+                else:
+                    # if reverse, mirror position of introns
+                    intron_attribs = {"d":"M {:d} 0 L {:d} {:d}".format(l-current_x+offset, l-current_x+offset, 2*H),
+                                    "stroke":"#ffffff",
+                                    "stroke-width":"2"}
+                intron_main.append(etree.Element("path", attrib=intron_attribs))
+                
+                # intron dashed line
+                intron_attribs["stroke"] = "#787878"
+                intron_attribs["stroke-linecap"] = "round"
+                intron_attribs["stroke-dasharray"] = "4,4"
+                intron_main.append(etree.Element("path", attrib=intron_attribs))
+                
+                # add the element to the main group
+                main_group.append(intron_main)
+                
+                current_x += end-start
+           
+
+        with open(filename, "bw") as f:
+            f.write(etree.tostring(root, xml_declaration=True, standalone=True, pretty_print=True))
         
-        with open(filename, "w") as f:
-            for row in data:
-                f.write(row)
-    
 
 class BGCDomain:
     def __init__(self, protein, ID, env_from, env_to, ali_from, ali_to, hmm_from, hmm_to, score, Evalue):
@@ -1230,4 +1319,4 @@ class BGCDomain:
         self.Evalue = Evalue        # Based on score and DB size
         
     def get_sequence(self):
-        return self.protein.sequence[ali_from:ali_to+1]
+        return self.protein.sequence[self.ali_from:self.ali_to+1]
