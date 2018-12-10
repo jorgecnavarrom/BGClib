@@ -31,7 +31,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -1027,7 +1027,7 @@ class BGCProtein:
             return
             
         if len(self.domain_list) == 1:
-            self.domain_set = {self.domain_list[0]}
+            self.domain_set = {self.domain_list[0].ID}
             return
         
         interval_list = []
