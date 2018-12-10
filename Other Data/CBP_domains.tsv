@@ -1,0 +1,22 @@
+#  ACcession	Source	Alias	IDentifier	DEscription	Comment
+PF16073.4	Pfam 31	SAT	SAT	Starter unit:ACP transacylase in aflatoxin biosynthesis	
+PF00109.25	Pfam 31	KS	ketoacyl-synt	Beta-ketoacyl synthase, N-terminal domain	
+PF02801.21	Pfam 31	KS_C	Ketoacyl-synt_C	Beta-ketoacyl synthase, C-terminal domain	
+PF16197.4	Pfam 31	KS_Ce	KAsynt_C_assoc	Ketoacyl-synthetase C-terminal extension	
+PF00698.20	Pfam 31	AT	Acyl_transf_1	Acyl transferase domain	
+TIGR04532	TIGRFAMs 15	PT	TIGR04532	PT_fungal_PKS: polyketide product template domain	
+PF00550.24	Pfam 31	T/ACP	PP-binding	Phosphopantetheine attachment site	(NRPS: T, PKS: ACP)
+PF00975.19	Pfam 31	TE	Thioesterase	Thioesterase	
+PF14765.5	Pfam 31	DH	PS-DH	Polyketide synthase dehydratase	
+PF08242.11	Pfam 31	CMeT	Methyltransf_12	Methyltransferase domain	
+SM00829	smart 7.1	ER	PKS_ER_names_mod	Enoylreductase in Polyketide synthases.	License: "Academic SMART"
+PF08659.9	Pfam 31	KR	KR	KR domain	
+PF07993.11	Pfam 31	R	NAD_binding_4	Male sterility protein	(Reductase in PKS)
+PF00195.18	Pfam 31	ChS_N	Chal_sti_synt_N	Chalcone and stilbene synthases, N-terminal domain	PKS III
+PF02797.14	Pfam 31	ChS_C	Chal_sti_synt_C	Chalcone and stilbene synthases, C-terminal domain	PKS III
+PF00668.19	Pfam 31	C	Condensation	Condensation domain	
+PF00501.27	Pfam 31	A	AMP-binding	AMP-binding enzyme	
+PF13193.5	Pfam 31	A_C	AMP-binding_C	AMP-binding enzyme C-terminal domain	
+PF11991.7	Pfam 31	DMAT	Trp_DMAT	Tryptophan dimethylallyltransferase	
+PF01397.20	Pfam 31	Ter	Terpene_synth	Terpene synthase, N-terminal domain	
+PF04183.11	Pfam 31	IucA_IucC	IucA_IucC	IucA / IucC family	NRPS-Independent Siderophore
