@@ -92,7 +92,7 @@ if __name__ == "__main__":
         hmmdbs.add_database(pfam_path)
         hmmdbs.add_database(Path("./Other Data/Domain models/TIGR04532.HMM"))
     hmmdbs.read_alias_file(Path("./Other Data/CBP_domains.tsv"))
-    hmmdbs.read_domain_colors(Path("./domains_color_file_ID.tsv"))
+    hmmdbs.read_domain_colors(Path("./Other Data/domains_color_file_ID.tsv"))
     hmmdbs.cores = cpu_count()
     
     
