@@ -19,6 +19,7 @@ from collections import defaultdict
 from math import sin, pi, atan2
 from lxml import etree
 from operator import itemgetter
+from copy import deepcopy
 
 try:
     from io import StringIO
@@ -31,13 +32,15 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.6"
+__version__ = "0.4.0"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
+
+# Static data
 valid_CBP_types = {"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
-        "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", "unknown_PKS", 
-        "no_domains", "NIS"}
+        "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", 
+        "unknown_PKS", "no_domains", "NIS"}
 
 # this should all have an alias in CBP_domains.tsv
 PKS_domains = {"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
@@ -49,7 +52,39 @@ NRPS_Independent_Siderophore_domains = {"IucA_IucC"}
 #Terpene_domains = set({"Terpene_synth", "Terpene_synth_C"})
 #Squalene_domains = set({"SQHop_cyclase_N", "SQHop_cyclase_C"})
 
+FAS_domains_A = {"Fas_alpha_ACP" ,"FAS_I_H", "ACPS"}
+FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
 
+role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
+               "tailoring":"#8fc889", # green, rgb(143, 200, 137)
+               "transporter":"#f0d963", # yellow, rgb(240, 217, 99)
+               "transcription factor":"#33c1f0", # blue, rgb(51, 193, 240)
+               "other":"#f0d963", # light gray, rgb(239, 240, 241)
+               "unknown":"#dcdcdc"} # gray, rgb(220, 220, 220)
+
+
+# Auxiliary functions
+def random_color_tuple(h_, s_, v_):
+    """
+    returns a random color in hex, with the hue, saturation and value being
+    (possibly) bound by input parameters
+    
+    Additional info:
+    https://en.wikipedia.org/wiki/HSL_and_HSV
+    and http://stackoverflow.com/a/1586291
+    
+    input:
+    h_, s_ and v_ are tuples of lower/upper numbers for hue/saturation/value
+    """
+    
+    h = uniform(h_[0], h_[1])
+    s = uniform(s_[0], s_[1])
+    v = uniform(v_[0], v_[1])
+    
+    return "#{}".join( hex(int(c * 255)) for c in hsv_to_rgb(h, s, v) )
+
+
+# Classes definition
 class HMM_DB:
     """
     This class keeps information about HMM databases to be used by the other
@@ -60,11 +95,12 @@ class HMM_DB:
         self.db_list = []           # list of paths to hmm databases
         self.alias = {}             # ID to alias
         self.colors = {}            # ID to tuple(r,g,b)
+        self.color_outline = {}
         self.cores = 0              # for hmmer. Remember that it always uses an
                                     # extra core for reading the database
                                     
-        self.ID_to_acc = defaultdict(str)   # TODO: load these data...
-        self.ID_to_desc = defaultdict(str)
+        self.ID_to_acc = {}   # TODO: load these data...
+        self.ID_to_desc = {}
         
         return
     
@@ -120,6 +156,10 @@ class HMM_DB:
                     
                     hmm_ID, colors = line.strip().split("\t")
                     self.colors[hmm_ID] = tuple(colors.split(","))
+                    
+                    r, g, b = colors.split(",")
+                    h, s, v = rgb_to_hsv(int(r)/255.0, int(g)/255.0, int(b)/255.0)
+                    self.color_outline[hmm_ID] = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h, s, 0.8*v))
         except FileNotFoundError:
             print("Could not open domain colors file ({})".format(colors_file))
         pass
@@ -133,8 +173,9 @@ class ArrowerOpts():
         self.scaling = 30                    # px per bp
         
         self.arrow_height = 30               # H: Height of arrows' body
-        self.arrow_head_height = 15          # aH: Additional width of arrows' head
+        #self.arrow_head_height = 15          # h: Additional width of arrows' head
                                         #  (i.e. total arrow head = H + 2*aH)
+                                        # internally, h = H/2 to preserve 45° angle
         self.arrow_head_length = 30
         
         self.gene_contour_thickness = 2      # note: thickness grows outwards
@@ -150,14 +191,17 @@ class ArrowerOpts():
         
         self.write_id = True
         self._color_mode = "white"
-        self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", "random"}
+        self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", 
+                                  "random", "roles"}
         
         self.outline = True
-        self.draw_domains = True
+        self.draw_domains = True # If false, all arrows will point forward
         
-        self.intron_break = True # Show a dashed line where the intron breaks gene
+        self.original_orientation = False
+        
+        self.intron_break = False # Show a dashed line where the intron breaks gene
                                 # This means that this is not an actual 
-        self.intron_region = False # Show the actual gap where the intron is
+        self.intron_regions = False # Show the actual gap where the intron is
 
     @property
     def color_mode(self):
@@ -326,350 +370,163 @@ class BGC:
                         locus.gene_coordinates.append((cds_start,cds_end))
               
                 self.loci.append(locus)
-
-
-    def random_color_tuple(self, s_, v_):
-        """
-        returns a random tupble of color in RGB according to a range of SV values
-        Additional info:
-        https://en.wikipedia.org/wiki/HSL_and_HSV
-        and http://stackoverflow.com/a/1586291
-        """
-        
-        h = uniform(0, 1) # all possible colors
-        s = uniform(s_[0], s_[1])
-        v = uniform(v_[0], v_[1])
-        
-        return tuple(int(c * 255) for c in hsv_to_rgb(h, s, v))
-        
-        
-    def gene_colors(self, mode):
-        if mode == "random-pastel":
-            s_ = (0.15, 0.4)
-            v_ = (0.9, 0.95)
-            return self.random_color_tuple(s_, v_)
-        elif mode == "random-dark":
-            s_ = (0.5, 0.75)
-            v_ = (0.4, 0.5)
-            return self.random_color_tuple(s_, v_)
-        elif mode == "random":
-            s_ = (0.6, 0.75)
-            v_ = (0.65, 0.85)
-            return self.random_color_tuple(s_, v_)
-        elif mode == "gray":
-            return (180, 180, 180)
-        else:
-            return (255, 255, 255)
+  
     
-    
-    def SVG_arrow(self, offsetx, Y, tabs, protein, models=HMM_DB(), svg_options=ArrowerOpts()):
-        #tabs, gene, baseX, Y, H, h, l, scaling=30):
+    def inter_loci_element(self, xoffset, yoffset, svg_options=ArrowerOpts()):
         """
-        SVG code for an arrow representing a single gene:
-            - offset: horizontal position where *locus* starts.
-            - Y: Top coordinate of the arrow (in line with the top arrow head)
-            - (X,Y) ... upper left (+) or right (-) corner of the arrow
-            - L ... arrow length
-            - H ... arrow height
-            - h ... arrow head edge width
-            - l ... arrow head length
-            the edges are ABCDEFG starting from (X,Y)     
+        Draws the following SVG figure to link loci genomic stripes:
+        __/ /__
+         / /
+        
+        And returns the corresponding etree element
         """
         
-        # remember protein objects' length is in aminoacids
-        L = (protein.length*3)/svg_options.scaling
-        X = offsetx/svg_options.scaling
-        h = svg_options.arrow_head_height
         H = svg_options.arrow_height
-        l = svg_options.arrow_head_length
-        gene_contour_thickness = svg_options.gene_contour_thickness
-        internal_domain_margin = svg_options.internal_domain_margin
-        domain_contour_thickness = svg_options.domain_contour_thickness
         
-        arrow = []
+        inter_loci_main = etree.Element("g")
         
-        arrow.append("{}<g>".format(tabs*"\t"))
-        tabs += 1
+        inter_loci_attribs = {
+            "stroke": "#464646",
+            "stroke-width": str(svg_options.stripe_thickness)
+            }
+            
+        # left
+        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset), int(yoffset + 0.5*H), int(xoffset+0.375*H), int(yoffset + 0.5*H))
+        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
         
-        if protein.forward:
-            head_end = L
-            if L < l:
-                # squeeze arrow if length shorter than head length
-                A = (X,Y-h)
-                B = (X+L,Y+H/2)
-                C = (X,Y+H+h)
-                head_start = 0
-                points = [A, B, C]
-            else:
-                A = (X,Y)
-                B = (X+L-l,Y)
-                C = (X+L-l,Y-h)
-                D = (X+L,Y+H/2)
-                E = (X+L-l,Y+H+h)
-                F = (X+L-l,Y+H)
-                G = (X,Y+H)
-                head_start = L - l # relative to the start of the gene, not absolute coords.
-                points = [A, B, C, D, E, F, G]
-        else:
-            head_start = 0
-            if L < l:
-                # squeeze arrow if length shorter than head length
-                A = (X,Y+H/2)
-                B = (X+L,Y-h)
-                C = (X+L,Y+H+h)
-                head_end = L
-                points = [A, B, C]
-            else:
-                A = (X+L,Y)
-                B = (X+l,Y)
-                C = (X+l,Y-h)
-                D = (X,Y+H/2)
-                E = (X+l,Y+H+h)
-                F = (X+l,Y+H)
-                G = (X+L,Y+H)
-                head_end = l
-                points = [A, B, C, D, E, F, G]
+        # right
+        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset+0.625*H), int(yoffset + 0.5*H), int(xoffset+H), int(yoffset + 0.5*H))
+        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
         
-        head_length = head_end - head_start
-        #rounding error?
-        if head_length == 0:
-            return []
+        # slash1
+        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset + 0.25*H), int(yoffset + 0.75*H), int(xoffset + 0.5*H), int(yoffset + 0.25*H))
+        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
         
-        points_coords = []
-        for point in points:
-            points_coords.append(str(int(point[0])) + "," + str(int(point[1])))
+        # slash2
+        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset + 0.5*H), int(yoffset + 0.75*H), int(xoffset + 0.75*H), int(yoffset + 0.25*H))
+        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
         
-        label = protein.identifier
-        if protein.accession != "":
-            label = protein.accession
-        arrow.append("{}\t<title>{}</title>".format(tabs*"\t", label))
-        
-        outline = ""
-        if svg_options.outline:
-            arrow_outline = (10, 10, 10)
-            outline = "stroke=\"rgb({})\" ".format(",".join([str(x) for x in arrow_outline]))
-        
-        arrow.append("{}\t<polygon points=\"{}\" fill=\"rgb({})\" {}stroke-width=\"{:d}\" />".format(tabs*"\t", " ".join(points_coords), ",".join([str(x) for x in self.gene_colors(svg_options.color_mode)]), outline, gene_contour_thickness ))
-        
-        if svg_options.draw_domains:
-            dH = H - 2*internal_domain_margin
-            for domain in protein.domain_list:
-                # domain coordinates are also in aminoacids!
-                dX = (3*domain.ali_from)/svg_options.scaling
-                dL = 3*(domain.ali_to - domain.ali_from)/svg_options.scaling
-                
-                # Try to get colors from external file
-                try:
-                    domain_color = models.colors[domain.ID]
-                except KeyError:
-                    domain_color = ('255', '255', '255')
-                    domain_color_outline = ('200', '200', '200')
-                    print(domain.ID)
-                else:
-                    h_, s, v = rgb_to_hsv(float(domain_color[0])/255.0, 
-                            float(domain_color[1])/255.0, float(domain_color[2])/255.0)
-                    domain_color = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h_, s*0.7, v*1.1))
-                    domain_color_outline = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h_, s, 0.8*v))
-                
-                arrow.append("{}<g>".format(tabs*"\t"))
-                tabs += 1
-                
-                arrow.append("{}<title>{} (acc)\ndesc</title>".format(tabs*"\t", domain.ID))
-                if protein.forward:
-                    # calculate how far from head_start we (the horizontal guide at 
-                    #  y=Y+internal_domain_margin) would crash with the slope
-                    # Using similar triangles (triangle with head_length as base vs
-                    #  triangle with collision_x as base):
-                    collision_x = head_length * (h + internal_domain_margin)
-                    collision_x /= (h + H/2.0)
-                    collision_x = round(collision_x)
-                    
-                    # either option for 'x_margin_offset' works
-                    #  m = -float(h + H/2)/(head_length) #slope of right line
-                    #  x_margin_offset = (internal_domain_margin*sqrt(1+m*m))/m
-                    #  x_margin_offset = -(x_margin_offset)
-                    #x_margin_offset = internal_domain_margin/sin(pi - atan2(h+H/2.0,-head_length))
-
-                    # does the domain fit completely before the arrow head's diagonal?
-                    if (dX + dL) < head_start + collision_x:
-                        d = "{}<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", int(round(X+dX)), 
-                            int(round(Y+internal_domain_margin)), dL, dH, ",".join(domain_color), 
-                            ",".join(domain_color_outline), domain_contour_thickness)
-                        arrow.append(d)
-                    else:
-                        del points[:]
-                        
-                        # left part of the domain
-                        if dX < head_start + collision_x:
-                            # add point A
-                            points.append((round(X + dX), round(Y + internal_domain_margin)))
-                            
-                            # add point B
-                            points.append((round(X + head_start + collision_x), round(Y + internal_domain_margin)))
-                        else:
-                            # Domain is a triangle; add point A'
-                            start_y_offset = (h + H/2)*(L - dX)
-                            start_y_offset /= head_length
-                            start_y_offset = int(start_y_offset)
-                            points.append((round(X + dX), round(Y + H/2 - start_y_offset)))
-                            
-                        # handle the rightmost part of the domain
-                        if dX + dL >= head_end: # could happen more easily with the scaling
-                            # head of the domain's triangle
-                            points.append((round(X + head_end), round(Y + H/2)))
-                        else:
-                            # add points C and D
-                            end_y_offset = (2*h + H)*(L - dX - dL)
-                            end_y_offset /= 2*head_length
-                            end_y_offset = round(end_y_offset)
-
-                            points.append((round(X + dX + dL), round(Y + H/2 - end_y_offset)))
-                            points.append((round(X + dX + dL), round(Y + H/2 + end_y_offset)))
-                    
-                        # handle lower part
-                        if dX < head_start + collision_x:
-                            # add points E and F
-                            points.append((round(X + head_start + collision_x), round(Y + H - internal_domain_margin)))
-                            points.append((round(X + dX), round(Y + H - internal_domain_margin)))
-                        else:
-                            # add point F'
-                            points.append((round(X + dX), round(Y + H/2 + start_y_offset)))
-                    
-                        del points_coords[:]
-                        for point in points:
-                            points_coords.append(str(int(point[0])) + "," + str(int(point[1])))
-                            
-                        d = "{}<polygon points=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", " ".join(points_coords), ",".join(domain_color), ",".join(domain_color_outline),
-                            domain_contour_thickness)
-                        arrow.append(d)
-                else:
-                    # Reverse orientation. Note that dX is relative to the _start_
-                    #  of the protein (now on the right!)
-                    # calculate how far from head_start we (the horizontal guide at 
-                    #  y=Y+internal_domain_margin) would crash with the slope
-                    # Using similar triangles:
-                    collision_x = head_length * ((H/2) - internal_domain_margin)
-                    collision_x /= (h + H/2.0)
-                    collision_x = round(collision_x)
-                    
-                    # The whole domain can be represented with a single block
-                    if L-dX-dL > collision_x:
-                        d = "{}<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" stroke-linejoin=\"round\" fill=\"rgb({})\" stroke=\"rgb({})\" stroke-width=\"{}\" />".format(tabs*"\t", int(round(X+L-dX-dL)), 
-                            int(round(Y+internal_domain_margin)), dL, dH, ",".join(domain_color), 
-                            ",".join(domain_color_outline), domain_contour_thickness)
-                        arrow.append(d)
-                    else:
-                        del points[:]
-                        
-                        print(domain.ID)
-                        print(X, collision_x, int(round(X+L-dX-dL)))
-                        print()
-                    
-                tabs -= 1
-                arrow.append("{}</g>".format(tabs*"\t"))
-        
-        tabs -= 1
-        arrow.append("{}</g>".format(tabs*"\t"))
-        
-        return arrow
+        return inter_loci_main
     
 
-    def SVG(self, models=HMM_DB(), svg_options=ArrowerOpts(), file_path=Path("./"), extra_label=""):
+    # TODO: implement the extra_label parameter. The main issue is how to 
+    # calculate the width of the text element to take into account for the SVG width
+    def BGC_SVG(self, filename, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), extra_label="", xoffset=0, yoffset=0, mirror = False):
         """
         Writes an SVG figure for the cluster
         """
         
-        h = svg_options.arrow_head_height
+        # Arrows need to be represented in their original orientation. 
+        # Be careful as not to modify input svg options though
+        if svg_options.original_orientation:
+            bgc_svg_options = svg_options
+        else:
+            bgc_svg_options = deepcopy(svg_options)
+            bgc_svg_options.original_orientation = True
+        
+        H = bgc_svg_options.arrow_height
+        
+        # length of the SVG figure
+        # second term accounts for the inter-loci figure
+        L = sum([locus.length/bgc_svg_options.scaling for locus in self.loci]) + (H*(len(self.loci)-1))
+        # substract all non-coding regions (but intergenic space remains
+        # unchanged). As we are mixing generic dna regions with only-coding regions
+        # this is just a _representation_ of the BGC; not meant to be accurate
+        intron_correction = 0.0
+        if not bgc_svg_options.intron_regions:
+            for locus in self.loci:
+                for p in locus.protein_list:
+                    intron_correction += ((p.cds_regions[-1][1] - p.cds_regions[0][0] - 3) - p.length*3) / bgc_svg_options.scaling
+                    
+        
+        # main node
+        # Note: we are in dna space (so amino acid sequence must be scaled)
+        # width, height, xoffset and yoffset must be corrected or the corners
+        # with sharp angles will be chopped off
+        thickness = bgc_svg_options.gene_contour_thickness
+        correction = 2*thickness
+        Xoffset = xoffset + thickness
+        Yoffset = yoffset + thickness
+        base_attribs = {"version":"1.1", 
+                        "baseProfile":"full",
+                        "width":str(int(Xoffset + L + thickness - intron_correction)),
+                        "height":str(int(Yoffset + 2*H + thickness))}
+        root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
+        
+        inner_tree = self.xml_BGC(Xoffset, Yoffset, hmmdb, bgc_svg_options, mirror=mirror)
+        root.append(inner_tree)
+        
+        with open(filename, "bw") as f:
+            f.write(etree.tostring(root, pretty_print=True))
+        
+        
+    def xml_BGC(self, xoffset, yoffset, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), mirror = False):
+        """
+        Creates a BGC SVG figure (xml structure)
+        """
+        main_group = etree.Element("g")
+        
         H = svg_options.arrow_height
-        scaling = svg_options.scaling
-        #hl = svg_options.arrow_head_length
-        #gene_contour_thickness = svg_options.gene_contour_thickness
-        #idm = svg_options.internal_domain_margin
-        #dct = svg_options.domain_contour_thickness
-        fontsize = svg_options.fontsize
-        margin = svg_options.label_arrow_margin
-        stripe_thickness = svg_options.stripe_thickness
-        stripe_color = svg_options.stripe_color
+        h = 0.5*H
         
-        svg_data = []
-
-        space_for_labels = 0
-        if svg_options.write_id or extra_label != "":
-            space_for_labels = fontsize + margin
-        
-        # TODO: still produce a figure is no loci were annotated but we do have
-        # proteins (i.e. consider every protein to be within a "mini-locus")
-        #if len(self.loci) == 0 and len(self.protein_list) > 0:
-        
-        max_width = sum([x.length for x in self.loci])
-        # give some space for inter-loci separator
-        if len(self.loci) > 1:
-            max_width += (len(self.loci)-1)*H
-            
-        # the extra "margin" for the height is due to the pointy lower parts of 
-        # the arrows going further than the coordinate
-        svg_data.append("<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" width=\"{:d}\" height=\"{:d}\">".format(int((max_width)/scaling), (2*h + H + space_for_labels + margin)))
-        
-        tabs = 1
-        
-        svg_data.append("{}<g>".format(tabs*"\t"))
-        tabs += 1
-        
-        x = 0
-        y = 0
-        
-        svg_data.append("{}<title>{}</title>".format(tabs*"\t",self.identifier))
-        if svg_options.write_id or extra_label != "":
-            svg_data.append("{}<text x=\"10\" y=\"{}\" font-size=\"{}\">".format(tabs*"\t", fontsize, fontsize))
-            y += fontsize + margin
-            tabs += 1
-            
-            label = ""
-            if svg_options.write_id:
-                label = self.identifier
-                if extra_label != "":
-                    label += " "
-            if extra_label != "":
-                label += extra_label
-            svg_data.append("{}{}".format(tabs*"\t",label))
-            
-            tabs -= 1
-            svg_data.append("{}</text>".format(tabs*"\t"))
-        
-        n_locus = 1
-        stripe_position = y + h + (H/2)
+        l = 1
+        Xoffset = xoffset # start of each locus
         for locus in self.loci:
-            svg_data.append("{}<g>".format(tabs*"\t"))
-            tabs += 1
+            L = locus.length/svg_options.scaling
             
-            svg_data.append("{}<line x1=\"{:d}\" y1=\"{:d}\" x2=\"{:2}\" y2=\"{:2}\" style=\"stroke:rgb({}); stroke-width:{:d}\" />".format(tabs*"\t", int(x), int(stripe_position), int(x+locus.length/svg_options.scaling), int(stripe_position), ",".join(map(str,stripe_color)), stripe_thickness))
+            # substract all non-coding regions (but intergenic space remains
+            # unchanged). As we are mixing generic dna regions with only-coding regions
+            # this is just a _representation_ of the BGC; not meant to be accurate
+            intron_correction = 0.0
+            if not svg_options.intron_regions:
+                for p in locus.protein_list:
+                    intron_correction += ((p.cds_regions[-1][1] - p.cds_regions[0][0] - 3) - p.length*3) / svg_options.scaling
+                L -= intron_correction
+            line_attribs = {
+                "x1": str(int(Xoffset)),
+                "y1": str(int(yoffset + h + 0.5*H)),
+                "x2": str(int(Xoffset+L)),
+                "y2": str(int(yoffset + h + 0.5*H)),
+                "stroke": "#464646",
+                "stroke-width": "2"
+                }
+            line = etree.Element("line", attrib=line_attribs)
+            main_group.append(line)
             
-            for p in range(len(locus.protein_list)):
-                protein = locus.protein_list[p]
-                gene_coordinates = locus.gene_coordinates[p]
+            p = 0
+            intron_offset = 0.0
+            for protein in locus.protein_list:
+                gene_start, gene_end = locus.gene_coordinates[p]
                 
-                svg_data.extend(self.SVG_arrow(x+gene_coordinates[0], y+h, tabs, protein, models, svg_options))
-            
-            x += locus.length
-            # TODO print locus separator mini-fig
-            if n_locus < len(self.loci):
-                x += H
-            
-            tabs -= 1
-            svg_data.append("{}</g>".format(tabs*"\t"))
-            
-            n_locus += 1
+                gene_start = gene_start / svg_options.scaling
+                gene_position = gene_start-intron_offset
+                if mirror:
+                    if svg_options.intron_regions:
+                        gene_length = (protein.cds_regions[-1][1] - protein.cds_regions[0][0] - 3)/svg_options.scaling
+                    else:
+                        gene_length = (protein.length*3)/svg_options.scaling
+                    gene_position = L - gene_position - gene_length
+                inner_tree = protein.xml_arrow(hmmdb, svg_options, Xoffset + gene_position, yoffset, mirror=mirror)
+                main_group.append(inner_tree)
+                
+                p += 1
+                if not svg_options.intron_regions:
+                    intron_offset += ((protein.cds_regions[-1][1] - protein.cds_regions[0][0] - 3) - protein.length*3) / svg_options.scaling
         
-        tabs -= 1
-        svg_data.append("{}</g>".format(tabs*"\t"))
-        svg_data.append("</svg>")
-        
-        
-        # get this BGC written
-        with open(file_path / (self.identifier + ".svg"), "w") as f:
-            f.write("{}".format("\n".join(svg_data)))
+            Xoffset += L
             
-        return
+            if l < len(self.loci):
+                # draw inter-locus fig of length H
+                # NOTE: the mirror parameter will flip each individual locus, not
+                # the whole collection of them. This means that the inter-loci
+                # element is still drawn at the end of each locus
+                main_group.append(inter_loci_element(Xoffset, yoffset + 0.5*H, svg_options))
+            
+                Xoffset += H
+            l += 1
+        
+        return main_group
+
     
 
 class BGCLocus:
@@ -787,6 +644,7 @@ class BGCProtein:
         
         self._sequence = ""
         self.length = 0             # automatically calculated when sequence is added
+                                    # Amino acid space
         
         self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
                                     #   resistance, unknown]
@@ -795,7 +653,7 @@ class BGCProtein:
         self.ss_cbp = ""            # e.g.: Group V2
         
         # e.g.: nrPKS, nrPKS+hrPKS etc.
-        # TODO: redifine as "Gene Cluster Architecture"?
+        # TODO: redefine as "Gene Cluster Architecture"?
         # then GCF would be defined by the list of CBP-signatures
         self._gca = []
         
@@ -808,7 +666,11 @@ class BGCProtein:
         
         self.forward = True
         
-        self.cds_regions = tuple()  # collection of start/stop CDS regions (to draw intron position)
+        self.cds_regions = tuple()  # collection of start/stop CDS regions (to 
+                                    # draw intron position).
+                                    # These come from the original GenBank file
+                                    # so are relative to the start of the locus
+                                    # They are in nucleotide space.
         
         self.domain_list = []       # list of BGCDomain objects
         self.domain_set = set()     # set of unique domain IDs
@@ -1188,6 +1050,7 @@ class BGCProtein:
         return
 
 
+    # TODO polish code like in arrow_SVG
     def domain_SVG(self, filename, hmmdb, svg_options=ArrowerOpts()):
         """Creates an SVG figure with the domains as boxes
     
@@ -1206,7 +1069,7 @@ class BGCProtein:
         curve_radius = int(H/10)
         scaling = svg_options.scaling
         intron_break = svg_options.intron_break
-        intron_region = svg_options.intron_region
+        intron_regions = svg_options.intron_regions
 
         # main node
         base_attribs = {"version":"1.1", 
@@ -1302,13 +1165,743 @@ class BGCProtein:
            
 
         with open(filename, "bw") as f:
-            f.write(etree.tostring(root, xml_declaration=True, standalone=True, pretty_print=True))
+            f.write(etree.tostring(root, standalone=True, pretty_print=True))
+    
+
+    def arrow_colors(self, mode):
+        if mode == "white":
+            return "#ffffff"
+        elif mode == "random-pastel":
+            s_ = (0.15, 0.4)
+            v_ = (0.9, 0.95)
+            return self.random_color_tuple((0.0, 1.0), s_, v_)
+        elif mode == "random-dark":
+            s_ = (0.5, 0.75)
+            v_ = (0.4, 0.5)
+            return self.random_color_tuple((0.0, 1.0), s_, v_)
+        elif mode == "random":
+            s_ = (0.6, 0.75)
+            v_ = (0.65, 0.85)
+            return self.random_color_tuple((0.0, 1.0), s_, v_)
+        elif mode == "gray":
+            return (180, 180, 180)
+        elif mode == "role":
+            return role_colors[self.role]
+        else:
+            # "white"
+            return "#ffffff"
         
+
+    def arrow_SVG(self, filename, hmmdb, svg_options=ArrowerOpts(), xoffset=0, yoffset=0):
+        """Creates an SVG figure with the domains as boxes
+    
+        in:
+            name: name of the file including path
+            hmmdb: contains alias and color information
+            svg_options: contains size of various elements in the figure
+            x/y offset: upper left corner of the arrow. In nucleotide space
+            
+        out:
+            an svg file
+        """
+        
+        H = svg_options.arrow_height
+        
+        thickness = svg_options.gene_contour_thickness
+        
+        # length of the SVG figure
+        L = self.length*3/svg_options.scaling
+        if svg_options.intron_regions:
+            L = (self.cds_regions[-1][1] - self.cds_regions[0][0])/svg_options.scaling
+        
+        # main node
+        # Note: we are in dna space (so amino acid sequence must be scaled)
+        # width, height, xoffset and yoffset must be corrected or the corners
+        # with sharp angles will be chopped off
+        correction = 2*thickness
+        base_attribs = {"version":"1.1", 
+                        "baseProfile":"full",
+                        "width":str(int(xoffset + L + correction)),
+                        "height":str(int(yoffset + 2*H + correction))}
+        root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
+
+        inner_tree = self.xml_arrow(hmmdb, svg_options, xoffset+thickness, yoffset+thickness, mirror=False)
+        root.append(inner_tree)
+        
+        with open(filename, "bw") as f:
+            f.write(etree.tostring(root, pretty_print=True))
+        
+    
+    def xml_arrow(self, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), xoffset=0, yoffset=0, mirror=False):
+        """Creates an arrow SVG figure (xml structure)
+        
+        Starting from upper left corner (X,Y), the vertices of the arrow are
+        (clockwise)
+        A, B, C, D (tip of the arrow), E, F, G
+        (not considering vertices created by intron regions)
+        But note that here the first coordinate to be annotated will be the one
+        in the bottom left corner (G or E, depending on whether the arrow is 
+        complete or will be a squeezed version)
+        
+        Domains are similar, except that b and c follow the slope of the arrow
+        head. Vertices:
+        a, b, c, d (if domain end matches the arrow's), e, f, g
+    
+        in:
+            options through an ArrowerOpts object
+                L: total arrow length. Will increase if considering introns
+                l: length of arrow head
+                H: height of arrow's body (A-G, B-F)
+                h: height of top/bottom arrow edge (B-C, E-F)
+                
+            an object of the HMM_DB class which contains domain information
+            
+            xoffset /yoffset: upper left corner of the canvas
+            
+            (svg_options.original_orientation): draw arrow according to strand information
+            mirror: draw arrow with the opposite direction of the strand orientation
+        out:
+            an etree tree
+            
+        X,Y: coordinate of the upper left corner of the arrow's tail (if it's
+        pointing forward). A = (X,Y) = (xoffset, yoffset+h)
+        
+        Note that scaling only happens on the x axis
+        """
+        original_orientation = svg_options.original_orientation
+        
+        if mirror:
+            flip = self.forward
+        else:
+            flip = not self.forward and original_orientation
+        
+        L = self.length*3/svg_options.scaling
+        if svg_options.intron_regions:
+            # if using nucleotides to calculate length, remember to remove three
+            # that correspond to the stop codon
+            L = (self.cds_regions[-1][1] - self.cds_regions[0][0] - 3)/svg_options.scaling
+        l = svg_options.arrow_head_length
+        
+        H = svg_options.arrow_height
+        h = H/2
+        
+        #X = 0
+        Y = h
+        
+        scaling = svg_options.scaling
+        stripe_thickness = svg_options.stripe_thickness
+        
+        idm = svg_options.internal_domain_margin
+        
+        intron_break = svg_options.intron_break
+        intron_regions = svg_options.intron_regions
+
+        main_group = etree.Element("g")
+        
+        # add title
+        title = etree.Element("title")
+        title.text = self.identifier
+        main_group.append(title)
+        
+        exon_elements = []
+        intron_elements = []
+        domain_elements = []
+        
+        # Use original list of CDS regions to make full list of tuples of
+        # (start, end, type) where type 0 = exons and type 1 = introns
+        regions = []
+        if intron_regions and len(self.cds_regions) > 1:
+            start = int(self.cds_regions[0][0]/scaling)
+            end = int(self.cds_regions[0][1]/scaling)
+            
+            offset = start
+            
+            regions.append((0, end-offset, 0))
+            for cds in self.cds_regions[1:]:
+                new_start = int(cds[0]/scaling)
+                new_end = int(cds[1]/scaling)
+                
+                regions.append((end - offset + 1, new_start - offset - 1, 1))
+                regions.append((new_start - offset, new_end - offset, 0))
+                
+                start = new_start
+                end = new_end
+        else:
+            regions.append((0, L, 0))
+            
+        
+        # precalculate a couple of numbers
+        vertices = []
+        head_start = L - l # In local 'arrow coordinates'
+        if head_start <= 0:
+            head_start = 0
+        center = Y + h
+        Hl = H/l # alpha = (H*(L-start)/l) distance from center to colission with head
+        HL = H/L # for shorter arrows
+        
+        # Keep track of current domain index and other info.
+        # Domains should be sorted by position
+        if svg_options.draw_domains and len(self.domain_list) > 0:
+            current_domain = 0
+            
+            domain = self.domain_list[current_domain]
+            # General properties of the current domain: color and title
+            try:
+                color = ",".join([str(c) for c in hmmdb.colors[domain.ID]])
+                color_outline = ",".join([str(c) for c in hmmdb.color_outline[domain.ID]])
+            except KeyError:
+                color = "150,150,150"
+                color_outline = "210,210,210"
+            
+            try:
+                title = hmmdb.alias[domain.ID]
+            except KeyError:
+                title = domain.ID
+            domain_title = etree.Element("title")
+            domain_title.text = title
+            
+            domain_attribs = {"class": "domain,{}".format(domain.ID)}
+            domain_node_main = etree.Element("g", attrib=domain_attribs)
+            domain_node_main.append(domain_title)
+            
+            # get coordinates in dna space
+            dstart = (domain.ali_from*3)/svg_options.scaling
+            dend = (domain.ali_to*3)/svg_options.scaling
+        else:
+            # this will prevent trying to draw domains later on
+            current_domain = len(self.domain_list) + 1
+        
+        intron_offset = 0
+        # keep track of region number so we can draw the tip on the last region
+        r = 0
+        # Traverse all exon/intron regions
+        for region in regions:
+            r += 1
+
+            del vertices[:]
+            start = region[0]
+            end = region[1]
+            region_type = region[2]
+            
+            # draw left-most part of region
+            if r == 1:
+                # short arrow
+                if head_start == 0:
+                    E = [start, Y + H + h]
+                    vertices.append(E)
+                    C = [start, Y - h]
+                    vertices.append(C)
+                else:
+                    G = [start, Y + H]
+                    vertices.append(G)
+                    A = [start, Y]
+                    vertices.append(A)
+            else:
+                if start < head_start:
+                    G = [start, Y + H]
+                    vertices.append(G)
+                    A = [start, Y]
+                    vertices.append(A)
+                else:
+                    if head_start == 0:
+                        alpha = int(HL*(L-start))
+                    else:
+                        alpha = int(Hl*(L-start))
+                    Eprime = [start, center + alpha]
+                    vertices.append(Eprime)
+                    Cprime = [start, center - alpha]
+                    vertices.append(Cprime)
+                    
+            # draw right-most part of region
+            if end <= head_start:
+                Aprime = [end, Y]
+                vertices.append(Aprime)
+                Gprime = [end, Y + H]
+                vertices.append(Gprime)
+            else:
+                if start < head_start:
+                    B = [head_start, Y]
+                    vertices.append(B)
+                    C = [head_start, Y-h]
+                    vertices.append(C)
+                
+                # if last region, only one vertex
+                if r == len(regions):
+                    D = [end, center]
+                    vertices.append(D)
+                else:
+                    if head_start == 0:
+                        alpha = int(HL*(L-end))
+                    else:
+                        alpha = int(Hl*(L-end))
+                    Cprimeprime = [end, center - alpha]
+                    vertices.append(Cprimeprime)
+                    Eprimeprime = [end, center + alpha]
+                    vertices.append(Eprimeprime)
+                    
+                if start < head_start:
+                    E = [head_start, Y + H + h]
+                    vertices.append(E)
+                    F = [head_start, Y + H]
+                    vertices.append(F)
+            
+            # flip if requested and gene is in the reverse strand
+            if flip:
+                for v in vertices:
+                    v[0] = L - v[0]
+            
+            # shape properties
+            string_vertices = []
+            for v in vertices:
+                string_vertices.append("{},{}".format(int(v[0]+xoffset), int(v[1])+yoffset))
+            
+            region_attribs = {
+                "points": " ".join(string_vertices),
+                "stroke-width": str(svg_options.gene_contour_thickness)
+                }
+            
+            if region_type == 0:
+                region_attribs["class"] = "exon"
+                region_attribs["fill"] = self.arrow_colors(svg_options.color_mode)
+                if svg_options.outline:
+                    region_attribs["stroke"] = "#0a0a0a"
+            else:
+                region_attribs["class"] = "intron"
+                region_attribs["fill"] = "#bbbbbb"
+                region_attribs["stroke-dasharray"] = "2,2"
+                if svg_options.outline:
+                    region_attribs["stroke"] = "#acacac"
+                
+            region_element = etree.Element("polygon", attrib = region_attribs)
+            
+            
+            # DOMAINS
+            if region_type == 0 and current_domain <= len(self.domain_list) - 1:
+                # get domain coordinates considering intron spaces
+                dstarti = int(dstart + intron_offset)
+                dendi = int(dend + intron_offset)
+                
+                # indicate we cannot draw another domain, go to next region
+                move_on = False
+
+                # Repeat for all domains that we can draw in the current region
+                while ((dstarti >= start and dstarti < end) or (dstarti < start and dendi > end) or (dendi > start and dendi <=end)) and (current_domain < len(self.domain_list)) and not move_on:
+                    # remember that head_start and arrow_collision are in local
+                    # 'arrow coordinates'
+                    if head_start == 0:
+                        arrow_collision = head_start + HL*(h+idm)
+                    else:
+                        arrow_collision = head_start + Hl*(h+idm)
+                    
+                    # get domain coordinates considering intron spaces (for current
+                    # domain)
+                    dstarti = int(dstart + intron_offset)
+                    dendi = int(dend + intron_offset)
+                    
+                    # Domain viewboxes:
+                    dbox_start = dstarti
+                    dbox_end = dendi
+                    
+                    ## Find if there is some portion of the domain in this region
+                    #draw = False
+                    
+                    # Indicate if the domain is split by an intron on any side. 
+                    # This will change the configuration of points used on the 
+                    # outline path
+                    outline_left = True
+                    outline_right = True
+                    
+                    next_domain = False # indicate whether we need to go to the next domain
+                    
+                    # start of domain is in this region
+                    if dstarti >= start and dstarti < end:
+                        # ...but the end of it is outside region
+                        if dendi > end:
+                            dbox_end = end
+                            outline_right = False
+                            move_on = True
+                        else:
+                            next_domain = True
+                    # domain continues in this region
+                    elif dstarti < start and dendi > end:
+                        dbox_start = start
+                        dbox_end = end
+                        outline_left = False
+                        outline_right = False
+                        move_on = True
+                    # domain didn't start in this region, but it ends here
+                    else:
+                        # This is 'if dendi > start and dendi <= end'
+                        dbox_start = start
+                        outline_left = False
+                        next_domain = True
+                    
+                    del vertices[:]
+                    
+                    # - Inner domain vertices -
+                    
+                    # case i) rectangle
+                    if dbox_end <= arrow_collision:
+                        g = [dbox_start, Y + H - idm]
+                        vertices.append(g)
+                        a = [dbox_start, Y + idm]
+                        vertices.append(a)
+                        aprime = [dbox_end, Y + idm]
+                        vertices.append(aprime)
+                        gprime = [dbox_end, Y + H - idm]
+                        vertices.append(gprime)
+                        
+                    # case ii) rectangle + trapezoid/triangle
+                    elif dbox_start < arrow_collision and dbox_end > arrow_collision:
+                        g = [dbox_start, Y + H - idm]
+                        vertices.append(g)
+                        a = [dbox_start, Y + idm]
+                        vertices.append(a)
+                        
+                        b = [arrow_collision, Y + idm]
+                        vertices.append(b)
+                        
+                        if int(dbox_end) == int(L):
+                            d = [L, center]
+                            vertices.append(d)
+                        else:
+                            if head_start == 0:
+                                alpha = int(HL*(L-dbox_end))
+                            else:
+                                alpha = int(Hl*(L-dbox_end))
+                            c = [dbox_end, center - alpha]
+                            vertices.append(c)
+                            e = [dbox_end, center + alpha]
+                            vertices.append(e)
+                            
+                        f = [arrow_collision, center + h - idm]
+                        vertices.append(f)
+                        
+                    # case iii) trapezoid
+                    else:
+                        if head_start == 0:
+                            alpha1 = int(HL*(L-dbox_start))
+                        else:
+                            alpha1 = int(Hl*(L-dbox_start))
+                        bprime = [dbox_start, center - alpha1]
+                        vertices.append(bprime)
+                        
+                        if int(dbox_end) == int(L):
+                            d = [L, center]
+                        else:
+                            if head_start == 0:
+                                alpha2 = int(HL*(L-dbox_end))
+                            else:
+                                alpha2 = int(Hl*(L-dbox_end))
+                            c = [dbox_end, center - alpha2]
+                            vertices.append(c)
+                            e = [dbox_end, center + alpha2]
+                            vertices.append(e)
+                    
+                        fprime = [dbox_start, center + alpha1]
+                        vertices.append(fprime)
+                    
+                    
+                    # - Domain outline path -
+                    vertices_outline = []
+                    vertices_outline_string = []
+                    
+                    # Not necessary
+                    #if flip and (not outline_left or not outline_right):
+                        #outline_left = not outline_left
+                        #outline_right = not outline_right
+                    
+                    # general attributes
+                    domain_outline_attribs = {
+                        "stroke": "rgb({})".format(color_outline),
+                        "stroke-linejoin": "round",
+                        "stroke-width": str(svg_options.gene_contour_thickness)
+                        }
+                    
+                    # two paths
+                    if not outline_left and not outline_right:
+                        vertices_outline_top = []
+                        vertices_outline_bottom = []
+                        
+                        # case i) rectangle
+                        if dbox_end <= arrow_collision:
+                            vertices_outline_top = [a, aprime]
+                            vertices_outline_bottom = [g, gprime]
+                            
+                        # case ii) rectangle + trapezoid
+                        elif dbox_start < arrow_collision and dbox_end > arrow_collision:
+                            vertices_outline_top = [a, b, c]
+                            vertices_outline_bottom = [g, f, e]
+                        # case iii) trapezoid
+                        else:
+                            vertices_outline_top = [bprime, c]
+                            vertices_outline_bottom = [fprime, e]
+                        
+                        if flip:
+                            vertices_outline_top = [(L - v[0], v[1]) for v in vertices_outline_top]
+                            vertices_outline_bottom = [(L - v[0], v[1]) for v in vertices_outline_bottom]
+                            
+                        vertices_outline_string = []
+                        vertices_outline_string.append("M{} {}".format(int(xoffset+vertices_outline_top[0][0]), int(yoffset+vertices_outline_top[0][1])))
+                        vertices_outline_string.append("L")
+                        vertices_outline_string.append(", ".join("{} {}".format(int(xoffset+v[0]),int(yoffset+v[1])) for v in vertices_outline_top[1:]))
+                        domain_outline_attribs["d"] = " ".join(vertices_outline_string)
+                        domain_outline_top = etree.Element("path", attrib=domain_outline_attribs)
+                        domain_node_main.append(domain_outline_top)
+                        
+                        vertices_outline_string = []
+                        vertices_outline_string.append("M{} {}".format(int(xoffset+vertices_outline_bottom[0][0]), int(yoffset+vertices_outline_bottom[0][1])))
+                        vertices_outline_string.append("L")
+                        vertices_outline_string.append(", ".join("{} {}".format(int(xoffset+v[0]),int(yoffset+v[1])) for v in vertices_outline_bottom[1:]))
+                        domain_outline_attribs["d"] = " ".join(vertices_outline_string)
+                        domain_outline_bottom = etree.Element("path", attrib=domain_outline_attribs)
+                        domain_node_main.append(domain_outline_bottom)
+                        
+                    else:
+                        # case i) rectangle
+                        if dbox_end <= arrow_collision:
+                            if outline_left:
+                                vertices_outline = [aprime, a, g, gprime]
+                            else:
+                                vertices_outline = [a, aprime, gprime, g]
+                        # case ii) rectangle + trapezoid/triangle
+                        elif dbox_start < arrow_collision and dbox_end > arrow_collision:
+                            if outline_right:
+                                vertices_outline = [a, b]
+                                if int(dbox_end) == int(L):
+                                    vertices_outline.append(d)
+                                else:
+                                    vertices_outline.append(c)
+                                    vertices_outline.append(e)
+                                vertices_outline.append(f)
+                                vertices_outline.append(g)
+                            else:
+                                vertices_outline = [c, b, a, g, f, e]
+                        # case iii) trapezoid/triangle
+                        else:
+                            if outline_left:
+                                vertices_outline = [c, bprime, fprime, e]
+                            else:
+                                if int(dbox_end) == int(L):
+                                    vertices_outline = [bprime, d, fprime]
+                                else:
+                                    vertices_outline = [bprime, c, e, fprime]
+                        
+                        if flip:
+                            vertices_outline = [(L - v[0], v[1]) for v in vertices_outline]
+                            
+                        vertices_outline_string = []
+                        vertices_outline_string.append("M{} {}".format(int(xoffset+vertices_outline[0][0]), int(yoffset+vertices_outline[0][1])))
+                        vertices_outline_string.append("L")
+                        vertices_outline_string.append(", ".join("{} {}".format(int(xoffset+v[0]),int(yoffset+v[1])) for v in vertices_outline[1:]))
+                        if outline_left and outline_right:
+                            vertices_outline_string.append("Z")
+                        
+                        domain_outline_attribs["d"] = " ".join(vertices_outline_string)
+                        
+                        domain_outline_attribs["fill"] = "none"
+                        domain_outline = etree.Element("path", attrib=domain_outline_attribs)
+                        domain_node_main.append(domain_outline)
+                    
+
+                    # - Render domain _inner_ block -
+                        
+                    # flip if requested and gene is in the reverse strand
+                    if flip:
+                        for v in vertices:
+                            v[0] = L - v[0]
+                    # shape properties
+                    string_vertices = []
+                    for v in vertices:
+                        string_vertices.append("{},{}".format(int(xoffset+v[0]), int(yoffset+v[1])))
+                    
+                    domain_inner_attribs = {
+                        "points": " ".join(string_vertices),
+                        "fill": "rgb({})".format(color),
+                        "stroke-linejoin":"round"
+                        }
+                    domain_inner = etree.Element("polygon", attrib=domain_inner_attribs)
+                    domain_node_main.append(domain_inner)
+                    
+                    #domain_node_main.append(domain_outer)
+                    domain_elements.append(domain_node_main)
+
+
+                    if next_domain:
+                        current_domain += 1
+                        
+                        # is there yet another domain?
+                        if current_domain < len(self.domain_list):
+                            domain = self.domain_list[current_domain]
+                            # General properties of the current domain: color and title
+                            try:
+                                color = ",".join([str(c) for c in hmmdb.colors[domain.ID]])
+                                color_outline = ",".join([str(c) for c in hmmdb.color_outline[domain.ID]])
+                            except KeyError:
+                                color = "150,150,150"
+                                color_outline = "210,210,210"
+                            
+                            try:
+                                title = hmmdb.alias[domain.ID]
+                            except KeyError:
+                                title = domain.ID
+                            domain_title = etree.Element("title")
+                            domain_title.text = title
+                            
+                            domain_attribs = {"class": "domain,{}".format(domain.ID)}
+                            domain_node_main = etree.Element("g", attrib=domain_attribs)
+                            domain_node_main.append(domain_title)
+                            
+                            # get coordinates in dna space
+                            dstart = (domain.ali_from*3)/svg_options.scaling
+                            dend = (domain.ali_to*3)/svg_options.scaling
+                            
+                            dstarti = int(dstart + intron_offset)
+                            dendi = int(dend + intron_offset)
+            
+            
+            # DOMAIN LINKER
+            # if the domain runs across two exons, draw a linker line in the intron
+            if region_type == 1 and current_domain <= len(self.domain_list) - 1:
+                if dstarti < start and dendi + end > end:
+                    # +/- 1 because linker goes beyond intron region
+                    if flip:
+                        x1 = L - start + 1
+                        x2 = L - end - 1
+                    else:
+                        x1 = start - 1
+                        x2 = end + 1
+                    domain_linker_attribs = {
+                        "x1": str(int(xoffset+x1)),
+                        "y1": str(int(yoffset+center)),
+                        "x2": str(int(xoffset+x2)),
+                        "y2": str(int(yoffset+center)),
+                        "stroke": "rgb({})".format(color),
+                        "stroke-width": str(int(H/4))
+                        }
+                    domain_linker = etree.Element("line", attrib=domain_linker_attribs)
+                    domain_node_main.append(domain_linker)
+
+        
+            # Finish this region by appending data
+            if region_type == 0:
+                exon_elements.append(region_element)
+            else:
+                intron_offset += end - start
+                intron_elements.append(region_element)
+            
+        
+        # INTRON BREAKS
+        # Draw intron breaks if intron regions were not requested
+        if intron_break and len(self.cds_regions) > 1 and not intron_regions:
+            # prepare regions
+            regions = []
+            start = int(self.cds_regions[0][0]/scaling)
+            end = int(self.cds_regions[0][1]/scaling)
+            
+            offset = start
+            
+            regions.append((0, end-offset, 0))
+            for cds in self.cds_regions[1:]:
+                new_start = int(cds[0]/scaling)
+                new_end = int(cds[1]/scaling)
+                
+                regions.append((end - offset + 1, new_start - offset - 1, 1))
+                regions.append((new_start - offset, new_end - offset, 0))
+                
+                start = new_start
+                end = new_end
+            
+            intron_offset = 0
+            vertices = []
+            vertices_string = []
+            r = 0
+            for region in regions:
+                r += 1
+                
+                start, end, region_type = region
+                
+                if region_type == 1:
+                    intron_offset += end - start
+                else:
+                    intron_break = end - intron_offset
+            
+                    # end of last region doesn't have an intron break
+                    if r < len(regions):
+                        del vertices[:]
+                        del vertices_string[:]
+                        
+                        if intron_break < head_start:
+                            a = [intron_break, Y]
+                            vertices.append(a)
+                            b = [intron_break, Y+H]
+                            vertices.append(b)
+                        else:
+                            alpha = int(Hl*(L-intron_break))
+                            
+                            a = [intron_break, center - alpha]
+                            vertices.append(a)
+                            b = [intron_break, center + alpha]
+                            vertices.append(b)
+                            
+                        if flip:
+                            for v in vertices:
+                                v[0] = L - v[0]
+                                
+                        vertices = [[str(int(xoffset+v[0])), str(int(yoffset+v[1]))] for v in vertices]
+                            
+                        intron_attribs = {"class":"intron"}
+                        intron_main = etree.Element("g", attrib=intron_attribs)
+                        
+                        # intron background
+                        intron_attribs = {
+                            "d":"M {} {} L {} {}".format(vertices[0][0], vertices[0][1], vertices[1][0], vertices[1][1]),
+                            "stroke":"#ffffff",
+                            "stroke-width": str(svg_options.gene_contour_thickness)
+                            }
+                        if intron_break <= head_start:
+                            intron_attribs["stroke-linecap"] = "square"
+                        else:
+                            intron_attribs["stroke-linecap"] = "round"
+                        
+                        intron_main.append(etree.Element("path", attrib=intron_attribs))
+                        
+                        # intron dashed line
+                        intron_attribs["stroke"] = "#8c8c8c"
+                        intron_attribs["stroke-dasharray"] = "2,3"
+                        intron_main.append(etree.Element("path", attrib=intron_attribs))
+                        
+                        # add the element to the main group
+                        intron_elements.append(intron_main)
+                        
+        
+        # Assemble the complete figure
+        # intron dashed boxes need to go first
+        for exon in exon_elements:
+            main_group.append(exon)
+        if intron_regions and len(self.cds_regions) > 1:
+            for intron in intron_elements:
+                main_group.append(intron)
+            
+            for domain in domain_elements:
+                main_group.append(domain)
+        # but intron breaks need to be drawn after exons
+        else:
+            #for exon in exon_elements:
+                #main_group.append(exon)
+            for domain in domain_elements:
+                main_group.append(domain)
+            for intron in intron_elements:
+                main_group.append(intron)
+                
+
+        return main_group
+
 
 class BGCDomain:
     def __init__(self, protein, ID, env_from, env_to, ali_from, ali_to, hmm_from, hmm_to, score, Evalue):
         self.protein = protein
-        self.ID = ID                # e.g. PF00501.27
+        self.ID = ID                # domain short name e.g. 'ketoacyl-synt'
         self.env_from = env_from    # Pos. in target seq. at which surr. envelope 
         self.env_to = env_to        #   starts/ends.
         self.ali_from = ali_from    # Position in target sequence at which the 

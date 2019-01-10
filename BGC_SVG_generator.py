@@ -106,8 +106,13 @@ if __name__ == "__main__":
     svgopts.color_mode = "white"
     svgopts.write_id = False
     svgopts.outline = True
+    svgopts.intron_regions = True
+    svgopts.intron_break = False
+    svgopts.original_orientation = True
+    svgopts.scaling = 30
     if not use_domains:
         svgopts.draw_domains = False
+    mirror_bgc = False
         
     # Options for box-plot domain content figure
     if dbox:
@@ -153,8 +158,14 @@ if __name__ == "__main__":
     # Render figures
     for b in svg_collection.bgcs:
         bgc = svg_collection.bgcs[b]
-        bgc.SVG(models=hmmdbs, svg_options=svgopts, file_path=o)
+        print(bgc.identifier)
+        bgc_name = o / (bgc.identifier + ".svg")
+        if mirror_bgc:
+            bgc_name = o / (bgc.identifier + ".m.svg")
+        bgc.BGC_SVG(bgc_name, hmmdb=hmmdbs, svg_options=svgopts, mirror=mirror_bgc)
         
         if dbox:
             for protein in bgc.protein_list:
-                protein.domain_SVG(o / (bgc.identifier + protein.identifier + ".svg"), hmmdbs, box_svgopts)
+                #print(protein.identifier)
+                protein.domain_SVG(o / (bgc.identifier + protein.identifier + "_box.svg"), hmmdbs, box_svgopts)
+                protein.arrow_SVG(o / (bgc.identifier + protein.identifier + "_arrow.svg"), hmmdbs, svgopts)
