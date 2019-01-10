@@ -93,8 +93,8 @@ if __name__ == "__main__":
         hmmdbs.add_database(Path("./Other Data/Domain models/TIGR04532.HMM"))
     hmmdbs.read_alias_file(Path("./Other Data/CBP_domains.tsv"))
     hmmdbs.read_domain_colors(Path("./Other Data/domains_color_file_ID.tsv"))
+    hmmdbs.read_domain_roles(Path("./Other Data/SM_domain_roles.tsv"))
     hmmdbs.cores = cpu_count()
-    
     
     
     data_cache = (Path(__file__).parent / "Cached_BGC_collection.pickle")
@@ -103,7 +103,8 @@ if __name__ == "__main__":
     # TODO: read this options from a file
     # Options for whole cluster
     svgopts = ArrowerOpts()
-    svgopts.color_mode = "white"
+    svgopts.color_mode = "roles"
+    svgopts.draw_domains = False
     svgopts.write_id = False
     svgopts.outline = True
     svgopts.intron_regions = True
@@ -145,11 +146,16 @@ if __name__ == "__main__":
         
     for b in working_collection.bgcs:
         bgc = working_collection.bgcs[b]
+        for p in bgc.protein_list:
+            p.classify_sequence()
+        
         svg_collection.bgcs[bgc.identifier] = bgc
         
         if use_domains:
             cached_collection.bgcs[bgc.identifier] = bgc
         
+    
+            
     # Update cache only if domains were predicted
     with open(data_cache, "wb") as dc:
         pickle.dump(cached_collection, dc)
@@ -158,6 +164,9 @@ if __name__ == "__main__":
     # Render figures
     for b in svg_collection.bgcs:
         bgc = svg_collection.bgcs[b]
+        for protein in bgc.protein_list:
+            protein.classify_sequence(hmmdbs)
+            
         print(bgc.identifier)
         bgc_name = o / (bgc.identifier + ".svg")
         if mirror_bgc:

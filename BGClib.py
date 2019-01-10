@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -81,7 +81,7 @@ def random_color_tuple(h_, s_, v_):
     s = uniform(s_[0], s_[1])
     v = uniform(v_[0], v_[1])
     
-    return "#{}".join( hex(int(c * 255)) for c in hsv_to_rgb(h, s, v) )
+    return "#{}".format("".join( hex(int(c * 255))[2:] for c in hsv_to_rgb(h, s, v) ))
 
 
 # Classes definition
@@ -99,12 +99,26 @@ class HMM_DB:
         self.cores = 0              # for hmmer. Remember that it always uses an
                                     # extra core for reading the database
                                     
-        self.ID_to_acc = {}   # TODO: load these data...
-        self.ID_to_desc = {}
+        self.ID_to_AC = {}          # ID: short name; AC: accession number (w/
+        self.ID_to_DE = {}          # version); DE: description
         
+        self.ID_to_role = {}        # manually assigned roles (see role_colors)
         return
     
-    def add_database(self, db_path):
+    def add_database(self, db_path, reload_data = False):
+        """
+        Makes sure the hmm that the user input is findable and ready to use with
+        HMMER.
+        
+        It also tries to load domain information (Accession and Description). This
+        information will be stored locally in a text file in the same place as BGClib
+        
+        input:
+            db_path: Path object that points to .hmm file
+            reload_data: read data from .hmm database again, replacing the 
+                contents of the locally stored text file (this can be used e.g.
+                when there is a new version of Pfam)
+        """
         if not db_path.is_file():
             print("Not able to add hmm database (not a file. Wrong path?)")
             return False
@@ -124,8 +138,81 @@ class HMM_DB:
             assert Path(db_path.parent / (db_path.name + ".h3i")).is_file()
         except AssertionError:
             sys.exit("Not able to hmmpress the database file")
+            
+        """
+        check if there is a file in the same location as BGClib that is e.g.
+        Pfam-A.hmm.domain_info.tsv
+        if there isn't:
+        check if in the hmmdb folder there is a file called e.g. Pfam-A.hmm.dat
+        if there is, read it for AC, DE
+        else
+        read the whole Pfam-A.hmm file
+        
+        store results in BGCliblocation/Pfam-A.hmm.domain_info.tsv
+        """
+        
+        domain_info_file = Path(__file__).parent / (db_path.name + ".domain_info.tsv")
+        
+        if domain_info_file.is_file() and not reload_data:
+            with open(domain_info_file, "r") as dif:
+                for line in dif:
+                    if line[0] == "#" or line.strip() == "":
+                        continue
+                    
+                    ID, AC, DE = line.strip().split("\t")
+                    
+                    self.ID_to_AC[ID] = AC
+                    self.ID_to_DE[ID] = DE
+        else:
+            dat_file = db_path.parent / (db_path.name + ".dat")
+            # shortcut
+            if dat_file.is_file():
+                print("\tFound {} file".format(db_path.name + ".dat"))
+                with open(dat_file, "r") as dat:
+                    putindict = False
+                    
+                    for line in dat:
+                        if line[5:7] == "ID":
+                            ID = line.strip()[10:]
+                        if line[5:7] == "AC":
+                            AC = line.strip()[10:]
+                        if line[5:7] == "DE":
+                            DE = line.strip()[10:]
+                            putindict = True
+                            
+                        if putindict:
+                            putindict = False
+                            self.ID_to_AC[ID] = AC
+                            self.ID_to_DE[ID] = DE
+                            
+            # Have to read the complete file. This will take a few seconds...
+            else:
+                with open(db_path, "r") as pfam:
+                    print("\tReading domain info from {} file".format(db_path.name))
+                    putindict = False
+                    # assuming that the order of the information never changes
+                    for line in pfam:
+                        if line[:4] == "NAME":
+                            ID = line.strip()[6:]
+                        if line[:3] == "ACC":
+                            AC = line.strip()[6:].split(".")[0]
+                        if line[:4] == "DESC":
+                            DE = line.strip()[6:]
+                            putindict = True
+                            
+                        if putindict:
+                            putindict = False
+                            self.ID_to_AC[ID] = AC
+                            self.ID_to_DE[ID] = DE
+
+            with open(domain_info_file, "w") as dif:
+                for ID in self.ID_to_AC:
+                    AC = self.ID_to_AC[ID]
+                    DE = self.ID_to_DE[ID]
+                    dif.write("{}\t{}\t{}\n".format(ID, AC, DE))
         
         self.db_list.append(db_path)
+        
         return True
 
     def read_alias_file(self, alias_file):
@@ -142,6 +229,7 @@ class HMM_DB:
                     self.alias[hmm_ID] = hmm_alias
         except FileNotFoundError:
             print("Could not open domain alias file ({})".format(alias_file))
+
 
     def read_domain_colors(self, colors_file):
         """
@@ -161,9 +249,35 @@ class HMM_DB:
                     h, s, v = rgb_to_hsv(int(r)/255.0, int(g)/255.0, int(b)/255.0)
                     self.color_outline[hmm_ID] = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h, s, 0.8*v))
         except FileNotFoundError:
-            print("Could not open domain colors file ({})".format(colors_file))
-        pass
+            print("Could not open domain colors file ({})".format(str(colors_file)))
+        
+        return
 
+
+    def read_domain_roles(self, domain_roles_file):
+        """
+        Expects the input file to be a tsv with two columns:
+        hmm_ID \t role
+        Where role is one of biosynthetic, tailoring, transporter, 
+            transcription factor, other, unknown
+        """
+        
+        try:
+            with open(domain_roles_file, "r") as f:
+                for line in f:
+                    if line[0] == "#" or line.strip() == "":
+                        continue
+                    
+                    ID, role = line.strip().split("\t")
+                    
+                    if role not in role_colors:
+                        print("Warning. Unknown role:\n{}\t{}".format(ID, role))
+                    
+                    self.ID_to_role[ID] = role
+        except FileNotFoundError:
+            print("Could not open domain role file({})".format(str(colors_file)))
+            
+        return
 
 class ArrowerOpts():
     """
@@ -212,6 +326,7 @@ class ArrowerOpts():
             self._color_mode = cm
         else:
             print("Color mode not supported; defaulting to 'white'")
+            print("Valid color modes are ['{}']".format("', '".join(self.valid_color_modes)))
             self._color_mode = "white"
 
 
@@ -964,7 +1079,7 @@ class BGCProtein:
         return
     
     
-    def classify_sequence(self):
+    def classify_sequence(self, hmmdb = HMM_DB()):
         """Classifies a sequence based on its predicted domains according to a 
         set of rules.
         
@@ -985,7 +1100,7 @@ class BGCProtein:
                 #return "other"
         
         sequence_type = ""
-
+        
         # pks/nrps hybrid
         if len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
             for d in self.domain_list:
@@ -999,6 +1114,7 @@ class BGCProtein:
                     else:
                         self._CBP_type = "PKS-NRPS_hybrid"
                     self.role = "biosynthetic"
+                    
                     return
                 elif d.ID in NRPS_domains:
                     self._CBP_type = "NRPS-PKS_hybrid"
@@ -1006,7 +1122,6 @@ class BGCProtein:
                     return
                 else:
                     pass
-            
         # nrPKS or (h/p)rPKS
         elif len(self.domain_set & PKS_domains) > 0:
             # try to set appart FAS-like sequences of e.g. azaphilone
@@ -1036,14 +1151,24 @@ class BGCProtein:
         elif len(self.domain_set & NRPS_domains) > 0:
             sequence_type = "NRPS"
             self.role = "biosynthetic"
-            
         elif len(self.domain_set & NRPS_Independent_Siderophore_domains) > 0:
             sequence_type = "NIS"
             self.role = "biosynthetic"
             
+        
         else:
             sequence_type = "other"
-            self.role = "unknown"
+            
+            role_set = set()
+            for d in self.domain_set:
+                if d in hmmdb.ID_to_role:
+                    role_set.add(hmmdb.ID_to_role[d])
+            
+            if len(role_set) == 1:
+                for r in role_set:
+                    self.role = r
+            else:
+                self.role = "unknown"
 
         self._CBP_type = sequence_type
         
@@ -1174,18 +1299,18 @@ class BGCProtein:
         elif mode == "random-pastel":
             s_ = (0.15, 0.4)
             v_ = (0.9, 0.95)
-            return self.random_color_tuple((0.0, 1.0), s_, v_)
+            return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "random-dark":
             s_ = (0.5, 0.75)
             v_ = (0.4, 0.5)
-            return self.random_color_tuple((0.0, 1.0), s_, v_)
+            return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "random":
             s_ = (0.6, 0.75)
             v_ = (0.65, 0.85)
-            return self.random_color_tuple((0.0, 1.0), s_, v_)
+            return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "gray":
             return (180, 180, 180)
-        elif mode == "role":
+        elif mode == "roles":
             return role_colors[self.role]
         else:
             # "white"
@@ -1353,10 +1478,15 @@ class BGCProtein:
                 color = "150,150,150"
                 color_outline = "210,210,210"
             
-            try:
-                title = hmmdb.alias[domain.ID]
-            except KeyError:
-                title = domain.ID
+            title = ""
+            if domain.ID in hmmdb.ID_to_DE:
+                title = hmmdb.ID_to_DE[domain.ID] + " "
+            if domain.ID in hmmdb.alias:
+                title += "[{}]".format(hmmdb.alias[domain.ID])
+            if domain.ID in hmmdb.ID_to_AC:
+                title += "\n{} - ".format(hmmdb.ID_to_AC[domain.ID])
+            title += domain.ID
+
             domain_title = etree.Element("title")
             domain_title.text = title
             
@@ -1741,10 +1871,14 @@ class BGCProtein:
                                 color = "150,150,150"
                                 color_outline = "210,210,210"
                             
-                            try:
-                                title = hmmdb.alias[domain.ID]
-                            except KeyError:
-                                title = domain.ID
+                            title = ""
+                            if domain.ID in hmmdb.ID_to_DE:
+                                title = hmmdb.ID_to_DE[domain.ID] + " "
+                            if domain.ID in hmmdb.alias:
+                                title += "[{}]".format(hmmdb.alias[domain.ID])
+                            if domain.ID in hmmdb.ID_to_AC:
+                                title += "\n{} - ".format(hmmdb.ID_to_AC[domain.ID])
+                            title += domain.ID
                             domain_title = etree.Element("title")
                             domain_title.text = title
                             

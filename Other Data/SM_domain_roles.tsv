@@ -1,0 +1,2071 @@
+PP-binding	tailoring
+adh_short	tailoring
+Epimerase	tailoring
+Glycos_transf_2	tailoring
+Glycos_transf_1	tailoring
+Acyl_transf_1	tailoring
+Pyr_redox_2	tailoring
+Pyr_redox	tailoring
+NTP_transferase	tailoring
+KR	tailoring
+ADH_zinc_N	tailoring
+Abhydrolase_1	tailoring
+Abhydrolase_2	tailoring
+Abhydrolase_3	tailoring
+Abhydrolase_4	tailoring
+Abhydrolase_6	tailoring
+Abhydrolase_8	tailoring
+ADH_N	tailoring
+p450	tailoring
+WD40	tailoring
+Methyltransf_11	tailoring
+Acyl-CoA_dh_1	tailoring
+Acetyltransf_1	tailoring
+DAO	tailoring
+Acyl-CoA_dh_N	tailoring
+FAD_binding_3	tailoring
+Acyl-CoA_dh_M	tailoring
+Radical_SAM	tailoring
+Thioesterase	tailoring
+DegT_DnrJ_EryC1	tailoring
+Aminotran_1_2	tailoring
+ACP_syn_III_C	tailoring
+Polysacc_synt	tailoring
+ECH_1	tailoring
+ACP_syn_III	tailoring
+Amino_oxidase	tailoring
+UDPG_MGDP_dh_N	tailoring
+NAD_binding_2	tailoring
+UDPG_MGDP_dh	tailoring
+UDPG_MGDP_dh_C	tailoring
+CbiA	tailoring
+GFO_IDH_MocA	tailoring
+Bac_luciferase	tailoring
+Wzz	tailoring
+Hydrolase_4	tailoring
+Thiolase_C	tailoring
+GMC_oxred_C	tailoring
+Thiolase_N	tailoring
+Aldedh	tailoring
+Fer2_BFD	tailoring
+Fe-ADH	tailoring
+Glyoxalase	tailoring
+Aminotran_3	tailoring
+FMO-like	tailoring
+dTDP_sugar_isom	tailoring
+2-Hacid_dh_C	tailoring
+Aminotran_5	tailoring
+GMC_oxred_N	tailoring
+Bac_transf	tailoring
+Oxidored_nitro	tailoring
+Fer2	tailoring
+FAD_binding_2	tailoring
+Methyltransf_12	tailoring
+3HCDH	tailoring
+Fer4	tailoring
+2-Hacid_dh	tailoring
+Cupin_2	tailoring
+GFO_IDH_MocA_C	tailoring
+Polysacc_synt_2	tailoring
+Aldo_ket_red	tailoring
+APH	tailoring
+MDMPI_N	tailoring
+Rieske	tailoring
+Esterase	tailoring
+Acyl_transf_3	tailoring
+Pkinase	tailoring
+Glyco_transf_9	tailoring
+LCM	tailoring
+FabA	tailoring
+4HBT	tailoring
+Epimerase_2	tailoring
+3HCDH_N	tailoring
+Cys_Met_Meta_PP	tailoring
+Hydrolase	tailoring
+IucA_IucC	tailoring
+TPP_enzyme_C	tailoring
+Wzy_C	tailoring
+Paired_CXXCH_1	tailoring
+NUDIX	tailoring
+PE	tailoring
+Apolipoprotein	tailoring
+Nitroreductase	tailoring
+Poly_export	tailoring
+OB_aCoA_assoc	tailoring
+MgsA_C	tailoring
+NMO	tailoring
+ACPS	tailoring
+Polyketide_cyc2	tailoring
+FAD_binding_4	tailoring
+TPP_enzyme_N	tailoring
+B12-binding	tailoring
+Beta-lactamase	tailoring
+Asn_synthase	tailoring
+MannoseP_isomer	tailoring
+Glyco_transf_28	tailoring
+FMN_dh	tailoring
+polyprenyl_synt	tailoring
+SQS_PSY	tailoring
+6PGD	tailoring
+FemAB	tailoring
+TauD	tailoring
+Acyltransferase	tailoring
+Fer4_NifH	tailoring
+Chorismate_bind	tailoring
+UDPGT	tailoring
+Isochorismatase	tailoring
+Pyr_redox_dim	tailoring
+Flavin_Reduct	tailoring
+MTS	tailoring
+Stap_Strp_tox_C	tailoring
+AsnC_trans_reg	tailoring
+cobW	tailoring
+Glycos_transf_4	tailoring
+Amidohydro_1	tailoring
+MaoC_dehydratas	tailoring
+ThiF	tailoring
+FAA_hydrolase	tailoring
+ETF	tailoring
+SMC_N	tailoring
+Trp_halogenase	tailoring
+Hexapep	tailoring
+Methyltransf_2	tailoring
+PALP	tailoring
+Amidohydro_2	tailoring
+CMD	tailoring
+PPE	tailoring
+CTP_transf_3	tailoring
+MbtH	tailoring
+UbiA	tailoring
+TPP_enzyme_M	tailoring
+Lactamase_B	tailoring
+Hydrolase_3	tailoring
+MlaD	tailoring
+Metallophos	tailoring
+TrkA_N	tailoring
+Oxidored_FMN	tailoring
+AcylCoA_DH_N	tailoring
+PAP2	tailoring
+WXG100	tailoring
+Sulfatase	tailoring
+FA_desaturase	tailoring
+PIG-L	tailoring
+CMAS	tailoring
+Glyco_transf_8	tailoring
+Kdo	tailoring
+NAD_binding_1	tailoring
+Gate	tailoring
+Carboxyl_trans	tailoring
+NIR_SIR_ferr	tailoring
+NIR_SIR	tailoring
+HMG_CoA_synt_C	tailoring
+NAD_binding_4	tailoring
+Prenyltrans	tailoring
+Sulfotransfer_1	tailoring
+ABM	tailoring
+Docking	tailoring
+AP_endonuc_2	tailoring
+YceG	tailoring
+FAD_binding_6	tailoring
+GATase_2	tailoring
+Capsule_synth	tailoring
+PAPS_reduct	tailoring
+NeuB	tailoring
+PG_binding_4	tailoring
+GATase	tailoring
+Orn_DAP_Arg_deC	tailoring
+DUF2892	tailoring
+His_Phos_1	tailoring
+IMS	tailoring
+DLH	tailoring
+SIS	tailoring
+Lipase_GDSL	tailoring
+PS_pyruv_trans	tailoring
+Orn_Arg_deC_N	tailoring
+IMS_C	tailoring
+Glyco_tran_28_C	tailoring
+SAF	tailoring
+Mce4_CUP1	tailoring
+HpaB_N	tailoring
+CoA_transf_3	tailoring
+Beta_elim_lyase	tailoring
+Fer4_19	tailoring
+FMN_red	tailoring
+HpaB	tailoring
+Aminotran_4	tailoring
+Alpha-amylase	tailoring
+PhyH	tailoring
+Glyphos_transf	tailoring
+Pribosyltran	tailoring
+IMS_HHH	tailoring
+APS_kinase	tailoring
+DUF3382	tailoring
+HMG_CoA_synt_N	tailoring
+AA_kinase	tailoring
+Resolvase	tailoring
+CTP_transf_like	tailoring
+FtsK_gamma	transcription factor
+Transket_pyr	tailoring
+Inositol_P	tailoring
+Zeta_toxin	tailoring
+SnoaL	tailoring
+DUF2867	tailoring
+Transketolase_N	tailoring
+Biotin_lipoyl	tailoring
+Polysacc_deac_1	tailoring
+GTP_EFTU	tailoring
+FAD_binding_9	tailoring
+ATG22	tailoring
+Transketolase_C	tailoring
+SIP	tailoring
+Caps_synth_GfcC	tailoring
+PGM_PMM_III	tailoring
+ETF_alpha	tailoring
+PGM_PMM_I	tailoring
+PGM_PMM_II	tailoring
+SbcD_C	tailoring
+PepSY_like	tailoring
+Sacchrp_dh_NADP	tailoring
+LPG_synthase_TM	tailoring
+GtrA	tailoring
+His_biosynth	tailoring
+PGM_PMM_IV	tailoring
+Cyclase	tailoring
+DUF87	tailoring
+GIDA	tailoring
+Shikimate_DH	tailoring
+LysE	tailoring
+PfkB	tailoring
+Thi4	tailoring
+Lip_A_acyltrans	tailoring
+Amidase	tailoring
+HpcH_HpaI	tailoring
+SSL_OB	tailoring
+RibD_C	tailoring
+Pyridoxal_deC	tailoring
+CobW_C	tailoring
+UreD	tailoring
+Ubie_methyltran	tailoring
+Flavodoxin_2	tailoring
+AraC_binding	tailoring
+Alk_phosphatase	tailoring
+Acyl-CoA_dh_2	tailoring
+Methyltransf_14	tailoring
+CPSase_L_D2	tailoring
+Putative_PNPOx	tailoring
+PNP_UDP_1	tailoring
+SGL	tailoring
+CobN-Mg_chel	tailoring
+Rhodanese	tailoring
+GAF	tailoring
+TauE	tailoring
+GHMP_kinases_C	tailoring
+PAF-AH_p_II	tailoring
+MR_MLE_N	tailoring
+AurF	tailoring
+PE_PPE_C	tailoring
+Shikimate_dh_N	tailoring
+Amidohydro_3	tailoring
+FA_hydroxylase	tailoring
+DoxX	tailoring
+BATS	tailoring
+Patatin	tailoring
+Semialdhyde_dh	tailoring
+FdhD-NarQ	tailoring
+COesterase	tailoring
+ThiG	tailoring
+Urease_gamma	tailoring
+Urease_beta	tailoring
+ICMT	tailoring
+DUF1205	tailoring
+Peptidase_S15	tailoring
+FdhE	tailoring
+Glyco_transf_8C	tailoring
+FhuF_C	tailoring
+YjbF	tailoring
+UreF	tailoring
+Urease_alpha	tailoring
+Ricin_B_lectin	tailoring
+F420_oxidored	tailoring
+DUF3327	tailoring
+CstA	tailoring
+HMG-CoA_red	tailoring
+WES_acyltransf	tailoring
+Eno-Rase_NADH_b	tailoring
+IAT_beta	tailoring
+ThiS	tailoring
+Enoyl_reductase	tailoring
+Leukocidin	tailoring
+IspD	tailoring
+Methyltransf_13	tailoring
+GLF	tailoring
+Glycos_transf_N	tailoring
+DSBA	tailoring
+Trp_dioxygenase	tailoring
+OCD_Mu_crystall	tailoring
+Methyltransf_3	tailoring
+Eno-Rase_FAD_bd	tailoring
+Cellulase	tailoring
+DHQ_synthase	tailoring
+Ferritin	tailoring
+Dala_Dala_lig_C	tailoring
+NAD_synthase	tailoring
+Biotin_carb_N	tailoring
+Thioredoxin	tailoring
+YcaO	tailoring
+Glyco_hydro_3	tailoring
+Sulfotransfer_2	tailoring
+MDMPI_C	tailoring
+ApbA	tailoring
+Phage_holin_3_6	tailoring
+VanW	tailoring
+NMT1	tailoring
+T7SS_ESX1_EccB	tailoring
+dCMP_cyt_deam_1	tailoring
+Formyl_trans_N	tailoring
+Amidase_2	tailoring
+LGFP	tailoring
+SLT	tailoring
+TrkA_C	tailoring
+Carbam_trans_N	tailoring
+DUF2974	tailoring
+CBM_48	tailoring
+DUF218	tailoring
+Stap_Strp_toxin	tailoring
+ThrE	tailoring
+DUF3108	tailoring
+Lant_dehydr_N	tailoring
+DUF3618	tailoring
+FdtA	tailoring
+ApbA_C	tailoring
+DUF397	tailoring
+Sel_put	tailoring
+F420H2_quin_red	tailoring
+MM_CoA_mutase	tailoring
+ACT	tailoring
+Arylsulfotrans	tailoring
+Cutinase	tailoring
+BBE	tailoring
+Ferric_reduct	tailoring
+Thymidylate_kin	tailoring
+Peptidase_S10	tailoring
+Phosphodiest	tailoring
+Hexose_dehydrat	tailoring
+PSD1	tailoring
+HemN_C	transcription factor
+HI0933_like	tailoring
+DUF664	tailoring
+IMPDH	tailoring
+Glyco_tran_WecB	tailoring
+Mg_chelatase	tailoring
+SNARE_assoc	tailoring
+SfLAP	tailoring
+YkuD	tailoring
+SKI	tailoring
+DUF1529	tailoring
+Dus	tailoring
+Nitro_FeMo-Co	tailoring
+PNK3P	tailoring
+PSCyt2	tailoring
+DUF2628	tailoring
+Peptidase_M28	tailoring
+DUF732	tailoring
+UreE_N	tailoring
+DAHP_synth_2	tailoring
+CoA_trans	tailoring
+Biopterin_H	tailoring
+NHase_beta	tailoring
+PSCyt1	tailoring
+T7SS_ESX_EspC	tailoring
+PGAP1	tailoring
+UreE_C	tailoring
+PEP-utilizers	tailoring
+PHP	tailoring
+Transpeptidase	tailoring
+Semialdhyde_dhC	tailoring
+DUF3479	tailoring
+Polyketide_cyc	tailoring
+LHC	tailoring
+PTAC	tailoring
+PTPS	tailoring
+TylF	tailoring
+DapB_N	tailoring
+AlaDh_PNT_C	tailoring
+DHO_dh	tailoring
+Methyltransf_20	tailoring
+AlaDh_PNT_N	tailoring
+Succ_DH_flav_C	tailoring
+Methyltransf_19	tailoring
+PCMT	tailoring
+S-methyl_trans	tailoring
+CBP_GIL	tailoring
+DUF3298	tailoring
+Polysacc_syn_2C	tailoring
+PPDK_N	tailoring
+Peptidase_M10	tailoring
+Amidinotransf	tailoring
+Molybdopterin	tailoring
+SRP54	tailoring
+LMWPc	tailoring
+ATP_bind_1	tailoring
+Biotin_carb_C	tailoring
+FAD-oxidase_C	tailoring
+Meth_synt_2	tailoring
+Molydop_binding	tailoring
+CBP_BcsG	tailoring
+Methyltransf_4	tailoring
+Glu_synthase	tailoring
+MCPsignal	tailoring
+PCP_red	tailoring
+DUF3410	tailoring
+Lycopene_cycl	tailoring
+ELFV_dehydrog	tailoring
+Lyase_aromatic	tailoring
+RraA-like	tailoring
+Dala_Dala_lig_N	tailoring
+Glyco_transf_5	tailoring
+Hemerythrin	tailoring
+Ala_racemase_N	tailoring
+SHMT	tailoring
+DUF742	transcription factor
+Peptidase_M78	tailoring
+PhzC-PhzF	tailoring
+SseB	tailoring
+DUF3040	tailoring
+ydhR	tailoring
+TMP-TENI	tailoring
+DUF968	tailoring
+Uma2	tailoring
+Peptidase_M17	tailoring
+NHase_alpha	tailoring
+ADC	tailoring
+DUF3471	tailoring
+MTHFR	tailoring
+Anth_synt_I_N	tailoring
+DUF3463	tailoring
+TP_methylase	tailoring
+Cytochrom_CIII	tailoring
+THF_DHG_CYH_C	tailoring
+Molybdop_Fe4S4	tailoring
+Fer2_2	tailoring
+THF_DHG_CYH	tailoring
+ELFV_dehydrog_N	tailoring
+Ser_hydrolase	tailoring
+Bacteriocin_IIc	tailoring
+PhoR	tailoring
+DUF3333	tailoring
+PSCyt3	tailoring
+Cellulose_synt	tailoring
+Flavoprotein	tailoring
+TehB	tailoring
+DUF2721	tailoring
+PSD4	tailoring
+ICL	tailoring
+E1_dh	tailoring
+NodS	tailoring
+Lyase_1	tailoring
+HMGL-like	tailoring
+EccE	tailoring
+HXXSHH	tailoring
+Cob_adeno_trans	tailoring
+LapA_dom	tailoring
+GDPD	tailoring
+Peptidase_M23	tailoring
+VanZ	tailoring
+MBOAT	tailoring
+CoA_binding	tailoring
+DUF2075	tailoring
+3Beta_HSD	tailoring
+ALO	tailoring
+N6_Mtase	tailoring
+Aldose_epim	tailoring
+AhpC-TSA	tailoring
+DUF3364	tailoring
+cNMP_binding	tailoring
+Esterase_phd	tailoring
+CPBP	tailoring
+DUF2922	tailoring
+PSD5	tailoring
+Asp_Glu_race	tailoring
+Rubrerythrin	tailoring
+DUF915	tailoring
+DUF3440	tailoring
+TcdB_toxin_midN	tailoring
+LigB	tailoring
+DUF3426	tailoring
+Dehydratase_MU	tailoring
+Aldolase_II	tailoring
+PRK	tailoring
+Lipase_3	tailoring
+MgtC	tailoring
+PDH	tailoring
+Glyco_hydro_12	tailoring
+CmcI	tailoring
+LYTB	tailoring
+StbA	tailoring
+DUF3438	tailoring
+DAHP_synth_1	tailoring
+RgpF	tailoring
+CDP-OH_P_transf	tailoring
+Ald_Xan_dh_C2	tailoring
+FGE-sulfatase	tailoring
+2OG-FeII_Oxy	tailoring
+LicD	tailoring
+BBP2_2	tailoring
+CBP_BcsR	tailoring
+DPPIV_N	tailoring
+Arginosuc_synth	tailoring
+FAD_binding_7	tailoring
+DUF2156	tailoring
+CBP_BcsF	tailoring
+DUF2895	tailoring
+CrtC	tailoring
+HD	tailoring
+WaaY	tailoring
+SpoIIAA-like	tailoring
+DUF3487	tailoring
+Ring_hydroxyl_B	tailoring
+DinB	tailoring
+FCSD-flav_bind	tailoring
+Bacillus_HBL	tailoring
+Penicil_amidase	tailoring
+Gly_kinase	tailoring
+Glyco_hydro_10	tailoring
+Haem_degrading	tailoring
+DUF3485	tailoring
+Gly_transf_sug	tailoring
+DUF3365	tailoring
+Asp23	tailoring
+DUF2976	tailoring
+PSD3	tailoring
+OTCace_N	tailoring
+EHN	tailoring
+GST_N	tailoring
+CHAP	tailoring
+ChpA-C	tailoring
+Guanylate_cyc	tailoring
+OTCace	tailoring
+DUF3231	tailoring
+Ring_hydroxyl_A	tailoring
+Pro_isomerase	tailoring
+Ppnp	tailoring
+GST_C	tailoring
+Aldolase	tailoring
+POR_N	tailoring
+DUF3349	tailoring
+DUF2859	tailoring
+DUF977	transcription factor
+PSD2	tailoring
+Meth_synt_1	tailoring
+URO-D	tailoring
+YCII	tailoring
+F5_F8_type_C	tailoring
+DUF1700	tailoring
+Creatininase	tailoring
+NAD_Gly3P_dh_N	tailoring
+Fe-S_biosyn	tailoring
+Arginase	tailoring
+DUF3261	tailoring
+DUF3071	tailoring
+Dehydratase_SU	tailoring
+UDG	tailoring
+Dehydratase_LU	tailoring
+DUF2884	tailoring
+Peptidase_M16	tailoring
+LIP	tailoring
+DHquinase_II	tailoring
+DeoC	tailoring
+Cupin_1	tailoring
+Met_10	tailoring
+ABC2_membrane_6	transporter
+DUF2786	tailoring
+YdaT_toxin	tailoring
+DUF1433	tailoring
+Hepar_II_III	tailoring
+FBPase_glpX	tailoring
+Glyco_hydro_16	tailoring
+Form-deh_trans	tailoring
+PGI	tailoring
+DUF2304	tailoring
+DUF1707	tailoring
+DUF3262	tailoring
+Transgly	tailoring
+CPT	tailoring
+Glyco_hydro_26	tailoring
+Se-cys_synth_N	tailoring
+CN_hydrolase	tailoring
+DUF347	tailoring
+DUF3418	tailoring
+PBP_dimer	tailoring
+DDR	tailoring
+Alg14	tailoring
+Acetyltransf_2	tailoring
+DHFR_1	tailoring
+Methyltrans_SAM	tailoring
+Phage_TAC_11	tailoring
+TENA_THI-4	tailoring
+Adenylsucc_synt	tailoring
+GTP_cyclohydroI	tailoring
+GSDH	tailoring
+DUF2142	tailoring
+HEM4	tailoring
+GGDEF	tailoring
+DUF2809	tailoring
+DUF3516	tailoring
+EthD	tailoring
+Peptidase_M42	tailoring
+LAM_C	tailoring
+POR	tailoring
+Asp_Arg_Hydrox	tailoring
+Kdo_hydroxy	tailoring
+DUF1729	tailoring
+Pro_racemase	tailoring
+TcdB_toxin_midC	tailoring
+YjbE	tailoring
+RMMBL	tailoring
+Glyco_transf_25	tailoring
+DUF1471	tailoring
+Chlorophyllase	tailoring
+Mg-por_mtran_C	tailoring
+Peptidase_S11	tailoring
+SCP2	tailoring
+Porphobil_deamC	tailoring
+Nif11	tailoring
+TPPK_C	tailoring
+Porphobil_deam	tailoring
+DUF3054	tailoring
+OB_NTP_bind	tailoring
+Glyco_hydro_3_C	tailoring
+DUF2154	tailoring
+TipAS	tailoring
+Glyco_transf_11	tailoring
+NAD_Gly3P_dh_C	tailoring
+Cyclase_polyket	tailoring
+Glyco_trans_4_3	tailoring
+DUF1298	tailoring
+2-oxoacid_dh	tailoring
+AfsA	tailoring
+Glyco_hydro_42	tailoring
+GlutR_dimer	tailoring
+DUF1627	tailoring
+Tyrosinase	tailoring
+AdoHcyase_NAD	tailoring
+Aconitase	tailoring
+AroM	tailoring
+Peptidase_M22	tailoring
+G_glu_transpept	tailoring
+MIP	tailoring
+FtsJ	tailoring
+Pirin_C	tailoring
+DUF3139	tailoring
+DUF3473	tailoring
+MobB	tailoring
+DUF3017	tailoring
+EcKinase	tailoring
+Gamma_PGA_hydro	tailoring
+DIT1_PvcA	tailoring
+PqqD	tailoring
+GXGXG	tailoring
+DUF3748	tailoring
+DUF454	tailoring
+NAD_binding_3	tailoring
+RPE65	tailoring
+Cupin_3	tailoring
+AIRC	tailoring
+DUF2750	tailoring
+KAP_NTPase	tailoring
+DMT_YdcZ	tailoring
+Transglut_core	tailoring
+DUF1978	tailoring
+DUF3000	tailoring
+DUF2559	tailoring
+DUF874	tailoring
+LppX_LprAFG	tailoring
+DUF1120	tailoring
+Peptidase_M19	tailoring
+DivIC	tailoring
+Antibiotic_NAT	tailoring
+Wyosine_form	tailoring
+Acyl-ACP_TE	tailoring
+DsbB	tailoring
+MctB	tailoring
+DUF2929	tailoring
+DUF2755	tailoring
+DUF2754	tailoring
+Acyl_CoA_thio	tailoring
+Catalase	tailoring
+DUF1398	tailoring
+BCHF	tailoring
+Glu_syn_central	tailoring
+Trypsin	tailoring
+NIPSNAP	tailoring
+DUF1731	tailoring
+DUF3141	tailoring
+DUF885	tailoring
+DUF1310	tailoring
+DUF836	tailoring
+Glycos_transf_3	tailoring
+DUF2808	tailoring
+B12-binding_2	tailoring
+DHDPS	tailoring
+DUF1803	tailoring
+SMC_hinge	tailoring
+DUF3459	tailoring
+Glyco_hydro_88	tailoring
+GATase_3	tailoring
+PMT	tailoring
+PhoH	tailoring
+DUF853	tailoring
+DUF3391	tailoring
+Iso_dh	tailoring
+DUF2201	tailoring
+PhaC_N	tailoring
+Pro-kuma_activ	tailoring
+DUF3145	tailoring
+Glyco_transf_52	tailoring
+FR47	tailoring
+Glyco_hydro_42M	tailoring
+PduV-EutP	tailoring
+LuxC	tailoring
+Ribosomal_L11	tailoring
+MetW	tailoring
+Phosphorylase	tailoring
+AdoHcyase	tailoring
+EutN_CcmL	tailoring
+DUF805	tailoring
+AcetylCoA_hydro	tailoring
+DUF3048	tailoring
+DUF2048	tailoring
+Glyco_hydro_43	tailoring
+DUF354	tailoring
+DUF3775	tailoring
+DUF2236	tailoring
+Methyltransf_9	tailoring
+DUF417	tailoring
+DUF3182	tailoring
+Chlor_dismutase	tailoring
+TfuA	tailoring
+DUF3500	tailoring
+AftA_N	tailoring
+DUF3278	tailoring
+Terpene_synth_C	tailoring
+Ldh_1_N	tailoring
+Lactonase	tailoring
+TAL_FSA	tailoring
+DUF1906	tailoring
+DUF3225	tailoring
+DNA_binding_1	tailoring
+Chitin_synth_2	tailoring
+GCV_T	tailoring
+CCP_MauG	tailoring
+SPOUT_MTase	tailoring
+Ldh_1_C	tailoring
+DUF3272	tailoring
+CitF	tailoring
+DUF3102	tailoring
+Glyco_hydro_127	tailoring
+MAP	tailoring
+DUF3427	tailoring
+DUF1772	tailoring
+UnbV_ASPIC	tailoring
+DUF2848	tailoring
+DUF3561	tailoring
+LuxE	tailoring
+DUF2268	tailoring
+Fructosamin_kin	tailoring
+Oxidored_molyb	tailoring
+DUF3417	tailoring
+TPMT	tailoring
+Phage_TAC_6	tailoring
+Hpt	tailoring
+DUF3606	tailoring
+TniB	tailoring
+DUF3623	tailoring
+DUF3311	tailoring
+Glucosamine_iso	tailoring
+Wzy_C_2	tailoring
+Pterin_bind	tailoring
+Coq4	tailoring
+DUF2269	tailoring
+Dioxygenase_C	tailoring
+Glyco_hydro_77	tailoring
+CBM_6	tailoring
+LCAT	tailoring
+TraX	tailoring
+Formyl_trans_C	tailoring
+Glyco_transf_7C	tailoring
+DUF1430	tailoring
+ComC	tailoring
+Redoxin	tailoring
+DUF3027	tailoring
+EPSP_synthase	tailoring
+DUF3577	tailoring
+AftA_C	tailoring
+Phage_holin_2_1	tailoring
+LEH	tailoring
+DUF3567	tailoring
+Ribul_P_3_epim	tailoring
+DUF995	tailoring
+G5	tailoring
+Rhodanese_C	tailoring
+DUF469	tailoring
+DUF3584	tailoring
+Zn_dep_PLPC	tailoring
+APH_6_hur	tailoring
+NTPase_1	tailoring
+BCSC_C	tailoring
+Prophage_tail	tailoring
+Zot	tailoring
+NifT	tailoring
+DUF3335	tailoring
+DUF2877	tailoring
+IDH	tailoring
+2OG-Fe_Oxy_2	tailoring
+PepSY	tailoring
+FGGY_N	tailoring
+IGPS	tailoring
+DUF3117	tailoring
+BacA	tailoring
+Cons_hypoth95	tailoring
+FAD-SLDH	tailoring
+Peptidase_C14	tailoring
+Transglycosylas	tailoring
+Pro_CA	tailoring
+DUF1100	tailoring
+GcpE	tailoring
+GCV_T_C	tailoring
+MtrB_PioB	tailoring
+SPDY	tailoring
+Diacid_rec	tailoring
+DUF2933	tailoring
+DUF3413	tailoring
+DUF1828	tailoring
+DUF2530	tailoring
+Glyco_hydro_2_N	tailoring
+DUF3237	tailoring
+Lipase_2	tailoring
+Macro	tailoring
+DUF3466	tailoring
+DUF3573	tailoring
+FmrO	tailoring
+DUF1360	tailoring
+DUF3558	tailoring
+PorA	tailoring
+Branch	tailoring
+DUF1612	tailoring
+Peptidase_M15	tailoring
+DUF3052	tailoring
+DUF3499	tailoring
+ACCA	tailoring
+Glyco_hydro_2_C	tailoring
+YchF-GTPase_C	tailoring
+Met_synt_B12	tailoring
+GSP_synth	tailoring
+DUF2964	tailoring
+NIF	tailoring
+UPF0149	tailoring
+MethyltransfD12	tailoring
+PS_Dcarbxylase	tailoring
+Y_phosphatase2	tailoring
+NanE	tailoring
+DUF1673	tailoring
+BcsB	tailoring
+Cupin_4	tailoring
+DUF2273	tailoring
+DUF1643	tailoring
+DUF2637	tailoring
+DUF3085	tailoring
+FSH1	tailoring
+ATP_bind_3	tailoring
+F_bP_aldolase	tailoring
+YjbR	tailoring
+TGT	tailoring
+Suc_Fer-like	tailoring
+Trp_syntA	tailoring
+Rad17	tailoring
+Ldh_2	tailoring
+DOT1	tailoring
+FGGY_C	tailoring
+CobD_Cbib	tailoring
+Alpha_L_fucos	tailoring
+Erythro_esteras	tailoring
+DUF202	tailoring
+ETF_QO	tailoring
+Glyco_hydro_2	tailoring
+Cu-oxidase_3	tailoring
+DUF2600	tailoring
+DUF3367	tailoring
+MG2	tailoring
+MttA_Hcf106	tailoring
+Lpp-LpqN	tailoring
+YdjM	tailoring
+DUF2501	tailoring
+PaaX_C	tailoring
+PHZA_PHZB	tailoring
+DUF2784	tailoring
+DUF1501	tailoring
+DUF1974	tailoring
+DUF3325	tailoring
+Peptidase_C10	tailoring
+B_lectin	tailoring
+DUF1013	tailoring
+Glycos_trans_3N	tailoring
+DUF1876	tailoring
+Glyco_transf_20	tailoring
+Cu-oxidase_2	tailoring
+DUF2316	transcription factor
+Staph_opine_DH	tailoring
+CBM_25	tailoring
+BNR	tailoring
+AcetDehyd-dimer	tailoring
+DUF1127	tailoring
+Mqo	tailoring
+Choline_kinase	tailoring
+DUF3037	tailoring
+DUF3164	tailoring
+DUF3159	tailoring
+DUF2807	tailoring
+DUF2793	tailoring
+T_hemolysin	tailoring
+AAT	tailoring
+Nitrate_red_del	tailoring
+PRCH	tailoring
+HicB	tailoring
+PMI_typeI	tailoring
+HTH_42	transcription factor
+HsdM_N	tailoring
+OprD	tailoring
+VanY	tailoring
+CitG	tailoring
+AlgF	tailoring
+Chorismate_synt	tailoring
+Phasin_2	tailoring
+DUF2771	tailoring
+DUF1133	transcription factor
+TraL	tailoring
+YfdX	tailoring
+DUF3734	tailoring
+L_biotic_typeA	tailoring
+DUF562	tailoring
+bMG3	tailoring
+Adenine_glyco	tailoring
+PAS_3	tailoring
+DUF1829	tailoring
+PA14	tailoring
+DUF2917	tailoring
+HRDC	tailoring
+TraE	tailoring
+Gallidermin	tailoring
+Mltc_N	tailoring
+Aconitase_C	tailoring
+Kelch_1	tailoring
+DUF2752	tailoring
+BKACE	tailoring
+Peptidase_M48	tailoring
+DUF1097	tailoring
+PUD	tailoring
+DUF2613	tailoring
+DUF3309	tailoring
+DUF899	tailoring
+PG_binding_1	tailoring
+Lsr2	tailoring
+DUF364	tailoring
+DUF3313	tailoring
+CaMKII_AD	tailoring
+MGS	tailoring
+ComZ	tailoring
+Peptidase_S66	tailoring
+DUF3560	tailoring
+Methyltransf_15	tailoring
+Peptidase_M1	tailoring
+CM_2	tailoring
+CsiD	tailoring
+ThiC_Rad_SAM	tailoring
+DUF3093	tailoring
+MGDG_synth	tailoring
+DUF575	tailoring
+Caps_synth	tailoring
+DUF1129	tailoring
+KTI12	tailoring
+N_methyl	tailoring
+DUF1073	tailoring
+Nudix_N	tailoring
+DUF3445	tailoring
+Alginate_lyase	tailoring
+DUF559	tailoring
+COX15-CtaA	tailoring
+DUF1367	tailoring
+STT3	tailoring
+S-AdoMet_synt_C	tailoring
+S-AdoMet_synt_M	tailoring
+DapB_C	tailoring
+Metalloenzyme	tailoring
+PaaX	transcription factor
+ILVD_EDD	tailoring
+DAGK_cat	tailoring
+Proton_antipo_M	tailoring
+HOK_GEF	tailoring
+DUF2064	tailoring
+DUF2537	tailoring
+DUF2834	tailoring
+Zn_clus	tailoring
+HemolysinCabind	tailoring
+S-AdoMet_synt_N	tailoring
+Lipoprotein_9	tailoring
+3-dmu-9_3-mt	tailoring
+HMA	tailoring
+Ni_hydr_CYTB	tailoring
+Tautomerase	tailoring
+DUF3050	tailoring
+DUF1295	tailoring
+Alpha-amylase_C	tailoring
+TOBE_2	tailoring
+Ogr_Delta	tailoring
+DUF1843	tailoring
+DUF3029	tailoring
+Cu_amine_oxidN1	tailoring
+DUF179	tailoring
+V_cholerae_RfbT	tailoring
+Zincin_1	tailoring
+GHL10	tailoring
+dCache_1	tailoring
+NADH5_C	tailoring
+Mac	tailoring
+Borrelia_orfD	tailoring
+Mob_synth_C	tailoring
+MutS_V	tailoring
+Glyco_hydro_15	tailoring
+DUF2510	tailoring
+Glyco_hydro_42C	tailoring
+SchA_CurD	tailoring
+DUF98	tailoring
+Peptidase_S9_N	tailoring
+OMPdecase	tailoring
+DUF2172	tailoring
+Mg_trans_NIPA	tailoring
+Glyco_hydro_30	tailoring
+DUF1702	tailoring
+Cytochrom_C_asm	tailoring
+DUF948	tailoring
+DUF3710	tailoring
+ResB	tailoring
+DUF1364	tailoring
+TFIIE_alpha	transcription factor
+IlvN	tailoring
+Flavodoxin_1	tailoring
+DUF1492	transcription factor
+DUF2298	tailoring
+CopC	tailoring
+PsiE	tailoring
+DUF3603	tailoring
+BetR	transcription factor
+DUF3556	tailoring
+DUF3489	tailoring
+CBM_5_12	tailoring
+PTR2	transporter
+YbaB_DNA_bd	tailoring
+DUF3188	tailoring
+ALAD	tailoring
+DUF2938	tailoring
+FlpD	tailoring
+TsaE	tailoring
+PFO_beta_C	tailoring
+PDT	tailoring
+A2M	tailoring
+Gp58	tailoring
+DUF2182	tailoring
+DUF3300	tailoring
+DUF1214	tailoring
+Autoind_synth	tailoring
+DivIVA	tailoring
+SWIM	tailoring
+Mn_catalase	tailoring
+DUF2332	tailoring
+Prenyltransf	tailoring
+Inos-1-P_synth	tailoring
+DUF892	tailoring
+DUF276	tailoring
+Bac_globin	tailoring
+Pterin_4a	tailoring
+His_Phos_2	tailoring
+DUF2773	tailoring
+AIM24	tailoring
+DFP	tailoring
+Cytochrome_cB	tailoring
+DUF2630	tailoring
+DUF423	tailoring
+Mlp	tailoring
+DUF2250	transcription factor
+DUF2919	tailoring
+BPL_LplA_LipB	tailoring
+TfoX_N	tailoring
+PRAI	tailoring
+DUF2089	transcription factor
+DUF1883	tailoring
+CytoC_RC	tailoring
+DUF261	tailoring
+NAD_binding_5	tailoring
+NAS	tailoring
+Cyt_bd_oxida_II	tailoring
+Ribonuc_red_sm	tailoring
+DUF1911	tailoring
+DUF2471	tailoring
+Peptidase_S24	tailoring
+DUF3153	tailoring
+DUF1206	tailoring
+BAAT_C	tailoring
+DUF685	tailoring
+Toxin_R_bind_N	tailoring
+UPF0047	tailoring
+Ysc84	tailoring
+DUF2587	tailoring
+MauE	tailoring
+DUF16	tailoring
+PHA_synth_III_E	tailoring
+Gpr1_Fun34_YaaH	tailoring
+IlvC	tailoring
+BioW	tailoring
+FHA	tailoring
+ADSL_C	tailoring
+ChuX_HutX	tailoring
+Glyco_hydro_39	tailoring
+DUF2070	tailoring
+DUF960	tailoring
+Band_7	tailoring
+STN	tailoring
+Spermine_synth	tailoring
+Ectoine_synth	tailoring
+Ribosomal_S21	tailoring
+Peptidase_M27	tailoring
+GT-D	tailoring
+DUF1510	tailoring
+NADH_4Fe-4S	tailoring
+DUF3520	tailoring
+DUF3450	tailoring
+DUF2278	tailoring
+VRP1	tailoring
+DUF350	tailoring
+AXE1	tailoring
+S6PP	tailoring
+DHquinase_I	tailoring
+Pro_dh	tailoring
+FKBP_C	tailoring
+Methyltransf_30	tailoring
+CopD	tailoring
+UTRA	tailoring
+DUF3149	tailoring
+Lipoprotein_6	tailoring
+DUF2963	tailoring
+DUF1357	tailoring
+NifU	tailoring
+DUF2383	tailoring
+DUF551	tailoring
+DUF362	tailoring
+DUF1918	tailoring
+GerPC	tailoring
+Nuc_deoxyrib_tr	tailoring
+Clostridium_P47	tailoring
+DUF1910	tailoring
+Peptidase_M4_C	tailoring
+DUF693	tailoring
+TetR_C_4	tailoring
+zinc-ribbons_6	tailoring
+Cna_B	tailoring
+DUF2726	tailoring
+GBS_Bsp-like	tailoring
+FAD_binding_1	tailoring
+CARDB	tailoring
+MreB_Mbl	tailoring
+Glyco_hydro_62	tailoring
+Ppx-GppA	tailoring
+DUF2536	tailoring
+NrfD	tailoring
+Glyco_hydro_18	tailoring
+DUF3169	tailoring
+PT-HINT	tailoring
+DUF3341	tailoring
+Hpr_kinase_C	tailoring
+MmgE_PrpD	tailoring
+Glyco_transf_90	tailoring
+Cytokin-bind	tailoring
+CompInhib_SCIN	tailoring
+MecA_N	tailoring
+DUF1326	tailoring
+SAUGI	tailoring
+DUF1624	tailoring
+DUF2811	tailoring
+zf-CGNR	tailoring
+Histone_HNS	tailoring
+Pilin_N	tailoring
+ArgJ	tailoring
+PTE	tailoring
+OpgC_C	tailoring
+PQQ	tailoring
+Melibiase	tailoring
+Glyco_hydro_6	tailoring
+Glyco_hydro_1	tailoring
+LtrA	tailoring
+Streptin-Immun	tailoring
+HtrL_YibB	tailoring
+Bac_rhamnosid	tailoring
+DcuC	tailoring
+Glyco_hydro_20	tailoring
+PI-PLC-X	tailoring
+UpxZ	tailoring
+SidE	tailoring
+DUF3551	tailoring
+DUF3039	tailoring
+GerPB	tailoring
+Malate_synthase	tailoring
+RecX	tailoring
+BioY	tailoring
+KduI	tailoring
+T2SSE_N	tailoring
+Arf	tailoring
+DUF1107	tailoring
+Glyco_transf_10	tailoring
+DUF393	tailoring
+Cytochrom_C_2	tailoring
+DUF1254	tailoring
+GerPE	tailoring
+GlcNAc	tailoring
+Peptidase_M4	tailoring
+GGACT	tailoring
+FAD_binding_8	tailoring
+Sua5_yciO_yrdC	tailoring
+DUF2934	tailoring
+CRR7	tailoring
+CPSase_L_D3	tailoring
+FA_desaturase_2	tailoring
+Transgly_assoc	tailoring
+gpW	tailoring
+Cellsynth_D	tailoring
+bPH_6	tailoring
+MoCF_biosynth	tailoring
+dUTPase	tailoring
+Sugar-bind	tailoring
+CAP	tailoring
+MFS_4	tailoring
+Mannosyl_trans2	tailoring
+GRDA	tailoring
+DUF982	tailoring
+DUF3275	tailoring
+DUF764	tailoring
+DUF735	tailoring
+DUF1400	tailoring
+DUF787	tailoring
+DUF676	tailoring
+DUF922	tailoring
+KorB	transcription factor
+C1q	tailoring
+FAE1_CUT1_RppA	tailoring
+FcoT	tailoring
+Zn-ribbon_8	tailoring
+DUF1380	tailoring
+HEAT_PBS	tailoring
+TamB	tailoring
+DUF2584	tailoring
+DUF900	tailoring
+SSV1_ORF_D-335	tailoring
+DUF1463	tailoring
+Toxin_trans	tailoring
+DUF938	tailoring
+DUF3079	tailoring
+SHOCT	tailoring
+DUF746	tailoring
+Sulphotransf	tailoring
+VKOR	tailoring
+DUF1350	tailoring
+DUF2732	tailoring
+A_deaminase	tailoring
+DUF496	tailoring
+DUF1080	tailoring
+DUF2968	tailoring
+DUF3291	tailoring
+DUF2653	tailoring
+Catalase-rel	tailoring
+Cupin_5	tailoring
+HgmA	tailoring
+DUF1506	tailoring
+DUF3138	tailoring
+DUF31	tailoring
+ECF-ribofla_trS	tailoring
+DUF1842	tailoring
+DUF792	tailoring
+DUF1836	transcription factor
+DUF1473	tailoring
+Cu-oxidase	tailoring
+Glyco_hydro_28	tailoring
+PAX	transcription factor
+V4R	tailoring
+DUF1322	tailoring
+Hyaluronidase_1	tailoring
+Rhomboid	tailoring
+CDO_I	tailoring
+NYN_YacP	tailoring
+DAGK_prokar	tailoring
+Amidase_3	tailoring
+DUF603	tailoring
+Tannase	tailoring
+RcnB	tailoring
+DUF2798	tailoring
+Peptidase_M24	tailoring
+DUF2608	tailoring
+DUF244	tailoring
+Caroten_synth	tailoring
+DUF2437	tailoring
+DUF1905	tailoring
+Transcrip_reg	tailoring
+DUF465	tailoring
+DUF2897	tailoring
+DUF2920	tailoring
+Ndr	tailoring
+Pox_D5	transcription factor
+Guanylate_kin	tailoring
+DUF3089	tailoring
+MSP1b	tailoring
+DUF3492	tailoring
+FTP	tailoring
+PBP	tailoring
+YqaJ	tailoring
+DUF1778	tailoring
+KdgM	tailoring
+NTP_transf_2	tailoring
+Holin_BlyA	tailoring
+Peptidase_M14	tailoring
+TraD_N	tailoring
+Inhibitor_I36	tailoring
+Fe_hyd_lg_C	tailoring
+EAL	tailoring
+malic	tailoring
+Cytochrom_NNT	tailoring
+DHC	tailoring
+DUF883	tailoring
+MCM	tailoring
+Spore-coat_CotZ	tailoring
+PepSY_TM	tailoring
+TrbL	tailoring
+BLYB	tailoring
+JmjC	tailoring
+Lon_C	tailoring
+PsbY	tailoring
+Lambda_Bor	tailoring
+DUF1641	tailoring
+Rz1	tailoring
+DUF371	tailoring
+Pro_Al_protease	tailoring
+Malic_M	tailoring
+SipA	tailoring
+DUF759	tailoring
+DUF3224	tailoring
+MipZ	tailoring
+DUF3649	tailoring
+Sbi-IV	tailoring
+AlbA_2	tailoring
+CgtA	tailoring
+DUF3772	tailoring
+GTP_EFTU_D3	tailoring
+DUF3106	tailoring
+Pec_lyase	tailoring
+BPL_N	tailoring
+DUF212	tailoring
+DUF2293	tailoring
+PQ-loop	tailoring
+DUF1275	tailoring
+DUF3119	tailoring
+YhcG_C	tailoring
+Chloroa_b-bind	tailoring
+Asp_decarbox	tailoring
+PEPCK_ATP	tailoring
+Neisseria_TspB	tailoring
+DUF1617	tailoring
+DUF3443	tailoring
+DUF777	tailoring
+BppU_N	tailoring
+DUF1992	tailoring
+DUF3131	tailoring
+DUF2911	tailoring
+YqcI_YcgG	tailoring
+ProQ	tailoring
+Borrelia_P13	tailoring
+Holin_BhlA	tailoring
+FeS_assembly_P	tailoring
+FinO_N	tailoring
+PK	tailoring
+Thy1	tailoring
+Glutaredoxin	tailoring
+DUF2844	tailoring
+Peptidase_S7	tailoring
+WavE	tailoring
+RES	tailoring
+DUF2511	tailoring
+DUF2889	tailoring
+PGA_cap	tailoring
+OsmC	tailoring
+DUF3253	transcription factor
+Erp_C	tailoring
+ABATE	tailoring
+DUF3098	tailoring
+DUF2187	tailoring
+DUF1972	tailoring
+PGK	tailoring
+Rhamno_transf	tailoring
+DS	tailoring
+Homoserine_dh	tailoring
+DUF3043	tailoring
+Heme_oxygenase	tailoring
+Lipoprotein_15	tailoring
+DUF2306	tailoring
+Glyco_hydro_cc	tailoring
+DUF1990	tailoring
+MoaE	tailoring
+DUF751	tailoring
+Mig-14	tailoring
+YHS	tailoring
+CitX	tailoring
+TnpB_IS66	tailoring
+Disaggr_repeat	tailoring
+Glyco_hydro_4C	tailoring
+GalP_UDP_transf	tailoring
+WbqC	tailoring
+FMN_bind_2	tailoring
+DUF2768	tailoring
+UxuA	tailoring
+AMIN	tailoring
+VIT1	tailoring
+Glycogen_syn	tailoring
+DUF1672	tailoring
+NKWYS	tailoring
+T2SSF	tailoring
+GMP_synt_C	tailoring
+NLPC_P60	tailoring
+PEP-utilizers_C	tailoring
+DUF2913	tailoring
+Trp_DMAT	tailoring
+Pantoate_transf	tailoring
+TilS_C	tailoring
+Glyco_hydro_4	tailoring
+SlyX	tailoring
+DBI_PRT	tailoring
+YceI	tailoring
+DUF3597	tailoring
+HemY_N	tailoring
+DUF190	tailoring
+Bac_rhamnosid_N	tailoring
+MatC_N	tailoring
+ARD	tailoring
+YfcL	tailoring
+RtcB	tailoring
+Proton_antipo_N	tailoring
+DUF1330	tailoring
+NHL	tailoring
+Mitofilin	tailoring
+BON	tailoring
+DUF305	tailoring
+DUF3142	tailoring
+Glyco_hydro_8	tailoring
+SAM_adeno_trans	tailoring
+Acetate_kinase	tailoring
+DUF3530	tailoring
+Snf7	tailoring
+Glyco_hydro_25	tailoring
+DUF1924	tailoring
+DUF2839	tailoring
+RNB	tailoring
+Ada_Zn_binding	tailoring
+DUF2092	tailoring
+DUF1453	tailoring
+DUF3461	tailoring
+C5-epim_C	tailoring
+DUF3185	tailoring
+DUF1652	tailoring
+DUF2723	tailoring
+DUF1565	tailoring
+DUF3568	tailoring
+DUF429	tailoring
+Disaggr_assoc	tailoring
+Octopine_DH	tailoring
+DHQS	tailoring
+bPH_1	tailoring
+DUF2950	tailoring
+TOBE	tailoring
+DUF2061	tailoring
+P_proprotein	tailoring
+DcrB	tailoring
+PTS_EIIA_2	tailoring
+Sm_multidrug_ex	tailoring
+DUF2778	tailoring
+Ferrochelatase	tailoring
+Fe_hyd_SSU	tailoring
+DUF3268	tailoring
+PNP_phzG_C	tailoring
+NifU_N	tailoring
+DUF134	transcription factor
+Trep_Strep	tailoring
+DUF1490	tailoring
+HigB_toxin	tailoring
+DUF973	tailoring
+DUF1574	tailoring
+Glt_symporter	tailoring
+PAS_6	tailoring
+Rdx	tailoring
+DUF402	tailoring
+Citrate_synt	tailoring
+LPMO_10	tailoring
+ParD_like	tailoring
+DUF2982	tailoring
+MucBP	tailoring
+UPF0014	tailoring
+NTP_transf_8	tailoring
+C_GCAxxG_C_C	tailoring
+Glyco_transf_92	tailoring
+DUF2957	tailoring
+DUF2970	tailoring
+SBP_bac_10	tailoring
+DUF2790	tailoring
+DUF2797	tailoring
+GTP_cyclohydro2	tailoring
+Bestrophin	tailoring
+DUF2087	tailoring
+Clp_N	tailoring
+DUF2795	tailoring
+DUF1656	tailoring
+Peptidase_C80	tailoring
+DUF2252	tailoring
+DUF3376	tailoring
+Cytidylate_kin	tailoring
+DUF1002	tailoring
+Colicin	tailoring
+Phos_pyr_kin	tailoring
+Atu4866	tailoring
+DUF442	tailoring
+DUF2949	tailoring
+DUF2971	tailoring
+GSH-S_ATP	tailoring
+Inovirus_Gp2	tailoring
+ATP-sulfurylase	tailoring
+Coatomer_E	tailoring
+Laminin_G_2	tailoring
+TIR	tailoring
+DUF2207	tailoring
+AzlC	tailoring
+Glyco_hydro_114	tailoring
+Glyco_tranf_2_2	tailoring
+DUF1132	tailoring
+DUF2645	tailoring
+5_nucleotid_C	tailoring
+SLH	tailoring
+DUF2141	tailoring
+Met_asp_mut_E	tailoring
+MTHFR_C	tailoring
+DUF2334	tailoring
+Ku	tailoring
+IstB_IS21_ATP	tailoring
+DUF3135	tailoring
+DUF1839	tailoring
+DUF2325	tailoring
+PUA	tailoring
+PriCT_1	tailoring
+PEP-CTERM	tailoring
+DUF1648	tailoring
+MutS_III	tailoring
+COXG	tailoring
+YtfJ_HI0045	tailoring
+DUF2953	tailoring
+F420_ligase	tailoring
+DUF1864	tailoring
+Seryl_tRNA_N	tailoring
+MoaF	tailoring
+Aminoglyc_resit	tailoring
+Glyco_hydro_35	tailoring
+Ligase_CoA	tailoring
+Carb_kinase	tailoring
+ChW	tailoring
+SpoU_sub_bind	tailoring
+TED_complement	tailoring
+MelC1	tailoring
+DUF2710	tailoring
+Peptidase_S41	tailoring
+CCG	tailoring
+Peptidase_M3	tailoring
+DUF3086	tailoring
+PPC	tailoring
+DUF3299	tailoring
+CBM_20	tailoring
+DUF1192	tailoring
+DUF2694	tailoring
+DUF2749	tailoring
+AICARFT_IMPCHas	tailoring
+Bacteriocin_IId	tailoring
+Borrelia_P83	tailoring
+YjeF_N	tailoring
+SNO	tailoring
+Toprim	tailoring
+B-block_TFIIIC	transcription factor
+dCMP_cyt_deam_2	tailoring
+CYTH	tailoring
+CBM9_1	tailoring
+Thiamine_BP	tailoring
+Phasin	tailoring
+Halogen_Hydrol	tailoring
+AdoMet_dc	tailoring
+RolB_RolC	tailoring
+DmpG_comm	tailoring
+Urm1	tailoring
+DUF2326	tailoring
+DUF3578	tailoring
+DUF3280	tailoring
+AIG1	tailoring
+PYNP_C	tailoring
+Terminase_5	transcription factor
+GARS_A	tailoring
+DUF3290	tailoring
+ANF_receptor	tailoring
+DUF445	tailoring
+Toxin_R_bind_C	tailoring
+SepSecS	tailoring
+Cyt-b5	tailoring
+Citrate_ly_lig	tailoring
+Spore_YhcN_YlaJ	tailoring
+T4BSS_DotH_IcmK	tailoring
+NTNH_C	tailoring
+RebB	tailoring
+Colicin_V	tailoring
+Methyltr_RsmB-F	tailoring
+EutQ	tailoring
+FAD_binding_5	tailoring
+Glycoamylase	tailoring
+DUF3470	tailoring
+Stealth_CR2	tailoring
+KH_1	tailoring
+NPCBM_assoc	tailoring
+ThiI	tailoring
+DUF2924	tailoring
+Mito_carr	tailoring
+Ald_Xan_dh_C	tailoring
+DUF2071	tailoring
+Vps4_C	tailoring
+Rio2_N	transcription factor
+TetR_C_32	tailoring
+DUF1697	tailoring
+PFK	tailoring
+DUF2730	tailoring
+DUF2891	tailoring
+MoaC	tailoring
+DUF726	tailoring
+LGT	tailoring
+RlaP	tailoring
+Glyco_hydro_14	tailoring
+DUF3097	tailoring
+DUF3099	tailoring
+DUF309	tailoring
+DUF2868	tailoring
+DUF903	tailoring
+DUF3265	tailoring
+Urocanase	tailoring
+DUF2461	tailoring
+SoxD	tailoring
+MutS_I	tailoring
+DUF1929	tailoring
+ScdA_N	tailoring
+DUF3046	tailoring
+Smr	tailoring
+Clenterotox	tailoring
+CBM_10	tailoring
+Lactococcin_972	tailoring
+Mur_ligase_M	tailoring
+Ras	tailoring
+DUF3152	tailoring
+DUF1327	tailoring
+DUF2283	tailoring
+DUF3422	tailoring
+DUF1422	tailoring
+Sterol-sensing	tailoring
+Glyco_hydro_20b	tailoring
+DUF234	tailoring
+5-nucleotidase	tailoring
+DUF43	tailoring
+DltD	tailoring
+DUF3303	tailoring
+Pantoate_ligase	tailoring
+TolA	tailoring
+ArsC	tailoring
+Hva1_TUDOR	tailoring
+DUF2854	tailoring
+FixS	tailoring
+Avidin	tailoring
+Oxidored_q5_N	tailoring
+DUF1706	tailoring
+Methyltransf_33	tailoring
+DALR_2	tailoring
+EKR	tailoring
+Fcf1	tailoring
+Acid_phosphat_B	tailoring
+G6PD_C	tailoring
+DUF3482	tailoring
+Usher	tailoring
+DUF3372	tailoring
+YdjC	tailoring
+DUF3564	tailoring
+Colicin_immun	tailoring
+ArabFuran-catal	tailoring
+Dioxygenase_N	tailoring
+DUF1282	tailoring
+Phage_ASH	tailoring
+BPL_C	tailoring
+Neocarzinostat	tailoring
+DUF2523	tailoring
+Porin_1	tailoring
+ArsP_1	tailoring
+UbiD	tailoring
+FRG	tailoring
+LpxB	tailoring
+FixG_C	tailoring
+ZinT	tailoring
+Head_binding	tailoring
+CST-I	tailoring
+DUF2206	tailoring
+DUF771	tailoring
+Phage_holin_3_7	tailoring
+NodA	tailoring
+RNR_N	tailoring
+DXP_redisom_C	tailoring
+GPI	tailoring
+TrbC	tailoring
+G6PD_N	tailoring
+DUF2150	tailoring
+MazG	tailoring
+DUF1835	tailoring
+MepB	tailoring
+DUF3552	tailoring
+DUF3493	tailoring
+DUF3038	tailoring
+PAD	tailoring
+B3_4	tailoring
+PRD	tailoring
+Phage_holin_4_2	tailoring
+Calx-beta	tailoring
+Exostosin	tailoring
+Sterile	tailoring
+fn3_5	tailoring
+SCO1-SenC	tailoring
+Methyltransf_28	tailoring
+Terminase_6	tailoring
+MutS_II	tailoring
+DUF2533	tailoring
+MutS_IV	tailoring
+PEGA	tailoring
+DUF2804	tailoring
+ADP_ribosyl_GH	tailoring
+AFG1_ATPase	tailoring
+PspA_IM30	tailoring
+PaaA_PaaC	tailoring
+DUF1932	tailoring
+ERAP1_C	tailoring
+MerC	tailoring
+Glyco_hydro_31	tailoring
+DUF480	transcription factor
+CAT	tailoring
+DUF520	tailoring
+TIG	tailoring
+CO_deh_flav_C	tailoring
+Ribonuc_red_lgC	tailoring
+DUF1980	tailoring
+DUF433	transcription factor
+SepF	tailoring
+DUF3375	tailoring
+DUF3658	tailoring
+DUF643	tailoring
+ArsB	tailoring
+Dyp_perox	tailoring
+GlcNAc_2-epim	tailoring
+DUF1286	tailoring
+FmdA_AmdA	tailoring
+DUF2381	tailoring
+Ribonuc_red_lgN	tailoring
+Inhibitor_I10	tailoring
+Ala_racemase_C	tailoring
+Cpn10	tailoring
+DUF3263	tailoring
+AAA_2	tailoring
+DUF21	tailoring
+His_kinase	tailoring
+DUF1539	tailoring
+YlqD	tailoring
+TPK_catalytic	tailoring
+Metal_hydrol	tailoring
+Stig1	tailoring
+Abhydro_lipase	tailoring
+YAcAr	tailoring
+MOSC	tailoring
+DXP_reductoisom	tailoring
+ECF_trnsprt	transporter
+ABC_tran	transporter
+ABC_membrane	transporter
+ABC2_membrane_3	transporter
+BPD_transp_2	transporter
+ABC2_membrane	transporter
+Aa_trans	transporter
+OPT	transporter
+ABC_sub_bind	transporter
+EcsB	transporter
+ABC_membrane_2	transporter
+oligo_HPY	transporter
+PDR_assoc	transporter
+AA_permease_N	transporter
+OppC_N	transporter
+ABC2_membrane_5	transporter
+Mem_trans	transporter
+BCA_ABC_TP_C	transporter
+ABC2_membrane_2	transporter
+ABC2_membrane_4	transporter
+MFS_1_like	transporter
+MFS_1	transporter
+ABC_tran_Xtn	transporter
+EmrE	transporter
+ABC_membrane_3	transporter
+ABC_trans_N	transporter
+AbiEi_3_N	transcription factor
+AbiEi_4	transcription factor
+ANAPC2	transcription factor
+AphA_like	transcription factor
+Arg_repressor	transcription factor
+ARID	transcription factor
+Bac_DnaA_C	transcription factor
+Bot1p	transcription factor
+BrkDBD	transcription factor
+Cdc6_C	transcription factor
+CENP-B_N	transcription factor
+Cro	transcription factor
+Crp	transcription factor
+CSN8_PSD8_EIF3K	transcription factor
+Cullin_Nedd8	transcription factor
+CUT	transcription factor
+DDRGK	transcription factor
+DEP	transcription factor
+Dimerisation	transcription factor
+Dimerisation2	transcription factor
+DsrD	transcription factor
+DUF1153	transcription factor
+DUF1323	transcription factor
+DUF1441	transcription factor
+DUF1495	transcription factor
+DUF1670	transcription factor
+DUF1804	transcription factor
+DUF1870	transcription factor
+DUF2582	transcription factor
+DUF3116	transcription factor
+DUF3853	transcription factor
+DUF3860	transcription factor
+DUF3908	transcription factor
+DUF4364	transcription factor
+DUF4447	transcription factor
+DUF739	transcription factor
+E2F_TDP	transcription factor
+EAP30	transcription factor
+ELL	transcription factor
+ESCRT-II	transcription factor
+Ets	transcription factor
+Exc	transcription factor
+F-112	transcription factor
+FaeA	transcription factor
+Fe_dep_repr_C	transcription factor
+Fe_dep_repress	transcription factor
+FeoC	transcription factor
+FokI_C	transcription factor
+FokI_N	transcription factor
+Forkhead	transcription factor
+FUR	transcription factor
+GcrA	transcription factor
+GerE	transcription factor
+GntR	transcription factor
+HARE-HTH	transcription factor
+HNF-1_N	transcription factor
+Homeodomain	transcription factor
+Homeobox_KN	transcription factor
+Homez	transcription factor
+HPD	transcription factor
+HrcA_DNA-bdg	transcription factor
+HSF_DNA-bind	transcription factor
+HTH_1	transcription factor
+HTH_10	transcription factor
+HTH_11	transcription factor
+HTH_12	transcription factor
+HTH_13	transcription factor
+HTH_15	transcription factor
+HTH_16	transcription factor
+HTH_17	transcription factor
+HTH_18	transcription factor
+HTH_19	transcription factor
+HTH_20	transcription factor
+HTH_21	transcription factor
+HTH_22	transcription factor
+HTH_23	transcription factor
+HTH_24	transcription factor
+HTH_25	transcription factor
+HTH_26	transcription factor
+HTH_27	transcription factor
+HTH_28	transcription factor
+HTH_29	transcription factor
+HTH_3	transcription factor
+HTH_30	transcription factor
+HTH_31	transcription factor
+HTH_32	transcription factor
+HTH_33	transcription factor
+HTH_34	transcription factor
+HTH_35	transcription factor
+HTH_36	transcription factor
+HTH_37	transcription factor
+HTH_38	transcription factor
+HTH_39	transcription factor
+HTH_40	transcription factor
+HTH_41	transcription factor
+HTH_43	transcription factor
+HTH_45	transcription factor
+HTH_46	transcription factor
+HTH_47	transcription factor
+HTH_5	transcription factor
+HTH_6	transcription factor
+HTH_7	transcription factor
+HTH_8	transcription factor
+HTH_9	transcription factor
+HTH_AraC	transcription factor
+HTH_AsnC-type	transcription factor
+HTH_CodY	transcription factor
+HTH_Crp_2	transcription factor
+HTH_DeoR	transcription factor
+HTH_IclR	transcription factor
+HTH_Mga	transcription factor
+HTH_micro	transcription factor
+HTH_OrfB_IS605	transcription factor
+HTH_psq	transcription factor
+HTH_Tnp_1	transcription factor
+HTH_Tnp_1_2	transcription factor
+HTH_Tnp_4	transcription factor
+HTH_Tnp_IS1	transcription factor
+HTH_Tnp_IS630	transcription factor
+HTH_Tnp_ISL3	transcription factor
+HTH_Tnp_Mu_1	transcription factor
+HTH_Tnp_Mu_2	transcription factor
+HTH_Tnp_Tc3_1	transcription factor
+HTH_Tnp_Tc3_2	transcription factor
+HTH_Tnp_Tc5	transcription factor
+HTH_WhiA	transcription factor
+HxlR	transcription factor
+IBD	transcription factor
+IF2_N	transcription factor
+IRF	transcription factor
+KicB	transcription factor
+KORA	transcription factor
+La	transcription factor
+LacI	transcription factor
+LexA_DNA_bind	transcription factor
+Linker_histone	transcription factor
+LZ_Tnp_IS481	transcription factor
+MADF_DNA_bdg	transcription factor
+MarR	transcription factor
+MarR_2	transcription factor
+MerR	transcription factor
+MerR-DNA-bind	transcription factor
+MerR_1	transcription factor
+MerR_2	transcription factor
+Mga	transcription factor
+Mnd1	transcription factor
+Mor	transcription factor
+MotA_activ	transcription factor
+MqsA_antitoxin	transcription factor
+MRP-L20	transcription factor
+Myb_DNA-bind_2	transcription factor
+Myb_DNA-bind_3	transcription factor
+Myb_DNA-bind_4	transcription factor
+Myb_DNA-bind_5	transcription factor
+Myb_DNA-bind_6	transcription factor
+Myb_DNA-bind_7	transcription factor
+Myb_DNA-binding	transcription factor
+Neugrin	transcription factor
+NUMOD1	transcription factor
+OST-HTH	transcription factor
+P22_Cro	transcription factor
+PadR	transcription factor
+PCI	transcription factor
+Penicillinase_R	transcription factor
+Phage_AlpA	transcription factor
+Phage_antitermQ	transcription factor
+Phage_CI_repr	transcription factor
+Phage_CII	transcription factor
+Phage_rep_org_N	transcription factor
+Phage_terminase	transcription factor
+Pou	transcription factor
+PuR_N	transcription factor
+Put_DNA-bind_N	transcription factor
+Rap1-DNA-bind	transcription factor
+Rep_3	transcription factor
+RepA_C	transcription factor
+RepA_N	transcription factor
+RepC	transcription factor
+RepL	transcription factor
+Replic_Relax	transcription factor
+RFX_DNA_binding	transcription factor
+Ribosomal_S19e	transcription factor
+Ribosomal_S25	transcription factor
+RNA_pol_Rpc34	transcription factor
+RP-C	transcription factor
+RPA	transcription factor
+RPA_C	transcription factor
+RQC	transcription factor
+Rrf2	transcription factor
+RTP	transcription factor
+RuvB_C	transcription factor
+SAC3_GANP	transcription factor
+SANT_DAMP1_like	transcription factor
+SatD	transcription factor
+SelB-wing_1	transcription factor
+SelB-wing_2	transcription factor
+SelB-wing_3	transcription factor
+SgrR_N	transcription factor
+Sigma54_CBD	transcription factor
+Sigma54_DBD	transcription factor
+Sigma70_ECF	transcription factor
+Sigma70_ner	transcription factor
+Sigma70_r2	transcription factor
+Sigma70_r3	transcription factor
+Sigma70_r4	transcription factor
+Sigma70_r4_2	transcription factor
+SLIDE	transcription factor
+SMC_ScpB	transcription factor
+SpoIIID	transcription factor
+STN1_2	transcription factor
+Sulfolobus_pRN	transcription factor
+SWIRM	transcription factor
+TBPIP	transcription factor
+TetR_N	transcription factor
+TFIIE_beta	transcription factor
+TFIIF_alpha	transcription factor
+TFIIF_beta	transcription factor
+Tn7_Tnp_TnsA_C	transcription factor
+Tn916-Xis	transcription factor
+TraI_2_C	transcription factor
+Trans_reg_C	transcription factor
+TrfA	transcription factor
+TrmB	transcription factor
+Trp_repressor	transcription factor
+UPF0122	transcription factor
+Vir_act_alpha_C	transcription factor
+YdaS_antitoxin	transcription factor
+YjcQ	transcription factor
+YokU	transcription factor
+z-alpha	transcription factor
+FleQ	transcription factor
+OKR_DC_1_N	transcription factor
+RcsC	transcription factor
+Response_reg	transcription factor
+TadZ_N	transcription factor
+H-kinase_dim	transcription factor
+HATPase_c	transcription factor
+HATPase_c_2	transcription factor
+HATPase_c_3	transcription factor
+HATPase_c_5	transcription factor
+HisKA	transcription factor
+HisKA_2	transcription factor
+HisKA_3	transcription factor
+HWE_HK	transcription factor
