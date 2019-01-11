@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -59,7 +59,8 @@ role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "tailoring":"#8fc889", # green, rgb(143, 200, 137)
                "transporter":"#f0d963", # yellow, rgb(240, 217, 99)
                "transcription factor":"#33c1f0", # blue, rgb(51, 193, 240)
-               "other":"#f0d963", # light gray, rgb(239, 240, 241)
+               "other":"#eff0f1", # light gray, rgb(239, 240, 241)
+               "precursor":"#9797dc", # lilac, rgb(151,151,220)
                "unknown":"#dcdcdc"} # gray, rgb(220, 220, 220)
 
 
@@ -290,6 +291,7 @@ class ArrowerOpts():
         #self.arrow_head_height = 15          # h: Additional width of arrows' head
                                         #  (i.e. total arrow head = H + 2*aH)
                                         # internally, h = H/2 to preserve 45° angle
+                                        
         self.arrow_head_length = 30
         
         self.gene_contour_thickness = 2      # note: thickness grows outwards
@@ -298,12 +300,7 @@ class ArrowerOpts():
         self.domain_contour_thickness = 1
         
         self.stripe_thickness = 3
-        self.stripe_color = (100, 100, 100)
-        
-        self.fontsize = 30
-        self.label_arrow_margin = 10
-        
-        self.write_id = True
+                
         self._color_mode = "white"
         self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", 
                                   "random", "roles"}
@@ -1099,10 +1096,13 @@ class BGCProtein:
             #else:
                 #return "other"
         
-        sequence_type = ""
+        cbp_type = ""
         
         # pks/nrps hybrid
-        if len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
+        if len(self.domain_set & FAS_domains_A) > 0 or len(self.domain_set & FAS_domains_B) > 0:
+            cbp_type = "other"
+            self.role = "precursor"
+        elif len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
             for d in self.domain_list:
                 if d.ID in PKS_domains:
                     # Detect PKS/multi-modular NRPS. Count both C and A domains 
@@ -1126,7 +1126,7 @@ class BGCProtein:
         elif len(self.domain_set & PKS_domains) > 0:
             # try to set appart FAS-like sequences of e.g. azaphilone
             if "ketoacyl-synt" not in self.domain_set:
-                sequence_type = "unknown_PKS"
+                cbp_type = "unknown_PKS"
                 self.role = "unknown"
                 
             elif len(self.domain_set & {"TIGR04532","SAT"}) > 0:
@@ -1137,27 +1137,26 @@ class BGCProtein:
                 # - no detection
                 # There are either several types of PT domains or not a general model
                 # to detect all three+ cases
-                sequence_type = "nrPKS"
+                cbp_type = "nrPKS"
                 self.role = "biosynthetic"
             elif len(self.domain_set & reducing_domains) > 0:
-                sequence_type = "rPKS"
+                cbp_type = "rPKS"
                 self.role = "biosynthetic"
             else:
-                sequence_type = "other_PKS"
+                cbp_type = "other_PKS"
                 self.role = "biosynthetic"
         elif len(self.domain_set & PKS3_domains) > 0:
-            sequence_type = "t3PKS"
+            cbp_type = "t3PKS"
             self.role = "biosynthetic"
         elif len(self.domain_set & NRPS_domains) > 0:
-            sequence_type = "NRPS"
+            cbp_type = "NRPS"
             self.role = "biosynthetic"
         elif len(self.domain_set & NRPS_Independent_Siderophore_domains) > 0:
-            sequence_type = "NIS"
+            cbp_type = "NIS"
             self.role = "biosynthetic"
             
-        
         else:
-            sequence_type = "other"
+            cbp_type = "other"
             
             role_set = set()
             for d in self.domain_set:
@@ -1170,7 +1169,7 @@ class BGCProtein:
             else:
                 self.role = "unknown"
 
-        self._CBP_type = sequence_type
+        self._CBP_type = cbp_type
         
         return
 
@@ -1297,15 +1296,15 @@ class BGCProtein:
         if mode == "white":
             return "#ffffff"
         elif mode == "random-pastel":
-            s_ = (0.15, 0.4)
+            s_ = (0.3, 0.5)
             v_ = (0.9, 0.95)
             return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "random-dark":
             s_ = (0.5, 0.75)
-            v_ = (0.4, 0.5)
+            v_ = (0.4, 0.6)
             return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "random":
-            s_ = (0.6, 0.75)
+            s_ = (0.4, 0.6)
             v_ = (0.65, 0.85)
             return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "gray":
@@ -1394,6 +1393,8 @@ class BGCProtein:
         Note that scaling only happens on the x axis
         """
         original_orientation = svg_options.original_orientation
+        
+        fill_color = self.arrow_colors(svg_options.color_mode)
         
         if mirror:
             flip = self.forward
@@ -1592,7 +1593,7 @@ class BGCProtein:
             
             if region_type == 0:
                 region_attribs["class"] = "exon"
-                region_attribs["fill"] = self.arrow_colors(svg_options.color_mode)
+                region_attribs["fill"] = fill_color
                 if svg_options.outline:
                     region_attribs["stroke"] = "#0a0a0a"
             else:

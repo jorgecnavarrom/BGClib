@@ -103,24 +103,23 @@ if __name__ == "__main__":
     # TODO: read this options from a file
     # Options for whole cluster
     svgopts = ArrowerOpts()
-    svgopts.color_mode = "roles"
-    svgopts.draw_domains = False
-    svgopts.write_id = False
-    svgopts.outline = True
-    svgopts.intron_regions = True
-    svgopts.intron_break = False
-    svgopts.original_orientation = True
     svgopts.scaling = 30
+    svgopts.color_mode = "roles"
+    svgopts.outline = True
     if not use_domains:
         svgopts.draw_domains = False
+    svgopts.original_orientation = True
+    svgopts.intron_break = False
+    svgopts.intron_regions = True
+    
     mirror_bgc = False
         
     # Options for box-plot domain content figure
     if dbox:
         box_svgopts = ArrowerOpts()
+        box_svgopts.scaling = 4
         box_svgopts.arrow_height = 15
         box_svgopts.stripe_thickness = 2
-        box_svgopts.scaling = 4
 
     # Three BGC collection objects:
     cached_collection = BGCCollection() # From previous results. Stored in pickled file
@@ -147,7 +146,7 @@ if __name__ == "__main__":
     for b in working_collection.bgcs:
         bgc = working_collection.bgcs[b]
         for p in bgc.protein_list:
-            p.classify_sequence()
+            p.classify_sequence(hmmdbs)
         
         svg_collection.bgcs[bgc.identifier] = bgc
         
