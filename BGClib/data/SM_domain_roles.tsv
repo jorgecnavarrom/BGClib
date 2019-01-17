@@ -204,7 +204,7 @@ HMG_CoA_synt_N	tailoring
 AA_kinase	tailoring
 Resolvase	tailoring
 CTP_transf_like	tailoring
-FtsK_gamma	transcription factor
+FtsK_gamma	regulation
 Transket_pyr	tailoring
 Inositol_P	tailoring
 Zeta_toxin	tailoring
@@ -352,7 +352,7 @@ Peptidase_S10	tailoring
 Phosphodiest	tailoring
 Hexose_dehydrat	tailoring
 PSD1	tailoring
-HemN_C	transcription factor
+HemN_C	regulation
 HI0933_like	tailoring
 DUF664	tailoring
 IMPDH	tailoring
@@ -427,7 +427,7 @@ Glyco_transf_5	tailoring
 Hemerythrin	tailoring
 Ala_racemase_N	tailoring
 SHMT	tailoring
-DUF742	transcription factor
+DUF742	regulation
 Peptidase_M78	tailoring
 PhzC-PhzF	tailoring
 SseB	tailoring
@@ -554,7 +554,7 @@ Aldolase	tailoring
 POR_N	tailoring
 DUF3349	tailoring
 DUF2859	tailoring
-DUF977	transcription factor
+DUF977	regulation
 PSD2	tailoring
 Meth_synt_1	tailoring
 URO-D	tailoring
@@ -577,7 +577,7 @@ DHquinase_II	tailoring
 DeoC	tailoring
 Cupin_1	tailoring
 Met_10	tailoring
-ABC2_membrane_6	transporter
+ABC2_membrane_6	transport
 DUF2786	tailoring
 YdaT_toxin	tailoring
 DUF1433	tailoring
@@ -913,7 +913,7 @@ Glycos_trans_3N	tailoring
 DUF1876	tailoring
 Glyco_transf_20	tailoring
 Cu-oxidase_2	tailoring
-DUF2316	transcription factor
+DUF2316	regulation
 Staph_opine_DH	tailoring
 CBM_25	tailoring
 BNR	tailoring
@@ -932,7 +932,7 @@ Nitrate_red_del	tailoring
 PRCH	tailoring
 HicB	tailoring
 PMI_typeI	tailoring
-HTH_42	transcription factor
+HTH_42	regulation
 HsdM_N	tailoring
 OprD	tailoring
 VanY	tailoring
@@ -941,7 +941,7 @@ AlgF	tailoring
 Chorismate_synt	tailoring
 Phasin_2	tailoring
 DUF2771	tailoring
-DUF1133	transcription factor
+DUF1133	regulation
 TraL	tailoring
 YfdX	tailoring
 DUF3734	tailoring
@@ -1000,7 +1000,7 @@ S-AdoMet_synt_C	tailoring
 S-AdoMet_synt_M	tailoring
 DapB_C	tailoring
 Metalloenzyme	tailoring
-PaaX	transcription factor
+PaaX	regulation
 ILVD_EDD	tailoring
 DAGK_cat	tailoring
 Proton_antipo_M	tailoring
@@ -1050,19 +1050,19 @@ DUF948	tailoring
 DUF3710	tailoring
 ResB	tailoring
 DUF1364	tailoring
-TFIIE_alpha	transcription factor
+TFIIE_alpha	regulation
 IlvN	tailoring
 Flavodoxin_1	tailoring
-DUF1492	transcription factor
+DUF1492	regulation
 DUF2298	tailoring
 CopC	tailoring
 PsiE	tailoring
 DUF3603	tailoring
-BetR	transcription factor
+BetR	regulation
 DUF3556	tailoring
 DUF3489	tailoring
 CBM_5_12	tailoring
-PTR2	transporter
+PTR2	transport
 YbaB_DNA_bd	tailoring
 DUF3188	tailoring
 ALAD	tailoring
@@ -1095,12 +1095,12 @@ Cytochrome_cB	tailoring
 DUF2630	tailoring
 DUF423	tailoring
 Mlp	tailoring
-DUF2250	transcription factor
+DUF2250	regulation
 DUF2919	tailoring
 BPL_LplA_LipB	tailoring
 TfoX_N	tailoring
 PRAI	tailoring
-DUF2089	transcription factor
+DUF2089	regulation
 DUF1883	tailoring
 CytoC_RC	tailoring
 DUF261	tailoring
@@ -1256,7 +1256,7 @@ DUF1400	tailoring
 DUF787	tailoring
 DUF676	tailoring
 DUF922	tailoring
-KorB	transcription factor
+KorB	regulation
 C1q	tailoring
 FAE1_CUT1_RppA	tailoring
 FcoT	tailoring
@@ -1292,11 +1292,11 @@ DUF31	tailoring
 ECF-ribofla_trS	tailoring
 DUF1842	tailoring
 DUF792	tailoring
-DUF1836	transcription factor
+DUF1836	regulation
 DUF1473	tailoring
 Cu-oxidase	tailoring
 Glyco_hydro_28	tailoring
-PAX	transcription factor
+PAX	regulation
 V4R	tailoring
 DUF1322	tailoring
 Hyaluronidase_1	tailoring
@@ -1320,7 +1320,7 @@ DUF465	tailoring
 DUF2897	tailoring
 DUF2920	tailoring
 Ndr	tailoring
-Pox_D5	transcription factor
+Pox_D5	regulation
 Guanylate_kin	tailoring
 DUF3089	tailoring
 MSP1b	tailoring
@@ -1402,7 +1402,7 @@ DUF2511	tailoring
 DUF2889	tailoring
 PGA_cap	tailoring
 OsmC	tailoring
-DUF3253	transcription factor
+DUF3253	regulation
 Erp_C	tailoring
 ABATE	tailoring
 DUF3098	tailoring
@@ -1500,7 +1500,7 @@ Fe_hyd_SSU	tailoring
 DUF3268	tailoring
 PNP_phzG_C	tailoring
 NifU_N	tailoring
-DUF134	transcription factor
+DUF134	regulation
 Trep_Strep	tailoring
 DUF1490	tailoring
 HigB_toxin	tailoring
@@ -1601,7 +1601,7 @@ Borrelia_P83	tailoring
 YjeF_N	tailoring
 SNO	tailoring
 Toprim	tailoring
-B-block_TFIIIC	transcription factor
+B-block_TFIIIC	regulation
 dCMP_cyt_deam_2	tailoring
 CYTH	tailoring
 CBM9_1	tailoring
@@ -1617,7 +1617,7 @@ DUF3578	tailoring
 DUF3280	tailoring
 AIG1	tailoring
 PYNP_C	tailoring
-Terminase_5	transcription factor
+Terminase_5	regulation
 GARS_A	tailoring
 DUF3290	tailoring
 ANF_receptor	tailoring
@@ -1645,7 +1645,7 @@ Mito_carr	tailoring
 Ald_Xan_dh_C	tailoring
 DUF2071	tailoring
 Vps4_C	tailoring
-Rio2_N	transcription factor
+Rio2_N	regulation
 TetR_C_32	tailoring
 DUF1697	tailoring
 PFK	tailoring
@@ -1764,14 +1764,14 @@ DUF1932	tailoring
 ERAP1_C	tailoring
 MerC	tailoring
 Glyco_hydro_31	tailoring
-DUF480	transcription factor
+DUF480	regulation
 CAT	tailoring
 DUF520	tailoring
 TIG	tailoring
 CO_deh_flav_C	tailoring
 Ribonuc_red_lgC	tailoring
 DUF1980	tailoring
-DUF433	transcription factor
+DUF433	regulation
 SepF	tailoring
 DUF3375	tailoring
 DUF3658	tailoring
@@ -1799,273 +1799,273 @@ Abhydro_lipase	tailoring
 YAcAr	tailoring
 MOSC	tailoring
 DXP_reductoisom	tailoring
-ECF_trnsprt	transporter
-ABC_tran	transporter
-ABC_membrane	transporter
-ABC2_membrane_3	transporter
-BPD_transp_2	transporter
-ABC2_membrane	transporter
-Aa_trans	transporter
-OPT	transporter
-ABC_sub_bind	transporter
-EcsB	transporter
-ABC_membrane_2	transporter
-oligo_HPY	transporter
-PDR_assoc	transporter
-AA_permease_N	transporter
-OppC_N	transporter
-ABC2_membrane_5	transporter
-Mem_trans	transporter
-BCA_ABC_TP_C	transporter
-ABC2_membrane_2	transporter
-ABC2_membrane_4	transporter
-MFS_1_like	transporter
-MFS_1	transporter
-ABC_tran_Xtn	transporter
-EmrE	transporter
-ABC_membrane_3	transporter
-ABC_trans_N	transporter
-AbiEi_3_N	transcription factor
-AbiEi_4	transcription factor
-ANAPC2	transcription factor
-AphA_like	transcription factor
-Arg_repressor	transcription factor
-ARID	transcription factor
-Bac_DnaA_C	transcription factor
-Bot1p	transcription factor
-BrkDBD	transcription factor
-Cdc6_C	transcription factor
-CENP-B_N	transcription factor
-Cro	transcription factor
-Crp	transcription factor
-CSN8_PSD8_EIF3K	transcription factor
-Cullin_Nedd8	transcription factor
-CUT	transcription factor
-DDRGK	transcription factor
-DEP	transcription factor
-Dimerisation	transcription factor
-Dimerisation2	transcription factor
-DsrD	transcription factor
-DUF1153	transcription factor
-DUF1323	transcription factor
-DUF1441	transcription factor
-DUF1495	transcription factor
-DUF1670	transcription factor
-DUF1804	transcription factor
-DUF1870	transcription factor
-DUF2582	transcription factor
-DUF3116	transcription factor
-DUF3853	transcription factor
-DUF3860	transcription factor
-DUF3908	transcription factor
-DUF4364	transcription factor
-DUF4447	transcription factor
-DUF739	transcription factor
-E2F_TDP	transcription factor
-EAP30	transcription factor
-ELL	transcription factor
-ESCRT-II	transcription factor
-Ets	transcription factor
-Exc	transcription factor
-F-112	transcription factor
-FaeA	transcription factor
-Fe_dep_repr_C	transcription factor
-Fe_dep_repress	transcription factor
-FeoC	transcription factor
-FokI_C	transcription factor
-FokI_N	transcription factor
-Forkhead	transcription factor
-FUR	transcription factor
-GcrA	transcription factor
-GerE	transcription factor
-GntR	transcription factor
-HARE-HTH	transcription factor
-HNF-1_N	transcription factor
-Homeodomain	transcription factor
-Homeobox_KN	transcription factor
-Homez	transcription factor
-HPD	transcription factor
-HrcA_DNA-bdg	transcription factor
-HSF_DNA-bind	transcription factor
-HTH_1	transcription factor
-HTH_10	transcription factor
-HTH_11	transcription factor
-HTH_12	transcription factor
-HTH_13	transcription factor
-HTH_15	transcription factor
-HTH_16	transcription factor
-HTH_17	transcription factor
-HTH_18	transcription factor
-HTH_19	transcription factor
-HTH_20	transcription factor
-HTH_21	transcription factor
-HTH_22	transcription factor
-HTH_23	transcription factor
-HTH_24	transcription factor
-HTH_25	transcription factor
-HTH_26	transcription factor
-HTH_27	transcription factor
-HTH_28	transcription factor
-HTH_29	transcription factor
-HTH_3	transcription factor
-HTH_30	transcription factor
-HTH_31	transcription factor
-HTH_32	transcription factor
-HTH_33	transcription factor
-HTH_34	transcription factor
-HTH_35	transcription factor
-HTH_36	transcription factor
-HTH_37	transcription factor
-HTH_38	transcription factor
-HTH_39	transcription factor
-HTH_40	transcription factor
-HTH_41	transcription factor
-HTH_43	transcription factor
-HTH_45	transcription factor
-HTH_46	transcription factor
-HTH_47	transcription factor
-HTH_5	transcription factor
-HTH_6	transcription factor
-HTH_7	transcription factor
-HTH_8	transcription factor
-HTH_9	transcription factor
-HTH_AraC	transcription factor
-HTH_AsnC-type	transcription factor
-HTH_CodY	transcription factor
-HTH_Crp_2	transcription factor
-HTH_DeoR	transcription factor
-HTH_IclR	transcription factor
-HTH_Mga	transcription factor
-HTH_micro	transcription factor
-HTH_OrfB_IS605	transcription factor
-HTH_psq	transcription factor
-HTH_Tnp_1	transcription factor
-HTH_Tnp_1_2	transcription factor
-HTH_Tnp_4	transcription factor
-HTH_Tnp_IS1	transcription factor
-HTH_Tnp_IS630	transcription factor
-HTH_Tnp_ISL3	transcription factor
-HTH_Tnp_Mu_1	transcription factor
-HTH_Tnp_Mu_2	transcription factor
-HTH_Tnp_Tc3_1	transcription factor
-HTH_Tnp_Tc3_2	transcription factor
-HTH_Tnp_Tc5	transcription factor
-HTH_WhiA	transcription factor
-HxlR	transcription factor
-IBD	transcription factor
-IF2_N	transcription factor
-IRF	transcription factor
-KicB	transcription factor
-KORA	transcription factor
-La	transcription factor
-LacI	transcription factor
-LexA_DNA_bind	transcription factor
-Linker_histone	transcription factor
-LZ_Tnp_IS481	transcription factor
-MADF_DNA_bdg	transcription factor
-MarR	transcription factor
-MarR_2	transcription factor
-MerR	transcription factor
-MerR-DNA-bind	transcription factor
-MerR_1	transcription factor
-MerR_2	transcription factor
-Mga	transcription factor
-Mnd1	transcription factor
-Mor	transcription factor
-MotA_activ	transcription factor
-MqsA_antitoxin	transcription factor
-MRP-L20	transcription factor
-Myb_DNA-bind_2	transcription factor
-Myb_DNA-bind_3	transcription factor
-Myb_DNA-bind_4	transcription factor
-Myb_DNA-bind_5	transcription factor
-Myb_DNA-bind_6	transcription factor
-Myb_DNA-bind_7	transcription factor
-Myb_DNA-binding	transcription factor
-Neugrin	transcription factor
-NUMOD1	transcription factor
-OST-HTH	transcription factor
-P22_Cro	transcription factor
-PadR	transcription factor
-PCI	transcription factor
-Penicillinase_R	transcription factor
-Phage_AlpA	transcription factor
-Phage_antitermQ	transcription factor
-Phage_CI_repr	transcription factor
-Phage_CII	transcription factor
-Phage_rep_org_N	transcription factor
-Phage_terminase	transcription factor
-Pou	transcription factor
-PuR_N	transcription factor
-Put_DNA-bind_N	transcription factor
-Rap1-DNA-bind	transcription factor
-Rep_3	transcription factor
-RepA_C	transcription factor
-RepA_N	transcription factor
-RepC	transcription factor
-RepL	transcription factor
-Replic_Relax	transcription factor
-RFX_DNA_binding	transcription factor
-Ribosomal_S19e	transcription factor
-Ribosomal_S25	transcription factor
-RNA_pol_Rpc34	transcription factor
-RP-C	transcription factor
-RPA	transcription factor
-RPA_C	transcription factor
-RQC	transcription factor
-Rrf2	transcription factor
-RTP	transcription factor
-RuvB_C	transcription factor
-SAC3_GANP	transcription factor
-SANT_DAMP1_like	transcription factor
-SatD	transcription factor
-SelB-wing_1	transcription factor
-SelB-wing_2	transcription factor
-SelB-wing_3	transcription factor
-SgrR_N	transcription factor
-Sigma54_CBD	transcription factor
-Sigma54_DBD	transcription factor
-Sigma70_ECF	transcription factor
-Sigma70_ner	transcription factor
-Sigma70_r2	transcription factor
-Sigma70_r3	transcription factor
-Sigma70_r4	transcription factor
-Sigma70_r4_2	transcription factor
-SLIDE	transcription factor
-SMC_ScpB	transcription factor
-SpoIIID	transcription factor
-STN1_2	transcription factor
-Sulfolobus_pRN	transcription factor
-SWIRM	transcription factor
-TBPIP	transcription factor
-TetR_N	transcription factor
-TFIIE_beta	transcription factor
-TFIIF_alpha	transcription factor
-TFIIF_beta	transcription factor
-Tn7_Tnp_TnsA_C	transcription factor
-Tn916-Xis	transcription factor
-TraI_2_C	transcription factor
-Trans_reg_C	transcription factor
-TrfA	transcription factor
-TrmB	transcription factor
-Trp_repressor	transcription factor
-UPF0122	transcription factor
-Vir_act_alpha_C	transcription factor
-YdaS_antitoxin	transcription factor
-YjcQ	transcription factor
-YokU	transcription factor
-z-alpha	transcription factor
-FleQ	transcription factor
-OKR_DC_1_N	transcription factor
-RcsC	transcription factor
-Response_reg	transcription factor
-TadZ_N	transcription factor
-H-kinase_dim	transcription factor
-HATPase_c	transcription factor
-HATPase_c_2	transcription factor
-HATPase_c_3	transcription factor
-HATPase_c_5	transcription factor
-HisKA	transcription factor
-HisKA_2	transcription factor
-HisKA_3	transcription factor
-HWE_HK	transcription factor
+ECF_trnsprt	transport
+ABC_tran	transport
+ABC_membrane	transport
+ABC2_membrane_3	transport
+BPD_transp_2	transport
+ABC2_membrane	transport
+Aa_trans	transport
+OPT	transport
+ABC_sub_bind	transport
+EcsB	transport
+ABC_membrane_2	transport
+oligo_HPY	transport
+PDR_assoc	transport
+AA_permease_N	transport
+OppC_N	transport
+ABC2_membrane_5	transport
+Mem_trans	transport
+BCA_ABC_TP_C	transport
+ABC2_membrane_2	transport
+ABC2_membrane_4	transport
+MFS_1_like	transport
+MFS_1	transport
+ABC_tran_Xtn	transport
+EmrE	transport
+ABC_membrane_3	transport
+ABC_trans_N	transport
+AbiEi_3_N	regulation
+AbiEi_4	regulation
+ANAPC2	regulation
+AphA_like	regulation
+Arg_repressor	regulation
+ARID	regulation
+Bac_DnaA_C	regulation
+Bot1p	regulation
+BrkDBD	regulation
+Cdc6_C	regulation
+CENP-B_N	regulation
+Cro	regulation
+Crp	regulation
+CSN8_PSD8_EIF3K	regulation
+Cullin_Nedd8	regulation
+CUT	regulation
+DDRGK	regulation
+DEP	regulation
+Dimerisation	regulation
+Dimerisation2	regulation
+DsrD	regulation
+DUF1153	regulation
+DUF1323	regulation
+DUF1441	regulation
+DUF1495	regulation
+DUF1670	regulation
+DUF1804	regulation
+DUF1870	regulation
+DUF2582	regulation
+DUF3116	regulation
+DUF3853	regulation
+DUF3860	regulation
+DUF3908	regulation
+DUF4364	regulation
+DUF4447	regulation
+DUF739	regulation
+E2F_TDP	regulation
+EAP30	regulation
+ELL	regulation
+ESCRT-II	regulation
+Ets	regulation
+Exc	regulation
+F-112	regulation
+FaeA	regulation
+Fe_dep_repr_C	regulation
+Fe_dep_repress	regulation
+FeoC	regulation
+FokI_C	regulation
+FokI_N	regulation
+Forkhead	regulation
+FUR	regulation
+GcrA	regulation
+GerE	regulation
+GntR	regulation
+HARE-HTH	regulation
+HNF-1_N	regulation
+Homeodomain	regulation
+Homeobox_KN	regulation
+Homez	regulation
+HPD	regulation
+HrcA_DNA-bdg	regulation
+HSF_DNA-bind	regulation
+HTH_1	regulation
+HTH_10	regulation
+HTH_11	regulation
+HTH_12	regulation
+HTH_13	regulation
+HTH_15	regulation
+HTH_16	regulation
+HTH_17	regulation
+HTH_18	regulation
+HTH_19	regulation
+HTH_20	regulation
+HTH_21	regulation
+HTH_22	regulation
+HTH_23	regulation
+HTH_24	regulation
+HTH_25	regulation
+HTH_26	regulation
+HTH_27	regulation
+HTH_28	regulation
+HTH_29	regulation
+HTH_3	regulation
+HTH_30	regulation
+HTH_31	regulation
+HTH_32	regulation
+HTH_33	regulation
+HTH_34	regulation
+HTH_35	regulation
+HTH_36	regulation
+HTH_37	regulation
+HTH_38	regulation
+HTH_39	regulation
+HTH_40	regulation
+HTH_41	regulation
+HTH_43	regulation
+HTH_45	regulation
+HTH_46	regulation
+HTH_47	regulation
+HTH_5	regulation
+HTH_6	regulation
+HTH_7	regulation
+HTH_8	regulation
+HTH_9	regulation
+HTH_AraC	regulation
+HTH_AsnC-type	regulation
+HTH_CodY	regulation
+HTH_Crp_2	regulation
+HTH_DeoR	regulation
+HTH_IclR	regulation
+HTH_Mga	regulation
+HTH_micro	regulation
+HTH_OrfB_IS605	regulation
+HTH_psq	regulation
+HTH_Tnp_1	regulation
+HTH_Tnp_1_2	regulation
+HTH_Tnp_4	regulation
+HTH_Tnp_IS1	regulation
+HTH_Tnp_IS630	regulation
+HTH_Tnp_ISL3	regulation
+HTH_Tnp_Mu_1	regulation
+HTH_Tnp_Mu_2	regulation
+HTH_Tnp_Tc3_1	regulation
+HTH_Tnp_Tc3_2	regulation
+HTH_Tnp_Tc5	regulation
+HTH_WhiA	regulation
+HxlR	regulation
+IBD	regulation
+IF2_N	regulation
+IRF	regulation
+KicB	regulation
+KORA	regulation
+La	regulation
+LacI	regulation
+LexA_DNA_bind	regulation
+Linker_histone	regulation
+LZ_Tnp_IS481	regulation
+MADF_DNA_bdg	regulation
+MarR	regulation
+MarR_2	regulation
+MerR	regulation
+MerR-DNA-bind	regulation
+MerR_1	regulation
+MerR_2	regulation
+Mga	regulation
+Mnd1	regulation
+Mor	regulation
+MotA_activ	regulation
+MqsA_antitoxin	regulation
+MRP-L20	regulation
+Myb_DNA-bind_2	regulation
+Myb_DNA-bind_3	regulation
+Myb_DNA-bind_4	regulation
+Myb_DNA-bind_5	regulation
+Myb_DNA-bind_6	regulation
+Myb_DNA-bind_7	regulation
+Myb_DNA-binding	regulation
+Neugrin	regulation
+NUMOD1	regulation
+OST-HTH	regulation
+P22_Cro	regulation
+PadR	regulation
+PCI	regulation
+Penicillinase_R	regulation
+Phage_AlpA	regulation
+Phage_antitermQ	regulation
+Phage_CI_repr	regulation
+Phage_CII	regulation
+Phage_rep_org_N	regulation
+Phage_terminase	regulation
+Pou	regulation
+PuR_N	regulation
+Put_DNA-bind_N	regulation
+Rap1-DNA-bind	regulation
+Rep_3	regulation
+RepA_C	regulation
+RepA_N	regulation
+RepC	regulation
+RepL	regulation
+Replic_Relax	regulation
+RFX_DNA_binding	regulation
+Ribosomal_S19e	regulation
+Ribosomal_S25	regulation
+RNA_pol_Rpc34	regulation
+RP-C	regulation
+RPA	regulation
+RPA_C	regulation
+RQC	regulation
+Rrf2	regulation
+RTP	regulation
+RuvB_C	regulation
+SAC3_GANP	regulation
+SANT_DAMP1_like	regulation
+SatD	regulation
+SelB-wing_1	regulation
+SelB-wing_2	regulation
+SelB-wing_3	regulation
+SgrR_N	regulation
+Sigma54_CBD	regulation
+Sigma54_DBD	regulation
+Sigma70_ECF	regulation
+Sigma70_ner	regulation
+Sigma70_r2	regulation
+Sigma70_r3	regulation
+Sigma70_r4	regulation
+Sigma70_r4_2	regulation
+SLIDE	regulation
+SMC_ScpB	regulation
+SpoIIID	regulation
+STN1_2	regulation
+Sulfolobus_pRN	regulation
+SWIRM	regulation
+TBPIP	regulation
+TetR_N	regulation
+TFIIE_beta	regulation
+TFIIF_alpha	regulation
+TFIIF_beta	regulation
+Tn7_Tnp_TnsA_C	regulation
+Tn916-Xis	regulation
+TraI_2_C	regulation
+Trans_reg_C	regulation
+TrfA	regulation
+TrmB	regulation
+Trp_repressor	regulation
+UPF0122	regulation
+Vir_act_alpha_C	regulation
+YdaS_antitoxin	regulation
+YjcQ	regulation
+YokU	regulation
+z-alpha	regulation
+FleQ	regulation
+OKR_DC_1_N	regulation
+RcsC	regulation
+Response_reg	regulation
+TadZ_N	regulation
+H-kinase_dim	regulation
+HATPase_c	regulation
+HATPase_c_2	regulation
+HATPase_c_3	regulation
+HATPase_c_5	regulation
+HisKA	regulation
+HisKA_2	regulation
+HisKA_3	regulation
+HWE_HK	regulation

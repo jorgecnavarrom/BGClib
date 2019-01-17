@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.4.2"
+__version__ = "0.4.4"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -57,8 +57,8 @@ FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
 
 role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "tailoring":"#8fc889", # green, rgb(143, 200, 137)
-               "transporter":"#f0d963", # yellow, rgb(240, 217, 99)
-               "transcription factor":"#33c1f0", # blue, rgb(51, 193, 240)
+               "transport":"#f0d963", # yellow, rgb(240, 217, 99)
+               "regulation":"#33c1f0", # blue, rgb(51, 193, 240)
                "other":"#eff0f1", # light gray, rgb(239, 240, 241)
                "precursor":"#9797dc", # lilac, rgb(151,151,220)
                "unknown":"#dcdcdc"} # gray, rgb(220, 220, 220)
@@ -104,7 +104,24 @@ class HMM_DB:
         self.ID_to_DE = {}          # version); DE: description
         
         self.ID_to_role = {}        # manually assigned roles (see role_colors)
+        
+        self.read_domain_colors(Path(__file__).parent / "data/domains_color_file_ID.tsv")
+        self.read_domain_roles(Path(__file__).parent / "data/SM_domain_roles.tsv")
+        self.read_alias_file(Path(__file__).parent / "data/CBP_domains.tsv")
+        
         return
+    
+
+    def add_included_database(self):
+        """
+        Reads hmm profiles included in the library
+        """
+        
+        for hmm in (Path(__file__).parent).glob("data/Domain_models/*.hmm"):
+            self.add_database(hmm)
+            
+        return
+    
     
     def add_database(self, db_path, reload_data = False):
         """
@@ -121,7 +138,7 @@ class HMM_DB:
                 when there is a new version of Pfam)
         """
         if not db_path.is_file():
-            print("Not able to add hmm database (not a file. Wrong path?)")
+            print("Not able to add hmm database (not a file. Wrong path?): {}".format(str(db_path)))
             return False
         elif db_path.suffix.lower() != ".hmm":
             print("Not able to add hmm datase (not a .hmm file)")
@@ -216,6 +233,7 @@ class HMM_DB:
         
         return True
 
+
     def read_alias_file(self, alias_file):
         try:
             with open(alias_file, "r") as f:
@@ -231,12 +249,20 @@ class HMM_DB:
         except FileNotFoundError:
             print("Could not open domain alias file ({})".format(alias_file))
 
-
-    def read_domain_colors(self, colors_file):
+        
+    def read_domain_colors(self, colors_file, append=True):
         """
         Expects the input file to be in a tsv with two columns:
         hmm_ID \t r,g,b
+        
+        input:
+            colors_file: a file with domain ID \t rgb colors
+            append: toggle to false to reset all colors
         """
+        if not append:
+            self.colors.clear()
+            self.color_outline.clear()
+        
         try:
             with open(colors_file, "r") as f:
                 for line in f:
@@ -255,13 +281,20 @@ class HMM_DB:
         return
 
 
-    def read_domain_roles(self, domain_roles_file):
+    def read_domain_roles(self, domain_roles_file, append=True):
         """
-        Expects the input file to be a tsv with two columns:
-        hmm_ID \t role
-        Where role is one of biosynthetic, tailoring, transporter, 
-            transcription factor, other, unknown
+        input:
+            domain_roles_file. A tsv file with two columns:
+            hmm_ID \t role
+            Where role is one of biosynthetic, tailoring, transport, 
+            regulation, other, unknown
+            
+        append:
+            If False, the ID_to_role will be erased. Otherwise values will only
+            be overwritten for previously assigned IDs
         """
+        if not append:
+            self.ID_to_role.clear()
         
         try:
             with open(domain_roles_file, "r") as f:
@@ -272,19 +305,20 @@ class HMM_DB:
                     ID, role = line.strip().split("\t")
                     
                     if role not in role_colors:
-                        print("Warning. Unknown role:\n{}\t{}".format(ID, role))
+                        print("Warning. Found unknown role when loading domain role file:\n{}\t{}".format(ID, role))
                     
                     self.ID_to_role[ID] = role
         except FileNotFoundError:
-            print("Could not open domain role file({})".format(str(colors_file)))
+            print("Could not open domain role file({})".format(str(domain_roles_file)))
             
         return
+
 
 class ArrowerOpts():
     """
     Options for Arrower-like figures. Colors will be elsewhere.
     """
-    def __init__(self):
+    def __init__(self, cfg=""):
         self.scaling = 30                    # px per bp
         
         self.arrow_height = 30               # H: Height of arrows' body
@@ -292,7 +326,7 @@ class ArrowerOpts():
                                         #  (i.e. total arrow head = H + 2*aH)
                                         # internally, h = H/2 to preserve 45° angle
                                         
-        self.arrow_head_length = 30
+        #self.arrow_head_length = 30        # Distance from start of head till end.
         
         self.gene_contour_thickness = 2      # note: thickness grows outwards
         
@@ -306,13 +340,18 @@ class ArrowerOpts():
                                   "random", "roles"}
         
         self.outline = True
-        self.draw_domains = True # If false, all arrows will point forward
+        self.draw_domains = True 
         
-        self.original_orientation = False
+        self.original_orientation = False # If false, all arrows will point forward
         
         self.intron_break = False # Show a dashed line where the intron breaks gene
                                 # This means that this is not an actual 
         self.intron_regions = False # Show the actual gap where the intron is
+
+        if cfg != "":
+            self.load_options(cfg)
+
+        return
 
     @property
     def color_mode(self):
@@ -326,6 +365,74 @@ class ArrowerOpts():
             print("Valid color modes are ['{}']".format("', '".join(self.valid_color_modes)))
             self._color_mode = "white"
 
+
+    def load_options(self, cfg):
+        cfgf = Path(cfg)
+        
+        if not cfgf.is_file():
+            print("Error: Not possible to load options file for ArrowerOpts ({})".format(str(cfg)))
+            return False
+        
+        for line in open(cfgf, "r"):
+            if line[0] == "#" or line.strip() == "":
+                continue
+            
+            try:
+                option, value = line.strip().split("=")
+            except ValueError:
+                print("ArrowerOpts configuration file: ignoring bad line ({})".format(line.strip()))
+                continue
+            else:
+                option = option.strip().lower()
+                value = value.strip()
+                
+                truefalse_errors = []
+                
+                if option == "scaling":
+                    self.scaling = int(value)
+                elif option == "arrow_height":
+                    self.arrow_head_height = int(value)
+                elif option == "gene_contour_thickness":
+                    self.gene_contour_thickness = int(value)
+                elif option == "internal_domain_margin":
+                    self.internal_domain_margin = int(value)
+                elif option == "domain_contour_thickness":
+                    self.domain_contour_thickness = int(value)
+                elif option == "stripe_thickness":
+                    self.stripe_thickness = int(value)
+                elif option == "color_mode":
+                    value = value.replace("'", "").replace('"', '')
+                    self.color_mode = value.lower()
+                elif option in {"outline", "draw_domains", "original_orientation", 
+                                "intron_break", "intron_regions"}:
+                    value = value.capitalize()
+                    if value in {"True","False"}:
+                        if value == "True":
+                            value = True
+                        else:
+                            value = False
+                            
+                        if option == "outline":
+                            self.outline = value
+                        elif option == "draw_domains":
+                            self.draw_domains = value
+                        elif option == "original_orientation":
+                            self.original_orientation = value
+                        elif option == "intron_break":
+                            self.intron_break = value
+                        else:
+                            self.intron_regions = value
+                    else:
+                        truefalse_errors.append(option)
+                else:
+                    print("ArrowerOpts configuration file: unknown option {}".format(option))
+                    
+                if len(truefalse_errors) > 0:
+                    print("ArrowerOpts configuration file: the following options must have a value of True or False {}".format(option))
+                    
+            
+        return True
+    
 
 class BGCCollection:
     """
@@ -470,7 +577,7 @@ class BGC:
                         
                         # should only point to BGC objects but we're still
                         # not outputting self.identifier into the annotation file
-                        protein.parent_cluster = clusterName
+                        protein.parent_cluster = self
                         
                         del cds_list[:]
                         for x in CDS.location.parts:
@@ -639,7 +746,6 @@ class BGC:
         
         return main_group
 
-    
 
 class BGCLocus:
     """
@@ -670,7 +776,18 @@ class ProteinCollection:
     # TODO: break work on sets of 4 cpus
     # TODO: evaluate whether hmmsearch is better than hmmscan
     # TODO: TEST!
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=1):
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True):
+        """
+        Uses hmmscan to search the protein sequences for hmm models specified
+        
+        input:
+            hmmdb: contains a list to all hmm databases
+            domtblout_path: where to store HMMER's output file (optional)
+            cpus: number of cpus to pass to HMMER. Remember it uses cpu + 1
+            tc: if true, use the model's Trusted Cutoff score (lower score of all
+                true positives)
+        """
+        
         if domtblout_path != "":
             try:
                 assert not domtblout_path.is_file()
@@ -686,7 +803,9 @@ class ProteinCollection:
             return
         
         for db in hmmdb.db_list:
-            command = ['hmmscan', '--cpu', str(cpus), '--cut_tc', '--noali', '--notextw']
+            command = ['hmmscan', '--cpu', str(cpus), '--noali', '--notextw']
+            if tc:
+                command.append('--cut_tc')
             if domtblout_path != "":
                 path = str(domtblout_path / ("output_" + db.stem + ".domtable"))
                 command.extend(['--domtblout', path ])
@@ -758,9 +877,12 @@ class BGCProtein:
         self.length = 0             # automatically calculated when sequence is added
                                     # Amino acid space
         
+        self.protein_type = ""      # Will eventually replace CBP_type to accomodate
+                                    # other (non-CBP) types e.g. "FAS_A"
         self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
                                     #   resistance, unknown]
-        self._CBP_type = "unknown"  # should be one from "valid_CBP_types"
+        self._CBP_type = "unknown"  # should be one from "valid_CBP_types" 
+        #TODO: change to sequence_type. Don't change against valid_CBP_types
         self.s_cbp = ""             # Sub classes of CBP e.g.: Group V
         self.ss_cbp = ""            # e.g.: Group V2
         
@@ -1406,10 +1528,10 @@ class BGCProtein:
             # if using nucleotides to calculate length, remember to remove three
             # that correspond to the stop codon
             L = (self.cds_regions[-1][1] - self.cds_regions[0][0] - 3)/svg_options.scaling
-        l = svg_options.arrow_head_length
         
         H = svg_options.arrow_height
         h = H/2
+        l = H
         
         #X = 0
         Y = h
@@ -1620,7 +1742,7 @@ class BGCProtein:
                     # remember that head_start and arrow_collision are in local
                     # 'arrow coordinates'
                     if head_start == 0:
-                        arrow_collision = head_start + HL*(h+idm)
+                        arrow_collision = L - ( (h-idm)/HL )
                     else:
                         arrow_collision = head_start + Hl*(h+idm)
                     
@@ -1714,6 +1836,7 @@ class BGCProtein:
                             alpha1 = int(HL*(L-dbox_start))
                         else:
                             alpha1 = int(Hl*(L-dbox_start))
+                            
                         bprime = [dbox_start, center - alpha1]
                         vertices.append(bprime)
                         
