@@ -1,5 +1,0 @@
-"""
-BGClib
-"""
-
-from .BGClib import *

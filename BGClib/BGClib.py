@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.4.4"
+__version__ = "0.4.5"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -391,7 +391,7 @@ class ArrowerOpts():
                 if option == "scaling":
                     self.scaling = int(value)
                 elif option == "arrow_height":
-                    self.arrow_head_height = int(value)
+                    self.arrow_height = int(value)
                 elif option == "gene_contour_thickness":
                     self.gene_contour_thickness = int(value)
                 elif option == "internal_domain_margin":
@@ -739,7 +739,7 @@ class BGC:
                 # NOTE: the mirror parameter will flip each individual locus, not
                 # the whole collection of them. This means that the inter-loci
                 # element is still drawn at the end of each locus
-                main_group.append(inter_loci_element(Xoffset, yoffset + 0.5*H, svg_options))
+                main_group.append(self.inter_loci_element(Xoffset, yoffset + 0.5*H, svg_options))
             
                 Xoffset += H
             l += 1
