@@ -314,7 +314,7 @@ class HMM_DB:
         return
 
 
-class ArrowerOpts():
+class ArrowerOpts:
     """
     Options for Arrower-like figures. Colors will be elsewhere.
     """
