@@ -32,15 +32,15 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.4.5"
+__version__ = "0.4.6"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
 
 # Static data
-valid_CBP_types = {"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
-        "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", 
-        "unknown_PKS", "no_domains", "NIS"}
+#valid_CBP_types = {"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
+        #"PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", 
+        #"unknown_PKS", "no_domains", "NIS"}
 
 # this should all have an alias in CBP_domains.tsv
 PKS_domains = {"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
@@ -54,6 +54,21 @@ NRPS_Independent_Siderophore_domains = {"IucA_IucC"}
 
 FAS_domains_A = {"Fas_alpha_ACP" ,"FAS_I_H", "ACPS"}
 FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
+
+valid_CBP_types = {"nrPKS": "#76b7f4", # blue
+                   "rPKS": "#2c9cdc", # darker blue
+                   "t3PKS": "#007dfb", # a bit more dark blue
+                   "NRPS": "#ffac00", # orange
+                   "other_PKS": "#00ffff", # another blue. Intense-ish 
+                   "unknown_PKS": "#aaffff", # lighter version of previous
+                   "PKS-NRPS_hybrid": "#aa007f", # purple
+                   "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
+                   "NRPS-PKS_hybrid": "#a25fe6", # violet
+                   "unknown": "#f4f4fc", # super light lilac
+                   "other": "#fcdcdc", # very light pink
+                   "no_domains": "ffffff", # white
+                   "NIS": "#c20c28" # red blood
+                    }
 
 role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "tailoring":"#8fc889", # green, rgb(143, 200, 137)
@@ -337,7 +352,7 @@ class ArrowerOpts:
                 
         self._color_mode = "white"
         self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", 
-                                  "random", "roles"}
+                                  "random", "roles", "domains"}
         
         self.outline = True
         self.draw_domains = True 
@@ -1202,28 +1217,30 @@ class BGCProtein:
         """Classifies a sequence based on its predicted domains according to a 
         set of rules.
         
-        This will be a work in progress as new rules are discovered
+        This will be a work in progress as new rules get incorporated
         """
         
+        self.protein_type = ""
         self._CBP_type = "unknown"
         self.role = "unknown"
         
-        # Basic filtering
-        #if len(self.domain_set) == 1:
-            #self._CBP_type = "unknown"
-            #self.role = "unknown"
-            #return
-            #if "Trp_DMAT" in domain_set:
-                #return "DMAT"
-            #else:
-                #return "other"
+        if (self.domain_set) == 0:
+            self._CBP_type = "no_domains"
+            return
         
         cbp_type = ""
         
         # pks/nrps hybrid
-        if len(self.domain_set & FAS_domains_A) > 0 or len(self.domain_set & FAS_domains_B) > 0:
+        if len(self.domain_set & (FAS_domains_A | FAS_domains_B)) > 0:
             cbp_type = "other"
             self.role = "precursor"
+            
+            if len(self.domain_set & FAS_domains_A & FAS_domains_B) > 0:
+                self.protein_type = "Fatty Acid Synthase"
+            elif len(self.domain_set & FAS_domains_A) > 0:
+                self.protein_type = "Fatty Acid Synthase A"
+            else:
+                self.protein_type = "Fatty Acid Synthase B"
         elif len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
             for d in self.domain_list:
                 if d.ID in PKS_domains:
@@ -1270,7 +1287,7 @@ class BGCProtein:
         elif len(self.domain_set & PKS3_domains) > 0:
             cbp_type = "t3PKS"
             self.role = "biosynthetic"
-        elif len(self.domain_set & NRPS_domains) > 0:
+        elif len(self.domain_set & NRPS_domains) > 1:
             cbp_type = "NRPS"
             self.role = "biosynthetic"
         elif len(self.domain_set & NRPS_Independent_Siderophore_domains) > 0:
@@ -1292,6 +1309,7 @@ class BGCProtein:
                 self.role = "unknown"
 
         self._CBP_type = cbp_type
+        self.protein_type = cbp_type
         
         return
 
@@ -1414,7 +1432,7 @@ class BGCProtein:
             f.write(etree.tostring(root, standalone=True, pretty_print=True))
     
 
-    def arrow_colors(self, mode):
+    def arrow_colors(self, mode, hmmdb=HMM_DB()):
         if mode == "white":
             return "#ffffff"
         elif mode == "random-pastel":
@@ -1433,6 +1451,30 @@ class BGCProtein:
             return (180, 180, 180)
         elif mode == "roles":
             return role_colors[self.role]
+        elif mode == "domains":
+            # colors based on found protein domains. Only if there is one type
+            # of domain predicted. Experimental
+            
+            # If it's a CBP, it has a defined color already
+            if self._CBP_type not in {"unknown", "other"}:
+                try:
+                    color = valid_CBP_types[self._CBP_type]
+                except KeyError:
+                    color = "#eff0f1"
+                return color
+            
+            if len(self.domain_set) == 1:
+                domain = self.domain_list[0]
+                try:
+                    color = "#{}".format("".join( hex(int(c))[2:] for c in hmmdb.colors[domain.ID] ))
+                except KeyError:
+                    color = "#eff0f1"
+                    
+                return color
+            else:
+                # TODO: plan something in case two or more. Define concatenated
+                # domain IDs as a new key with an associated color?
+                return "#eff0f1"
         else:
             # "white"
             return "#ffffff"
@@ -1516,7 +1558,7 @@ class BGCProtein:
         """
         original_orientation = svg_options.original_orientation
         
-        fill_color = self.arrow_colors(svg_options.color_mode)
+        fill_color = self.arrow_colors(svg_options.color_mode, hmmdb)
         
         if mirror:
             flip = self.forward
@@ -1547,9 +1589,9 @@ class BGCProtein:
         main_group = etree.Element("g")
         
         # add title
-        title = etree.Element("title")
-        title.text = self.identifier
-        main_group.append(title)
+        arrow_title = etree.Element("title")
+        arrow_title.text = self.identifier
+        main_group.append(arrow_title)
         
         exon_elements = []
         intron_elements = []
@@ -1574,6 +1616,16 @@ class BGCProtein:
                 
                 start = new_start
                 end = new_end
+                
+            if not self.forward:
+                # if the protein is in the reverse strand, then the _last_ CDS
+                # defines the _beginning_ of the protein. All the orders of the
+                # regions need to be reversed
+                reverse_regions = []
+                end = regions[-1][1]
+                for region in regions[::-1]:
+                    reverse_regions.append((end-region[1], end-region[0], region[2]))
+                regions = reverse_regions
         else:
             regions.append((0, L, 0))
             
@@ -1589,7 +1641,20 @@ class BGCProtein:
         
         # Keep track of current domain index and other info.
         # Domains should be sorted by position
-        if svg_options.draw_domains and len(self.domain_list) > 0:
+        draw_domains = svg_options.draw_domains
+        # If only one domain and color_mode == 'domains', don't draw domains even
+        # if requested (instead, whole arrow will be filled with domain's color)
+        if svg_options.color_mode == "domains" and (len(self.domain_set) == 1 or \
+            self._CBP_type not in {"unknown", "other"}):
+            draw_domains = False
+            
+            if self._CBP_type not in {"unknown", "other"}:
+                arrow_title.text = "{}\n{}".format(self.identifier, self._CBP_type)
+            else:
+                domain = self.domain_list[0]
+                arrow_title.text = "{}\n[{}]".format(self.identifier, hmmdb.ID_to_DE[domain.ID])
+        
+        if draw_domains and len(self.domain_list) > 0:
             current_domain = 0
             
             domain = self.domain_list[current_domain]
@@ -2020,6 +2085,7 @@ class BGCProtein:
             
             # DOMAIN LINKER
             # if the domain runs across two exons, draw a linker line in the intron
+            # TODO: make this a polygon in case if runs past arrow_collision
             if region_type == 1 and current_domain <= len(self.domain_list) - 1:
                 if dstarti < start and dendi + end > end:
                     # +/- 1 because linker goes beyond intron region
@@ -2069,6 +2135,16 @@ class BGCProtein:
                 
                 start = new_start
                 end = new_end
+                
+            if not self.forward:
+                # if the protein is in the reverse strand, then the _last_ CDS
+                # defines the _beginning_ of the protein. All the orders of the
+                # regions need to be reversed
+                reverse_regions = []
+                end = regions[-1][1]
+                for region in regions[::-1]:
+                    reverse_regions.append((end-region[1], end-region[0], region[2]))
+                regions = reverse_regions
             
             intron_offset = 0
             vertices = []
