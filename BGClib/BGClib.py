@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.4.6"
+__version__ = "0.4.7"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -133,6 +133,8 @@ class HMM_DB:
         """
         
         for hmm in (Path(__file__).parent).glob("data/Domain_models/*.hmm"):
+            self.add_database(hmm)
+        for hmm in (Path(__file__).parent).glob("data/Domain_models/*.HMM"):
             self.add_database(hmm)
             
         return
@@ -1587,7 +1589,7 @@ class BGCProtein:
         intron_regions = svg_options.intron_regions
 
         main_group = etree.Element("g")
-        
+
         # add title
         arrow_title = etree.Element("title")
         arrow_title.text = self.identifier
@@ -1794,7 +1796,7 @@ class BGCProtein:
             
             
             # DOMAINS
-            if region_type == 0 and current_domain <= len(self.domain_list) - 1:
+            if region_type == 0 and current_domain < len(self.domain_list):
                 # get domain coordinates considering intron spaces
                 dstarti = int(dstart + intron_offset)
                 dendi = int(dend + intron_offset)
@@ -1830,7 +1832,7 @@ class BGCProtein:
                     outline_right = True
                     
                     next_domain = False # indicate whether we need to go to the next domain
-                    
+
                     # start of domain is in this region
                     if dstarti >= start and dstarti < end:
                         # ...but the end of it is outside region
@@ -2087,7 +2089,7 @@ class BGCProtein:
             # if the domain runs across two exons, draw a linker line in the intron
             # TODO: make this a polygon in case if runs past arrow_collision
             if region_type == 1 and current_domain <= len(self.domain_list) - 1:
-                if dstarti < start and dendi + end > end:
+                if dstarti < start and dendi + end >= end:
                     # +/- 1 because linker goes beyond intron region
                     if flip:
                         x1 = L - start + 1
@@ -2105,7 +2107,45 @@ class BGCProtein:
                         }
                     domain_linker = etree.Element("line", attrib=domain_linker_attribs)
                     domain_node_main.append(domain_linker)
-
+                
+                # Domains should not end in the middle of introns, but this could
+                # happen due to small numerical errors
+                if dendi <= end:
+                    current_domain += 1
+                        
+                    # is there yet another domain?
+                    if current_domain < len(self.domain_list):
+                        domain = self.domain_list[current_domain]
+                        # General properties of the current domain: color and title
+                        try:
+                            color = ",".join([str(c) for c in hmmdb.colors[domain.ID]])
+                            color_outline = ",".join([str(c) for c in hmmdb.color_outline[domain.ID]])
+                        except KeyError:
+                            color = "150,150,150"
+                            color_outline = "210,210,210"
+                        
+                        title = ""
+                        if domain.ID in hmmdb.ID_to_DE:
+                            title = hmmdb.ID_to_DE[domain.ID] + " "
+                        if domain.ID in hmmdb.alias:
+                            title += "[{}]".format(hmmdb.alias[domain.ID])
+                        if domain.ID in hmmdb.ID_to_AC:
+                            title += "\n{} - ".format(hmmdb.ID_to_AC[domain.ID])
+                        title += domain.ID
+                        domain_title = etree.Element("title")
+                        domain_title.text = title
+                        
+                        domain_attribs = {"class": "domain,{}".format(domain.ID)}
+                        domain_node_main = etree.Element("g", attrib=domain_attribs)
+                        domain_node_main.append(domain_title)
+                        
+                        # get coordinates in dna space
+                        dstart = (domain.ali_from*3)/svg_options.scaling
+                        dend = (domain.ali_to*3)/svg_options.scaling
+                        
+                        dstarti = int(dstart + intron_offset)
+                        dendi = int(dend + intron_offset)
+                    
         
             # Finish this region by appending data
             if region_type == 0:

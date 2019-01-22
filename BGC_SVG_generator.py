@@ -137,7 +137,7 @@ if __name__ == "__main__":
             bgc = BGC(gbk)
             working_collection.bgcs[bgc.identifier] = bgc
     
-    if use_domains:
+    if use_domains and len(working_collection.bgcs) > 0:
         print("Predicting domains for {} BGC(s)".format(len(working_collection.bgcs)))
         working_collection.predict_domains(hmmdbs, cpus=hmmdbs.cores)
         
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     with open(data_cache, "wb") as dc:
         pickle.dump(cached_collection, dc)
     
-    
+
     # Render figures
     for b in svg_collection.bgcs:
         bgc = svg_collection.bgcs[b]
