@@ -32,7 +32,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -1226,7 +1226,7 @@ class BGCProtein:
         This will be a work in progress as new rules get incorporated
         """
 
-        self.protein_type = ""
+        self.protein_type = "unknown"
         self._CBP_type = "unknown"
         self.role = "unknown"
         
@@ -1237,8 +1237,8 @@ class BGCProtein:
         cbp_type = ""
         
         # pks/nrps hybrid
-        if len(self.domain_set & (FAS_domains_A | FAS_domains_B)) > 0:
-            cbp_type = "other"
+        if len(self.domain_set & (FAS_domains_A | FAS_domains_B)) > 1:
+            self._CBP_type = "other"
             self.role = "precursor"
             
             if len(self.domain_set & FAS_domains_A & FAS_domains_B) > 0:
@@ -1247,6 +1247,8 @@ class BGCProtein:
                 self.protein_type = "Fatty Acid Synthase A"
             else:
                 self.protein_type = "Fatty Acid Synthase B"
+                
+            return
         elif len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
             for d in self.domain_list:
                 if d.ID in PKS_domains:
@@ -2063,8 +2065,8 @@ class BGCProtein:
                             lc = [end, center-alpha2]
                             ld = [end, center+alpha2]
                             
-                            vertices_top.append(lcprime)
-                            vertices_bottom.append(ldprime)
+                            vertices_top.append(lc)
+                            vertices_bottom.append(ld)
                         
                         # We are at an intron region. Push end of domain and all
                         # following domains
