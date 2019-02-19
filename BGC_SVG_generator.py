@@ -134,8 +134,12 @@ if __name__ == "__main__":
             svg_collection.bgcs[identifier] = cached_collection.bgcs[identifier]
         else:
             # New BGCs that we hadn't in the cached file
-            bgc = BGC(gbk)
-            working_collection.bgcs[bgc.identifier] = bgc
+            try:
+                bgc = BGC(gbk)
+            except BaseException as e:
+                print("Failed to load {}: ".format(gbk.name, str(e)))
+            else:
+                working_collection.bgcs[bgc.identifier] = bgc
     
     if use_domains and len(working_collection.bgcs) > 0:
         print("Predicting domains for {} BGC(s)".format(len(working_collection.bgcs)))

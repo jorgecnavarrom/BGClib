@@ -16,7 +16,6 @@ from random import uniform
 from colorsys import hsv_to_rgb
 from colorsys import rgb_to_hsv
 from collections import defaultdict
-from math import sin, pi, atan2
 from lxml import etree
 from operator import itemgetter
 from copy import deepcopy
@@ -32,7 +31,7 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.1"
+__version__ = "0.5.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
@@ -60,7 +59,8 @@ FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
 valid_CBP_types = {"nrPKS": "#76b7f4", # blue
                    "rPKS": "#2c9cdc", # darker blue
                    "t3PKS": "#007dfb", # a bit more dark blue
-                   "NRPS": "#ffac00", # orange
+                   "NRPS": "#ffc755", # orange
+                   "NRPS-like": "#ffeb87", # light orange / yellow
                    "other_PKS": "#00ffff", # another blue. Intense-ish 
                    "unknown_PKS": "#aaffff", # lighter version of previous
                    "PKS-NRPS_hybrid": "#aa007f", # purple
@@ -121,9 +121,14 @@ class HMM_DB:
         self.ID_to_DE = {}          # version); DE: description
         
         self.ID_to_role = {}        # manually assigned roles (see role_colors)
+        self.domain_signature_to_protein_type = {}  # curated using annotated 
+                                                    # proteins from MIBiG
+                                                    # Domain Signature = tilde-
+                                                    # separated domain_IDs
         
-        self.read_domain_colors(Path(__file__).parent / "data/domains_color_file_ID.tsv")
+        self.read_domain_colors(Path(__file__).parent / "data/domain_color_file_ID.tsv")
         self.read_domain_roles(Path(__file__).parent / "data/SM_domain_roles.tsv")
+        self.read_protein_types(Path(__file__).parent / "data/protein_types.tsv")
         self.read_alias_file(Path(__file__).parent / "data/CBP_domains.tsv")
         
         return
@@ -142,20 +147,22 @@ class HMM_DB:
         return
     
     
-    def add_database(self, db_path, reload_data = False):
+    def add_database(self, db_path):
         """
-        Makes sure the hmm that the user input is findable and ready to use with
-        HMMER.
+        Adds a database of hmm models. It also stores information about each
+        individual domain (linking its ID to Accession and Description)
         
-        It also tries to load domain information (Accession and Description). This
-        information will be stored locally in a text file in the same place as BGClib
+        For the latter, a local file will be kept in the same location as the 
+        hmm user database. This has the effect that, in order to work on previous
+        data (e.g. a pickled file with domains already predicted), and ensure
+        that the data hasn't changed (e.g. the pfam accession numbers), she will
+        have to point to the exact same hmm database.
+        
         
         input:
             db_path: Path object that points to .hmm file
-            reload_data: read data from .hmm database again, replacing the 
-                contents of the locally stored text file (this can be used e.g.
-                when there is a new version of Pfam)
         """
+        
         if not db_path.is_file():
             print("Not able to add hmm database (not a file. Wrong path?): {}".format(str(db_path)))
             return False
@@ -177,22 +184,24 @@ class HMM_DB:
             sys.exit("Not able to hmmpress the database file")
             
         """
-        check if there is a file in the same location as BGClib that is e.g.
-        Pfam-A.hmm.domain_info.tsv
+        check if there is a file in the same location as the database that we
+        have previously stored (*.domain_info.tsv) 
         if there isn't:
-        check if in the hmmdb folder there is a file called e.g. Pfam-A.hmm.dat
-        if there is, read it for AC, DE
+        check if in the hmmdb folder there is a .dat file (e.g. Pfam-A.hmm.dat)
+        if there is, 
+            read it for AC, DE
         else
-        read the whole Pfam-A.hmm file
+            read the whole Pfam-A.hmm file
         
-        store results in BGCliblocation/Pfam-A.hmm.domain_info.tsv
         """
         
-        # TODO: this writes files that get bigger and bigger each time another
-        # database is added (i.e. they are not specific to db_path.name)
-        domain_info_file = Path(__file__).parent / (db_path.name + ".domain_info.tsv")
+        # save the domain info file in the same place as the database so it's 
+        # accessible to the user
+        domain_info_file = db_path.parent / (db_path.name + ".domain_info.tsv")
+        db_ID_to_AC = {}
+        db_ID_to_DE = {}
         
-        if domain_info_file.is_file() and not reload_data:
+        if domain_info_file.is_file():
             with open(domain_info_file, "r") as dif:
                 for line in dif:
                     if line[0] == "#" or line.strip() == "":
@@ -200,11 +209,11 @@ class HMM_DB:
                     
                     ID, AC, DE = line.strip().split("\t")
                     
-                    self.ID_to_AC[ID] = AC
-                    self.ID_to_DE[ID] = DE
+                    db_ID_to_AC[ID] = AC
+                    db_ID_to_DE[ID] = DE
         else:
             dat_file = db_path.parent / (db_path.name + ".dat")
-            # shortcut
+            # If the .dat file is found, it's much faster read
             if dat_file.is_file():
                 print("\tFound {} file".format(db_path.name + ".dat"))
                 with open(dat_file, "r") as dat:
@@ -221,8 +230,8 @@ class HMM_DB:
                             
                         if putindict:
                             putindict = False
-                            self.ID_to_AC[ID] = AC
-                            self.ID_to_DE[ID] = DE
+                            db_ID_to_AC[ID] = AC
+                            db_ID_to_DE[ID] = DE
                             
             # Have to read the complete file. This will take a few seconds...
             else:
@@ -241,15 +250,17 @@ class HMM_DB:
                             
                         if putindict:
                             putindict = False
-                            self.ID_to_AC[ID] = AC
-                            self.ID_to_DE[ID] = DE
+                            db_ID_to_AC[ID] = AC
+                            db_ID_to_DE[ID] = DE
 
             with open(domain_info_file, "w") as dif:
-                for ID in self.ID_to_AC:
-                    AC = self.ID_to_AC[ID]
-                    DE = self.ID_to_DE[ID]
+                for ID in db_ID_to_AC:
+                    AC = db_ID_to_AC[ID]
+                    DE = db_ID_to_DE[ID]
                     dif.write("{}\t{}\t{}\n".format(ID, AC, DE))
         
+        self.ID_to_AC.update(db_ID_to_AC)
+        self.ID_to_DE.update(db_ID_to_DE)
         self.db_list.append(db_path)
         
         return True
@@ -333,12 +344,44 @@ class HMM_DB:
             print("Could not open domain role file({})".format(str(domain_roles_file)))
             
         return
+    
+    
+    # TODO is it possible to use and integrate interpro rules?
+    def read_protein_types(self, protein_types_file, append=True):
+        """
+        input:
+            protein_types_file: A tsv file with two columns:
+                Domain Signature (tilde separated hmm_IDs) \t protein_type
+            
+            protein_type comes from Fungal MIBiG BGCs with annotations
+        append:
+            If False, the domain_signature_to_protein_type dictionary will be 
+            erased. Otherwise values will only be overwritten for previously
+            assigned values
+        """
+        if not append:
+            self.ID_to_role.clear()
+        
+        try:
+            with open(protein_types_file, "r") as f:
+                for line in f:
+                    if line[0] == "#" or line.strip() == "":
+                        continue
+                    
+                    domain_signature, protein_type = line.strip().split("\t")
+                    self.domain_signature_to_protein_type[domain_signature] = protein_type
+        except FileNotFoundError:
+            print("Could not open protein types file({})".format(str(protein_types_file)))
+            
+        return
 
 
 class ArrowerOpts:
     """
-    Options for Arrower-like figures. Colors will be elsewhere.
+    Options for Arrower-like figures. Colors are linked with domains so see the
+    HMM_DB class for them.
     """
+    
     def __init__(self, cfg=""):
         self.scaling = 30                    # px per bp
         
@@ -508,6 +551,7 @@ class BGC:
                                     #  be fragmented
     
         self.protein_list = []      # should also be present in loci
+        # TODO Implement: gene_complement_domain_set, core_biosynthetic_protein_list
         self.loci = []
 
         self.accession = ""
@@ -547,6 +591,7 @@ class BGC:
             cds_list = []
             
             # traverse all possible records in the file. There's usually only 1
+            locus_num = 0
             for record in records:
                 locus = BGCLocus()
                 locus.length = len(record.seq)
@@ -584,13 +629,19 @@ class BGC:
                             accession = CDS.qualifiers["protein_id"][0]
                         
                             
-                        identifier = clusterName + "~" + "CDS" + str(cds_num)
+                        #identifier = clusterName + "~" + "CDS" + str(cds_num)
+                        identifier = "{}~L{}+CDS{}".format(clusterName, locus_num, cds_num)
                         if accession != "":
                             identifier += "~" + accession
                             
                         protein = BGCProtein()
                         protein.identifier = identifier
                         protein.accession = accession
+                        # TODO: check if the 'translation' annotation is really 
+                        # there. If not, try to manually translate from dna
+                        if "translation" not in CDS.qualifiers:
+                            print(" Warning. Skipping CDS without 'translation' qualifier: {}".format(identifier))
+                            continue
                         protein.sequence = CDS.qualifiers["translation"][0]
                         
                         if CDS.location.strand != 1:
@@ -610,6 +661,8 @@ class BGC:
                         locus.gene_coordinates.append((cds_start,cds_end))
               
                 self.loci.append(locus)
+                locus_num += 1
+                
   
     
     def inter_loci_element(self, xoffset, yoffset, svg_options=ArrowerOpts()):
@@ -728,7 +781,7 @@ class BGC:
                 "x2": str(int(Xoffset+L)),
                 "y2": str(int(yoffset + h + 0.5*H)),
                 "stroke": "#464646",
-                "stroke-width": "2"
+                "stroke-width": str(int(svg_options.stripe_thickness))
                 }
             line = etree.Element("line", attrib=line_attribs)
             main_group.append(line)
@@ -981,9 +1034,14 @@ class BGCProtein:
         return self._sequence
     @sequence.setter
     def sequence(self, seq):
-        # note: does not check if contains valid amino acid characters yet
+        # TODO: check if contains valid amino acid characters
         self._sequence = seq.replace("\n", "").strip().replace(" ", "").upper()
         self.length = len(seq)
+        
+        # cds_regions not yet imported from genbank. Do this now to be able to
+        # draw standalone SVG arrow figures
+        if len(self.cds_regions) == 0:
+            self.cds_regions = ([0, 3*self.length], )
     
     
     def get_annotations(self):
@@ -1232,6 +1290,7 @@ class BGCProtein:
         
         if len(self.domain_set) == 0:
             self._CBP_type = "no_domains"
+            self.protein_type = "no_domains"
             return
         
         cbp_type = ""
@@ -1298,8 +1357,11 @@ class BGCProtein:
         elif len(self.domain_set & PKS3_domains) > 0:
             cbp_type = "t3PKS"
             self.role = "biosynthetic"
-        elif len(self.domain_set & NRPS_domains) > 1:
-            cbp_type = "NRPS"
+        elif len(self.domain_set & NRPS_domains) > 0:
+            if "Condensation" in self.domain_set:
+                cbp_type = "NRPS"
+            else:
+                cbp_type = "NRPS-like"
             self.role = "biosynthetic"
         elif len(self.domain_set & NRPS_Independent_Siderophore_domains) > 0:
             cbp_type = "NIS"
@@ -1599,8 +1661,6 @@ class BGCProtein:
         #X = 0
         Y = h
         
-        stripe_thickness = svg_options.stripe_thickness
-        
         idm = svg_options.internal_domain_margin
         
         intron_break = svg_options.intron_break
@@ -1661,7 +1721,6 @@ class BGCProtein:
                 regions = reverse_regions
         else:
             regions.append((0, L, 0))
-            
         
         # precalculate a couple of numbers
         vertices = []
@@ -1775,7 +1834,7 @@ class BGCProtein:
                     region_attribs["stroke"] = "#0a0a0a"
             else:
                 region_attribs["class"] = "intron"
-                region_attribs["fill"] = "#bbbbbb"
+                region_attribs["fill"] = "#dddddd"
                 region_attribs["stroke-dasharray"] = "2,2"
                 if svg_options.outline:
                     region_attribs["stroke"] = "#919191"
@@ -1808,6 +1867,9 @@ class BGCProtein:
             vertices_top = []
             vertices_bottom = []
             vertices_outline = []
+            # TODO: don't assume all domains are completely consecutive because
+            # we allow for a small overlap. So some start positions may be
+            # before the end position of the previous domain
             for current_domain in range(len(self.domain_list)):
                 dstart, dend = domain_coordinates[current_domain]
                 domain = self.domain_list[current_domain]
@@ -2079,6 +2141,10 @@ class BGCProtein:
                     # Move to next region if domain is not finished
                     if current_region < len(regions) and not next_domain:
                         current_region += 1
+                        if current_region == len(regions):
+                            print("bad region", dstart, dend, start, end)
+                            print(self.accession)
+                            sys.exit(self.parent_cluster.identifier)
                         start, end, region_type = regions[current_region]
                     
                 
@@ -2118,7 +2184,7 @@ class BGCProtein:
                 domain_outline_attribs = {
                     "stroke": "rgb({})".format(color_outline),
                     "stroke-linejoin": "round",
-                    "stroke-width": str(svg_options.gene_contour_thickness)
+                    "stroke-width": str(svg_options.domain_contour_thickness)
                     }
                 if len(vertices_outline) == 1:
                     vo = vertices_outline[0]
