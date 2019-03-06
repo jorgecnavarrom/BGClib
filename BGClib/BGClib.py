@@ -31,17 +31,14 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@westerdijkinstitute.nl"
 
 
 # Static data
-#valid_CBP_types = {"nrPKS", "rPKS", "NRPS", "t3PKS", "unknown", "other",
-        #"PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid", "other_PKS", 
-        #"unknown_PKS", "no_domains", "NIS"}
 
-# this should all have an alias in CBP_domains.tsv
+# these should all have an alias in CBP_domains.tsv
 PKS_domains = {"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
                 "Acyl_transf_1", "TIGR04532"}
 PKS3_domains = {"Chal_sti_synt_N", "Chal_sti_synt_C"}
@@ -1281,7 +1278,8 @@ class BGCProtein:
         """Classifies a sequence based on its predicted domains according to a 
         set of rules.
         
-        This will be a work in progress as new rules get incorporated
+        This will be a work in progress as new rules get incorporated.
+        
         """
 
         self.protein_type = "unknown"
@@ -1523,7 +1521,7 @@ class BGCProtein:
             return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "random":
             s_ = (0.4, 0.6)
-            v_ = (0.65, 0.85)
+            v_ = (0.5, 0.8)
             return random_color_tuple((0.0, 1.0), s_, v_)
         elif mode == "gray":
             return "#bababa"
@@ -1532,29 +1530,31 @@ class BGCProtein:
         elif mode == "roles":
             return role_colors[self.role]
         elif mode == "domains":
-            # colors based on found protein domains. Only if there is one type
-            # of domain predicted. Experimental
+            # colors based on protein domains. 
+            # If role is 'biosynthetic' or 'precursor' use color or role
+            # If protein has 1 domain, use its color
+            # If protein has more than one domain, use color from first one
             
             # If it's a CBP, it has a defined color already
-            if self._CBP_type not in {"unknown", "other"}:
+            if self.role == "biosynthetic":
                 try:
-                    color = valid_CBP_types[self._CBP_type]
+                    color = valid_CBP_types[self.protein_type]
                 except KeyError:
-                    color = "#eff0f1"
+                    # unknown core gene type??
+                    color = "#d59d7c"
                 return color
             
-            if len(self.domain_set) == 1:
+            if len(self.domain_list) > 0:
                 domain = self.domain_list[0]
                 try:
                     color = "#{}".format("".join( hex(int(c))[2:] for c in hmmdb.colors[domain.ID] ))
                 except KeyError:
                     color = "#eff0f1"
-                    
-                return color
             else:
-                # TODO: plan something in case two or more. Define concatenated
-                # domain IDs as a new key with an associated color?
-                return "#eff0f1"
+                color = "#eff0f1"
+                
+            return color
+            
         else:
             # "white"
             return "#ffffff"
@@ -1647,9 +1647,9 @@ class BGCProtein:
         
         L = self.length*3.0
         if svg_options.intron_regions:
-            # if using nucleotides to calculate length, remember to remove three
-            # that correspond to the stop codon
-            L = (self.cds_regions[-1][1] - self.cds_regions[0][0] - 3)
+            # seems like the stop codon is not included in the CDS info, so there's
+            # no need to substract the last codon (3 bases)
+            L = (self.cds_regions[-1][1] - self.cds_regions[0][0])
         
         
         scaling = svg_options.scaling
@@ -1676,14 +1676,18 @@ class BGCProtein:
         draw_domains = svg_options.draw_domains
         # If only one domain and color_mode == 'domains', don't draw domains even
         # if requested (instead, whole arrow will be filled with domain's color)
-        if svg_options.color_mode == "domains" and (len(self.domain_set) == 1 or self._CBP_type not in {"unknown", "other"}):
+        if svg_options.color_mode == "domains":
             draw_domains = False
             
-            if self._CBP_type not in {"unknown", "other"}:
-                arrow_title.text = "{}\n{}".format(self.identifier, self._CBP_type)
+            if self.role == "biosynthetic":
+                arrow_title.text = "{}\n{}".format(self.identifier, self.protein_type)
             else:
-                domain = self.domain_list[0]
-                arrow_title.text = "{}\n[{}]".format(self.identifier, hmmdb.ID_to_DE[domain.ID])
+                try:
+                    d_info = " + ".join([hmmdb.ID_to_DE[d.ID] for d in self.domain_list])
+                except KeyError:
+                    d_info = " + ".join([d.ID for d in self.domain_list])
+                
+                arrow_title.text = "{}\n[{}]".format(self.identifier, d_info)
         
         
         exon_elements = []
@@ -2141,10 +2145,6 @@ class BGCProtein:
                     # Move to next region if domain is not finished
                     if current_region < len(regions) and not next_domain:
                         current_region += 1
-                        if current_region == len(regions):
-                            print("bad region", dstart, dend, start, end)
-                            print(self.accession)
-                            sys.exit(self.parent_cluster.identifier)
                         start, end, region_type = regions[current_region]
                     
                 

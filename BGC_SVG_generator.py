@@ -41,6 +41,8 @@ def CMD_parser():
     parser.add_argument("-m", "--mirror", action="store_true", default=False,
                         help="Toggle to mirror the BGC figure (does not work with\
                         the protein-box or protein-arrows figures)")
+    parser.add_argument("-e", "--exclude", default="final", help="GenBank files\
+                        with this string will be excluded (default='final')")
     return parser.parse_args()
 
 
@@ -52,6 +54,7 @@ if __name__ == "__main__":
     dbox = args.dbox
     arrows = args.arrows
     mirror_bgc = args.mirror
+    exclude = args.exclude
         
     # Check input parameters:
     input_files = []
@@ -65,6 +68,8 @@ if __name__ == "__main__":
             if pf.suffix != ".gbk":
                 print("Skipping file {} (not GenBank file?)".format(str(f)))
                 continue
+            if "exclude" in pf.name:
+                continue
             input_files.append(Path(f))
     
     input_folders = []
@@ -76,6 +81,8 @@ if __name__ == "__main__":
                 continue
             
             for gbk in pi.glob("*.gbk"):
+                if exclude in gbk.name:
+                    continue
                 input_files.append(gbk)
     
     if len(input_files) == 0:
@@ -107,7 +114,7 @@ if __name__ == "__main__":
         hmmdbs.add_included_database()
     
     # Options for whole cluster
-    svgopts = ArrowerOpts("./SVG_arrow_options.cfg")
+    svgopts = ArrowerOpts(Path(__file__).parent / "SVG_arrow_options.cfg")
         
     # Options for box-plot domain content figure
     if dbox:
@@ -164,10 +171,15 @@ if __name__ == "__main__":
     # Render figures
     for b in svg_collection.bgcs:
         bgc = svg_collection.bgcs[b]
+        
+        del bgc.gca[:]
         for protein in bgc.protein_list:
             protein.classify_sequence(hmmdbs)
-            
-        bgc_name = o / (bgc.identifier + ".svg")
+            if protein.role == "biosynthetic":
+                bgc.gca.append(protein.protein_type)
+                    
+        gca = "+".join(bgc.gca)
+        bgc_name = o / "{}_[{}].svg".format(bgc.identifier, gca)
         if mirror_bgc:
             bgc_name = o / (bgc.identifier + ".m.svg")
         print("Saving {}".format(bgc_name.name))

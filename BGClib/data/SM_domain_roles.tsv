@@ -325,6 +325,7 @@ Adenine_glyco	tailoring
 Adenylsucc_synt	tailoring
 ADH_N	tailoring
 adh_short	tailoring
+adh_short_C2	tailoring
 ADH_zinc_N	tailoring
 AdoHcyase	tailoring
 AdoHcyase_NAD	tailoring
@@ -1811,6 +1812,7 @@ Sbi-IV	tailoring
 SBP_bac_10	tailoring
 ScdA_N	tailoring
 SchA_CurD	tailoring
+Scytalone_dh	tailoring
 SCO1-SenC	tailoring
 SCP2	tailoring
 Se-cys_synth_N	tailoring
