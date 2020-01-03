@@ -9,7 +9,7 @@ PF00550.24	Pfam 31	T/ACP	PP-binding	Phosphopantetheine attachment site	(NRPS: T,
 PF00975.19	Pfam 31	TE	Thioesterase	Thioesterase	
 PF14765.5	Pfam 31	DH	PS-DH	Polyketide synthase dehydratase	
 PF08242.11	Pfam 31	CMeT	Methyltransf_12	Methyltransferase domain	
-SM00829	smart 7.1	ER	PKS_ER_names_mod	Enoylreductase in Polyketide synthases.	License: "Academic SMART"
+PKS_ER	antiSMASH	ER	PKS_ER	Enoylreductase in Polyketide synthases.
 PF08659.9	Pfam 31	KR	KR	KR domain	
 PF07993.11	Pfam 31	R	NAD_binding_4	Male sterility protein	(Reductase in PKS)
 PF00195.18	Pfam 31	ChS_N	Chal_sti_synt_N	Chalcone and stilbene synthases, N-terminal domain	PKS III

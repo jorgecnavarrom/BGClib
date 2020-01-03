@@ -1083,6 +1083,7 @@ ELFV_dehydrog_N	tailoring
 Eno-Rase_FAD_bd	tailoring
 Eno-Rase_NADH_b	tailoring
 Enoyl_reductase	tailoring
+PKS_ER	tailoring
 Epimerase	tailoring
 Epimerase_2	tailoring
 EPSP_synthase	tailoring
@@ -2068,6 +2069,9 @@ EmrE	transport
 Mem_trans	transport
 MFS_1	transport
 MFS_1_like	transport
+MFS_2	transport
+MFS_5	transport
+MFS_MOT1	transport
 oligo_HPY	transport
 OppC_N	transport
 OPT	transport

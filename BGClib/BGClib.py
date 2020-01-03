@@ -22,6 +22,7 @@ from copy import deepcopy
 
 try:
     from io import StringIO
+    # TODO: not necessary from biopython 1.72
     from Bio import BiopythonExperimentalWarning
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', BiopythonExperimentalWarning)
@@ -31,19 +32,22 @@ except ModuleNotFoundError:
     sys.exit("BGC lib did not find all needed dependencies")
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.3"
+__version__ = "0.5.7"
 __maintainer__ = "Jorge Navarro"
-__email__ = "j.navarro@westerdijkinstitute.nl"
+__email__ = "j.navarro@wi.knaw.nl"
 
 
 # Static data
 
 # these should all have an alias in CBP_domains.tsv
+
+# Turns out there's a few NRPS that contain the Acyl_transf_1 domain (but not
+# ks etc.) so they get mixed with hybrids
 PKS_domains = {"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
-                "Acyl_transf_1", "TIGR04532"}
+                "TIGR04532"}
 PKS3_domains = {"Chal_sti_synt_N", "Chal_sti_synt_C"}
 NRPS_domains = {"Condensation", "AMP-binding", "AMP-binding_C"}
-reducing_domains = {"PKS_ER_names_mod", "KR", "PS-DH"}
+reducing_domains = {"PKS_ER", "KR", "PS-DH"}
 NRPS_Independent_Siderophore_domains = {"IucA_IucC"}
 Terpene_domains = {"Terpene_synth", "Terpene_synth_C", "Lycopene_cycl", 
                    "SQHop_cyclase_N", "SQHop_cyclase_C", "Prenyltrans", 
@@ -55,7 +59,7 @@ FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
 
 valid_CBP_types = {"nrPKS": "#76b7f4", # blue
                    "rPKS": "#2c9cdc", # darker blue
-                   "t3PKS": "#007dfb", # a bit more dark blue
+                   "t3PKS": "#3cb5a1", #007dfb", # a bit more dark blue
                    "NRPS": "#ffc755", # orange
                    "NRPS-like": "#ffeb87", # light orange / yellow
                    "other_PKS": "#00ffff", # another blue. Intense-ish 
@@ -97,6 +101,7 @@ def random_color_tuple(h_, s_, v_):
     v = uniform(v_[0], v_[1])
     
     return "#{}".format("".join( hex(int(c * 255))[2:] for c in hsv_to_rgb(h, s, v) ))
+
 
 
 # Classes definition
@@ -145,6 +150,7 @@ class HMM_DB:
     
     
     def add_database(self, db_path):
+        #TODO rename db_path to db_hmm
         """
         Adds a database of hmm models. It also stores information about each
         individual domain (linking its ID to Accession and Description)
@@ -240,7 +246,8 @@ class HMM_DB:
                         if line[:4] == "NAME":
                             ID = line.strip()[6:]
                         if line[:3] == "ACC":
-                            AC = line.strip()[6:].split(".")[0]
+                            #AC = line.strip()[6:].split(".")[0]
+                            AC = line.strip()[6:]
                         if line[:4] == "DESC":
                             DE = line.strip()[6:]
                             putindict = True
@@ -365,12 +372,15 @@ class HMM_DB:
                     if line[0] == "#" or line.strip() == "":
                         continue
                     
-                    domain_signature, protein_type = line.strip().split("\t")
+                    stripped_line = line.strip().split("\t")
+                    domain_signature = stripped_line[0]
+                    protein_type = stripped_line[1]
                     self.domain_signature_to_protein_type[domain_signature] = protein_type
         except FileNotFoundError:
             print("Could not open protein types file({})".format(str(protein_types_file)))
             
         return
+
 
 
 class ArrowerOpts:
@@ -403,7 +413,7 @@ class ArrowerOpts:
         self.outline = True
         self.draw_domains = True 
         
-        self.original_orientation = False # If false, all arrows will point forward
+        self.original_orientation = True # If false, all arrows will point forward
         
         self.intron_break = False # Show a dashed line where the intron breaks gene
                                 # This means that this is not an actual 
@@ -495,6 +505,7 @@ class ArrowerOpts:
         return True
     
 
+
 class BGCCollection:
     """
     This class will allow implementation of collection-wide functions such as 
@@ -506,7 +517,7 @@ class BGCCollection:
         self.name = ""
     
     
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True):
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
         """
         Compile the protein sequences of the whole collection and apply hmmscan
         on them to predict domains. Assign predicted domains to each protein
@@ -530,17 +541,40 @@ class BGCCollection:
         if missing_identifier:
             print("Warning: one or more proteins don't have a valid identifier")
             
-        pc.predict_domains(hmmdb, domtblout_path, cpus, tc)
+        pc.predict_domains(hmmdb, domtblout_path, cpus, tc, filterdoms)
         
         return
+
+
+    def classify_proteins(self, cpus=1):
+        """
+        Once domains have been predicted, classify proteins from the whole 
+        collection
+        """
+        
+        with Pool(cpus) as pool:
+            for bgc_id in self.bgcs:
+                pool.apply_async(self.bgcs[bgc_id].classify_proteins())
+            pool.close()
+            pool.join()
+        return
+    
 
 
 class BGC:
     def __init__(self, gbkfile=None):
         self.identifier = ""    # usually the file name
-        self.gca = []           # Gene Cluster Architecture. List of CBP types 
-                                #  in the cluster
-        self.gcf = []           # should be a list of CBP signatures (numbers?)
+        
+        self.CBPtypes = []          # Core Biosynthetic Protein List: simple
+                                    #  list of biosynthetic types
+        self.CBPtypes_set = set()
+        self.CBPcontent = {}        # Core Biosynthetic Protein Content. Every 
+                                    #  biosynthetic-type returns a list of 
+                                    #  pointers to each Protein object
+        
+        #self.gca = []           # Gene Cluster Architecture. List of CBP types 
+                                #  in the cluster # NOTE: now substituted by
+                                # self.CBPtypes
         self.products = set()   # All different 'product' qualifiers annotated 
                                 #  by antiSMASH
         self.contig_edge = False    # antiSMASH v4+ was not able to fully 
@@ -548,12 +582,15 @@ class BGC:
                                     #  be fragmented
     
         self.protein_list = []      # should also be present in loci
+        self.proteins = {}          # direct access with protein identifier
         # TODO Implement: gene_complement_domain_set, core_biosynthetic_protein_list
         self.loci = []
 
+        # TODO consider removing these/create another class for metadata
         self.accession = ""
         self.definition = ""
         self.organism = ""
+        self.taxonomy = ""
         self.TaxId = ""
         
         # try to initialize object with GenBank content
@@ -584,6 +621,7 @@ class BGC:
             self.accession = records[0].id
             self.definition = records[0].description
             self.organism = records[0].annotations["organism"]
+            self.taxonomy = records[0].annotations["taxonomy"]
             
             cds_list = []
             
@@ -594,19 +632,31 @@ class BGC:
                 locus.length = len(record.seq)
                 
                 cds_num = 0
-                product = ""
 
                 for feature in record.features:
+                    # antiSMASH <= 4
                     if feature.type == "cluster":
                         if "product" in feature.qualifiers:
-                            # I don't think this'll every happen...
-                            if len(feature.qualifiers["product"]) > 1:
-                                print("  WARNING: more than product annotated in {}".format(gbk.name))
                             for product in feature.qualifiers["product"]:
-                                for p in product.split("-"):
-                                    self.products.add(p.replace(" ",""))
+                                for p in product.replace(" ","").split("-"):
+                                    self.products.add(p)
                                 
                         if "contig_edge" in feature.qualifiers:
+                            if feature.qualifiers["contig_edge"][0] == "True":
+                                self.contig_edge = True
+                                
+                        continue
+                    
+                    # antiSMASH = 5
+                    if feature.type == "region":
+                        if "product" in feature.qualifiers:
+                            for product in feature.qualifiers["product"]:
+                                self.products.add(product)
+                                
+                        if "contig_edge" in feature.qualifiers:
+                            # there might be mixed contig_edge annotations
+                            # in multi-record files. Turn on contig_edge when
+                            # there's at least one annotation
                             if feature.qualifiers["contig_edge"][0] == "True":
                                 self.contig_edge = True
                                 
@@ -621,19 +671,48 @@ class BGC:
                         cds_end = max(0, int(CDS.location.end))
                         
                         
-                        accession = ""
-                        if "protein_id" in CDS.qualifiers:
-                            accession = CDS.qualifiers["protein_id"][0]
+                        #accession = ""
+                        #if "protein_id" in CDS.qualifiers:
+                            #accession = CDS.qualifiers["protein_id"][0]
                         
-                            
-                        #identifier = clusterName + "~" + "CDS" + str(cds_num)
                         identifier = "{}~L{}+CDS{}".format(clusterName, locus_num, cds_num)
-                        if accession != "":
-                            identifier += "~" + accession
+                        #if accession != "":
+                            #identifier += "~" + accession
+                            
+                        product = ""
+                        if "product" in CDS.qualifiers:
+                            product = ", ".join(CDS.qualifiers["product"])
+                            
+                        # NOTE: JGI annotations have a non-standard qualifier:
+                        # "proteinId" or "proteinID", which is just a number (sometimes). 
+                        protein_id = ""
+                        # found in NCBI:
+                        if "protein_id" in CDS.qualifiers:
+                            protein_id = CDS.qualifiers["protein_id"][0]
+                            
+                        # found in JGI
+                        elif "proteinID" in CDS.qualifiers:
+                            protein_id = CDS.qualifiers["proteinID"][0]
+                        elif "proteinId" in CDS.qualifiers:
+                            protein_id = CDS.qualifiers["proteinId"][0]
+                            
+                        # also found in JGI
+                        elif "gene" in CDS.qualifiers:
+                            temp = CDS.qualifiers["gene"][0]
+                            protein_id = temp.split("_")[-1]
+                            
+                        gene = ""
+                        if "gene" in CDS.qualifiers:
+                            gene = CDS.qualifiers["gene"][0]
                             
                         protein = BGCProtein()
+                        
                         protein.identifier = identifier
-                        protein.accession = accession
+                        #protein.accession = accession
+                        protein.product = product
+                        protein.protein_id = protein_id
+                        protein.gene = gene
+                        
                         # TODO: check if the 'translation' annotation is really 
                         # there. If not, try to manually translate from dna
                         if "translation" not in CDS.qualifiers:
@@ -648,19 +727,32 @@ class BGC:
                         # not outputting self.identifier into the annotation file
                         protein.parent_cluster = self
                         
+                        # TODO: detect overlapping CDS (e.g. gene annotation 
+                        #  errors, multiple splicing)
                         del cds_list[:]
                         for x in CDS.location.parts:
                             cds_list.append((int(x.start), int(x.end)))
                         protein.cds_regions = tuple(sorted(cds_list, key=itemgetter(0)))
-                        
+
                         self.protein_list.append(protein)
+                        self.proteins[protein.identifier] = protein
+                        locus.identifier = "{}~{}".format(clusterName, locus_num)
                         locus.protein_list.append(protein)
                         locus.gene_coordinates.append((cds_start,cds_end))
-              
+
                 self.loci.append(locus)
                 locus_num += 1
-                
-  
+    
+    
+    # TODO: finish
+    def load_fasta(self, fasta):
+        """
+        Creates faux BGCs from a fasta file.
+        Each entry in the fasta file will be treated as a separate locus.
+        Assumes that the fasta file contains a protein sequence.
+        """
+        pass
+    
     
     def inter_loci_element(self, xoffset, yoffset, svg_options=ArrowerOpts()):
         """
@@ -748,13 +840,17 @@ class BGC:
         
         with open(filename, "bw") as f:
             f.write(etree.tostring(root, pretty_print=True))
-        
-        
+
+
     def xml_BGC(self, xoffset, yoffset, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), mirror = False):
         """
         Creates a BGC SVG figure (xml structure)
         """
         main_group = etree.Element("g")
+        
+        bgc_title = etree.Element("title")
+        bgc_title.text = self.identifier
+        main_group.append(bgc_title)
         
         H = svg_options.arrow_height
         h = 0.5*H
@@ -818,6 +914,57 @@ class BGC:
         return main_group
 
 
+    def classify_proteins(self):
+        """
+        Uses predicted domains to classify (Secondary Metabolism) role and 
+        protein_type of all its proteins.
+        """
+        
+        for p in self.protein_list:
+            p.classify_sequence()
+        
+        del self.CBPtypes[:]
+        self.CBPtypes_set.clear()
+        self.CBPcontent.clear()
+        for protein in self.protein_list:
+            if protein.role == "biosynthetic":
+                self.CBPtypes.append(protein.protein_type)
+                try:
+                    self.CBPcontent[protein.protein_type].append(protein)
+                except KeyError:
+                    self.CBPcontent[protein.protein_type] = [protein]
+        self.CBPtypes_set = set(self.CBPtypes)
+
+
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
+        """
+        Compile the protein sequences of the whole collection and apply hmmscan
+        on them to predict domains. Assign predicted domains to each protein
+        and filter
+        """
+        assert(isinstance(hmmdb, HMM_DB))
+        if domtblout_path != "":
+            assert(isinstance(domtblout_path, Path))
+        
+        pc = ProteinCollection()
+        
+        missing_identifier = False
+
+        for protein in self.protein_list:
+            if protein.identifier != "":
+                pc.proteins[protein.identifier] = protein
+            else:
+                missing_identifier = True
+        
+        if missing_identifier:
+            print("Warning: one or more proteins don't have a valid identifier")
+            
+        pc.predict_domains(hmmdb, domtblout_path, cpus, tc, filterdoms)
+        
+        return
+    
+    
+
 class BGCLocus:
     """
     BGC might be divided in more than one locus (because of sequencing, or, as
@@ -826,6 +973,7 @@ class BGCLocus:
     This class can be used to organize proteins
     """
     def __init__(self):
+        self.identifier = ""        # e.g. "bgc~L01"
         self.protein_list = []
         self.gene_coordinates = []  # a list of tuples. end-start might not match
                                     # the corresponding protein length due to 
@@ -835,19 +983,75 @@ class BGCLocus:
         self.length = 0
 
 
+
 class ProteinCollection:
     """
     Intended for mass-prediction of domains
     """
     
-    def __init__(self):
+    def __init__(self, fastafile=None):
         self.proteins = {}    # key = identifier
+        
+        if fastafile is not None:
+            self.fasta_load(fastafile)
+            
+            
+    def fasta_load(self, fastafile):
+        """
+        Tries to load a fasta file
+        """
+        
+        # initial string
+        random_string = "l5aRx]3DahVr9bnIGVVaMHwpFhOu6iML#DWDbY7DJxTEhc9F4Vw_ZoFRdcA4"
+        
+        with open(fastafile) as f:
+            header = random_string
+            sequence = ""
+            for line in f:
+                if line.strip() == "":
+                    continue
+                
+                if line[0] == ">":
+                    if header == "":
+                        print("Warning: skipping headerless sequence")
+                        print(" ({}...)".format(sequence[:50]))
+                        sequence = ""
+                        header = line.strip()[1:]
+                        continue
+                    
+                    if header != random_string:
+                        if header in self.proteins:
+                            print("Warning: {} already in Protein Collection. \
+                                  Skipping...".format(header))
+                            print(" ({}...)".format(sequence[:50]))
+                        else:
+                            protein = BGCProtein()
+                            protein.identifier = header
+                            protein.sequence = sequence
+                            self.proteins[header] = protein
+                    sequence = ""
+                    header = line.strip()[1:]
+                else:
+                    sequence += line.strip()
+                    
+        if header == "":
+            print("Warning: skipping headerless sequence")
+            print(" ({}...)".format(sequence[:50]))
+        else:
+            if header in self.proteins:
+                print("Warning: {} already in Protein Collection. Skipping...".format(header))
+                print(" ({})".format(sequence[:50]))
+            else:
+                protein = BGCProtein()
+                protein.identifier = header
+                protein.sequence = sequence
+                self.proteins[header] = protein
         
         
     # TODO: break work on sets of 4 cpus
     # TODO: evaluate whether hmmsearch is better than hmmscan
     # TODO: TEST!
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True):
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
         """
         Uses hmmscan to search the protein sequences for hmm models specified
         
@@ -916,12 +1120,107 @@ class ProteinCollection:
         with Pool(cpus) as pool:
             for p in self.proteins:
                 protein = self.proteins[p]
+                if filterdoms:
+                    pool.apply_async(protein.filter_domains())
+                protein.attempted_domain_prediction = True
+            pool.close()
+            pool.join()
+    
+        return
+
+
+    # TODO: finish this. Challenge is target now is the query
+    def predict_domains_search(self, hmmdb, domtblout_path="", cpus=1, tc=True):
+        """
+        Uses hmmsearch to search the protein sequences for hmm models specified
+        
+        input:
+            hmmdb: contains a list to all hmm databases
+            domtblout_path: where to store HMMER's output file (optional)
+            cpus: number of cpus to pass to HMMER. Remember it uses cpu + 1
+            tc: if true, use the model's Trusted Cutoff score (lower score of all
+                true positives)
+        """
+        
+        if domtblout_path != "":
+            try:
+                assert not domtblout_path.is_file()
+            except AssertionError:
+                sys.exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
+            
+        protein_list = []
+        for protein_id in self.proteins:
+            protein = self.proteins[protein_id]
+            protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
+                    
+        if len(protein_list) == 0:
+            return
+        
+        for db in hmmdb.db_list:
+            command = ['hmmsearch', '--cpu', str(cpus), '--noali', '--notextw']
+            if tc:
+                command.append('--cut_tc')
+            if domtblout_path != "":
+                path = str(domtblout_path / ("output_" + db.stem + ".domtable"))
+                command.extend(['--domtblout', path ])
+            dbpath = str(db)
+            command.extend([ dbpath, '-'])
+            
+            proc_hmmscan = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            out, err = proc_hmmscan.communicate(input="\n".join(protein_list).encode("utf-8"))
+            
+            # "SearchIO parses a search output file's contents into a hierarchy of four 
+            # nested objects: QueryResult, Hit, HSP, and HSPFragment"
+            # http://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
+            results = SearchIO.parse(StringIO(out.decode()), 'hmmer3-text')
+            for qresult in results:
+                #print(qresult)
+                for hit in qresult:
+                    for hsp in hit:
+                        hspf = hsp[0] # access to HSPFragment
+
+                        seq_identifier = qresult.id
+                        hmm_id = hit.id
+                        ali_from = hspf.query_start
+                        ali_to = hspf.query_end
+                        hmm_from = hspf.hit_start
+                        hmm_to = hspf.hit_end
+                        env_from = hsp.env_start
+                        env_to = hsp.env_end
+                        
+                        Evalue = hsp.evalue
+                        score = hsp.bitscore
+                        
+                        domain = BGCDomain(self.proteins[seq_identifier], 
+                                           hmm_id, env_from, env_to, ali_from, 
+                                           ali_to, hmm_from, hmm_to, score, Evalue)
+                        
+                        self.proteins[seq_identifier].domain_list.append(domain)
+        
+        with Pool(cpus) as pool:
+            for p in self.proteins:
+                protein = self.proteins[p]
                 pool.apply_async(protein.filter_domains())
                 protein.attempted_domain_prediction = True
             pool.close()
             pool.join()
     
         return
+    
+
+    def classify_proteins(self, cpus=1):
+        """
+        Once domains have been predicted, classify proteins from the whole 
+        collection
+        """
+        
+        with Pool(cpus) as pool:
+            for p_id in self.proteins:
+                pool.apply_async(self.proteins[p_id].classify_sequence())
+            pool.close()
+            pool.join()
+        return
+    
     
 
 class BGCProtein:
@@ -932,35 +1231,35 @@ class BGCProtein:
     def __init__(self):
         self.parent_cluster = None  # Should point to an object of the BGC class
         
-        self.identifier = ""        # Should be unique. In principle:
-                                    # BGCname:CDS#:ref_accession
-                                    # (use _accession if ref_accession not available)
+        self.identifier = ""        # Internal identifier. Should be unique:
+                                    # BGCname~L#+CDS#
 
+        self.protein_id = ""        # From NCBI's GenBank
+        self.gene = ""              # From NCBI's GenBank
         
-        self._accession = ""        # original NCBI accession if possible
+        #self._accession = ""        # original NCBI accession if possible
         self._ref_accession = ""    # "RefSeq Selected Product" from NCBI's IPG DB
         self.ncbi_id = ""           # NCBI internal id in the Protein database
         
-        # NCBI internal id in the Identical Protein Group database. Should be unique
-        self.ncbi_ipg_id = ""
+        self.ncbi_ipg_id = ""       # NCBI internal id in the Identical Protein 
+                                    # Group database. Should be unique
+        
+        # NOTE: other NCBI annotations:
+        # /db_xref="GeneID:1095902"
+        # /gene_synonym="SCF76.19c"
+        # /locus_tag="SCO0479"
         
         self._sequence = ""
-        self.length = 0             # automatically calculated when sequence is added
-                                    # Amino acid space
+        self.length = 0             # automatically calculated when sequence is 
+                                    # added. Calculated in amino acid space
         
         self.protein_type = ""      # Will eventually replace CBP_type to accomodate
                                     # other (non-CBP) types e.g. "FAS_A"
+        self.product = ""           # From NCBI's GenBank annotations
         self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
-                                    #   resistance, unknown]
-        self._CBP_type = "unknown"  # should be one from "valid_CBP_types" 
-        #TODO: change to sequence_type. Don't change against valid_CBP_types
-        self.s_cbp = ""             # Sub classes of CBP e.g.: Group V
-        self.ss_cbp = ""            # e.g.: Group V2
+                                    #   resistance, unknown]. See role_colors
         
-        # e.g.: nrPKS, nrPKS+hrPKS etc.
-        # TODO: redefine as "Gene Cluster Architecture"?
-        # then GCF would be defined by the list of CBP-signatures
-        self._gca = []
+        
         
         
         self.compound_family = ""   # Compound family e.g. "emodin-like"
@@ -974,7 +1273,7 @@ class BGCProtein:
         self.cds_regions = tuple()  # collection of start/stop CDS regions (to 
                                     # draw intron position).
                                     # These come from the original GenBank file
-                                    # so are relative to the start of the locus
+                                    # so are relative to the start of the locus.
                                     # They are in nucleotide space.
         
         self.domain_list = []       # list of BGCDomain objects
@@ -985,14 +1284,14 @@ class BGCProtein:
     
     # always try to have an identifier. Either the reference accession or the 
     # original accession
-    @property
-    def accession(self):
-        return self._accession
-    @accession.setter
-    def accession(self, acc):
-        self._accession = acc
-        if self.identifier == "":
-            self.identifier = acc
+    #@property
+    #def accession(self):
+        #return self._accession
+    #@accession.setter
+    #def accession(self, acc):
+        #self._accession = acc
+        #if self.identifier == "":
+            #self.identifier = acc
             
     @property
     def ref_accession(self):
@@ -1002,29 +1301,7 @@ class BGCProtein:
         self._ref_accession = ra
         if self.identifier == "":
             self.identifier = ra
-    
-    @property
-    def CBP_type(self):
-        return self._CBP_type    
-    @CBP_type.setter
-    def CBP_type(self, cbptype):
-        try:
-            assert cbptype in valid_CBP_types
-        except AssertionError:
-            print("{} is not a valid CBP type".format(cbptype))
-            self._CBP_type = "unknown"
-        else:
-            self._CBP_type = cbptype
-    
-    @property
-    def gca(self):
-        return "+".join(self._gca)
-    @gca.setter
-    def gca(self, gca_in):
-        if isinstance(gca_in, list):
-            self._gca = gca_in
-        else:
-            self._gca = gca_in.split("+")
+
     
     @property
     def sequence(self):
@@ -1042,24 +1319,33 @@ class BGCProtein:
     
     
     def get_annotations(self):
-        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
-            self.parent_cluster, self.gca, self.identifier, self.accession, 
-            self.ref_accession, self.ncbi_id, self.ncbi_ipg_id, self.CBP_type, 
-            self.s_cbp, self.ss_cbp, self.compound_family, self.compound, 
-            self.source, self.organism, self.TaxId)
+        gca = ""
+        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+            self.parent_cluster, self.identifier, self.ref_accession, 
+            self.ncbi_id, self.ncbi_ipg_id, self.protein_type, "", "", 
+            self.compound_family, self.compound, self.source, self.organism, 
+            self.TaxId)
     
     
-    def sequence80(self):
-        return "\n".join([self._sequence[i:i+80] for i in range(0, self.length, 80)])
+    def sequence80(self, start=0, end=None):
+        if end == None:
+            end = self.length
+            
+        if start >= end or start < 0 or end > self.length:
+            return ""
+        return "\n".join([self._sequence[i:i+80] for i in range(start, end, 80)])
         
         
-    def fasta(self):
+    def fasta(self, start=0, end=None):
         """
         Returns a fasta-formatted data
         Tries to use reference accession for header. If not present, falls back
         to original accession. If either are absent, use identifier (should
         always be present)
         """
+        if end == None:
+            end = self.length
+        
         compound = ""
         if self.compound != "":
             compound = " {}".format(self.compound.replace("/",""))
@@ -1069,10 +1355,10 @@ class BGCProtein:
         #elif self.accession != "":
             #return ">{}{}\n{}".format(self.accession, compound, self.sequence80())
         #else:
-        return ">{}{}\n{}".format(self.identifier, compound, self.sequence80())
+        return ">{}{}\n{}".format(self.identifier, compound, self.sequence80(start, end))
 
 
-    def domain_string(self, domain_alias):
+    def domain_string(self, domain_alias, original_orientation=True):
         """Returns a basic domain-organization string
         
         - It uses the hmm model name (not accession number)
@@ -1103,10 +1389,10 @@ class BGCProtein:
         if self.compound != "":
             tag += "_[{}]".format(self.compound)
         
-        if self.forward:
-            return "|--[{}]-->\t{}".format("]-[".join(domain_alias_list), tag)
-        else:
+        if original_orientation and not self.forward:
             return "<--[{}]--|\t{}".format("]-[".join(list(reversed(domain_alias_list))), tag)
+        else:
+            return "|--[{}]-->\t{}".format("]-[".join(domain_alias_list), tag)
         
         
     def recursive_interval(self, interval_list):
@@ -1224,8 +1510,8 @@ class BGCProtein:
     
     def predict_domains(self, hmmdb, domtblout_path="", cpus=0):
         """
-        domtblout_path is the path where the domtableout file will be deposited. If
-        present, a Path-like object is expected
+        domtblout_path is the path where the domtableout file will be deposited. 
+        If present, a Path-like object is expected
         """
         assert(isinstance(hmmdb, HMM_DB))
         if domtblout_path != "":
@@ -1269,6 +1555,7 @@ class BGCProtein:
                         self.domain_list.append(domain)
         
         self.filter_domains()
+        
         self.attempted_domain_prediction = True
         
         return
@@ -1282,20 +1569,18 @@ class BGCProtein:
         
         """
 
-        self.protein_type = "unknown"
-        self._CBP_type = "unknown"
-        self.role = "unknown"
-        
+        # Immediately return to preserve potential pre-existing annotations
+        # (e.g. from antiSMASH) # TODO: use antiSMASH's predictions
         if len(self.domain_set) == 0:
-            self._CBP_type = "no_domains"
-            self.protein_type = "no_domains"
             return
+
+        self.protein_type = "unknown"
+        self.role = "unknown"
         
         cbp_type = ""
         
         # pks/nrps hybrid
         if len(self.domain_set & (FAS_domains_A | FAS_domains_B)) > 1:
-            self._CBP_type = "other"
             self.role = "precursor"
             
             if len(self.domain_set & FAS_domains_A & FAS_domains_B) > 0:
@@ -1314,16 +1599,13 @@ class BGCProtein:
                     A_domains = len([a.ID for a in self.domain_list if a.ID == "AMP-binding"])
                     C_domains = len([c.ID for c in self.domain_list if c.ID == "Condensation"])
                     if A_domains > 1 and C_domains > 1:
-                        self._CBP_type = "PKS-mmNRPS_hybrid"
                         self.protein_type = "PKS-mmNRPS_hybrid"
                     else:
-                        self._CBP_type = "PKS-NRPS_hybrid"
                         self.protein_type = "PKS-NRPS_hybrid"
                     self.role = "biosynthetic"
                     
                     return
                 elif d.ID in NRPS_domains:
-                    self._CBP_type = "NRPS-PKS_hybrid"
                     self.protein_type = "NRPS-PKS_hybrid"
                     self.role = "biosynthetic"
                     return
@@ -1371,7 +1653,12 @@ class BGCProtein:
             cbp_type = "DMATS"
             self.role = "biosynthetic"
         else:
-            cbp_type = "other"
+            domain_signature = "~".join(self.domain_list)
+            if domain_signature in hmmdb.domain_signature_to_protein_type:
+            try:
+                cbp_type = hmmdb.domain_signature_to_protein_type[domain_signature]
+            except KeyError:
+                cbp_type = "other"
             
             role_set = set()
             for d in self.domain_set:
@@ -1384,7 +1671,6 @@ class BGCProtein:
             else:
                 self.role = "unknown"
 
-        self._CBP_type = cbp_type
         self.protein_type = cbp_type
         
         return
@@ -2320,6 +2606,7 @@ class BGCProtein:
                 
 
         return main_group
+
 
 
 class BGCDomain:

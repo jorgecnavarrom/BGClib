@@ -150,6 +150,7 @@ if __name__ == "__main__":
     
     if use_domains and len(working_collection.bgcs) > 0:
         print("Predicting domains for {} BGC(s)".format(len(working_collection.bgcs)))
+        #working_collection.predict_domains(hmmdbs, cpus=hmmdbs.cores, domtblout_path=Path("./"))
         working_collection.predict_domains(hmmdbs, cpus=hmmdbs.cores)
         
     for b in working_collection.bgcs:
@@ -181,7 +182,7 @@ if __name__ == "__main__":
         gca = "+".join(bgc.gca)
         bgc_name = o / "{}_[{}].svg".format(bgc.identifier, gca)
         if mirror_bgc:
-            bgc_name = o / (bgc.identifier + ".m.svg")
+            bgc_name = o / "{}_[{}].m.svg".format(bgc.identifier, gca)
         print("Saving {}".format(bgc_name.name))
         bgc.BGC_SVG(bgc_name, hmmdb=hmmdbs, svg_options=svgopts, mirror=mirror_bgc)
         

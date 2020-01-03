@@ -1,3 +1,6 @@
 # Provides basic protein annotation using domain signatures -particular 
 # combination of domain ID's found in annotated proteins from MIBiG 
 Cu-oxidase_3~Cu-oxidase~Cu-oxidase_2	laccase
+FAD_binding_4~BBE	oxidase
+EthD	decarboxylase
+DUF1772	emodin anthrone monooxygenase	HypC, TpcL
