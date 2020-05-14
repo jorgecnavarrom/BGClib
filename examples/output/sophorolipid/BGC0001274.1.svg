@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" width="747" height="84">
+  <g>
+    <title>BGC0001274.1</title>
+    <line x1="2" y1="42" x2="102" y2="42" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>ADT71703.1 [BGC0001274.1~L0+CDS1]</title>
+      <polygon points="25.6,62.0 25.6,22.0 50.55,22.0 50.55,2.0 90.55,42.0 50.55,82.0 50.55,62.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
+      <g class="domain,Glyco_transf_28">
+        <title>Glycosyltransferase family 28 N-terminal domain 
+PF03033.20 - Glyco_transf_28</title>
+        <polygon points="27.7,26.0 42.7,26.0 42.7,58.0 27.7,58.0" fill="rgb(157,218,79)" stroke-linejoin="round"/>
+        <path stroke="rgb(126,174,63)" stroke-linejoin="round" stroke-width="1" d="M27.7 26.0 L 42.7 26.0, 42.7 58.0, 27.7 58.0 Z" fill="none"/>
+      </g>
+      <g class="domain,UDPGT">
+        <title>UDP-glucoronosyl and UDP-glucosyl transferase 
+PF00201.18 - UDPGT</title>
+        <polygon points="72.55,26.0 74.55,26.0 87.1,39.0 87.1,45.0 74.55,58.0 72.55,58.0" fill="rgb(225,150,107)" stroke-linejoin="round"/>
+        <path stroke="rgb(180,120,86)" stroke-linejoin="round" stroke-width="1" d="M87.1 39.0 L 74.55 26.0, 72.55 26.0, 72.55 58.0, 74.55 58.0, 87.1 45.0 Z" fill="none"/>
+      </g>
+    </g>
+    <g>
+      <path stroke="#464646" stroke-width="3" d="M102 42 L 117 42"/>
+      <path stroke="#464646" stroke-width="3" d="M127 42 L 142 42"/>
+      <path stroke="#464646" stroke-width="3" d="M112 52 L 122 32"/>
+      <path stroke="#464646" stroke-width="3" d="M122 52 L 132 32"/>
+    </g>
+    <line x1="142" y1="42" x2="337" y2="42" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>AET14838.1 [BGC0001274.1~L1+CDS1]</title>
+      <polygon points="142.5,62.0 142.5,22.0 297.5,22.0 297.5,2.0 337.5,42.0 297.5,82.0 297.5,62.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
+      <g class="domain,ABC_membrane">
+        <title>ABC transporter transmembrane region 
+PF00664.23 - ABC_membrane</title>
+        <polygon points="151.95,26.0 193.2,26.0 193.2,58.0 151.95,58.0" fill="rgb(149,226,73)" stroke-linejoin="round"/>
+        <path stroke="rgb(119,181,58)" stroke-linejoin="round" stroke-width="1" d="M151.95 26.0 L 193.2 26.0, 193.2 58.0, 151.95 58.0 Z" fill="none"/>
+      </g>
+      <g class="domain,ABC_tran">
+        <title>ABC transporter 
+PF00005.27 - ABC_tran</title>
+        <polygon points="203.85,26.0 227.7,26.0 227.7,58.0 203.85,58.0" fill="rgb(129,201,63)" stroke-linejoin="round"/>
+        <path stroke="rgb(103,161,50)" stroke-linejoin="round" stroke-width="1" d="M203.85 26.0 L 227.7 26.0, 227.7 58.0, 203.85 58.0 Z" fill="none"/>
+      </g>
+      <g class="domain,ABC_membrane">
+        <title>ABC transporter transmembrane region 
+PF00664.23 - ABC_membrane</title>
+        <polygon points="251.25,26.0 292.5,26.0 292.5,58.0 251.25,58.0" fill="rgb(149,226,73)" stroke-linejoin="round"/>
+        <path stroke="rgb(119,181,58)" stroke-linejoin="round" stroke-width="1" d="M251.25 26.0 L 292.5 26.0, 292.5 58.0, 251.25 58.0 Z" fill="none"/>
+      </g>
+      <g class="domain,ABC_tran">
+        <title>ABC transporter 
+PF00005.27 - ABC_tran</title>
+        <polygon points="302.85,26.0 321.5,26.0 325.95,31.0 325.95,53.0 321.5,58.0 302.85,58.0" fill="rgb(129,201,63)" stroke-linejoin="round"/>
+        <path stroke="rgb(103,161,50)" stroke-linejoin="round" stroke-width="1" d="M325.95 31.0 L 321.5 26.0, 302.85 26.0, 302.85 58.0, 321.5 58.0, 325.95 53.0 Z" fill="none"/>
+      </g>
+    </g>
+    <g>
+      <path stroke="#464646" stroke-width="3" d="M337 42 L 352 42"/>
+      <path stroke="#464646" stroke-width="3" d="M362 42 L 377 42"/>
+      <path stroke="#464646" stroke-width="3" d="M347 52 L 357 32"/>
+      <path stroke="#464646" stroke-width="3" d="M357 52 L 367 32"/>
+    </g>
+    <line x1="377" y1="42" x2="424" y2="42" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>AEK28753.1 [BGC0001274.1~L2+CDS1]</title>
+      <polygon points="379.6,82.0 379.6,2.0 418.6,42.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
+      <g class="domain,Mac">
+        <title>Maltose acetyltransferase 
+PF12464.8 - Mac</title>
+        <polygon points="385.75,26.0 394.75,26.0 394.75,58.0 385.75,58.0" fill="rgb(188,228,87)" stroke-linejoin="round"/>
+        <path stroke="rgb(150,182,70)" stroke-linejoin="round" stroke-width="1" d="M385.75 26.0 L 394.75 26.0, 394.75 58.0, 385.75 58.0 Z" fill="none"/>
+      </g>
+      <g class="domain,Hexapep">
+        <title>Bacterial transferase hexapeptide (six repeats) 
+PF00132.24 - Hexapep</title>
+        <polygon points="405.7,28.77 410.8,34.0 410.8,50.0 405.7,55.23" fill="rgb(89,131,202)" stroke-linejoin="round"/>
+        <path stroke="rgb(71,105,162)" stroke-linejoin="round" stroke-width="1" d="M410.8 34.0 L 405.7 28.77, 405.7 55.23, 410.8 50.0 Z" fill="none"/>
+      </g>
+    </g>
+    <g>
+      <path stroke="#464646" stroke-width="3" d="M424 42 L 439 42"/>
+      <path stroke="#464646" stroke-width="3" d="M449 42 L 464 42"/>
+      <path stroke="#464646" stroke-width="3" d="M434 52 L 444 32"/>
+      <path stroke="#464646" stroke-width="3" d="M444 52 L 454 32"/>
+    </g>
+    <line x1="464" y1="42" x2="553" y2="42" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>ADT71702.1 [BGC0001274.1~L3+CDS1]</title>
+      <polygon points="475.75,62.0 475.75,22.0 505.35,22.0 505.35,2.0 545.35,42.0 505.35,82.0 505.35,62.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
+      <g class="domain,UDPGT">
+        <title>UDP-glucoronosyl and UDP-glucosyl transferase 
+PF00201.18 - UDPGT</title>
+        <polygon points="510.25,26.0 529.35,26.0 537.1,34.0 537.1,50.0 529.35,58.0 510.25,58.0" fill="rgb(225,150,107)" stroke-linejoin="round"/>
+        <path stroke="rgb(180,120,86)" stroke-linejoin="round" stroke-width="1" d="M537.1 34.0 L 529.35 26.0, 510.25 26.0, 510.25 58.0, 529.35 58.0, 537.1 50.0 Z" fill="none"/>
+      </g>
+    </g>
+    <g>
+      <path stroke="#464646" stroke-width="3" d="M553 42 L 568 42"/>
+      <path stroke="#464646" stroke-width="3" d="M578 42 L 593 42"/>
+      <path stroke="#464646" stroke-width="3" d="M563 52 L 573 32"/>
+      <path stroke="#464646" stroke-width="3" d="M573 52 L 583 32"/>
+    </g>
+    <line x1="593" y1="42" x2="745" y2="42" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>ACD75398.1 [BGC0001274.1~L4+CDS1]</title>
+      <polygon points="605.65,62.0 605.65,22.0 646.5,22.0 646.5,2.0 686.5,42.0 646.5,82.0 646.5,62.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
+      <g class="domain,p450">
+        <title>Cytochrome P450 
+PF00067.22 - p450</title>
+        <polygon points="620.5,26.0 670.5,26.0 681.55,38.0 681.55,46.0 670.5,58.0 620.5,58.0" fill="rgb(85,216,107)" stroke-linejoin="round"/>
+        <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M681.55 38.0 L 670.5 26.0, 620.5 26.0, 620.5 58.0, 670.5 58.0, 681.55 46.0 Z" fill="none"/>
+      </g>
+    </g>
+    <g>
+      <title>ACD75399.1 [BGC0001274.1~L4+CDS2]</title>
+      <polygon points="710.9,82.0 710.9,2.0 733.1,42.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
+    </g>
+  </g>
+</svg>

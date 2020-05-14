@@ -1,0 +1,483 @@
+LOCUS       BGC0001274.1            2010 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Non-acetylated open-chain sophorolipid / diacetylated lactonic
+            sophorolipid biosynthetic gene cluster
+ACCESSION   BGC0001274
+VERSION     BGC0001274.1
+KEYWORDS    .
+SOURCE      Starmerella bombicola
+  ORGANISM  Starmerella bombicola
+            Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+            Saccharomycetes; Saccharomycetales; Saccharomycetales incertae
+            sedis; Starmerella.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID HM440974.1.
+FEATURES             Location/Qualifiers
+     source          1..2010
+                     /db_xref="taxon:75736"
+                     /mol_type="genomic DNA"
+                     /organism="Starmerella bombicola"
+     cluster         1..2010
+                     /note="Cluster number: 1"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png;
+                     structures/compound2.png; "
+                     /product="other"
+     gene            <473..>1771
+                     /gene="UGTB1"
+     mRNA            <473..>1771
+                     /product="UDP-glucosyltransferase"
+                     /gene="UGTB1"
+     CDS             473..1771
+                     /function="transfers glucose from
+                     uridine-5'-diphosphoglucose to a glucolipid"
+                     /product="UDP-glucosyltransferase"
+                     /codon_start=1
+                     /EC_number="2.4.1.-"
+                     /note="smCOG: SMCOG1062:glycosyltransferase,_MGT_family
+                     (Score: 161.6; E-value: 5.7e-49);"
+                     /db_xref="GI:315057135"
+                     /translation="MAIEKPVIVACACPLAGHVGPVLSLVRGLLNRGYEVTFVTGNAFK
+                     EKVIEAGCTFVPLQGRADYHEYNLPEIAPGLLTIPPGLEQTGYSMNEIFVKAIPEQYDA
+                     LQTALKQVEAENKSAVVIGETMFLGVHPISLGAPGLKPQGVITLGTIPCMLKAEKAPGV
+                     PSLEPMIDTLVRQQVFQPGTDSEKEIMKTLGATKEPEFLLENIYSSPDRFLQLCPPSLE
+                     FHLTSPPPGFSFAGSAPHVKSAGLATPPHLPSWWPDVLSAKRLIVVTQGTAAINYEDLL
+                     IPALQAFADEEDTLVVGILGVKGASLPDSVKVPANARIVDYFPYDELLPHASVFIYNGG
+                     YGGLQHSLSHGVPVIIGGGMLVDKPAVASRAVWAGVGYDLQTLQATSELVSTAVKEVLA
+                     TPSYHEKAMAVKKELEKYKSLDILESAISELAS"
+                     /gene="UGTB1"
+                     /protein_id="ADT71703.1"
+ORIGIN
+        1 gagagtggga cctgattcag aatcacacgg acccgtatat ataacaatca ctttccaaca
+       61 atatagcgag tattaatata tttccgggta agggttgttc cggacttatg catttaatca
+      121 caggttgcat cagctaaata tgtcagggcc gacggcgtaa atttagaagg ttaggtcaag
+      181 atccatcggt caggccaatg gagctctact atgataggca gctgaagcga gacaagatat
+      241 acttcagttg cgctctctga aaaaattatt ttgtgattct cactcagtgg atgtggcgac
+      301 acacggaacc aataatctcg ccggaaaggc ggctgaacat cagtcttgca taagtgtgca
+      361 agtggcctga gcacagcgtg cattaccctt accatacatt cggggcaagt taaatccagc
+      421 attatataaa cttgattgac acaaatgggc ataaaacaat aaagtctcct atatggccat
+      481 cgagaaacca gtgatagttg cttgtgcctg cccactagcg gggcacgtgg gcccagtgct
+      541 cagcctggtc cgcggtctac tcaatagagg atatgaggtg actttcgtaa cagggaacgc
+      601 attcaaggag aaagttattg aggcaggatg cactttcgtc cctctccaag gacgagctga
+      661 ctaccatgaa tacaatctcc ctgaaatcgc tccaggattg ctcacgattc ctccaggcct
+      721 tgagcagacc ggttactcaa tgaatgagat ttttgtgaag gcgattcctg agcagtacga
+      781 tgcacttcaa actgctctaa aacaggttga ggctgaaaat aaatcagctg tggtgattgg
+      841 cgagaccatg tttctagggg tgcatccgat atcactgggt gccccaggtc tcaagcccca
+      901 aggcgtaatc acgttaggaa ctattccgtg catgctgaaa gcagagaagg cgcctggagt
+      961 tcctagtctt gagccaatga ttgatacttt agtgcggcaa caagtatttc aaccaggaac
+     1021 tgactctgag aaggagatca tgaagacgct cggggccacg aaggagcccg aatttctcct
+     1081 ggagaatata tacagcagcc ctgacagatt tttgcaactg tgccctccat ctcttgaatt
+     1141 tcacttgact tcgcctcctc ctggcttctc gttcgctggt agtgcaccgc atgtaaagtc
+     1201 tgctggatta gcaactccac ctcacctgcc gtcttggtgg cctgatgtgc tgagtgcgaa
+     1261 gcgtctgatt gttgttacac aaggaacagc agccatcaac tatgaagatc tgctcattcc
+     1321 agcattgcag gcctttgctg acgaagaaga cactctcgta gttggtatat tgggcgtcaa
+     1381 aggggcgtca cttcctgata gcgttaaagt tcctgcaaac gctcgaattg ttgattattt
+     1441 tccttacgat gagctactac cgcatgcctc tgttttcata tacaacggtg gatacggagg
+     1501 tctgcagcac agtttgagcc atggcgttcc cgtcatcatc ggaggaggaa tgttggtaga
+     1561 caagccagct gttgcttcac gagctgtatg ggctggtgtt ggttatgatc ttcaaacctt
+     1621 gcaggcaact tctgagctag tctccacggc cgttaaggag gtgttggcta ctccctcgta
+     1681 tcacgagaaa gccatggcag tcaagaaaga gcttgaaaaa tacaagtctc ttgatattct
+     1741 agagtcggca attagtgaat tagcttctta acctggctct ttttctagat atgtctgcgc
+     1801 cctgctcact gcttactggc ctaagctggt attacggacc ttaatcaagt atcaccccaa
+     1861 ggcaatcgag agtcttatcg agtctctagg tagatagata cacgttttga tttttcggcc
+     1921 cactttgtag aaaaatctca gtgatttcat ggaattcagt tacaaatact aatctgataa
+     1981 accaagaact acactcggtg ttgagagcag
+//
+LOCUS       BGC0001274.2            3900 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Non-acetylated open-chain sophorolipid / diacetylated lactonic
+            sophorolipid biosynthetic gene cluster
+ACCESSION   BGC0001274
+VERSION     BGC0001274.2
+KEYWORDS    .
+SOURCE      Starmerella bombicola
+  ORGANISM  Starmerella bombicola
+            Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+            Saccharomycetes; Saccharomycetales; Saccharomycetales incertae
+            sedis; Starmerella.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID HQ660581.1.
+FEATURES             Location/Qualifiers
+     source          1..3900
+                     /db_xref="taxon:75736"
+                     /mol_type="genomic DNA"
+                     /organism="Starmerella bombicola"
+     gene            <1..>3900
+                     /gene="mdr"
+     mRNA            <1..>3900
+                     /product="multidrug resistance protein"
+                     /gene="mdr"
+     CDS             1..3900
+                     /product="multidrug resistance protein"
+                     /codon_start=1
+                     /EC_number="3.6.3.44"
+                     /note="smCOG: SMCOG1288:ABC_transporter_related_protein
+                     (Score: 264.7; E-value: 2.9e-80);"
+                     /db_xref="GI:356578781"
+                     /translation="MVDDIQVEKREKLIETKDKLLEEKLSALDPHEANVLRSQLETKRV
+                     ATSFFRLFRFCTPLDVFLEILALFFAAVHGAALPMFTLVVGAIFNTFRDFTSYDLKGNE
+                     FQHKVNHLSLYFVYIGIGMLGSAFLESFLLVDRGEVLAGRYRKHYLSAVIRQNIAFYDK
+                     LGGGEVSTRIINDTNSIQEAISDKLGNVVQGIASFIAATVISFASQWKLACILLSAVGF
+                     MVITMGTGATFMAKYQLRSDAIYSQSGATVAEEALSAVRTTVAFGAQPHLAVKYEKVLD
+                     RVVKESKRSSYSLGVMLACIWASTFWVYALALWQGSREIVSGSADVGKIIVVITAMLLG
+                     SFQLGNIAPNVRFLVKGLTAASILNEAIDRVPVIDGQSIDKGIVPQTKAVGRIELKNVK
+                     FRYPSRPDVLVLSDFSLEVPAGSTVALVGASGSGKSTIVGILERFYLPLEGSVTLDGQE
+                     ISDLNTRWLRQQIGYVQQEPVLFSESIYENISYGLIGTDIEFADEHVKEAKIIQACKDA
+                     NAWDFIQTLSEGIQTNVGDRGFLLSGGQKQRIAIARAIVSDPKILLLDEATSALDTKSE
+                     GIVQDALDKAAEGRTTIVVAHRLSTIKDANKIVVMSKGNVIEQGTHNELIQREGPYKAL
+                     VDAQRVTKAKSTNVEVLDIEALDISPLDSLNEKFNPKDVSTLSVHSAGTQTTQPPEYQE
+                     NDIPGVRNPPHSTLMTNTKLVWGLNRKEWGYILIGSLASIILGYCYPAMAIITGQTTGS
+                     MVLPPSEYGKMRHVVNIMGWWYFFVGCISFMTAFITIAALSLASDKLVKNIRLALFRQL
+                     MRMDIAFFDHKNNTPGALTSILAKEAKMIEGLSGATLGQIQQSLVTLIGGIVTGIPFNW
+                     RIGLVATSVVPVMLVCGFVRVWVLTQLSDRAREVYERSGSMASEYTSAVRTVQSLTREL
+                     DVVVKYTKTVDSQIFSSRIAIARSALYYALSEGMTPWVVALVFWWGSTVMRRGEASVAG
+                     YMTVFMAIITGSQAAGQIFSYAPNMNSAKDAARNIYRILTATPSIDVWSEEGYVAPEES
+                     VRGDIEFRHVNFRYPTRPQVPVLQDLNLTVKKGQYIALVGASGCGKSTTIGLVERFYDP
+                     LAGQVLFDGKDLREYNLNALRSHIALVQQEPMLYSGTLRENILMGWSGPESEVTQEMIE
+                     DAARKANIHEFIMSLPDGYETLSGSRGSLLSGGQKQRIAIARALIRNPKVLLLDEATSA
+                     LDSESEKVVQAALDAAAKGRTTIAVAHRLSTIQKADVIYVFSGGRIVEQGDHQSLLELN
+                     GWYAELVNLQGLGEI"
+                     /gene="mdr"
+                     /protein_id="AET14838.1"
+     cluster         1..3900
+                     /note="Cluster number: 2"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png;
+                     structures/compound2.png; "
+                     /product="other"
+ORIGIN
+        1 atggtggatg atatacaggt agagaagcgt gagaaactca tcgagactaa ggacaagctt
+       61 ctcgaggaga agctctctgc gttagatcca catgaggcca atgtattgcg aagtcagctt
+      121 gaaacaaaga gagtcgccac aagctttttc aggttgttca gattttgcac tccccttgac
+      181 gttttcttgg agatacttgc gctttttttt gcagcggtgc atggagccgc gcttccaatg
+      241 ttcacgttag tagtgggcgc catcttcaac acattcagag acttcacttc atatgacctc
+      301 aagggcaatg agttccagca taaggtgaat cacctgtctc tctattttgt ctatattggc
+      361 attggtatgc tcggcagtgc gtttctcgag agcttcctgc ttgtggacag aggcgaagtg
+      421 ttggcaggac gttaccgaaa gcattatctg agtgctgtta ttcgccagaa tatcgcgttt
+      481 tacgacaaac taggtggtgg cgaggtcagc accagaatca ttaacgatac caactcaatt
+      541 caggaagcga tcagcgacaa gcttggaaac gtcgtacagg gaatagcttc cttcattgcg
+      601 gccaccgtta taagttttgc ttcgcaatgg aaactggctt gcatcctcct gagtgctgta
+      661 gggttcatgg taatcacaat gggaactggc gccaccttca tggccaaata tcagctcaga
+      721 tctgacgcga tatattcgca gtctggagct accgttgcgg aggaggctct cagtgctgtc
+      781 aggactacag tagcatttgg cgctcaacct catctcgccg tcaagtatga aaaggtactt
+      841 gatcgtgttg tgaaggaatc gaagcggagc agttactcat tgggggtcat gttagcgtgc
+      901 atatgggcta gtactttttg ggtgtatgcc ttagctctgt ggcagggttc cagagaaatc
+      961 gttagtggga gtgctgacgt tggaaagata atagttgtaa tcacagctat gttacttgga
+     1021 agcttccagc ttgggaatat cgcgccaaac gtgaggtttc ttgtcaaggg tctcactgcc
+     1081 gcgagcattc tcaatgaggc cattgatcgt gtcccagtca tcgatggcca gtccatagat
+     1141 aaaggaattg tcccccaaac taaggccgtt ggcagaattg agctcaaaaa tgtcaagttc
+     1201 cgatatccta gtcgcccaga cgttttggtc ctctccgatt ttagccttga agttcctgct
+     1261 ggatctactg tggcactggt aggtgcctcg ggatcaggga agtctacaat tgtaggtatt
+     1321 cttgagaggt tctatttacc tctcgaagga agcgttactc tggatggcca ggagattagc
+     1381 gacctgaaca caagatggct ccgtcaacaa attggttatg ttcagcagga accagtactc
+     1441 ttttcagagt caatatatga gaatatcagc tatggtttga ttggcactga cattgagttc
+     1501 gctgacgagc atgttaagga agctaaaatc attcaagctt gtaaagatgc caatgcctgg
+     1561 gatttcattc agactctctc agaaggcatc caaaccaatg ttggagatcg aggatttctt
+     1621 ctcagcggtg gtcagaaaca acgcattgca atagcaagag caatcgtctc agaccctaaa
+     1681 attctgctgc tcgatgaagc gacttctgct ctggatacca aatctgaagg tatcgttcaa
+     1741 gatgcgctcg acaaagcggc cgaaggtcgt accactatag tcgttgcaca cagactctct
+     1801 acgatcaagg atgccaacaa gatagttgtc atgtctaaag gtaacgtcat agagcagggt
+     1861 actcacaatg agctcataca gcgagaaggg ccttataaag ctttggttga tgctcaaaga
+     1921 gtaactaaag caaagagcac taacgttgag gtcctcgata ttgaagctct agacatttcg
+     1981 cctctggact cactgaacga aaagttcaat cccaaggatg tgagcacatt gagtgttcac
+     2041 agtgcaggta ctcagaccac tcaacctcct gaatatcaag aaaatgacat ccctggtgtg
+     2101 cgcaaccccc cacatagcac gttgatgacc aataccaaac tggtttgggg gctgaatagg
+     2161 aaagaatggg gttacattct cattggtagt ttagcctcca ttattttggg ctattgctat
+     2221 cctgcaatgg caataataac tggccaaacc actggaagca tggttctacc tcccagtgaa
+     2281 tacggaaaaa tgcggcatgt ggtgaatatc atgggatggt ggtatttttt cgtaggctgc
+     2341 atttcattca tgacggcttt tatcactata gctgctttat cacttgcatc tgataagttg
+     2401 gtcaaaaata tcagattagc tttgttccgc caattgatgc gaatggatat tgcattcttc
+     2461 gaccacaaaa acaacacgcc gggtgcgcta acctcaattt tggcgaagga agctaaaatg
+     2521 atcgagggtt tgagtggggc caccctcggt caaattcaac agagtctggt gaccttgatt
+     2581 ggcggcatag ttactggtat acctttcaat tggagaattg gactcgtggc tacgtctgtt
+     2641 gttcctgtca tgttggtgtg tggcttcgtc agagtctggg ttcttaccca attatcggat
+     2701 cgtgcgagag aagtttacga acgaagtggc tccatggcat ctgagtatac aagtgctgtc
+     2761 cgcacagtcc agtccttaac tcgtgagtta gacgtggtcg taaaatacac aaagacagta
+     2821 gactctcaga ttttcagctc cagaattgcc attgcccgct cagcattgta ctacgcactc
+     2881 tcggaaggaa tgacaccctg ggtggtagcc ctcgtttttt ggtggggaag cactgtaatg
+     2941 agacgaggtg aagcttcggt cgcaggatat atgactgtct tcatggctat tattacaggt
+     3001 tctcaagccg ctggccaaat tttcagctat gctccaaaca tgaactcagc caaagatgca
+     3061 gcgcgtaaca tttacagaat cttgactgcc actccttcta tagatgtatg gagtgaggaa
+     3121 ggttacgttg ctcccgagga gtcggtgaga ggagatattg agttccgtca tgtgaatttc
+     3181 cgatatccta ctcgacctca agtaccagtt ttacaagatc tcaacttaac agtcaaaaag
+     3241 ggccaataca tcgctctagt tggagccagt ggatgcggta agtctactac tattggactg
+     3301 gtggaaagat tttatgatcc attagcaggt caagtacttt tcgatgggaa agatttacgc
+     3361 gaatataacc tgaatgcatt gagatcacac attgctttag tccagcaaga accaatgctt
+     3421 tattcaggca cgctacgtga gaatattcta atgggatggt ctggccctga gtctgaagta
+     3481 acgcaggaga tgattgagga tgccgctcgc aaagcgaaca ttcacgaatt catcatgtcg
+     3541 ttgcctgatg gctacgaaac gctcagcgga tctaggggat cgttgctatc tggggggcaa
+     3601 aagcagcgaa ttgcaattgc aagggccctg atcagaaatc caaaggtact cctcctcgat
+     3661 gaggccacct cagctctgga ttccgaatct gagaaagtag ttcaagcagc actcgacgca
+     3721 gcagcgaagg gccgtactac aatcgccgtt gcgcatagat tatcaacaat tcagaaagca
+     3781 gatgtcatat atgtgttctc aggagggcgc atcgtggagc agggcgacca tcagagcctc
+     3841 cttgaactca atggatggta cgctgaattg gtgaacttgc aaggtctcgg agagatttga
+//
+LOCUS       BGC0001274.3             932 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Non-acetylated open-chain sophorolipid / diacetylated lactonic
+            sophorolipid biosynthetic gene cluster
+ACCESSION   BGC0001274
+VERSION     BGC0001274.3
+KEYWORDS    .
+SOURCE      Starmerella bombicola (anamorph: Candida bombicola)
+  ORGANISM  Starmerella bombicola
+            Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+            Saccharomycetes; Saccharomycetales; Saccharomycetales incertae
+            sedis; Starmerella.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID HQ670751.1.
+FEATURES             Location/Qualifiers
+     source          1..932
+                     /mol_type="genomic DNA"
+                     /strain="ATCC 22214"
+                     /note="anamorph: Candida bombicola"
+                     /db_xref="taxon:75736"
+                     /organism="Starmerella bombicola"
+                     /culture_collection="ATCC:22214"
+     cluster         1..932
+                     /note="Cluster number: 3"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png;
+                     structures/compound2.png; "
+                     /product="other"
+     mRNA            <43..>822
+                     /product="acetyltransferase"
+     CDS             43..822
+                     /function="transfers acetylgroups from acetylcoenzyme A to
+                     a sophorolipid or a glucolipid"
+                     /product="acetyltransferase"
+                     /codon_start=1
+                     /note="smCOG: SMCOG1156:Chloramphenicol_acetyltransferase
+                     (Score: 107.9; E-value: 8.8e-33);"
+                     /db_xref="GI:340034829"
+                     /translation="MVVNSSKDPQNKGMTPRKEIDQEMVSWAKKNLKNTPGNENYEKMV
+                     SGVPYNPYDPDLMFRALATSEKVREFNTIASESRTFESNHAAYIKKVEILKDTFGQTKD
+                     IVWLTAPFSVDFGFNISVGEHFYANFNVCFLDSAPIIFGDEVIVGPNTTFVTATHPISP
+                     EKRARRIVYALPIKVGNNVWIGANVTVLPGVTIGDGSTIAAGAVVREDVPPRTVVGGVP
+                     ARILKHIPEEDPDEAEGEELEFLLPVEMNVNTANQKV"
+                     /protein_id="AEK28753.1"
+ORIGIN
+        1 tcctccttcc ttgcctcatt ccacctcaca ttctagaatt caatggttgt aaactcctcg
+       61 aaggaccctc aaaacaaagg aatgactcct agaaaagaaa ttgaccagga aatggtctct
+      121 tgggccaaaa aaaacctcaa aaacacccct ggcaatgaaa actatgagaa gatggtctca
+      181 ggagttcctt acaatccata cgatccagat cttatgttta gagccctggc tactagtgag
+      241 aaagttaggg agttcaatac cattgcaagt gaaagtcgta cttttgagtc aaatcacgct
+      301 gcttatatca agaaggtcga gattctcaaa gacacttttg gtcaaacaaa ggatattgtc
+      361 tggctgaccg ctccattctc agttgatttt ggattcaaca tcagcgtagg cgagcacttt
+      421 tacgccaact tcaacgtttg cttcttggac tcggctccaa taatctttgg tgatgaggtg
+      481 attgtagggc ccaatacaac gttcgtgact gcgactcatc ctattagccc cgagaaacgt
+      541 gcgaggagaa ttgtgtatgc tcttcctatc aaggtgggga ataatgtatg gattggtgcg
+      601 aatgtgactg tcctgccggg tgttacgatt ggagatggct caacaattgc ggctggtgct
+      661 gtcgttcgag aagatgttcc tcctcgtact gtggtgggag gagtccctgc gcgaatcctc
+      721 aagcatattc cagaggagga tcccgacgag gctgaaggag aggaactgga attccttctt
+      781 ccagttgaaa tgaacgtcaa taccgctaac cagaaggtct aggtaaacta aattcatgac
+      841 agccttttct tctttctttc cacaaaacaa ttaaaaaaaa ataacagaat tagaagaagg
+      901 taaatatatt gggcaaactc ctctcttcct tt
+//
+LOCUS       BGC0001274.4            1778 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Non-acetylated open-chain sophorolipid / diacetylated lactonic
+            sophorolipid biosynthetic gene cluster
+ACCESSION   BGC0001274
+VERSION     BGC0001274.4
+KEYWORDS    .
+SOURCE      Starmerella bombicola
+  ORGANISM  Starmerella bombicola
+            Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+            Saccharomycetes; Saccharomycetales; Saccharomycetales incertae
+            sedis; Starmerella.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID HM440973.1.
+FEATURES             Location/Qualifiers
+     source          1..1778
+                     /db_xref="taxon:75736"
+                     /mol_type="genomic DNA"
+                     /organism="Starmerella bombicola"
+     cluster         1..1778
+                     /note="Cluster number: 4"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png;
+                     structures/compound2.png; "
+                     /product="other"
+     gene            <234..>1625
+                     /gene="UGTA1"
+     mRNA            <234..>1625
+                     /product="UDP-glucosyltransferase"
+                     /gene="UGTA1"
+     CDS             234..1625
+                     /function="transfers glucose from
+                     uridine-5'-diphosphoglucose to a (sub)terminal hydroxylated
+                     fatty acid"
+                     /product="UDP-glucosyltransferase"
+                     /codon_start=1
+                     /EC_number="2.4.1.-"
+                     /note="smCOG: SMCOG1062:glycosyltransferase,_MGT_family
+                     (Score: 162.9; E-value: 2.3e-49);"
+                     /db_xref="GI:315057133"
+                     /translation="MSPSSHKPLILACGLPLSGHIMPVLSLVHGLTDDGYEATVVTGRA
+                     FEQKVRDVGADFVPLEGNADFDDHTLDDLVPGRKDMAPSFDRTVQDVEHMMVATLPEQF
+                     AAIQRAFKKLSASGRPVVLVSEVLFFGAHPISLGAPGFKPAGWICLGVLPLLIRSDHTL
+                     GLDNDRSPEAHAKKLAMNHALEHQIFVKATAKHKEICRELGCTEDPKFIWEHSYIAADK
+                     FLQLCPPSLEFSRDHLPSNFKFAGSTPKHRTQFTPPSWWGDVLSAKRVIMVTQGTFAVS
+                     YKHLIVPTLEALKDEPDTLTVAILGRRGAKLPDDVVVPENARVIDYFNYDALLPHVDAL
+                     VYNGGYGGLQHSLSHSVPVVIAGDSEDKPMVASRAEAAGVAIDLKTGLPTVEQIKEAVD
+                     SIIGNPKFHEASKKVQMELESHNSLKILEESIEEIASHDFGLLTKSDEETEDIPVKGPA
+                     LAVSS"
+                     /gene="UGTA1"
+                     /protein_id="ADT71702.1"
+ORIGIN
+        1 cagatatgca tcaggggcac agactaaaag ctgctctcag cgagtaccct tacctcttga
+       61 gaaccctcaa aatttaccca gcctgcagca tatcatgcac catggttaaa ttcggaaatg
+      121 aatttaccgg tggccttgaa ccacgttcct ccaattattt aaggcaataa cctgccactc
+      181 tcttgatttg attaagaaag actttcaatt tagcttctcc ctacgaatat tcaatgagcc
+      241 cttcatcaca caaacccctg attctcgctt gcggcttgcc tctttcaggc catataatgc
+      301 ccgttttgag tctggtacac ggccttacgg acgacggata cgaagctact gttgtgacag
+      361 gcagagcgtt tgaacaaaaa gttcgagatg tgggtgcaga ctttgttcct ttagaaggga
+      421 acgcagattt tgatgaccac accttagacg atctggtccc gggccgtaaa gacatggccc
+      481 caagcttcga tcgtacagtt caagatgtgg agcacatgat ggtagctact cttcctgagc
+      541 agtttgccgc tattcagagg gctttcaaaa agctcagcgc aagcggccgc cctgtcgttc
+      601 ttgtcagtga agtgctgttt ttcggtgcac accctatcag cctcggtgct cctggtttca
+      661 aacccgctgg ctggatttgt ttaggggttt tgcctctttt gatccgcagt gatcatacct
+      721 taggacttga caacgacagg agccccgaag cacatgcaaa gaaactcgct atgaaccacg
+      781 ctcttgagca ccaaattttc gttaaagcca ctgctaagca caaggaaatc tgccgagagt
+      841 taggttgcac tgaagatccc aaatttatct gggagcacag ttacattgct gcagacaagt
+      901 tcctgcagct gtgcccgcct tctcttgagt tcagcagaga ccatctgcct agcaacttca
+      961 aattcgccgg ctcaacgccc aagcaccgaa ctcaattcac ccctccttcc tggtgggggg
+     1021 atgttctgag tgccaagcga gtcatcatgg tcactcaagg aacttttgct gtcagttaca
+     1081 agcatcttat tgtgcctact cttgaggcct tgaaggacga gcctgacact ttaacagtag
+     1141 ccatattggg ccgccgcggt gccaagctac cggatgatgt tgtggttcct gagaatgctc
+     1201 gcgtgatcga ctacttcaac tacgatgctc tacttcctca cgttgatgct cttgtctaca
+     1261 atggtggata tggcggactt cagcacagct taagccactc tgttccagtt gttattgctg
+     1321 gtgactctga agacaagcca atggtggcat cgagagctga ggccgctggc gtggcaattg
+     1381 atttgaaaac tggcttgcct acagtggagc aaatcaaaga agctgttgat tcgataattg
+     1441 gaaatccgaa attccacgaa gcctcgaaga aggttcaaat ggagttggaa agccacaact
+     1501 ccttgaaaat tcttgaggaa agcatcgagg aaatcgccag ccatgacttt ggtcttttga
+     1561 ccaagagtga cgaggaaact gaagatatac ctgtcaaagg gccggcctta gcggtgagtt
+     1621 cttagaatcg tacgatcaaa tcagatcagg gaagagaggt agggtttttt ttatttatgt
+     1681 ctttgttttt attgattgaa atttacaata caacaaccat caaattaatt tgaacaaaca
+     1741 acaacacaca cacactgcaa ctttcaaaaa aataagta
+//
+LOCUS       BGC0001274.5            3043 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Non-acetylated open-chain sophorolipid / diacetylated lactonic
+            sophorolipid biosynthetic gene cluster
+ACCESSION   BGC0001274
+VERSION     BGC0001274.5
+KEYWORDS    .
+SOURCE      Starmerella bombicola (anamorph: Candida bombicola)
+  ORGANISM  Starmerella bombicola
+            Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+            Saccharomycetes; Saccharomycetales; Saccharomycetales incertae
+            sedis; Starmerella.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID EU552419.1.
+FEATURES             Location/Qualifiers
+     source          1..3043
+                     /note="anamorph: Candida bombicola"
+                     /db_xref="taxon:75736"
+                     /mol_type="genomic DNA"
+                     /organism="Starmerella bombicola"
+     cluster         1..3043
+                     /note="Cluster number: 5"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png;
+                     structures/compound2.png; "
+                     /product="other"
+     mRNA            <254..>1870
+                     /product="cytochrome P450 monooxygenase CYP52-M1"
+     CDS             254..1870
+                     /product="cytochrome P450 monooxygenase CYP52-M1"
+                     /codon_start=1
+                     /note="hydroxylation of fatty acids and/or alkanes"
+                     /note="smCOG: SMCOG1034:cytochrome_P450 (Score: 286.7;
+                     E-value: 5.9e-87);"
+                     /db_xref="GI:189035857"
+                     /translation="MLIKDIILTPMSLSAVAGLLPLLFVAFLVLHEPIWLLWYRYAARR
+                     HKCSMPRFIEKSFPLGIQRTMDMIKTAKSYTLLEVQYDRVFNKFKARTYLRQAPLQYQI
+                     FTIEPENIKTILATKFNDFGLGARFHTVGKVFGQGIFTLSGNGWKQSRSMLRPQFTKDQ
+                     VCRIDQISSHAAELIKEMNRAMKVDQFIDVQHYFHKLTLDTATEFLFGESCESLNPENQ
+                     SCIVARDGSEITAEQFVESYNFLLNYAFKRTLSSKVYWLFNSKEFRDHKKRAQSYIDYY
+                     VDKALYATSFAAENSIAEKDAAAESSGIYVFSLEMAKVTRDPVTIRDQIFNILIAGRDT
+                     TAATLSFAIHFLARNPDVFNKLREEVLDHFGTKEEQRPLSFELLKQAPYLKQVINEVLR
+                     LAPVLPLNFRTAVRDTTLPIGGGPEQKDPIFVPKGTAVYYSIYMVHRDIKYWGPDAHEF
+                     NPNRWENLKLDNVWAFLPFNGGPRICLGQQFALTELSLTLVRLLQEYSKIEMGPDFPES
+                     PRFSTTLTAQHAPPGVVVRFS"
+                     /protein_id="ACD75398.1"
+     mRNA            <2359..>2802
+                     /product="hypothetical protein"
+     CDS             2359..2802
+                     /db_xref="GI:189035858"
+                     /product="hypothetical protein"
+                     /codon_start=1
+                     /translation="MVPVPENKGSILFKDEDQFVVTHDNILVQCRDLRKDMKVFCPACE
+                     TGHYTDKFSFTIPRASVGVSSGVVVYGIRHGELSIRCFSSDDFGKYTAIVVCEFFDREM
+                     NVTKLQKVDLDFPDQLRVNAPVGFLTRGRLDPGSILHPIETKF"
+                     /protein_id="ACD75399.1"
+ORIGIN
+        1 ktttctcaac agacttagat gattcaatct aaattctgag tgataggttg agcattagca
+       61 cagtttggtt tagatagtaa ctgagtttcc cagtgacgaa actctaccta tggtgtaaga
+      121 gtcttgaggc tgaggttaca gcgactcaaa ctacagcgtg catgagaaac tcgctaatat
+      181 atattagggt tgatgcagct tgcatataga gtcgggcgtt atttctccgt ttatcatatt
+      241 gaaaagtaca tatatgttaa tcaaagacat tattctaact ccaatgagtt tatccgctgt
+      301 tgctggcttg ttgccactgc tcttcgtagc tttcttagtt ctacacgagc ctatctggct
+      361 cctatggtac cgctatgcag cacgtaggca caagtgtagt atgcctcgct tcattgagaa
+      421 atcgttccca ctgggaatac aaagaaccat ggacatgatc aagacggcca agtcatacac
+      481 cttactggaa gttcaatacg acagagtctt caataagttc aaagcacgga cgtatcttcg
+      541 acaagctccc cttcaatacc aaatcttcac aatcgagcca gaaaacatta agacaatcct
+      601 ggcaaccaaa ttcaatgatt ttggtcttgg agcacgtttc cacacagtgg gaaaagtgtt
+      661 tggccaaggg atatttacac tcagcggaaa tggatggaaa cagtctcgat cgatgttgag
+      721 acctcagttc actaaagatc aggtttgcag aattgatcag atttccagtc atgctgcgga
+      781 gttaataaag gagatgaacc gtgcaatgaa agtggaccaa tttattgatg ttcaacatta
+      841 tttccacaaa cttacgctgg atacagcgac tgaattccta tttggggagt cctgcgagag
+      901 cttgaaccct gagaatcagt catgtattgt agcccgtgat ggttcggaga ttactgccga
+      961 acaattcgtg gagtcctaca actttctact gaattacgct ttcaaacgga ccctatcaag
+     1021 caaagtctac tggttgttca actctaagga attccgagat cacaagaaac gtgctcagtc
+     1081 ctatattgac tactacgttg ataaggctct ttacgccaca tctttcgctg ctgagaactc
+     1141 tattgcagag aaggatgctg ctgcagagtc tagtggcatc tatgtgttct cgcttgagat
+     1201 ggctaaagtt acccgagacc cagtgacgat acgtgatcaa attttcaaca ttctcattgc
+     1261 tggtagagat acaacagctg ctacgttgag cttcgctatt catttccttg ccagaaatcc
+     1321 tgacgtattc aacaaactac gtgaggaggt cctcgatcat tttggaacca aggaggagca
+     1381 aaggccttta tcattcgaac ttctgaagca agcaccttat ttgaagcaag ttataaatga
+     1441 agtcttgcgt cttgcgccgg tattgccatt gaacttccgt actgctgtga gagatacaac
+     1501 tctacccata ggtggtggtc ccgagcagaa ggatccgatc ttcgttccta agggcaccgc
+     1561 agtttactat tcaatttaca tggtccacag ggacatcaag tattggggtc ctgacgccca
+     1621 cgaattcaat cccaatcgat gggagaactt gaagctagat aatgtgtggg cattcttgcc
+     1681 cttcaatggc ggtccccgaa tttgtctcgg ccaacaattc gccctgacag agctttcgct
+     1741 aactctggtg agactcttac aggagtattc caagattgag atgggtcccg acttcccaga
+     1801 gtcccctcgt ttctcaacaa cgcttacagc tcaacacgct cctcccggtg tggttgtgcg
+     1861 gttttcttaa gtttcttagc ctcccatgga agaaacgttc cctccttaat tggttcaatc
+     1921 aacccatgtt aactcaacct gtggcaacct ttttattatt ctgagcactc tactcaagaa
+     1981 tggctgcagt tctttattta tgctctttat gaagaatcat gtaaatcatg taaatcttga
+     2041 aggagtgcgt ttaaccgact attcttgaca tagaagcgac atctttacag ctcgaagtat
+     2101 acctcaatcc agaacaattg atggattatt cccacatgaa atcatttgat aggacaggat
+     2161 cgggccctcg ctccaatgaa taacagaacg cgcaagatac gtttgatcag gggtatacac
+     2221 ccgtgaattt gcgtgtggag atgcaccggc gatttgagag gccggcgaga gcaccaggtc
+     2281 ccatgtgagc gccgtcttct gttagaagaa tatggcatca gtcccgaaga tgagcagaaa
+     2341 ttattcgccc ataatggaat ggtgccagtt cctgagaaca aagggagcat cttattcaag
+     2401 gatgaggacc aatttgtcgt cacccacgac aacatacttg tccaatgtcg agacctgcga
+     2461 aaggacatga aagtgttctg cccggcctgt gagacgggcc attataccga caaattcagt
+     2521 ttcactatcc ccagggcgtc tgtcggtgtg tccagtggag tagtcgttta tgggattcgt
+     2581 catggtgaac tctcaatcag atgcttctct tcagacgatt ttggtaaata tactgcaatc
+     2641 gttgtgtgtg agtttttcga ccgtgaaatg aatgtaacta aactacaaaa agttgatctc
+     2701 gactttccag atcaactacg ggtaaatgca cccgtaggtt ttttgactcg cggtcgtttg
+     2761 gatccggggt ccatcctaca ccccattgaa acaaagtttt gattgtcaga ggagcttcac
+     2821 gcttttcgta tcatgatggg acagactcca aagctatcca tcgaacaatt ttytccgatg
+     2881 gaatttggcg agtcgacacc cttgtttcaa taagagtacc gaacaagagc gcaacaaatt
+     2941 tgtaactaat cgcaaacttg ctattagata cctctcggat gacaaaaata caagtttaca
+     3001 cacttggkgg tttaaatacc aattaacaaa aagaaggaaa aag
+//

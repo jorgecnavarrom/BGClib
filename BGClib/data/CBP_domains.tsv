@@ -20,3 +20,5 @@ PF13193.5	Pfam 31	A_C	AMP-binding_C	AMP-binding enzyme C-terminal domain
 PF11991.7	Pfam 31	DMAT	Trp_DMAT	Tryptophan dimethylallyltransferase	
 PF01397.20	Pfam 31	Ter	Terpene_synth	Terpene synthase, N-terminal domain	
 PF04183.11	Pfam 31	IucA_IucC	IucA_IucC	IucA / IucC family	NRPS-Independent Siderophore
+Epimerization	antiSMASH	E	Epimerization	Epimerization domain for NRPS
+Condensation_DCL	antiSMASH	C_T	Condensation_DCL	Terminal condensation domain in NRPS

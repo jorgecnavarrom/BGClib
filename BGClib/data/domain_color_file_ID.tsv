@@ -2476,6 +2476,7 @@ Complex1_LYR_1	195,82,74
 Complex1_LYR_2	101,71,214
 Con-6	99,204,151
 Condensation	224,184,98
+Condensation_DCL	220,166,104
 Condensin2nSMC	117,95,226
 Connexin	101,121,223
 Connexin40_C	90,143,195
@@ -7518,6 +7519,7 @@ Epiglycanin_C	63,220,155
 Epiglycanin_TR	55,121,186
 Epimerase	98,102,214
 Epimerase_2	212,113,103
+Epimerization	220,220,120
 EpmC	198,105,96
 EpoR_lig-bind	78,60,187
 EppA_BapA	199,59,224

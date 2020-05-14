@@ -1,0 +1,4 @@
+# Three BGCs encoding mycophenolic acid retrieved from MIBiG 2.0 (2020-05-12)
+BGC0000104.1	ADY00129.1
+BGC0001360.1	BGC0001360.1~L0+CDS7	# protein id: CDM36727.1 but using internal protein identifier
+BGC0001677.1	API82665.1

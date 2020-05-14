@@ -1,0 +1,1158 @@
+LOCUS       BGC0001247.1            6591 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.1
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID AY649543.1.
+FEATURES             Location/Qualifiers
+     source          1..6591
+                     /db_xref="taxon:29003"
+                     /mol_type="mRNA"
+                     /organism="Cercospora nicotianae"
+     CDS             1..6591
+                     /product="polyketide synthase"
+                     /codon_start=1
+                     /note="required for singlet oxygen-generating cercosporin
+                     toxin biosynthesis and fungal virulence"
+                     /note="smCOG: SMCOG1022:Beta-ketoacyl_synthase (Score:
+                     188.2; E-value: 4.2e-57);"
+                     /db_xref="GI:50080729"
+                     /sec_met="Type: t1pks"
+                     /sec_met="Domains detected: PP-binding (E-value: 1.8e-13,
+                     bitscore: 37.1, seeds: 164); PP-binding (E-value: 1.7e-14,
+                     bitscore: 40.4, seeds: 164); PKS_AT (E-value: 1.1e-81,
+                     bitscore: 260.5, seeds: 1682); itr_KS (E-value: 5.7e-152,
+                     bitscore: 492.4, seeds: 96)"
+                     /sec_met="Kind: biosynthetic"
+                     /sec_met="NRPS/PKS subtype: Type I Iterative PKS"
+                     /sec_met="NRPS/PKS Domain: PKS_KS (383-816). E-value:
+                     4.1e-143. Score: 468.6;"
+                     /sec_met="NRPS/PKS Domain: PKS_AT (922-1214). E-value:
+                     4.2e-80. Score: 260.5;"
+                     /sec_met="NRPS/PKS Domain: ACP (1680-1746). E-value: 3e-11.
+                     Score: 34.8;"
+                     /sec_met="NRPS/PKS Domain: ACP (1792-1841). E-value:
+                     9.2e-13. Score: 39.6;"
+                     /sec_met="NRPS/PKS Domain: Thioesterase (1937-2189).
+                     E-value: 3e-28. Score: 91.0;"
+                     /translation="MEDGAQMRVVAFGDQTYDCSEAVSQLLRVRDDAIVVDFLERAPAV
+                     LKAELARLSSEQQEETPRFATLAELVPRYRAGTLNPAVSQALTCIAQLGLFIRQHSSGQ
+                     EAYPTAHDSCITGVCTGALTAVAVGSASSVTALVPLALHTVAVAVRLGARAWEIGSCLA
+                     DARRGANGRYASWTSAVGGISPQDLQDRISAYTAEQALASVSVPYLSAAVGPGQSSVSA
+                     APVILDAFLSTLLRPLTTTRLPITAPYHAPHLFTAKDVQHVTDCLPPSEAWPTVRIPII
+                     SFSRDEAVSRGASFPAAMSEAVRDCLIRPIALDRMAVSITNHARDLGKDSVLPSPIALS
+                     FSDKLGPQVNSHLPGAKAPTPELTSKSIPSAIGAEQQPMAKSPIAILAASGRFPQSSSM
+                     DQFWDVLINGVDTHELVPPTRWNAATHVSEDPKAKNVSGTGFGCWLHEAGEFDAAYFNM
+                     SPREAPQVDPAQRLALLTATEALEQAGVVPNRTSSTQKNRVGVWYGATSNDWMETNSAQ
+                     NVDTYFIPGGNRAFIPGRVNYFHKFSGPSYTIDTACSSSLAALHMACNALWRGEVDTAI
+                     VGGTNVLTNPDMTAGLDAGHFLSRSGNCKTFDDEADGYCRGEAVVTLILKRLPDAQADK
+                     DPIQASILGIATNHSAEAASITRPHAGAQQDLFQQVLTETGLTANDISVCEMHGTGTQA
+                     GDSGETTSVVETLAPLNRSGSAVRTTPLYIGAVKSNVGHAESAAGVSSLAKILLMLKHS
+                     KIPPHVGIKTKLNHRLPDLAARNTHIARSEVPWPRPKNGKRRVLLNNFSAAGGNTCLVL
+                     EDAPEPEDSQEVDPREHHIVALSAKTPDSMVNNLTNMITWIDKHSGDSLATLPQLSYTT
+                     TARRVHHRHRAVATGTDLLQIRSSLQEQLDRRVSGERSIPHPPNGPSFVLAFTGQGSAF
+                     AGMGVDLYKRFASFRSDIARYDQICEGMSLPSIKAMFEDEKVFSTASPTLQQLTHVCFQ
+                     MALYRLWKSLGVQAKAVVGHSLGEYAALYAAGVLSQSDTLYLVGRRAQLMEKHLSQGTH
+                     AMLAVRAKEEAIVAAIDGPPGEAYEFSCRNGEQRNVLGGTVAQIQAAKAALEAKKIRCQ
+                     YLDTPMAFHTGQVDPILPELLQVAAACSIQDPQIPVISPAYGKVIRSAKDFQPEYFTHH
+                     CRSSVNMVDALQSAVEEGLLDKNVIGLEIGPGPVVTQFVKEAVGTTMQTFASINKDKDT
+                     WQLMTQALAKFYLAGASVEWSRYHEDFPGAQKVLELPAYGWALKNYWLQYVNDWSLRKG
+                     DPAVVVAASNLELSSSIHKVITNTITANSDGELVVDADLSREDLHPMVQGHQVYGVPLC
+                     TPSVYADIALTLGEYIRQVIKPGEVAQTSVEVAEMNIQSALVANNTGRVQLLRTCAKFD
+                     PKAQVASCTFSSIVEQHANCKIRFGSLEKEKTALKSAALAAQASMAALKTQVGQDDNTY
+                     RFSKGMIYKMIGQLADFDEKYRGLCAITLDNDAMEASGKVSFKGIPNEGKFHSSPAYLD
+                     ALSQLGGFVMNANEGVDLEKEVFVNHGWGSMRFFAALDPAMTYYTHVKMTQGKDKLWTG
+                     DVLIFDDKQALIGIVGGVALQGVPKRLMHYIVTAANKKASGPPTEKKTSSPPVEKKASA
+                     PVAPTRPAIQRKNASIPPPATQVTPQNKTIKTPSVSALIAPALEIVSEEIRMPIDELKD
+                     DIDFTDAGLDSLLSLVISSRMRDQLGIEFESAQFMEIGSIGGLKEFLTRLSPPVAVAVA
+                     TAVEIVKEEALTSLEELTDPSPNEIGTVWRDALKILSEESGLTDEELTDDTSFADVGVD
+                     SLMSLVITSRLRDELDIDFPDRALFEECQTIFDLRKRFSGSTESFDSTTTKPSAGDATP
+                     PLTDSSASSPPSSEFDGETPMTDLDEVFDSPPAQKRIPSPPKGRIPPAWSMYLQGSQKR
+                     SKEILFLFPDGAGAATSYLSLPRLGEDIGVVAFNSPFMKTPHKFADHTLPDVIASYVEG
+                     IRGRQAQGPYHLGGWSAGGILAYAVAQELIAAGEEVSTLLLIDSPSPTKGLDRLPTRFF
+                     DHCTNVGLFGTELSRGSGGPNKTPEWLMPHFRASIELLHGYHAPPMKLGNKTKVMVIWA
+                     GECAFDGVRYAHIPPSAGDTDEDTEGMKFLTEKRKDFGATEWASLFPGTDVDARVVESE
+                     HHFSMMRDSGAQMLVEHMRDGLGIVSS"
+                     /protein_id="AAT69682.1"
+     cluster         1..6591
+                     /note="Cluster number: 1"
+                     /note="Detection rule(s) for this cluster type: t1pks:
+                     ((PKS_KS & PKS_AT) or (ene_KS & PKS_AT) or (mod_KS &
+                     PKS_AT) or (hyb_KS & PKS_AT) or (itr_KS & PKS_AT) or
+                     (tra_KS & PKS_AT));"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="t1pks"
+     CDS_motif       1630..1677
+                     /note="NRPS/PKS Motif: PKSI-KS_m3 (e-value: 1.2e-06,
+                     bit-score: 20.4);"
+     CDS_motif       1819..1857
+                     /note="NRPS/PKS Motif: PKSI-KS_m4 (e-value: 0.00038,
+                     bit-score: 13.5);"
+     CDS_motif       2173..2217
+                     /note="NRPS/PKS Motif: PKSI-KS_m6 (e-value: 0.0049,
+                     bit-score: 9.8);"
+     CDS_motif       2767..2814
+                     /note="NRPS/PKS Motif: PKSI-AT-M_m1 (e-value: 0.00057,
+                     bit-score: 12.8);"
+     CDS_motif       2998..3120
+                     /note="NRPS/PKS Motif: PKSI-AT-M_m3 (e-value: 1.5e-15,
+                     bit-score: 49.3);"
+     CDS_motif       5989..6063
+                     /note="NRPS/PKS Motif: NRPS-te1 (e-value: 5.2e-13,
+                     bit-score: 41.2);"
+ORIGIN
+        1 atggaagatg gagcgcagat gcgagtggtg gcattcgggg atcagacata tgactgcagt
+       61 gaggcagtct cacagctctt gagggtccgc gacgatgcca tagtcgtcga cttcctcgaa
+      121 cgggcaccag ccgttttgaa ggcagagttg gccaggctaa gcagcgagca acaagaagag
+      181 acgccacgat tcgccacgct cgctgaactt gtgccacgct accgagctgg caccttaaat
+      241 ccagcagtgt cgcaagcatt gacatgcatc gcccagctgg ggcttttcat ccgacaacac
+      301 agcagcggac aggaagccta ccccacagcc cacgatagtt gcattactgg cgtctgcacc
+      361 ggagcgctga ccgcggtcgc tgtcggctct gcttcgagtg tgaccgcttt ggtgccgctc
+      421 gcattgcaca ctgttgccgt cgccgtgcga ttgggtgctc gagcctggga gattggcagc
+      481 tgccttgccg atgccaggag aggtgcgaat ggccggtatg cttcttggac atcggcggtg
+      541 ggcggtatca gtccccaaga ccttcaggat cgaatttcag catacacggc cgagcaggct
+      601 cttgcatccg tgtccgttcc atatctctcg gcagcggtcg gcccgggcca atcaagtgtg
+      661 tcggctgctc ccgtcatcct cgacgcgttc ctcagcacac ttctccgacc gctgacaaca
+      721 acgcgacttc ccattaccgc tccgtatcac gcacctcacc tcttcactgc gaaagatgtg
+      781 cagcatgtca cggactgtct gcctcccagc gaggcatggc cgacagtgcg aattcccatc
+      841 atcagcttct cccgcgatga ggcagtgtcg cgtggtgcaa gcttcccggc cgccatgagt
+      901 gaggccgtgc gagactgctt gatccgcccc attgccctcg accgcatggc agtgagcatt
+      961 accaatcatg ctcgagatct tggcaaagac tcggtgcttc cgtcacccat cgctctgtca
+     1021 ttcagcgaca agctgggccc acaagtaaac agccacttgc caggcgcgaa ggcacccacg
+     1081 cctgagctga catcaaaatc tatcccgtct gctataggag cggaacagca gccgatggca
+     1141 aaatccccca ttgctatcct tgctgcctct ggtcgtttcc cacaatcttc atccatggac
+     1201 cagttctggg atgtacttat taacggcgtc gatacgcacg aacttgtacc tccaacccgt
+     1261 tggaatgcag ctactcatgt ctccgaagat cctaaagcaa agaatgtgtc tggcacaggt
+     1321 ttcggttgct ggcttcacga agccggtgaa tttgatgccg cttacttcaa catgagtcca
+     1381 cgtgaagcgc cgcaggttga tccagcacag cgtctcgcgc tcttgactgc caccgaagcc
+     1441 ctcgagcagg ccggcgttgt cccgaaccga acgtcgtcaa ctcagaaaaa ccgagttggt
+     1501 gtatggtacg gcgcaaccag caatgattgg atggagacaa acagcgctca aaacgttgat
+     1561 acatacttca ttcccggtgg caatcgcgca ttcatcccag gaagagtgaa ctacttccac
+     1621 aagtttagtg gcccatctta cacgatcgat acagcctgca gctccagttt ggcagcattg
+     1681 cacatggcgt gcaacgcact ttggcgaggc gaagtcgata cagccatcgt aggtgggacc
+     1741 aacgtcctca cgaatccaga catgacggcg ggactcgacg cgggtcactt cttgtcaagg
+     1801 tctggaaatt gtaagacgtt cgacgacgaa gccgatggct attgcagagg tgaggcagtg
+     1861 gtgaccctca ttctcaaacg gctgccagac gcgcaagcgg acaaagatcc aatccaggct
+     1921 tcaattctgg gaattgccac taatcactca gccgaggccg cctctatcac taggcctcat
+     1981 gccggagcgc agcaagactt gttccaacaa gttctcacgg agacaggtct taccgcgaac
+     2041 gacattagtg tgtgcgagat gcatggtact ggcacccagg ctggagacag tggtgaaaca
+     2101 acgtccgtcg tggagaccct agcgcctttg aaccgatccg gctctgccgt gcgaacaaca
+     2161 cctctctaca ttggcgcagt taagtccaat gtgggtcatg ctgagtccgc agctggggtc
+     2221 agcagtctgg ccaagatctt gcttatgctc aagcattcca agatccctcc tcatgtgggc
+     2281 atcaaaacga agctgaatca ccggctacca gacctagctg cacgaaatac acacatagcg
+     2341 cggtctgagg taccttggcc tcggccaaag aatggcaagc gtcgtgttct gctcaataac
+     2401 ttctcggccg ctggaggtaa cacgtgcctt gtgcttgagg atgcgcccga gcccgaggac
+     2461 tctcaagaag tcgaccctag agaacatcac attgttgcac tctctgctaa aacacctgat
+     2521 tcaatggtga acaacctcac gaacatgata acctggatcg acaagcactc tggagacagc
+     2581 ctcgccacct tgcctcaact gtcttacacg acaactgcac gaagagtgca ccatagacac
+     2641 agagccgtag ctaccggcac cgatctgctg caaatccgtt cgtcgcttca agaacagctt
+     2701 gaccgccggg tgtccggcga gagaagtatc cctcacccgc ccaatggacc tagctttgtc
+     2761 cttgctttca ctggccaagg ctcggcgttc gcaggtatgg gtgtagatct ctacaaacgt
+     2821 ttcgcctcat ttcggtcaga cattgcccgc tatgatcaga tctgcgaggg tatgagcctg
+     2881 ccctcgatca aagctatgtt cgaggacgag aaagtgttct ccacagcttc accaactttg
+     2941 cagcagctca cgcatgtctg ttttcagatg gccctgtaca gattatggaa gtccctcggt
+     3001 gtacaggcga aggcggtagt tggccacagt ttgggcgagt atgctgcact ctacgccgct
+     3061 ggagtgctat cgcaatccga tacgctctac ctggtggggc ggcgtgcaca gctgatggag
+     3121 aaacatcttt cgcaaggcac acatgcaatg ctggccgtcc gtgcgaaaga agaagccatt
+     3181 gtcgcagcga ttgacgggcc tccaggagag gcatacgagt tctcttgccg caatggcgaa
+     3241 cagcgaaacg ttctcggagg caccgttgct caaatccagg cggcgaaagc cgcgcttgag
+     3301 gctaagaaga ttcgatgcca gtacttggac accccgatgg cattccacac tggccaagtc
+     3361 gatccgattc tgcccgagct cttgcaggtc gctgcggcat gctccatcca ggatccccaa
+     3421 attcctgtca tctccccagc atatggcaaa gtgatcaggt ctgccaagga cttccaacca
+     3481 gagtacttca cccatcactg ccgcagttct gtcaacatgg tcgatgctct ccaaagtgca
+     3541 gtcgaagaag gcttacttga caagaacgtt attggcctcg agattggccc tggcccggtc
+     3601 gtcacgcagt tcgtcaagga agctgtgggc acaaccatgc agacctttgc gtccatcaat
+     3661 aaagacaaag acacatggca gctcatgacg caagcgctag ctaagttcta tcttgcaggt
+     3721 gccagtgtcg agtggtcgcg ctatcacgaa gacttccctg gagctcagaa agtccttgag
+     3781 ctcccggctt atggctgggc cttgaaaaac tactggctgc aatatgtcaa cgactggtct
+     3841 ctgaggaagg gcgatccagc cgtggttgtt gccgcgtcaa atttggaact ctcttcgtcg
+     3901 atacacaagg tcataacaaa cacaatcacc gccaacagcg acggcgagct tgtcgtggac
+     3961 gcagacctca gtcgagagga cctgcatccc atggtccagg ggcatcaggt ctacggggtt
+     4021 ccactgtgca caccttccgt gtacgcggac atcgctctga cactcggcga gtatattcga
+     4081 caggtcatca agccaggcga ggttgcacag acatccgttg aagtagcaga gatgaacatt
+     4141 caaagcgcac tggtggctaa caacacgggc agagtgcaac tccttcgcac gtgtgccaag
+     4201 tttgacccca aggcccaggt agcgtcatgc acgttctcta gtatcgtcga gcagcatgct
+     4261 aattgcaaga tccggttcgg cagtctcgag aaggagaaga ccgcgctcaa gagtgctgca
+     4321 ctagctgccc aagccagcat ggccgctctg aaaacacaag ttggccagga tgacaacaca
+     4381 taccgcttca gcaaaggcat gatttacaag atgatcggcc aattagctga cttcgatgag
+     4441 aagtaccgcg ggctctgcgc gatcacactc gacaacgacg ccatggaagc ctcgggcaaa
+     4501 gtatcattca agggcattcc aaacgagggc aaattccact ctagcccggc ttatctcgac
+     4561 gcgctgtcgc aacttggcgg attcgtcatg aacgcgaacg agggtgtgga tcttgagaaa
+     4621 gaagtctttg tcaatcacgg ctggggttcc atgcgtttct tcgccgctct ggatccagca
+     4681 atgacttact acactcatgt gaagatgacc caaggcaaag acaaattgtg gactggcgat
+     4741 gtcttgatct tcgacgacaa gcaagcattg atcggcattg ttgggggagt ggcgttgcag
+     4801 ggcgtgccca agcgacttat gcattacatt gttacagctg ccaacaagaa agcttccggc
+     4861 ccgccgacag agaagaagac ctctagcccg ccagtcgaaa agaaagccag cgcgccagtc
+     4921 gcgcccacga ggccagcgat ccagcgtaag aatgcttcga ttcctccacc tgcaacccaa
+     4981 gtgactccgc aaaacaagac catcaagacg ccaagtgtgt cggcactgat agccccggcc
+     5041 ctcgagattg ttagcgagga gatccggatg ccaatcgacg agctcaagga tgatatcgac
+     5101 ttcaccgatg ctggtcttga cagtctgctt tccttggtaa ttagcagtcg catgcgggac
+     5161 cagctgggca tcgaattcga atccgcgcag ttcatggaga ttggatctat cggtggactc
+     5221 aaggagttct tgaccaggct cagtccccca gtagcagtcg ccgttgccac tgccgtggaa
+     5281 attgtcaagg aggaagcgct cacctcattg gaagagctta ctgatccatc ccctaacgag
+     5341 atcggcactg tctggcgcga tgccctcaag atcctgtctg aagagagtgg cctcactgat
+     5401 gaggagttga ctgatgacac aagtttcgcc gacgtgggcg ttgatagcct catgagtctt
+     5461 gtgatcacca gtcgcctacg ggatgaattg gacatcgact tcccggaccg agcattattc
+     5521 gaagaatgcc agactatatt tgaccttcgc aagaggttct ctgggtcaac ggaaagcttc
+     5581 gactcgacga cgaccaagcc cagcgctggt gatgcgacgc cacctctgac cgattccagc
+     5641 gcgtcatctc cgccctcctc cgagttcgat ggcgagacgc cgatgactga tctggacgag
+     5701 gtgttcgatt ctcccccagc gcagaagagg ataccatccc cgcccaaagg acgaatcccg
+     5761 cctgcatggt cgatgtattt gcaaggctca cagaagcggt cgaaggagat tcttttcttg
+     5821 tttccagacg gcgctggcgc cgcaacttct tacttgtctt tacctcgttt gggtgaagac
+     5881 attggcgtag tcgccttcaa ttcgcctttc atgaagacac cgcacaagtt tgctgatcat
+     5941 accttaccgg acgtcatcgc gtcctatgta gaaggcattc gaggccgtca agcgcaaggc
+     6001 ccgtatcatc tgggcggctg gtctgctggt ggtattctgg cctatgccgt agcccaagaa
+     6061 ctcatcgcag ctggcgagga ggtttcgaca ctcctcctca tcgactcgcc ttcgccaacc
+     6121 aaaggcctag atcgccttcc aacacgattc ttcgatcact gcacgaacgt cggactcttt
+     6181 ggaacggagc tctccagagg cagtggaggt cccaacaaga cacccgaatg gctgatgcct
+     6241 catttcagag ctagtattga actgctacac ggctaccacg ctcctcctat gaagcttggc
+     6301 aacaagacga aagtcatggt catctgggcc ggcgaatgtg catttgatgg cgttcgctat
+     6361 gctcacatac cgccatctgc aggcgatacc gacgaagata ctgagggtat gaagtttctg
+     6421 acggagaaga ggaaagattt tggggccaca gaatgggcaa gtctgttccc tggcactgac
+     6481 gttgacgcga gagttgtgga gagcgagcat cacttcagca tgatgcgtga ttctggtgca
+     6541 cagatgcttg ttgagcacat gcgagatggt ttggggattg tttcatcatg a
+//
+LOCUS       BGC0001247.2            2616 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.2
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ355149.2.
+FEATURES             Location/Qualifiers
+     source          1..2616
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     gene            <1..>2616
+                     /gene="CTB3"
+     mRNA            <1..>2616
+                     /product="cercosporin toxin biosynthesis protein"
+                     /gene="CTB3"
+     CDS             1..2616
+                     /product="cercosporin toxin biosynthesis protein"
+                     /codon_start=1
+                     /note="O-methyltransferase/FAD-dependent monooxygenase"
+                     /note="smCOG: SMCOG1042:O-methyltransferase (Score: 264.4;
+                     E-value: 2.6e-80);"
+                     /db_xref="GI:90656022"
+                     /translation="MMQFQRDLEASLEAVSANAQELLKSLKSRKDVQDLNASLPKDPLD
+                     NCDAQTQAARAQLAEAATRILQLSIRPQEYLEHLQNGYQHLTCFRWLVELNILDHLPHS
+                     GTISYTDLARKASVPPMQLRSICRMAICNGFLEEPEANQVRHSRISALFARDESYLGWA
+                     RWMVNYSVPAAYKLSDATRSWGETVAKDQTAFNLGMDVKVPFFDHLRQTPAMKDAFAAY
+                     MRNVTSNATWGLQHAVTGFDWASLPRGAKVVDVGGSLGHGSIAIAKEHTHLTFVIQDLP
+                     ETVAGARKEMAQNDKIEASVKSRITFQEHDFFGPQTVKDADVYFLRMICHDWPDNEAKV
+                     ILSQIRAALKPGAQIVIMDTILPQPGTISVLQEQQLRIRDLTMMEVFNAKERELEDWSS
+                     LMQSAGLEISRVNQPLNSVMGLLTVRSAGQTALSGTNTLTPELVAAVSASTGSADSRPV
+                     LIAGAGIAGLCLAQALKKAGIDFRVFERDSHIDARPQGYRLKFEADAAQSLKNILPDDV
+                     YEAFELSNAVTAVGETDFNPFNGNIIHSRTGGGLSGKKGLYATFTVDRKAFRTQLMTGI
+                     EDKISFGKEIAYYKTDDATSTVNAEFKDGTHVTGSFLAGTDGLHSVVRKTCVPNHRIVD
+                     TGAACIYGKTVMTPEFLARFPEKGLRFMTVVSDIAPMLQSCLIGDSPVTLLLEPIRFSE
+                     ASRARYPELPPDYVYWALIGPKERFGSQEVTSMKNFVSLDQAAEQAAKLSLAVTEEWHP
+                     SLRALFELQDTKQASLIRVASTIPDIPSWESHSNVTVLGGSIHPMSPCGGVGANTAIVD
+                     ADALAKVLVEHGTKPPVNAIAEFGAAMRTRAKRNIWRSEVGSKRMFGQKNLVDCSEFVF
+                     "
+                     /gene="CTB3"
+                     /protein_id="ABC79591.2"
+     cluster         1..2616
+                     /note="Cluster number: 2"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+ORIGIN
+        1 atgatgcagt tccaacgcga tcttgaggcg tccttggagg ccgtatcggc caacgcccag
+       61 gagctgctca aatctctcaa gagtcgcaag gatgttcaag acctcaacgc gtcgttgcca
+      121 aaggatcctt tagacaactg cgatgctcaa actcaagccg ctcgtgcgca gctggcagag
+      181 gcagcgacaa gaatcttgca gttgtcgatc cgacctcaag agtatctgga gcatctacaa
+      241 aacggctatc aacatttaac ctgttttcgc tggctggtgg aactcaacat attggaccac
+      301 cttccacata gcggaacgat cagctacaca gatcttgcga gaaaagccag cgtgccgcct
+      361 atgcaattga gaagcatctg tcgcatggcc atatgcaatg gattcctgga agagcccgag
+      421 gccaaccaag tccgccacag tcgcatttcc gccttgttcg ctcgcgatga aagctattta
+      481 ggttgggcta gatggatggt caactactct gtgccagctg catacaagct tagcgacgcc
+      541 acgcgatcgt ggggcgagac tgtcgccaaa gatcagaccg cgttcaatct gggaatggat
+      601 gtgaaagtcc cattctttga ccatctccgc cagacgcccg caatgaagga cgcctttgca
+      661 gcttatatgc gtaatgtgac ttcgaacgca acttggggcc tccagcacgc agtcaccggc
+      721 ttcgactggg cttcccttcc gcggggcgca aaagtcgtgg atgtcggtgg ctctcttggg
+      781 catggtagca ttgccattgc caaggagcac actcacctta ccttcgtcat tcaagatctg
+      841 ccagagacgg tcgctggtgc caggaaagaa atggcccaaa atgacaagat tgaagcttct
+      901 gttaaatctc gcatcacctt tcaggaacat gacttctttg gtcctcaaac agtgaaggat
+      961 gccgatgttt actttcttcg catgatctgt cacgactggc ccgacaacga agccaaggtc
+     1021 atcctctctc agattcgcgc tgcactgaaa cctggggcgc aaatagtcat catggacacc
+     1081 attcttcccc agcccggcac aattagcgtt ttgcaagagc aacaactacg cattcgggat
+     1141 ctaacaatga tggaagtctt caatgccaag gagcgtgaat tggaggactg gagctcattg
+     1201 atgcaatctg ccggtctcga gatttctcgc gtgaaccagc cgctcaacag tgtgatgggt
+     1261 ctgctcacag tccgctcagc cggccaaact gccctctccg gaacgaatac actgacgcca
+     1321 gagttggtgg cggcagtctc cgcaagcact ggctctgctg attcgaggcc agtcctcatc
+     1381 gcaggcgcgg gtattgctgg gctctgcctt gcacaggctt tgaagaaggc cggcattgac
+     1441 tttcgcgtct tcgaaaggga ctcccatatc gatgctcggc cacaaggata ccgactcaaa
+     1501 ttcgaagcag acgccgcaca gtctctcaag aacatcctgc ctgacgatgt ttatgaggct
+     1561 ttcgaactgt caaatgccgt caccgccgta ggcgagacgg acttcaatcc cttcaatggt
+     1621 aacataatcc acagccgcac tggtggcggc ctgtctggca agaagggact gtatgcgaca
+     1681 ttcactgttg accgcaaagc attcagaact cagctcatga ctggcattga ggacaagatt
+     1741 tcgttcggga aggaaatcgc gtactacaag accgatgacg ctacatctac ggtcaacgca
+     1801 gaattcaagg acggcactca cgtcaccgga agtttcctgg ccggcactga tggcttacac
+     1861 tctgtcgttc gcaagacatg tgtaccaaac catcgtatcg tggatactgg tgctgcctgc
+     1921 atctacggca agactgtaat gacaccggaa ttcctcgcgc gattccccga gaaaggcttg
+     1981 agattcatga cagtggtcag cgacatcgca cctatgctac agtcttgtct catcggcgac
+     2041 agcccagtca ccttactact ggagcctatc cgattcagcg aagcctcgcg tgcccgctat
+     2101 ccagaactgc ctccagacta cgtctactgg gccctcatcg gacccaagga acgtttcgga
+     2161 tcgcaagagg tgacttccat gaagaacttc gtctcactgg accaagcggc agaacaggct
+     2221 gccaagctca gtctcgcagt caccgaggaa tggcatccga gccttcgcgc gctgtttgag
+     2281 cttcaagaca cgaagcaagc atcgctcatt cgcgttgcat ccacaattcc cgatatccca
+     2341 tcttgggagt cccactccaa tgttaccgtt cttggcggta gcattcatcc gatgagccct
+     2401 tgtggtggag tcggagcgaa caccgcaata gtcgatgccg acgccttggc taaagtgctc
+     2461 gttgagcatg gtacgaagcc accggtgaac gcaatcgccg agttcggggc cgcgatgaga
+     2521 acgagagcga agaggaacat ttggaggagt gaggttggca gcaagaggat gtttggacag
+     2581 aagaatctgg tggattgttc agagtttgtg ttttga
+//
+LOCUS       BGC0001247.3            2397 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.3
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ991505.1.
+FEATURES             Location/Qualifiers
+     source          1..2397
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..2397
+                     /note="Cluster number: 3"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     gene            <545..>1983
+                     /gene="CTB2"
+     mRNA            join(<545..823,877..>1983)
+                     /product="O-methyltransferase"
+                     /gene="CTB2"
+     CDS             join(545..823,877..1983)
+                     /function="cercosporin toxin biosynthesis"
+                     /product="O-methyltransferase"
+                     /codon_start=1
+                     /note="smCOG: SMCOG1042:O-methyltransferase (Score: 171.8;
+                     E-value: 3.7e-52);"
+                     /db_xref="GI:118162010"
+                     /translation="MVKRIEADNLFELTAELVSASSKLHKFLDQKNLPQPSFDAPAPSV
+                     ALNSANKPYYDARSAIVEAAEQLIRLVRGPRDTLLALSFEHCATASMQVVFKYKFANHI
+                     PLHGSTTYSKIAEAVGDGVTTALVERTIQHCASFGLFETIPGAMLLQCYLVLLVTDPDL
+                     EAWMYLSAVIAYPAGAAIPKAVEQYGVSHEADESGYGASIGRKIAQFQRFREPDGKKDH
+                     EMFARAMRGIAAGGAYDFRHAVDGGYPWHLLAEGAGHLVVDVGGGPGHVAMALAEKYPS
+                     LRFQVQDLPETVQVGAKNCPEHLKSRVSFQSHDFFTSQPAHEVQDGEGIVYFARFILHD
+                     WSDKYATKIVQQLATGLRPQDRIILNEVVVPEAGQVGRETERRMHDRDLLMLMNLNGRE
+                     RTQSAFEAIFASVTPKLRLQRVIHPEQGELSLIEVTLDGVELPAQANGVNGHANGTNGV
+                     NGH"
+                     /gene="CTB2"
+                     /protein_id="ABK64180.1"
+ORIGIN
+        1 agcgctagat ttaggtgttg gagttcgact gtaatgaaat tttgaatgtt cttataaatg
+       61 taactcagtc ttcagtcgct gccacatgtg gacttgacgt gcagcctcag gcactagctt
+      121 ggcattcaca tgtgatttct cgaacctcct ttgcgtattc tcctcgccaa cacacgcttg
+      181 atcccaacag cttatggagt tcccagccat tccttccaaa caccatgcat gtcttgcatg
+      241 atggcgttct ccagaagcat tggcgatggt cggtctcggc aacagcgttc accgagctgg
+      301 gatcggtgaa cgtcgcgctt acacctcgtg tcctcccttt gccgcatcca cgaaactgca
+      361 cctcttaccc ggtgattatc tcgcggtgtg cgacgaagca ccgtgagcgg gcacaatggc
+      421 cgactcggta tcatgactag cgctcgcatt cgcagcactg acttgcgaag ccatatcata
+      481 cccagcccgt agcatcactg ttcgacttca caattgcaat ttacaagttt aacatcaatc
+      541 aaaaatggtt aaacgaatcg aagcggacaa tctctttgag ctcacggcag agctggtctc
+      601 agcctcctca aagcttcaca aatttctaga ccagaagaac cttccgcagc catcgtttga
+      661 tgctccagct ccatcggttg ctctcaactc agccaacaag ccgtactatg atgcgagaag
+      721 cgcgattgta gaggctgctg agcaactcat tcgcctggtc cgtggacctc gcgacacact
+      781 cctcgctctg tctttcgagc actgcgctac ggcgtcgatg caggtcagtc gggccaaaga
+      841 atgtcctgct gtatcctcat taacgcatct tcacaggtcg tcttcaaata caagtttgcg
+      901 aatcacatcc cgctacatgg ctcgacaact tatagcaaga ttgccgaagc agtcggagat
+      961 ggtgtgacaa cagctctcgt tgagcgcacg atacaacatt gcgcttcctt tggcctattc
+     1021 gagacgatcc ctggcgctat gttactccaa tgctacctcg tcctactggt caccgatcca
+     1081 gatctcgaag cctggatgta tctctcggcg gtgatagcct acccagctgg cgcagctatc
+     1141 cctaaggctg tagagcagta tggcgtttcc catgaagctg acgaatcagg gtacggtgcc
+     1201 agcataggaa gaaagattgc gcaattccag cgattccgtg agcccgatgg gaagaaggac
+     1261 cacgagatgt tcgcacgagc catgcgtggt atcgcggctg gtggtgcgta tgacttccgc
+     1321 catgcagtcg atggcggata cccttggcac ctcctcgcag agggcgcagg tcacctggtc
+     1381 gtggatgttg gtggaggtcc cggccacgtc gccatggcac tcgcggaaaa gtacccaagc
+     1441 ttgcgtttcc aagtccaaga tctgcccgag accgtccaag tgggagcgaa gaattgccct
+     1501 gagcacttga agtcccgcgt gtcattccag agccacgatt tcttcacctc gcaacctgct
+     1561 catgaagtgc aagacggcga aggaatcgtc tactttgctc gattcatctt gcacgactgg
+     1621 agtgacaagt atgccaccaa gatcgtgcag caacttgcaa ctggcttgag gccacaagat
+     1681 cgcatcattt tgaacgaagt ggtcgttccc gaagccggac aagttggcag agagaccgaa
+     1741 cgaagaatgc acgatcgtga tctgctgatg ttgatgaacc tcaacggccg tgagcggaca
+     1801 cagagtgcat tcgaggcgat cttcgcttca gtgactccca agctgcggct gcagagggtc
+     1861 attcacccag agcaaggcga attgtcgctt atcgaggtga ctcttgatgg cgttgagctt
+     1921 cctgcccagg ctaatggtgt caacggccat gcgaatggca ccaatggtgt caatggtcat
+     1981 taagatgttg ttcagataat tagcgtttgt gtagccattc aacgtgtttt ctccaagtca
+     2041 tcagaaattt ctcgtttctc gtttggtgtt ccaaggctac ctgtggtcac cgccagattg
+     2101 tgggaaccac atcaagaact cggaaacatg cacacttgtg gtcatctctc gtcaacatct
+     2161 tgatacttcg cctgcctcgc ttcttgagac agagagccct agctacgcta cacgaagcgg
+     2221 agatacgagg gacgaaagag cacgttgatg ccccgtacag aagagcactc aatattggga
+     2281 ctggctttca tgttgccctt cctgcggtag gtctggtaag tcaaggccaa caattaacaa
+     2341 gatgaccgta aattatctcc atcgttctat cagttatatc taacacgtag cgactat
+//
+LOCUS       BGC0001247.4            2280 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.4
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ991506.1.
+FEATURES             Location/Qualifiers
+     source          1..2280
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..2280
+                     /note="Cluster number: 4"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     gene            complement(<85..>1780)
+                     /gene="CTB4"
+     mRNA            complement(join(<85..229,282..720,778..1343,1392..>1780))
+                     /product="MFS transporter"
+                     /gene="CTB4"
+     CDS             complement(join(85..229,282..720,778..1343,1392..1780))
+                     /function="cercosporin toxin biosynthesis"
+                     /product="MFS transporter"
+                     /codon_start=1
+                     /note="major facilitator transporter"
+                     /note="smCOG: SMCOG1106:major_facilitator_transporter
+                     (Score: 86.1; E-value: 3.1e-26);"
+                     /db_xref="GI:118162012"
+                     /translation="MAPPITDDDLDGLKQPYVTFSSGSASPPRSTAEAMDFEEQILEAI
+                     KSDAFLVDWIGEDDKGNPQNLPYWRKWVITMSLALYALSTTFSSSVFGAATHVLAEEFA
+                     LPAETVVLGCTSLFMVGFATGPIFWGPFSEAFGRTRPLLAGYLGFAVLQLPIADARSLT
+                     SICILRFLGGFFGAAPSSILSGILADIWSPRERGFAMPTVGAFLTIGPILGPLIGSVLV
+                     QSVLGWRWIANVVAIASFLIALSTFPFLPETYTPLLLARRAERMRHMTRNWAYRSKSEE
+                     AQSSIGDFAERYLLRPARMLALEPILLMMTLYVSVSFGLLYNFFLAYPTSFIQERGWDQ
+                     TTASLPLISILVGAIIAGALLSFSTNSRWAPNAKEGRPQETRLLLMMVGAVSLPAGMFL
+                     FAWTSSATMNPWPQILSGIPTGFGIHLINMQGMNYIIDSYKIYANSAIAANTFLRSLFA
+                     AGFPILATSMYAAIGVKWGTTILALLAVAMIPIPILFYYFGAKIRAKSKWQPPL"
+                     /gene="CTB4"
+                     /protein_id="ABK64181.1"
+ORIGIN
+        1 agacttgcga tagatttaca tcatgtacag caggcgaagg cccatgcaag cgagtcaaag
+       61 ctcgtgactg cttgactgga gtatttacaa aggtggctgc cacttgctct tcgctctgat
+      121 tttggcaccg aagtagtaga acagtatcgg aatcgggatc atggcaactg cgagcaatgc
+      181 aagaatggtc gttccccatt ttactccgat tgcagcatac atcgaagtcc taaagaacag
+      241 tcagtacact gttgtggcaa tacgattaat gctatactta cgccaagatc gggaatccag
+      301 cagcgaacag ggatctcaag aaggtgttag cggctatggc cgaattcgca tagatcttgt
+      361 aagagtcgat gatatagttc atgccttgca tgttgatcag atgaatacca aagccagtgg
+      421 gaatacccga caaaatttgt ggccaagggt tcatggtagc agagcttgtc caagcgaaga
+      481 ggaacattcc agccggtaac gagactgcgc caaccatcat gagcaagagt cttgtctcct
+      541 ggggtcgtcc ctctttggcg ttcggtgccc atctggaatt ggtactaaaa gaaagtagtg
+      601 cccctgcgat aatggcgccc acgaggatgg agatgagcgg aagactggca gtcgtctggt
+      661 cccagccgcg ctcctgaatg aacgatgttg gatatgccag aaagaagttg tacaacaagc
+      721 ctgcaaaacg tcaatcattt tctctccatg gctcggctca agttatgtca aacttaccaa
+      781 aagacacact gacatagagt gtcatcatca gcagaatggg ttcaagcgcc agcatacgag
+      841 caggtcgaag caagtaacgc tcggcgaaat cgccaatact gctttgcgct tcctcagatt
+      901 tggaacggta agcccagttg cgagtcatgt gtcgcatgcg ttcagcacga cgcgccaaaa
+      961 gcaacggcgt gtacgtttcg gggaggaatg ggaaggtaga aagggcaatg aggaacgagg
+     1021 cgatcgcaac cacattcgcg atccatcgcc agccgagtac actttggacg aggactgatc
+     1081 caatcagcgg tcccagaatt ggtccgatag tcagaaatgc accaactgtg ggcatagcga
+     1141 aacctcgttc tctgggcgac cagatgtctg ccaagatgcc tgacaggatt gaggaaggcg
+     1201 ctgcgccgaa gaatcctccc agaaagcgca gaatacatat ggatgtcaga cttcttgcgt
+     1261 cggcgatggg cagttgcagg accgcaaagc ccaggtagcc tgccagaaga ggtcgagtcc
+     1321 ggccaaaagc ctcgctgaag ggtctagtgc ttgtcagtca tatgcctctc gagatagaat
+     1381 atcttactca cccccagaag atgggcccgg tagcgaatcc taccatgaag agggaagtgc
+     1441 aacccagcac gaccgtctct gctggcaggg caaactcttc tgcgagaacg tgcgtagcag
+     1501 ctccgaagac cgacgaagag aaagttgtgg agagagcata caatgccaga gacattgtga
+     1561 taacccactt ccgccagtac ggcaaattct gaggatttcc cttgtcatcc tcgccaatcc
+     1621 agtccacaag gaaggcatcg cttttgatcg cttccagtat ctgctcttcg aagtccatgg
+     1681 cctcagccgt cgatcgcggt ggtgatgctg agcccgatga aaaggtcacg taaggctgct
+     1741 tcagcccgtc gaggtcatcg tcagtgatag ggggagccat tgtgggtgta cagtcttcaa
+     1801 gaaacagaat gaagcaagac ttcgatggtc aaaagcaacc ctcggcctca gaaggtaagc
+     1861 ccggtgaggt ctaaacactt gccgtaaatg attgattcca tggccgcatg aaagccgcct
+     1921 catgtccgag cagtgcaatc gtcgaaccta caattactcc ggaggctcgg tgaacagtca
+     1981 ccgttcgccg tagcgttaat tcgcatactg ttgtcgaaga aatctcattg tcagtactgc
+     2041 ggaggtggaa ttatgtctgc attctggagg tggtgatgac ttgcatcgag ccactcttgc
+     2101 aaagccgaga tggttgtgat gaaggaagat tgaggttgaa ggggtaggag agcgtttgat
+     2161 ctgggcgacg agatggtctt ggcatcggcc cgaacggccc cgagcacatc ccgagattcg
+     2221 acttcagctt cgccagtgct gcttcttgca acgtgagcag gcgactgaag agatcggaag
+//
+LOCUS       BGC0001247.5            2400 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.5
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ991507.1.
+FEATURES             Location/Qualifiers
+     source          1..2400
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..2400
+                     /note="Cluster number: 5"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     gene            <685..>2064
+                     /gene="CTB5"
+     mRNA            <685..>2064
+                     /product="oxidoreductase"
+                     /gene="CTB5"
+     CDS             685..2064
+                     /function="cercosporin toxin biosynthesis"
+                     /product="oxidoreductase"
+                     /codon_start=1
+                     /note="oxygen, FAD/FMN-dependent oxidoreductase"
+                     /note="smCOG: SMCOG1138:FAD_linked_oxidase_domain_protein
+                     (Score: 155.0; E-value: 7.6e-47);"
+                     /db_xref="GI:118162014"
+                     /translation="MGSYFSLKNSDLHPSCIALPRSAEEVSKAVRTLSLGAHKWEGQCQ
+                     FGVRGGGHTPFKGAASTDNGIVLDLLHMPSAGISPDYETITVSPSTTWDLVYEVLDAHN
+                     RSTLGTKVAGIGVGGASTSCGVSYFSPRYGYICDMVENWEVVLATGDIVNANANENADL
+                     WKALRGGINNFGIVTAVTLKAFEQGPFWGGQTFHSIETRQEHFKNHAKLASAHPYDPYA
+                     HYINTLVLANGGHWFIGNSIQYTKSDPPVAEPEVFKPFLKTERTPIFPGLPEDTLRVDN
+                     VTSFSREYAANTLYPQRWQFACISFAPDADFMETFFQMANDAMQQYVKLPGFKLILNYQ
+                     PAPTVQLERNGAVDSLGPIQTEGNVVFVHWAVSYDESEAQFDDAITKSVQDLFHAANTK
+                     AKELGIYRHFIQPTYADSWQSPFDYRSKSTIEELVATSKKYDPLQVFQKQVPGGFKLPQ
+                     I"
+                     /gene="CTB5"
+                     /protein_id="ABK64182.1"
+ORIGIN
+        1 gctgcagaga tacatccgag agacagaagc gactgctttg cacgagagta agctctgggg
+       61 attgtctgct tctttctccg acaatgcaca caggtctctg ctacttagca tgatgaagag
+      121 atccgattgt gttgcaacag gtgtcgggga cacggaactc gtcctacagt acctggtgcc
+      181 gatgactttt ggagcaagct tcacaatcac cggtcacgtg ctcgcatcca ctcgcgcaga
+      241 cctcacgcgg tcggggatca gcacacgaca ccgagctcga ggtggccgag tgtggcaaca
+      301 atgctcgaag gcatggcggg cattgcgctg gctgatgtgc aaatacttgc aatgacatcc
+      361 attgtcttgc tttcccagcc cactcgttct ctgaatattt tcgtcacgaa ttgattcacc
+      421 atcatgttgg ggcttaattt acagcaggtc ctctccaatg ttcctacgat atccagcatc
+      481 gtcagtggtg taggctcata tcaacatggg tcagacagca gtgcatgggc ttcagtggcg
+      541 gcgtcaaaat cttgtgtcag tcctcattga tgttaattga tgcaaagatt agacactgac
+      601 gcaaagaaat agtgcgatgc cttgatcaaa agcctgggca agaactcagt ggtgttccca
+      661 tatgatgcgg cctactccca atccatgggc tcatacttca gcttgaagaa cagcgacctt
+      721 catcccagtt gtatagcact tccacgatca gcagaagagg tctcgaaagc agtgcgaacg
+      781 ctgtcccttg gcgctcacaa atgggaaggg caatgccaat tcggcgtacg aggtggtggt
+      841 catacaccct tcaaaggagc cgcaagcacc gacaacggga ttgtgctcga tctcctgcac
+      901 atgccgtccg cgggcatttc gcctgactac gagaccatca cagtgtcgcc cagtacgaca
+      961 tgggatttgg tatacgaagt tctcgatgct cacaaccgaa gcacacttgg aaccaaagtc
+     1021 gccggtattg gtgtcggagg agcatcgacg agctgcggag tctcatattt ctcccctcgc
+     1081 tatggataca tttgcgacat ggtagagaat tgggaagtcg ttctcgccac cggtgatatc
+     1141 gtcaatgcca acgcaaacga aaatgccgat ctctggaaag cgctgcgagg tggaatcaac
+     1201 aactttggca tcgtcaccgc tgttactttg aaggcgttcg aacaaggccc cttctggggc
+     1261 ggtcaaacat tccactctat cgagacccgc caagaacact tcaagaatca cgcaaaactt
+     1321 gcctcagcgc atccctacga tccatacgcc cactacatca atactctggt cttggcaaac
+     1381 ggaggtcatt ggttcatcgg caatagcatc cagtacacca agagcgaccc gccagtggca
+     1441 gagccagaag tattcaagcc gttcctcaag actgaacgaa ccccaatttt ccctggactg
+     1501 cctgaagaca ctcttcgagt ggacaacgtc acctcgttct ctcgcgagta cgcagcaaac
+     1561 actttatacc ctcaacggtg gcaattcgcc tgcatcagct tcgctcccga tgcagacttc
+     1621 atggagacat tcttccaaat ggccaacgac gccatgcaac aatacgtgaa actgccaggc
+     1681 ttcaagctca tcctcaacta ccaacccgca ccaaccgttc agctggaacg taatggagca
+     1741 gttgactctt tgggcccaat tcaaactgaa ggcaacgtcg tcttcgtaca ctgggctgtc
+     1801 agctacgatg agtccgaggc ccaattcgac gatgctatca ccaagagcgt ccaggacttg
+     1861 ttccatgctg ccaacactaa ggccaaagag ctgggtatct acaggcattt catccaacct
+     1921 acctatgcag acagctggca gagccccttt gattacagaa gcaagagcac gattgaggag
+     1981 ctggttgcta cgagcaagaa gtatgatccc ctacaggttt tccagaagca ggtgccgggt
+     2041 ggcttcaagt tgccgcagat ttgagatgga gcgtgagtgg tgtggaacag tccggggaaa
+     2101 tagtgatatt gacttacaac atattctaca gggagactgt gtgccagaat ttgtttctca
+     2161 ggttgtcatt atgaacgaaa tccatggttt gcgaaacatg tgttcgtctt gttacaacaa
+     2221 ttgatcccag aagcactcgc cgcctttctg ttcagtaatc aagaacgggc aggactccgt
+     2281 cgcactgtag ctctactgtt gtctcgctac ttacaagcgc gtctagggca agctgacatg
+     2341 ctatgccgaa cagggctgcg atccataaaa cccgagagct cgtttaccga tgataatacc
+//
+LOCUS       BGC0001247.6            1740 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.6
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ991508.1.
+FEATURES             Location/Qualifiers
+     source          1..1740
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..1740
+                     /note="Cluster number: 6"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     gene            complement(<169..>1242)
+                     /gene="CTB6"
+     mRNA            complement(<169..>1242)
+                     /product="reductase"
+                     /gene="CTB6"
+     CDS             complement(169..1242)
+                     /function="cercosporin toxin biosynthesis"
+                     /product="reductase"
+                     /codon_start=1
+                     /note="NADPH-dependent reductase"
+                     /note="smCOG: SMCOG1010:NAD-dependent_epimerase/dehydratase
+                     (Score: 90.2; E-value: 2.7e-27);"
+                     /db_xref="GI:118162016"
+                     /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+                     /sec_met="NRPS/PKS Domain: NAD_binding_4 (7-206). E-value:
+                     2e-11. Score: 34.7;"
+                     /translation="MADSLVLLTGATGFIGFRILVELLRQGYSVRAVIRSAAKGQWLES
+                     RLTAVMKGSDYKDRFQTTIVADFVTDGAFDQAAENTSYIIHVASPIVSSDNPDDWEHDF
+                     KRVAVKGSIGVLEAAKRSGTVRRVVITSSMVGLFSPKALFAEPSEVPLNAESRIPEMEP
+                     PYAHKMLAYQAGKIASINSAEAWIKHEKPAFDLIHMHPSFVTGRDDLATTREDLRKFSS
+                     NWHSMQIVLGHKNPIGKPILTCHNDDVARCHVSALDPKVAGNQSFLISCSPEDGSEWDN
+                     VKKIVQREFPEAVAQGVLPNDGHMPTVNKGVRFDVRKTEETFGFKHIPYEAQVLDVVKQ
+                     YLELPEKDEGVEISTTA"
+                     /gene="CTB6"
+                     /protein_id="ABK64183.1"
+ORIGIN
+        1 ctgggcgacg agatggtctt ggcatcggcc cgaacggccc cgagcacatc ccgagattcg
+       61 acttcagctt cgccagtgct gcttcttgca acgtgagcag gcgactgaag agatcggaag
+      121 caatatgaac aggaaatgtg agagtaaaat gggcatatat acttcttcct acgccgtcgt
+      181 cgagatctcc accccttcat ccttctccgg caactccaag tactgcttga ccacatcaag
+      241 gacttgtgcc tcgtagggaa tgtgcttgaa gccaaaggtc tcctcagttt tccggacgtc
+      301 aaatctgacg cctttattca ctgtcggcat gtgaccgtca ttgggcaaca cgccctgcgc
+      361 aaccgcttca ggaaactccc tctgcacgat cttcttcaca ttatcccatt cggatccatc
+      421 ctccggactg cacgaaatga ggaaactctg attgcctgcg accttgggat ccagcgccga
+      481 tacatgacag cgagcgacat catcgttgtg gcatgtcagg attggcttgc cgataggatt
+      541 cttgtggccg agtacaatct gcatcgaatg ccagtttgac gagaatttcc gcagatcctc
+      601 gcgagtcgtc gctaggtcat cccgaccagt cacgaaggac gggtgcatgt gaataagatc
+      661 gaacgccggt ttctcgtgct tgatccaagc ttccgcgctg ttgatgcttg cgatcttccc
+      721 agcttggtat gccagcattt tgtgcgcata aggaggctcc atttccggaa tgcgcgattc
+      781 tgcattcaga ggcacctcag atggctcagc aaaaagagct ttcggcgaga aaagtccaac
+      841 catgctagat gtgatgacga ctcgtcgcac agttccgctt cgtttggctg cctccaggac
+      901 cccaatactg cctttcacag caacacgttt gaagtcgtgt tcccagtcgt ctgggttgtc
+      961 cgagctgact atcgggctgg ccacgtggat aatgtaagac gtgttctcag ctgcttgatc
+     1021 gaaagctcca tctgtcacga aatccgccac aatggtagtt tggaacctgt ccttgtagtc
+     1081 cgagcctttc atcacggcag tcagccgtga ctcaagccat tgtcccttgg cagcactgcg
+     1141 gatcacagct cgcacgctgt atccttgacg gagcagctcg accaagatac gaaagccaat
+     1201 gaagccggta gcaccagtca atagaaccag agagtcggcc ataactgcgg caatttgtgc
+     1261 agagctgtgt tcagaagagt tgcaagagcg ggttgtcaaa tcgcgaacac ttcgtgaaag
+     1321 tgcacatagt cggatcaagg cctgggttga cgcagtgacc ggcaatcaag tcatcgggat
+     1381 atgagtggtg ttgccgcgta ctgcctggga atggcaaatc ctgatgggct acacccacgc
+     1441 gctcacggtg cttcctccgc tcactagcaa gaagtcacaa ccaacgaatc gaagtgctcg
+     1501 ctgcttgccg ctgagccgca tatttcgtgc aacatgcggc gaggtatctg cgtttgccga
+     1561 gtcggacatc gaagccaggc agccaagagc agcaagcctg cggaagatcc ttgaggcttt
+     1621 ttgtgcttca ttgagcctag cttcttttga ggctacagta gcctgggact agcttgcgga
+     1681 ctgtctcata ctccattgct ggcgacttcg ttgcagagag gtagtttgtg actatgtgtg
+//
+LOCUS       BGC0001247.7            2937 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.7
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ991509.1.
+FEATURES             Location/Qualifiers
+     source          1..2937
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..2937
+                     /note="Cluster number: 7"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     gene            <1400..>2800
+                     /gene="CTB7"
+     mRNA            join(<1400..2097,2146..>2800)
+                     /product="oxidoreductase"
+                     /gene="CTB7"
+     CDS             join(1400..2097,2146..2800)
+                     /function="cercosporin toxin biosynthesis"
+                     /product="oxidoreductase"
+                     /codon_start=1
+                     /note="FAD/FMN-dependent oxidoreductase"
+                     /note="smCOG: SMCOG1087:hypothetical_protein (Score: 174.5;
+                     E-value: 6.8e-53);"
+                     /db_xref="GI:118162018"
+                     /translation="MASSNRRVLVNGGGPAGAVTAFWLAKGGFEVVVTERSMSRPYGQG
+                     VDVMGRAVDIIKKMGLEQRIRDSTTGEAGLTVVDDQGEDVAPPLGTAPIEGGTASVTQE
+                     IEIMRRDLTKIFVDAAEALPNVTFRYGCTVDEVQQHEKSITAVLSDTGDPEDFTAIIGA
+                     DGLGSAIRKLTFDPEINRRSVSPTNTYVAFFSIPGDPKYVSSAARRLSPAPSLCPRSEL
+                     CDSEGGHDANAYDTPVGKLQHANKGRGILVRPIDKKGTQRSCYLMSQSDSQELAQVART
+                     GSQEDQKALLDNRFREFTGPLGKRAVEGMHSADDFYFTRIVQIKLDSWHSGRAALVGDA
+                     GYSPSPLTGQGTTLAIIGAYVLAGEMAKSPDDLERAFTSYYDILNKFVSESQEIPFGGQ
+                     APKLILPQSDWGIWLLRTFYKIISWTGIWRLLNFGNETVKIEPEYDFGGLD"
+                     /gene="CTB7"
+                     /protein_id="ABK64184.1"
+ORIGIN
+        1 aacgcgtggc gacgctgcgc ccgtcgaaac ggttcgcacg ttgcgtctgc aactagttgt
+       61 gagtctgtgt ttaccattga gcgtatccca gcacagacga ctctgacagc tcgtaccctg
+      121 gaacgcttag tgtcccagca actcgataga ggacggcgga ggccgttgcg ctatggtacc
+      181 actgtccgaa tgtggcggtg cgtgtcagaa gcgtgtgtgc gatcctgggg gcatgcaagg
+      241 ttgattatgc accagcagta ccatgaagcg agatgcagca cgcgggcgag gtccgtcagt
+      301 gcagtgagat caacagcgcc gccggacttg gctgcgccct cctggaacct aagtcatcta
+      361 aacatgtccc acttattcca catgtgcgct gcttagtctt gcatcgcgag cgcgcctgta
+      421 agcacccaca atcagcgaac ctgcagctgc atgcgaatgt ccctggcaga cagtccccgt
+      481 atcaagcgag cagtagaagt ccccgaccaa gcaattctcc gagcgtgccg atggagtgtt
+      541 caaggtgttg cacatggcag tttgacgcta ctagcaccgt cccggaaggt aagagattga
+      601 tctgcagcgc gccggtcccg atccttgagc gtccacgttc tcgtgcttcg aggataggac
+      661 agtaggcgtt gcttccgtac tcagtgggcg ctcaggcacg aacagcacac ttgaccgcca
+      721 agatcatctg catgcagtag atggctaggc gctgtacgga atagggtcgc gaatggcgtg
+      781 agtatgcaca ttctatcgcc atccttggtc gtcttcacag gcggcatgtc aactgctgtt
+      841 gttgtgtcaa gcctagccgg gcccggagtt gcatccgttc cgcatagtgt cccgactgcc
+      901 gactgcacgt gatggcgcga ctcggctcag cgacccttcg taactcttcg ttcgacccca
+      961 gcgcccacca aacacggacg gcaaccccga tgatcacgca gagaccggtg cttgtggaga
+     1021 tgcaacagcc tggctggcct taactttgat ggacggagcc tgggcagtcg tctggccctc
+     1081 gacacggctc tgcctggtcg ctgccggtgg tgccacgatc tcgcgcgccc gaccggcgct
+     1141 ttctggccgt acgggtgatc tgcaagtttg gttctcagcc tgttgagcct cctcgttcgc
+     1201 ccagtatggc ccggatgctc catcatgagg tgatgagttg caaatgatgt aacccagtcg
+     1261 acgtcatgaa gaacaggaga caaggcaact gtggagggcg atcacacgtt gtgcagaagg
+     1321 cataaaggcg gatgggtcag cgaccagacc ttgtcagaca tacccaagca gtgtgaacat
+     1381 catccccagt tctacagaca tggcatcatc taaccgaaga gtcctggtca atggcggagg
+     1441 acccgctggc gccgtgacgg ctttctggct cgccaagggc ggcttcgaag tggttgttac
+     1501 agagcgctca atgagtcggc cctacggaca aggggtcgac gtcatgggac gcgctgtcga
+     1561 cattatcaag aagatgggat tagagcaacg cattcgagac agcactaccg gcgaagcagg
+     1621 tctgaccgtt gtcgacgatc aaggcgaaga tgttgctccc ccgctgggta ctgcacctat
+     1681 cgagggagga acggccagcg tcacacaaga aatcgagatc atgagacggg acttgacaaa
+     1741 aatctttgta gacgccgcag aagcattgcc aaatgtcacg ttccgatatg gctgcacggt
+     1801 cgacgaagtt caacagcatg agaagtcaat cactgccgtt ttatccgaca cgggcgaccc
+     1861 agaagacttc actgcaatca ttggtgcaga cgggcttgga tcagctatac gcaagcttac
+     1921 attcgatccg gagatcaaca gacgttctgt gtccccgacc aatacctacg ttgcgttctt
+     1981 ctccatacca ggtgatccaa agtacgtaag ctcggccgcg agaaggcttt cccctgcccc
+     2041 atcactctgt ccgcggagcg agctctgtga cagtgagggt ggacacgacg cgaatgcgtc
+     2101 gcaaagacct gcctgggaga cgcatatcat ctaacgatga attaggtacg ataccccagt
+     2161 cggcaaactc caacatgcca acaaaggtcg cggaatactt gtccggccca ttgataagaa
+     2221 gggcactcaa agatcatgtt acctgatgtc gcagtccgat agccaggagc tggcacaggt
+     2281 tgcacgaact ggatcgcaag aagaccaaaa agctcttttg gacaacagat tccgagagtt
+     2341 cacgggccca ctgggtaaac gagccgtcga aggcatgcac agcgctgacg acttctactt
+     2401 cacccgcata gtgcaaatca aactggactc gtggcatagt gggcgagcgg ctctggtggg
+     2461 ggacgctggt tactctcctt ctccgcttac agggcaaggc acaactcttg ctatcatcgg
+     2521 cgcctatgtg cttgcgggcg agatggccaa aagtccggac gatctagaac gggctttcac
+     2581 ctcgtattac gatatactca acaagtttgt cagcgagtcc caagaaattc catttggagg
+     2641 tcaagctccg aaacttatct tgccacagtc agactggggc atatggcttc ttcgcacctt
+     2701 ctataaaatc atctcctgga caggcatctg gcgcttgctc aatttcggga atgaaactgt
+     2761 aaagattgag cctgagtacg actttggtgg gctggattga tgcaatgtgc taaagaagca
+     2821 cgttgcgagg caggcgaatt cccatatatg cagacagaac ttacatacgg cagatactca
+     2881 gcgcaatgat tcaacgcagc tttttaattc cccgactgtg tcagttaccg gaaagaa
+//
+LOCUS       BGC0001247.8            2160 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.8
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ991510.1.
+FEATURES             Location/Qualifiers
+     source          1..2160
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..2160
+                     /note="Cluster number: 8"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     gene            complement(<276..>1520)
+                     /gene="CTB8"
+     mRNA            complement(join(<276..1385,1437..>1520))
+                     /product="zinc finger transcription factor"
+                     /gene="CTB8"
+     CDS             complement(join(276..1385,1437..1520))
+                     /function="cercosporin toxin biosynthesis"
+                     /product="zinc finger transcription factor"
+                     /codon_start=1
+                     /db_xref="GI:118162020"
+                     /translation="MAKGSAGDAPNTRDTSFKRPKIRESCTHCSSQKIRCTKERPACAR
+                     CVNKGLLCQYNISRRTGTRRHSVRATPEPETTISNAPTSSVPPDSVKIDGKQSPAMSDF
+                     ALLDGLETFNNSLWHQPITTDIQDIDMQYFDFFDPGGYQAEPEPINSFDIDSTLLCGTS
+                     TAGYLPELDAEASTRPSSSSSPPSQRSDGGRATTHGGGGCISTALQIFSELHVSSSACP
+                     IAAGAPSHNIREFDHVLDSNRAALEKLSSILDCPPCCHDQEVLTALFLAVQKALSWYSA
+                     ALDVAGDGEPTSPSSRVKSPPAFLGSYALGAQAQTLARAYVVMAQLQQHFQPLLAKLQR
+                     KSSLSALGARSSSTTSLSSVSSLQSSTSGSAVIECQKRALQEALEDVVAKIEGIKRG"
+                     /gene="CTB8"
+                     /protein_id="ABK64185.1"
+ORIGIN
+        1 gagcgcgtcg acacgcgact tcggcgtgga gagcgtgctg ccggcgtcgg cgaccgcgac
+       61 tgggcgcgcc ggcagaggag gccgtacggc gtcggtggga atttggccgg cggtgaccgg
+      121 cggtggacgt ggacagcgta tttgaagagc cggtgggtgc aggcggaagt cagcaccatg
+      181 cgtgaaggaa catcgtttgt acatttgagg ctggaaatcc cgtgacgtgc ccccctctaa
+      241 ttacatcaag tcgtcatcaa atcaaatcaa atccatcacc cgcgcttgat gccctcaatc
+      301 ttggccacaa catcctccag cgcctcctgc agcgcgcgct tttggcactc aatcaccgcc
+      361 gatccggacg tggatgactg cagcgacgag acggagctca gcgaggtcgt cgacgacgag
+      421 cgcgccccca gcgccgacag ggacgatttt cgctgcagct ttgccagaag cggctggaag
+      481 tgctgttgca actgtgccat caccacatac gcgcgtgcca gcgtctgcgc ctgggctcca
+      541 agcgcgtagc tgcccaggaa tgccggcggg ctcttcaccc gcgaggacgg gctggtgggt
+      601 tcgccgtcgc ccgccacatc caaggctgca gagtaccacg acagcgcttt ttggaccgcc
+      661 aggaacaagg ccgtgagaac ctcttgatca tggcagcacg gcgggcagtc gagaatgctg
+      721 gacagttttt ccaaggctgc gcgattgctg tccagcacat ggtcgaactc gcgaatgttg
+      781 tgggatggtg cgcccgcggc tatggggcac gctgaacttg acacatgaag ttcggagaag
+      841 atctggagcg ccgtacttat gcatccacca ccaccatgtg tcgtcgccct gccgccatcg
+      901 ctccgttgac taggaggcga tgacgacgat gaaggccgtg ttgacgcttc tgcgtccagc
+      961 tctggaagat aacctgctgt cgatgtccca cacaaaagcg tgctgtctat gtcgaatgaa
+     1021 ttaatgggtt ccggctcagc ttggtagcca cccgggtcga aaaagtcgaa gtactgcatg
+     1081 tctatatcct ggatgtctgt cgtgatgggc tggtgccaca ggctattgtt gaatgtctcc
+     1141 aaaccatcta gcaatgcaaa gtcgctcatg gcgggcgact gcttgccatc gatcttaaca
+     1201 gagtccgggg gaacgctgga ggtaggagca ttggatattg ttgtttcagg ctcaggcgtt
+     1261 gctcgaacag aatgacgcct ggtgccggta cgccgcgaga tgttgtactg acataggagt
+     1321 cctttgttga cgcaacgggc acaagcgggg cgttctttgg tgcagcggat cttctggcta
+     1381 gagcactggt ggagcggtca gtcgtgccga gcagcgaagc acgcacaaaa acatacgtga
+     1441 gtgcacgatt ccctgatctt cggacgcttg aacgatgtgt ctcttgtgtt gggtgcatcg
+     1501 cctgcgctcc ccttcgccat ggttgaaagc ctatcggaca gtgttgtcaa gggtgcgtgt
+     1561 caaagaacga tcgggatcga agtgccttct gatgtgctac ccacagactt ctcagctcaa
+     1621 catatatctc cctccgccat cagcacgcac ttccgttggc atcctagcag atggaatcgg
+     1681 agcaacgaca cttttaagct aatcgccgct catcaacgtg cgctagggag cgagagtcga
+     1741 aacgcgtggc gacgctgcgc ccgtcgaaac ggttcgcacg ttgcgtctgc aactagttgt
+     1801 gagtctgtgt ttaccattga gcgtatccca gcacagacga ctctgacagc tcgtaccctg
+     1861 gaacgcttag tgtcccagca actcgataga ggacggcgga ggccgttgcg ctatggtacc
+     1921 actgtccgaa tgtggcggtg cgtgtcagaa gcgtgtgtgc gatcctgggg gcatgcaagg
+     1981 ttgattatgc accagcagta ccatgaagcg agatgcagca cgcgggcgag gtccgtcagt
+     2041 gcagtgagat caacagcgcc gccggacttg gctgcgccct cctggaacct aagtcatcta
+     2101 aacatgtccc acttattcca catgtgcgct gcttagtctt gcatcgcgag cgcgcctgta
+//
+LOCUS       BGC0001247.9            1800 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.9
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ993249.1.
+FEATURES             Location/Qualifiers
+     source          1..1800
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..1800
+                     /note="Cluster number: 9"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     mRNA            complement(join(<171..352,406..588,644..1047,1100..>1146))
+                     /product="hypothetical protein"
+     CDS             complement(join(171..352,406..588,644..1047,1100..1146))
+                     /product="hypothetical protein"
+                     /codon_start=1
+                     /note="ORF9; conserved eukaryotic protein; possible
+                     transmembrane protein containing a DUF 850 domain"
+                     /db_xref="GI:116090731"
+                     /translation="MAGIVEQQIHRDPALFAISYWILLPITIVMVLTGILRHYLSTLLQ
+                     STPKPQPLAKTRQQRSLLRMQNLRVNNTQISRAAFEKRKEFYHEAIKDGRFLADLENRG
+                     RPPANPLTDPGAMDGMMGAMKGNVAMMVPQSLIMGWINAFFSGYVITMTDNVTVKLPFP
+                     LTPQFKQMLQAGVGTRDLDVRWVSSLSWYFLTLFGLQPVYNFILGSNNAASQIAQQMAQ
+                     SQMGQNPMGGQEDPDKLFKAEIENLEVIEHKYILDGVEERLLAKLNATI"
+                     /protein_id="ABJ55988.1"
+ORIGIN
+        1 gtcagatgtc taatcactca tgatggatag tagcctcgag cacaaggtaa gcgttgagca
+       61 gacagaggac gaaaaaccag gctgcaggta agccgtcgat agtcgcctgg ttggaaaaat
+      121 ccgcagtccg aatggcgtta tgggattgcg atgtcgaact gtttcgagcc tcatatggtg
+      181 gcgtttagct tagctaacag cctttcctcc acgccatcaa gtatgtattt gtgctcaatg
+      241 acttctaggt tctcaatttc agccttgaac agcttgtctg ggtcttcttg tccacccatg
+      301 gggttctggc ccatttgtga ctgggccatc tgttgagcga tttgtgaggc agctgtgatt
+      361 ggatcagcga cgggtcccac caatgcagct tcgaaatgca cataccattg ttgctaccga
+      421 gtataaagtt gtatactggc tgcaatccga acagagtcag gaagtaccaa ctcagactgc
+      481 tcacccatct gacatctaga tctctggtac cgacacctgc ttgcaacatt tgcttgaatt
+      541 gcggagtaag cgggaatggc agtttcactg tcacgttgtc agtcatcgct cacgtctttc
+      601 tctgtcctgc aggcaatgca tcctgaggaa gttttgtact cactgataac ataaccgcta
+      661 aagaaggcgt tgatccagcc catgatcaag gattgtggta ccatcatggc cacattaccc
+      721 ttcatggcgc ccatcatgcc gtccatagct cccggatctg tcaacggatt ggccggaggt
+      781 ctccctctgt tctcaaggtc tgccaaaaat ctgccatcct tgatcgcttc atgatagaac
+      841 tccttgcgct tctcaaatgc tgcacgggag atctgggtat tattgacgcg gaggttctgc
+      901 atgcggagca gagagcgctg ttgtcgtgtc ttggcgaggg gctgtggttt gggagtggat
+      961 tgtagcaagg tcgatagata atggcgcagg ataccagtaa ggaccatgac tatggtgatt
+     1021 ggcagcaaga tccagtagct aatggcgctg gtcagtcgcg gactcgcagg gcaggaattc
+     1081 gggtgcgcag agaacataca acagagcagg atcacggtgg atctgctgct caacgatgcc
+     1141 cgccatggtt gcagatgtct cgcgcgagta gtgaacgtcg atggtgcagt aggacaacga
+     1201 cgtgcagtgc atcgctctct cttcacatgc tccccacaac tgcgccaagc ttttgagccg
+     1261 catccactag cgcaacctag cttggggaca cctggagctt tactctttct tacaagttac
+     1321 cgaacgtgaa gttgatctcg ctctcaggct caccattctg acatcgaatt tctctgagtc
+     1381 cacaatggcc gaatcccgca taggcgccat acaatttggc tgatctgaag aacacgaccg
+     1441 acgatgctct aggaaactat ctgcgatcac tgggctttgt ccaggacaac tcgaagctgg
+     1501 acgttcggct cgcattgggc tatgtttcgg tagtgatcgc tggtgcaaca tttgcggcag
+     1561 actacaaact cggatgggag gccaccaaga cctggactgc cgtggcagtc gcagcatacg
+     1621 ccatgctcag tgcagccatg acctattgga tgtgggctgt ggagaaaggg ctagtgttcg
+     1681 agggcacgcg ctcagggaag aaggtgggtt gacatccttg actgttcgga acagcttttg
+     1741 gaaaacgtgt tggctgatca tgcgtgaccg attctagatc tccatcttct cccgcacgaa
+//
+LOCUS       BGC0001247.10           2160 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.10
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ993250.1.
+FEATURES             Location/Qualifiers
+     source          1..2160
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..2160
+                     /note="Cluster number: 10"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     mRNA            complement(join(<371..517,588..900,957..1310,1382..>1755))
+                     /product="hypothetical protein"
+     CDS             complement(join(371..517,588..900,957..1310,1382..1755))
+                     /product="hypothetical protein"
+                     /codon_start=1
+                     /note="ORF10; contains HET domain"
+                     /db_xref="GI:116090733"
+                     /translation="MRLLNTGTLTFETFYDEQTPPYSILSHRWAAEEVSYVDFIAGNKR
+                     DHAGHKKVLEACRSAKSQSHTWIWIDTVCIDKTSSAELTEAINSMYQYYADARICFAYL
+                     RDVSPGLPTQQTNDALQGSEWFRRGWTLQELLAPREVLFLDASWTAFGSKAQLPAVIHR
+                     ATGVPEWYLHRPDQIPFASVAARMAWAARRQTTRSEDLAYSLLGLFNVNSKSFLEFTMF
+                     GSGIGCRIAMTSLREMFSYLLLQLEIAKSTDDESIFAWTSPSNQPCGMFAPSPSAFAGF
+                     ANVKPLPLDPEDRLPWKWTHKGLELHLASPLNSSSTMKMGNTFYDHTKTRDMHKVVTLG
+                     CFKSDVENWNSMEEDQCPTGVPHQGFRTIHQLVFRKPGHAKGVLRCPVSAKCQYC"
+                     /protein_id="ABJ55989.1"
+ORIGIN
+        1 ggctgaaaag ctgtggataa tgtatgcgat gtacaatgat accactcaaa aggcccttgg
+       61 cttcgcacgt tccataatgg aacatttatt ctcgttcgct ttcactcggt cggatgcttt
+      121 ccaagttgtc gtcagaaggc atgtgtttgg ctctcaggaa ctctctgcag catagtcgtg
+      181 tttctcatct aagctagaga gcgcagaagg tccccttcct cttcggacaa cactcctttc
+      241 tgagcagtcc tctcacgcag ggcggtcatg tttcagacat acctcagtgg cacaatctcg
+      301 tacccgactt ggctcgccgg cagtatcgct ctgcaaagag atgatccgtc ttcgggggag
+      361 tgggcataca tcagcagtac tggcattttg cgctcactgg gcaacgtagt acaccttttg
+      421 cgtgaccggg cttccgaaaa acgagctggt gtatcgttcg aaatccttgg tgaggaacac
+      481 ctgttgggca ttgatcctct tccatcgagt tccaattctt tgcagttcga tgcagatcac
+      541 attacctttg ctaacctttt gacagctttg gcatctcgca tgtcgacttc gacatcactc
+      601 ttgaagcagc ccagagttac gaccttgtgc atatctcgag tcttcgtatg atcgtagaag
+      661 gtgttgccca ttttcatggt cgaacttgag tttagaggac tcgcgagatg cagctccagg
+      721 cctttgtgcg tccacttcca cgggagccgg tcctcggggt ccaatggaag aggtttgaca
+      781 ttggcaaatc ctgcgaaagc tgatggactg ggagcaaaca tgccacaggg ctgattcgaa
+      841 ggcgaagtcc atgcaaaaat actttcatcg tctgtagatt ttgcaatttc gagctgtagt
+      901 ctgaagaatg cacgactgcc tcgctaaccg tacagaagag gcactaagat gatgacaaaa
+      961 ggtaagaaaa catctcgcgc agactggtca ttgcgatccg gcagccgatt ccactaccga
+     1021 acatagtgaa ttcgagaaag gacttactgt taacgttgaa cagacccaga agtgagtaag
+     1081 caaggtcctc actgcgcgtc gtctggcgac gtgcagccca ggccatccgc gccgccaccg
+     1141 aggcaaaagg aatttgatca ggacgatgca gataccactc cgggacgccg gtggctcggt
+     1201 ggatgacagc tgggagttga gccttggatc caaatgccgt ccaagaggca tcgaggaaca
+     1261 gcacttctct aggtgctagc aattcttgta atgtccagcc gcgtcggaac ctgcgaaccc
+     1321 aatggcgtca gtcgatgcgt tgactctggc tggcgcgaca ctgctatggc gacagactga
+     1381 ccattcactg ccctgcaagg catcattggt ctgctgagtg ggcaaacccg gcgagacgtc
+     1441 cctcaaatat gcaaagcaaa ttcgggcatc cgcgtagtat tgatacatcg aattaatggc
+     1501 ctcggtgagc tcagcgctcg atgtcttgtc gatgcacaca gtatcgatcc agatccatgt
+     1561 gtgtgactgc gactttgctg agcggcaagc ttcgaggacc ttcttgtgtc cggcatggtc
+     1621 ccttttgttc ccagcaatga agtcgacata tgagacctct tccgcagccc agcggtgaga
+     1681 cagaatagag tagggcggcg tctgctcgtc gtaaaatgtt tcgaatgtca acgtccccgt
+     1741 attgagcagc cgcatcactc tagttaaccg ccgcaaagcc aaaagacagg ttcagaccga
+     1801 cactgcgtgc actttcgatc ctcgtaactc tgcctcgtgc cgtgtagctg aggcactatg
+     1861 tctcgagaag cgaggtaggc gtaaaacgag gttgcggacg aggtgtggat gtttcccact
+     1921 ttccgttttg ctctccgcga gtagctaatg accagatgaa ctgcaacatg gtggcggagg
+     1981 acgcgggacc gagtatatat tagcagcaga gatgcggctg aagacgatca ttttgcgcct
+     2041 cgcagtagtg gcagtagtag tggcagcgca gaaagcagat gcagatgcag gtcgctgctg
+     2101 atcgttgtcg cgccaagaca tttggctgac acgcgagacg agctgtcgcg tttccctgag
+//
+LOCUS       BGC0001247.11           1769 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.11
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ993251.1.
+FEATURES             Location/Qualifiers
+     source          1..1769
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..1769
+                     /note="Cluster number: 11"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     mRNA            <649..>1647
+                     /product="hypothetical protein"
+     CDS             649..1647
+                     /product="hypothetical protein"
+                     /codon_start=1
+                     /note="ORF11; contains truncated zinc finger"
+                     /db_xref="GI:116090735"
+                     /translation="MRPSAQKIRCGKERPSCARCFSKDICCNYSPSLRTGRHPGSVVDQ
+                     QSYNLHSNVALPASERNEPDISSPNGQSCSNGHDISDFLQDNWPWDEPLGGSADATAPV
+                     HSHFSSSRDWATMDWTKAPSTRVTPLDWSPPQTLPPGMEHNNCPQHDCYATLLRLAAEQ
+                     LHVPSQKCLNAASGVQADARCARDVDSLLTENREAIRLLDRSLSCACMSDMSVKLVAYM
+                     VANKIVSMYGAIVGEPDCGDIVDSPIFIGSYALDTAARRSVRARTVLNEIRQQVEPVVA
+                     RLPRSQPVVPSERGGPQEQTCVVKTDEAVPIECMLRTELQRVVAIANSMIY"
+                     /protein_id="ABJ55990.1"
+ORIGIN
+        1 agagtcaaac tacgtgctgc gcacctcttg tagtctggta taatttcctg tttggtgcct
+       61 cattgctcct gccgcgatga aagctgactc aaatttgatc taactcggaa gctcagtgct
+      121 ggcggaatgg ggagtcgcaa gggtcaggct cggctgggag agtcgacaca gaaatgatga
+      181 aggtacgcgg tctccagtga tgacgctagt ccacctccgt tcttgtcagc gcctcgcttg
+      241 agcatcggga tgtcattacc ggaccggcaa ggtgactggc attggagctg gcattgcgtg
+      301 tccacgaaat atcctggtac gaccacgtgc atcaggatga tctccaagac catgttccaa
+      361 attgtggaga tccaatagtt gccctgtacc aaatcctgag gaaatgtctg gcaagtgttg
+      421 aatatcaggt gcccaagact cgcatgaccc acagactctg tagcttggaa ctgctcggcc
+      481 tcgactcatt cattgtcaga aacagcgcag caacaaaagt gtcttgtagc atgtcgattg
+      541 aacaagaaca cacgcctggc ggcggagaag ggaccttggg tagaaagttg cgagattcat
+      601 gcaacgcgtg caggtaaacc aatatgacca cttccatggc tcaggctgat gaggcccagc
+      661 gcacagaaga ttcgatgtgg gaaggagcgt ccaagttgcg cgcgttgctt cagcaaggac
+      721 atatgctgca actatagccc ctcgctgcgc acaggcaggc acccaggctc tgtagtggat
+      781 cagcagtcgt acaatttgca tagcaatgtc gcgctgccag cgtcagagcg aaacgagcca
+      841 gatatatcat cgccgaatgg gcaatcctgc agcaacggac atgatattag cgattttctc
+      901 caagacaatt ggccatggga cgagccactg ggcggttcgg cggacgccac ggcacctgtg
+      961 cactcacatt tctcgagtag tcgcgattgg gcaacgatgg actggaccaa ggcaccgagt
+     1021 actcgggtca cgccgttgga ctggtcaccg ccgcagacac tgccaccggg aatggaacac
+     1081 aacaattgcc cacagcacga ctgctacgcg actttactgc gtttagcagc cgagcagctg
+     1141 catgttccca gtcagaagtg tttgaacgca gccagcggag tgcaggcgga cgctcggtgc
+     1201 gccagagatg tggattcgct cttgactgaa aatcgagaag cgatccgcct ccttgaccgg
+     1261 agtctaagct gtgcgtgcat gtcggacatg agcgtgaagc tggtggcata catggtggcg
+     1321 aacaagattg tctccatgta tggggcgata gtgggagagc ctgactgcgg cgatatcgtg
+     1381 gactctccga tcttcattgg ctcttacgca ttagacacag ctgcaagacg ctccgtcagg
+     1441 gctcggaccg tgctgaacga gattcgacag caggtcgagc ccgtggtcgc gagactgcct
+     1501 cgctctcaac ccgtcgttcc gagtgaacga ggcggacccc aggagcaaac ctgcgtggta
+     1561 aagacggacg aagcagtgcc catcgagtgc atgttgcgga ctgaattgca aagagtcgtt
+     1621 gccatcgcga atagcatgat atattagagc gcgtaggcaa ggcgcgtccg ccggatgaac
+     1681 ggtcagcgta gtgatggctc cggtcagcgt acgccggact gggcattcgc accgccttcg
+     1741 tgctcgggtt gtttgtcgcc gaccttccg
+//
+LOCUS       BGC0001247.12           1980 bp    DNA              PLN 26-AUG-2016
+DEFINITION  Cercosporin biosynthetic gene cluster
+ACCESSION   BGC0001247
+VERSION     BGC0001247.12
+KEYWORDS    .
+SOURCE      Cercospora nicotianae
+  ORGANISM  Cercospora nicotianae
+            Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
+            Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
+            Cercospora.
+COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
+            This entry originates from GenBank ID DQ993252.1.
+FEATURES             Location/Qualifiers
+     source          1..1980
+                     /db_xref="taxon:29003"
+                     /mol_type="genomic DNA"
+                     /organism="Cercospora nicotianae"
+     cluster         1..1980
+                     /note="Cluster number: 12"
+                     /note="Detection rule(s) for this cluster type: other:
+                     ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+                     (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+                     LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+                     frbD or mitE or vlmB or prnB or CaiA or bacilysin);"
+                     /note="Structure image: structures/compound1.png; "
+                     /product="other"
+     mRNA            complement(<462..>1421)
+                     /product="hypothetical protein"
+     CDS             complement(462..1421)
+                     /product="hypothetical protein"
+                     /codon_start=1
+                     /note="ORF12; contains PAS domain"
+                     /db_xref="GI:116090737"
+                     /translation="MRIGRPPRNRAEPVLAESMTKDPASPPPDPNTDQEWPMTDASMLF
+                     DDLRWSLACDDVNIPTSKDIFDTQFFLEEDLAVLDATSNTTRAGADVLQYVPPAPIMTL
+                     EPLGHCRPLSATGESNPVTSTASSDCLTCIIQLLDDMHVRNPLCNDGAGYHPHPNSRSV
+                     DMVLMRNRIALSTLAKAVDCPCFSAQGSIHLASYLLVSAVVSGYGAILRADGKPATASS
+                     ITDRVAPSPLFMGSYELNEAAQRGIRGRIVLTELKNHLEPLLERLPRFRASLADEISQA
+                     TDGASMPDVAMANTPLEVQECVLREQLRSLVSAASQIP"
+                     /protein_id="ABJ55991.1"
+ORIGIN
+        1 gagtgcacga gtcgaaaagt acgatgcaag ccatgctctt cagatagagt gaggtcaaag
+       61 ccgacgcgtg aaatttatgg gtccgcgagc tctttcgggc agcgcaagac cctgtggtgc
+      121 attctgcaag gtgatcgggg gtaatgtccc cttcggggat tcttatctca gcaagactgc
+      181 agaatagcgg cggggagaag tactggcgtc tggctgtaat caatcaagtg cttatttcca
+      241 ggctggccag cggagcaact tcttctccgg cctaaggctt ttgcctttca acggccagtc
+      301 agacgttggt tgcttcatat gtacggcaga tgtggtaatg tgggtcgttt gggaaccaaa
+      361 tgccgttgaa ggcaattggg tagcgccagc gtttctgctc ggaaggctgg cgatcaagta
+      421 taatgtacat gccgagtgca ttcgcgctag tgcccggatc ttcaaggtat ctggctagcc
+      481 gccgatacga gcgacctcag ttgttcccgc agcacacact cctgcacctc tagaggagta
+      541 ttcgccatcg ccacatcggg catagatgct ccatctgtcg cttggcttat ctcgtctgcg
+      601 agcgacgcgc ggaagcgagg caggcgctct aagagcggtt cgaggtgatt cttgagctcg
+      661 gtcaacacaa ttcggccgcg gataccgcgc tgagctgctt cgttgagttc gtacgatccc
+      721 atgaacaatg ggctgggcgc gacgcggtcg gtgatcgacg aggctgttgc cggcttcccg
+      781 tcggccctca ggatggcgcc atatccgctg accactgccg agaccagtag gtaagaagcc
+      841 agatgtatgg atccctgagc agagaagcag ggacagtcta cggccttggc taaagtggat
+      901 aaggcgattc ggttgcgcat gagcaccatg tcgacgctcc gcgaatttgg atggggatga
+      961 tatccagctc cgtcgttgca cagagggttc ctgacgtgca tgtcatcgag gagctggatg
+     1021 atgcacgtga ggcaatcgct gcttgctgtt gaagtgacag gattcgattc gcctgtggct
+     1081 gaaagaggtc gacaatgtcc gagaggctca agcgtcatga ttggggctgg aggaacatat
+     1141 tgcaggacat ctgctccagc tctcgtggtg ttagaagtag catcgagaac ggccaagtct
+     1201 tcttccagaa agaattgggt atcgaagatg tctttggacg tggggatgtt cacatcgtca
+     1261 caagccagtg accatctcag atcgtcaaac agcatgcttg cgtccgtcat aggccattct
+     1321 tggtcagtat tgggatcggg aggtggtgag gcaggatctt tggtcattga ctcagcaagt
+     1381 acaggttctg cccggttcct tggtgggcgt ccgatgcgca tggacacgct gtaatggcaa
+     1441 gtatcgagcc ccttcgatac gcagcgagca cagcggggtc tctgcttgcc gcatttgatt
+     1501 ttctgcaaag ctgaaatgag cctgttgaca aagaaaatgg agcctcgtct ggcgcaatgc
+     1561 tcacttgttg gctacattgg tcgcaggagt cgcggacttt tggcgcattg gacatcttga
+     1621 cgccgttgag cactgctcga agcactgtca gagtgattgc tgatggtaag ggctgtcact
+     1681 gaacgacacc cgagtcctcg ggaagtaatc gcaggagcgc actgctagga ctggccgtat
+     1741 ggtttctcca ttgatactcc tgcttcattc cgaataggcg ggcaactcgg tcgcctctgc
+     1801 ctccaacatg gtcggcggga tcaccgccgc gcaagctgcg tcaatgcgag ccttgccggt
+     1861 ctcggcgacc tgtgtgcatc atgctctctg atttcgacct aatgactgag tggatttgaa
+     1921 ggagccttgg ccgccagaac catgcaatgt ctatgcagag ggccgagtac aacagccggg
+//
