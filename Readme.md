@@ -12,11 +12,11 @@ As an application of what it can do, two companion scripts are included:
 
 This script will generate high-quality figures from GenBank files. It is not limited to biosynthetic gene clusters.
 
-Features:
+## Features
 
 * Input: GenBank or .bgc/.bgccase files (see [here](#bgc_toolkit)). GenBank files (.gb/.gbk) must have the protein translation.
 * Data filters: There are three types of filters
-  - Include strings. Only filenames (or BGC identifiers, in the case of .bgc/.bgccase files) with this strings will be included. Default: 'region', 'cluster'.
+  - Include strings. Only filenames (or BGC identifiers, in the case of .bgc/.bgccase files) with these strings will be included. Default: 'region', 'cluster'.
   - Exclude strings. Filenames or identifiers with this string(s) will be ignored. Default: 'final'. 
   
   The default values for these two filters ensure that results from antiSMASH (v4, v5) will not include the whole genome.
@@ -24,8 +24,10 @@ Features:
   - BGC list. A tab-separated text file. First column: cluster/identifier name. Second (optional) column: Protein Id. This file can be used to 1) further filter the input data, 2) define an order (in case all BGCs are included in a single figure) and 3) to align.
   
 * There are some options to change the styling of the figure through an external configuration file.
-* Figures can be produced individually or in a single SVG (see examples below)
+* Figures can be produced individually or in a single SVG.
 * Additionally, the genes can be decorated by drawing regions inside them that depict domains in their coresponding translations. 
+
+## The whole options
 
 ```
 Input:
@@ -58,7 +60,17 @@ Output:
   -g, --gaps            If --stacked is used, toggle this option to leave gaps when a particular BGC is not found in the input data
 ```
 
-examples
+## Examples
+
+Here is a simple example with the cladofulvin BGC:
+```
+./BGC_SVG_generator.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --outputfolder examples/output/cladofulvin --include
+```
+
+It has been renamed from a fungiSMASH result, so it doesn't include the usual 'region' string and we have to disable that filter by using `--include`. This command will produce
+
+![Cladofulvin_Final](examples/output/cladofulvin/Cladofulvin_Final.svg "Cladofulvin. color_mode=random-pastel")
+
 mibig 1.4
 
 sophorolipid single

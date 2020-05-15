@@ -10,7 +10,6 @@ Classes for data storage and analysis of Biosynthetic Gene Clusters
 import sys
 from pathlib import Path
 from subprocess import PIPE, Popen
-import warnings
 from multiprocessing import Pool, cpu_count
 from random import uniform
 from colorsys import hsv_to_rgb
@@ -19,20 +18,12 @@ from collections import defaultdict
 from lxml import etree
 from operator import itemgetter
 from copy import deepcopy
-
-try:
-    from io import StringIO
-    # TODO: not necessary from biopython 1.72
-    from Bio import BiopythonExperimentalWarning
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-        from Bio import SearchIO
-    from Bio import SeqIO
-except ModuleNotFoundError:
-    sys.exit("BGC lib did not find all needed dependencies")
+from io import StringIO
+from Bio import SearchIO
+from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.7"
+__version__ = "0.5.8"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -121,6 +112,7 @@ class HMM_DB:
                                     
         self.ID_to_AC = {}          # ID: short name; AC: accession number (w/
         self.ID_to_DE = {}          # version); DE: description
+        self.ID_to_LENG = {}        
         
         self.ID_to_role = {}        # manually assigned roles (see role_colors)
         self.domain_signature_to_protein_type = {}  # curated using annotated 
@@ -572,9 +564,6 @@ class BGC:
                                     #  biosynthetic-type returns a list of 
                                     #  pointers to each Protein object
         
-        #self.gca = []           # Gene Cluster Architecture. List of CBP types 
-                                #  in the cluster # NOTE: now substituted by
-                                # self.CBPtypes
         self.products = set()   # All different 'product' qualifiers annotated 
                                 #  by antiSMASH
         self.contig_edge = False    # antiSMASH v4+ was not able to fully 
@@ -720,12 +709,12 @@ class BGC:
                             continue
                         protein.sequence = CDS.qualifiers["translation"][0]
                         
+                        # NOTE what happens if there is no strand info (strand=None)?
                         if CDS.location.strand != 1:
                             protein.forward = False
                         
-                        # should only point to BGC objects but we're still
-                        # not outputting self.identifier into the annotation file
                         protein.parent_cluster = self
+                        protein.parent_locus = locus
                         
                         # TODO: detect overlapping CDS (e.g. gene annotation 
                         #  errors, multiple splicing)
@@ -857,7 +846,10 @@ class BGC:
         
         l = 1
         Xoffset = xoffset # start of each locus
-        for locus in self.loci:
+        loci_list = self.loci
+        if mirror:
+            loci_list = reversed(self.loci)
+        for locus in loci_list:
             L = locus.length/svg_options.scaling
             
             # substract all non-coding regions (but intergenic space remains
@@ -1078,7 +1070,8 @@ class ProteinCollection:
             return
         
         for db in hmmdb.db_list:
-            command = ['hmmscan', '--cpu', str(cpus), '--noali', '--notextw']
+            #command = ['hmmscan', '--cpu', str(cpus), '--noali', '--notextw']
+            command = ['hmmscan', '--cpu', str(cpus), '--notextw', '--qformat', 'fasta']
             if tc:
                 command.append('--cut_tc')
             if domtblout_path != "":
@@ -1092,28 +1085,76 @@ class ProteinCollection:
             
             # "SearchIO parses a search output file's contents into a hierarchy of four 
             # nested objects: QueryResult, Hit, HSP, and HSPFragment"
-            # http://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
+            # https://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
+            # https://biopython.org/DIST/docs/api/Bio.SearchIO.HmmerIO-module.html
             results = SearchIO.parse(StringIO(out.decode()), 'hmmer3-text')
+            #TODO: parallelize this loop
             for qresult in results:
+                # if the original header of the fasta sequence contains a space,
+                # this thing takes everything after the space as the "description"
+                # and the first part as the "id" but probably this isn't what 
+                # we want
+                if qresult.description != "<unknown description>":
+                    seq_identifier = "{} {}".format(qresult.id, qresult.description)
+                else:
+                    seq_identifier = qresult.id
+                                
                 for hit in qresult:
+                    #print(hit.description)
                     for hsp in hit:
                         hspf = hsp[0] # access to HSPFragment
 
-                        seq_identifier = qresult.id
+                        #seq_identifier = qresult.id
                         hmm_id = hit.id
-                        ali_from = hspf.query_start
-                        ali_to = hspf.query_end
-                        hmm_from = hspf.hit_start
-                        hmm_to = hspf.hit_end
-                        env_from = hsp.env_start
-                        env_to = hsp.env_end
+                        
+                        # NOTE: these are 1-based indices
+                        ali_from = hspf.query_start - 1
+                        ali_to = hspf.query_end - 1
+                        hmm_from = hspf.hit_start - 1
+                        hmm_to = hspf.hit_end - 1
+                        #env_from = hsp.env_start
+                        #env_to = hsp.env_end
+                        
+                        # NOTE hspf.query is a SeqRecord object
+                        algn_seq = hspf.query.seq
+                        
+                        # NOTE: The alignment of the query sequence vs the hmm
+                        # model can be obtained directly from the hmmscan output.
+                        # In order to get same-sized alignments (allowed amino 
+                        # acids + deletions in the query), we need to remove all
+                        # insertions (of the query, with the model as reference. 
+                        # marked as lowercase symbols in the query).
+                        # For this we could use the '#=GC RF' line from a proper
+                        # Stockholm alignment (e.g. using hmmalign) as a mask. 
+                        # hmmscan does not report that line as part of its output
+                        # but we can use the "hit" sequence to find the positions
+                        # of the insertions (from the perspective of the hmm with
+                        # the query as reference, these will be viewed as deletions
+                        # which are marked with periods in the hmm sequence).
+                        # A second option would be to filter the lowercase
+                        # symbols in the sequence
+                        #print(hspf.query.seq)
+                        #print(hspf.hit.seq)
+                        #print(hspf.aln_span, len(hspf.hit.seq))
+                        
+                        hit_seq = hspf.hit.seq
+                        ## this is probably super expensive...
+                        #hit_seq_split = hit_seq.split(".")
+                        
+                        #x = "xxx.x.xxxx.x...xx".split(".")
+                        #print([len(a) for a in x])
+                        #sys.exit()
+                        
+                        
+                        hmm_size = len(hit_seq)
                         
                         Evalue = hsp.evalue
                         score = hsp.bitscore
                         
                         domain = BGCDomain(self.proteins[seq_identifier], 
-                                           hmm_id, env_from, env_to, ali_from, 
-                                           ali_to, hmm_from, hmm_to, score, Evalue)
+                                           hmm_id, ali_from, ali_to, 
+                                           hmm_from, hmm_to, hmm_size, 
+                                           score, Evalue, algn_seq)
                         
                         self.proteins[seq_identifier].domain_list.append(domain)
         
@@ -1157,7 +1198,7 @@ class ProteinCollection:
             return
         
         for db in hmmdb.db_list:
-            command = ['hmmsearch', '--cpu', str(cpus), '--noali', '--notextw']
+            command = ['hmmsearch', '--cpu', str(cpus), '--notextw']
             if tc:
                 command.append('--cut_tc')
             if domtblout_path != "":
@@ -1193,7 +1234,8 @@ class ProteinCollection:
                         
                         domain = BGCDomain(self.proteins[seq_identifier], 
                                            hmm_id, env_from, env_to, ali_from, 
-                                           ali_to, hmm_from, hmm_to, score, Evalue)
+                                           ali_to, hmm_from, hmm_to, score, 
+                                           Evalue, algn_seq)
                         
                         self.proteins[seq_identifier].domain_list.append(domain)
         
@@ -1212,6 +1254,9 @@ class ProteinCollection:
         """
         Once domains have been predicted, classify proteins from the whole 
         collection
+        
+        Note that directly classifying a protein will not update BGC.CBPcontent,
+         BGC.CBPtypes and BGC.CBPtypes_set of its parent BGC
         """
         
         with Pool(cpus) as pool:
@@ -1230,6 +1275,7 @@ class BGCProtein:
         
     def __init__(self):
         self.parent_cluster = None  # Should point to an object of the BGC class
+        self.parent_locus = None    
         
         self.identifier = ""        # Internal identifier. Should be unique:
                                     # BGCname~L#+CDS#
@@ -1253,8 +1299,7 @@ class BGCProtein:
         self.length = 0             # automatically calculated when sequence is 
                                     # added. Calculated in amino acid space
         
-        self.protein_type = ""      # Will eventually replace CBP_type to accomodate
-                                    # other (non-CBP) types e.g. "FAS_A"
+        self.protein_type = ""      # Protein type, e.g.: nrPKS, FAS_A
         self.product = ""           # From NCBI's GenBank annotations
         self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
                                     #   resistance, unknown]. See role_colors
@@ -1276,7 +1321,7 @@ class BGCProtein:
                                     # so are relative to the start of the locus.
                                     # They are in nucleotide space.
         
-        self.domain_list = []       # list of BGCDomain objects
+        self.domain_list = []       # list of BGCDomain objects, ordered by ali_from
         self.domain_set = set()     # set of unique domain IDs
         self.attempted_domain_prediction = False
         
@@ -1318,6 +1363,7 @@ class BGCProtein:
             self.cds_regions = ([0, 3*self.length], )
     
     
+    # TODO delete
     def get_annotations(self):
         gca = ""
         return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
@@ -1326,16 +1372,31 @@ class BGCProtein:
             self.compound_family, self.compound, self.source, self.organism, 
             self.TaxId)
     
-    
+    # TODO fix this
     def sequence80(self, start=0, end=None):
-        if end == None:
+        if end == None: # NOTE parameter can't be 'end=self.length' (check)
             end = self.length
             
         if start >= end or start < 0 or end > self.length:
             return ""
-        return "\n".join([self._sequence[i:i+80] for i in range(start, end, 80)])
+        
+        length = end - start + 1
+        
+        part_one = "\n".join([self._sequence[i:i+80] for i in range(length // 80)])
+        
+        part_two = ""
+        remainder = length % 80
+        if remainder > 0:
+            part_two = "{}\n".format(self._sequence[-remainder:])
+            
+        print(self._sequence)
+        print(start, end)
+        print("{}{}".format(part_one, part_two))
+        sys.exit("test")
+        return "{}{}".format(part_one, part_two)
         
         
+    # TODO rename to "get_fasta"?
     def fasta(self, start=0, end=None):
         """
         Returns a fasta-formatted data
@@ -1343,6 +1404,12 @@ class BGCProtein:
         to original accession. If either are absent, use identifier (should
         always be present)
         """
+        try:
+            assert(type(start) == int)
+        except AssertionError:
+            return ""
+        
+        
         if end == None:
             end = self.length
         
@@ -1508,6 +1575,7 @@ class BGCProtein:
         return
     
     
+    # TODO substitute for a call to ProteinCollection.predict_domains
     def predict_domains(self, hmmdb, domtblout_path="", cpus=0):
         """
         domtblout_path is the path where the domtableout file will be deposited. 
@@ -1550,7 +1618,8 @@ class BGCProtein:
                         score = hsp.bitscore
                         
                         domain = BGCDomain(self, hmm_id, env_from, env_to, ali_from, 
-                                           ali_to, hmm_from, hmm_to, score, Evalue)
+                                           ali_to, hmm_from, hmm_to, hmm_size, score, 
+                                           Evalue)
                         
                         self.domain_list.append(domain)
         
@@ -1653,8 +1722,7 @@ class BGCProtein:
             cbp_type = "DMATS"
             self.role = "biosynthetic"
         else:
-            domain_signature = "~".join(self.domain_list)
-            if domain_signature in hmmdb.domain_signature_to_protein_type:
+            domain_signature = "~".join(x.ID for x in self.domain_list)
             try:
                 cbp_type = hmmdb.domain_signature_to_protein_type[domain_signature]
             except KeyError:
@@ -1886,6 +1954,7 @@ class BGCProtein:
             f.write(etree.tostring(root, pretty_print=True))
         
     
+    # TODO: do heavy optimization.
     def xml_arrow(self, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), xoffset=0, yoffset=0, mirror=False):
         """Creates an arrow SVG figure (xml structure)
         
@@ -1956,7 +2025,10 @@ class BGCProtein:
         
         # add title
         arrow_title = etree.Element("title")
-        arrow_title.text = self.identifier
+        if self.protein_id != "":
+            arrow_title.text = "{} [{}]".format(self.protein_id, self.identifier)
+        else:
+            arrow_title.text = "[{}]".format(self.identifier)
         main_group.append(arrow_title)
         
         draw_domains = svg_options.draw_domains
@@ -2610,17 +2682,23 @@ class BGCProtein:
 
 
 class BGCDomain:
-    def __init__(self, protein, ID, env_from, env_to, ali_from, ali_to, hmm_from, hmm_to, score, Evalue):
+    def __init__(self, protein, ID, ali_from, ali_to, hmm_from, hmm_to, hmm_size, score, Evalue, algn_seq):
+        # TODO: consider removing `env_from` and `env_to` for good 
         self.protein = protein
         self.ID = ID                # domain short name e.g. 'ketoacyl-synt'
-        self.env_from = env_from    # Pos. in target seq. at which surr. envelope 
-        self.env_to = env_to        #   starts/ends.
+        #self.env_from = env_from    # Pos. in target seq. at which surr. envelope 
+        #self.env_to = env_to        #   starts/ends.
         self.ali_from = ali_from    # Position in target sequence at which the 
         self.ali_to = ali_to        #   hit starts/ends
         self.hmm_from = hmm_from    # Position in the hmm at which the hit 
         self.hmm_to = hmm_to        #   starts/ends
+        self.hmm_size = hmm_size    # Size of the hmm model
         self.score = score          # Only depends on profile HMM and target seq.
         self.Evalue = Evalue        # Based on score and DB size
+        self.algn_seq = algn_seq    # Sequence of hit, aligned to the hmm profile
         
     def get_sequence(self):
-        return self.protein.sequence[self.ali_from:self.ali_to+1]
+        return self.protein.sequence[self.ali_from:self.ali_to + 1]
+
+    def get_aligned_sequence(self):
+        return "{}{}{}".format("-"*self.hmm_from, self.algn_seq, "-"*(self.hmm_size-self.hmm_to))
