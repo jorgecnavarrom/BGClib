@@ -118,7 +118,9 @@ Finally, let's use three mycophenolic acid BGCs from MIBiG 2.0 with domain annot
 
 ![mycophenolic_stacked_algn](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=white")
 
-Now with an alternative alignment using a different file
+There is some questionable gene calling going on.
+
+Now with an alternative alignment to the genes encoding proteins with domain DUF2236 using a different file
 
 ```
 ./BGC_SVG_generator.py --inputfolder ./examples/data/mycophenolic\ acid/ --outputfolder examples/output/mycophenolic\ acid/ --include --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG_DUF2236.tsv --stacked --hmm ~/Databases/pfam/33/Pfam-A.hmm
