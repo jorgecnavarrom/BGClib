@@ -2017,36 +2017,36 @@ class BGCProtein:
         Y = h
         
         idm = svg_options.internal_domain_margin
-        
         intron_break = svg_options.intron_break
         intron_regions = svg_options.intron_regions
+        draw_domains = svg_options.draw_domains
 
         main_group = etree.Element("g")
         
         # add title
         arrow_title = etree.Element("title")
-        if self.protein_id != "":
-            arrow_title.text = "{} [{}]".format(self.protein_id, self.identifier)
-        else:
-            arrow_title.text = "[{}]".format(self.identifier)
-        main_group.append(arrow_title)
         
-        draw_domains = svg_options.draw_domains
+        arrow_identifier = "{} [{}]".format(self.protein_id, self.identifier)
+        
         # If only one domain and color_mode == 'domains', don't draw domains even
         # if requested (instead, whole arrow will be filled with domain's color)
+        core_type = ""
+        d_info = ""
         if svg_options.color_mode == "domains":
             draw_domains = False
             
             if self.role == "biosynthetic":
-                arrow_title.text = "{}\n{}".format(self.identifier, self.protein_type)
-            else:
-                try:
-                    d_info = " + ".join([hmmdb.ID_to_DE[d.ID] for d in self.domain_list])
-                except KeyError:
-                    d_info = " + ".join([d.ID for d in self.domain_list])
+                core_type = "\n{}".format(self.protein_type)
                 
-                arrow_title.text = "{}\n[{}]".format(self.identifier, d_info)
+            try:
+                d_info = "\n{}".format(" + ".join([hmmdb.ID_to_DE[d.ID] for d in self.domain_list]))
+            except KeyError:
+                d_info = "\n{}".format(" + ".join([d.ID for d in self.domain_list]))
         
+        arrow_title_text = "{}{}{}".format(arrow_identifier, core_type, d_info)
+        arrow_title.text = arrow_title_text
+        
+        main_group.append(arrow_title)
         
         exon_elements = []
         intron_elements = []
