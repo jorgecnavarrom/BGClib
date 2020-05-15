@@ -1,49 +1,53 @@
-LOCUS       BGC0001541.1           42806 bp    DNA              PLN 31-JUL-2018
-DEFINITION  Cercosporin biosynthetic gene cluster
+LOCUS       BGC0001541             42806 bp    DNA     linear   PLN 02-NOV-2017
+DEFINITION  Cercospora beticola strain 09-40 chromosome 1, whole genome shotgun
+            sequence.
 ACCESSION   BGC0001541
 VERSION     BGC0001541.1
-KEYWORDS    WGS.
+KEYWORDS    .
 SOURCE      Cercospora beticola
   ORGANISM  Cercospora beticola
             Eukaryota; Fungi; Dikarya; Ascomycota; Pezizomycotina;
             Dothideomycetes; Dothideomycetidae; Capnodiales; Mycosphaerellaceae;
             Cercospora.
-COMMENT     MIBiG: Minimum Information about a Biosynthetic Gene cluster
-            This entry originates from the region between 2253404-2296209 nt
-            from GenBank ID LKMD01000100.1.
+COMMENT     ##antiSMASH-Data-START##
+            Version      :: 5.1.0-0c1c90d(changed)
+            Run date     :: 2019-11-12 02:12:31
+            NOTE: This is a single cluster extracted from a larger record!
+            Orig. start  :: 2253403
+            Orig. end    :: 2296209
+            ##antiSMASH-Data-END##
 FEATURES             Location/Qualifiers
-     gene            1..1110
-                     /locus_tag="CB0940_00830"
+     subregion       1..42806
+                     /aStool="mibig"
+                     /contig_edge="False"
+                     /label="Polyketide"
+                     /subregion_number="1"
+                     /tool="antismash"
+     region          1..42806
+                     /contig_edge="False"
+                     /product="unknown"
+                     /region_number="1"
+                     /subregion_numbers="1"
+                     /tool="antismash"
      mRNA            1..1110
                      /locus_tag="CB0940_00830"
                      /product="putative oxidoreductase"
-     source          1..42806
-                     /mol_type="genomic DNA"
-                     /db_xref="taxon:122368"
-                     /collection_date="2009"
-                     /country="USA: Red River Valley of North Dakota and
-                     Minnesota"
-                     /strain="09-40"
-                     /host="Beta vulgaris"
-                     /organism="Cercospora beticola"
-                     /chromosome="1"
-     cluster         1..42806
-                     /note="Cluster number: 1"
-                     /note="Detection rule(s) for this cluster type: t1pks:
-                     ((PKS_KS & PKS_AT) or (ene_KS & PKS_AT) or (mod_KS &
-                     PKS_AT) or (hyb_KS & PKS_AT) or (itr_KS & PKS_AT) or
-                     (tra_KS & PKS_AT));"
-                     /note="Structure image: structures/compound1.png; "
-                     /product="t1pks"
-     CDS             37..1110
-                     /product="putative oxidoreductase"
-                     /codon_start=1
+     gene            1..1110
                      /locus_tag="CB0940_00830"
-                     /note="smCOG: SMCOG1010:NAD-dependent_epimerase/dehydratase
-                     (Score: 89.1; E-value: 5.7e-27);"
-                     /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
-                     /sec_met="NRPS/PKS Domain: NAD_binding_4 (7-243). E-value:
-                     7.4e-11. Score: 32.9;"
+     CDS             37..1110
+                     /NRPS_PKS="Domain: NAD_binding_4 (7-243). E-value: 1e-10.
+                     Score: 32.9. Matches aSDomain:
+                     nrpspksdomains_CB0940_00830_NAD_binding_4.1"
+                     /NRPS_PKS="type: other"
+                     /codon_start=1
+                     /gene_functions="biosynthetic-additional (smcogs)
+                     SMCOG1010:NAD-dependent epimerase/dehydratase (Score: 89.1;
+                     E-value: 5.7e-27)"
+                     /gene_kind="biosynthetic-additional"
+                     /locus_tag="CB0940_00830"
+                     /product="putative oxidoreductase"
+                     /protein_id="PIB02402.1"
+                     /transl_table=1
                      /translation="MADSLVLLTGATGFIGFRILIELLRQGYSVRAVIRSAGKGQWLES
                      RLTAVMKGSDYKDRFETTTVADFVTDGAFDQAAENTSYIIHVASPIVSSDNPDDWEHDF
                      KRVAVKGSIGVLEAAKRSGTVRRVVITSSMVGLFSPKALFAEPSEVPLNAESRIPEMEP
@@ -51,18 +55,38 @@ FEATURES             Location/Qualifiers
                      NWHSMQIVLGHKNPIGKPILTCHNDDVARCHVLALDPKVTGNQSFLISCSPEDGSEWDD
                      VKKFVQREFPEAVAQGVLPNDGHMPTVNKGVRFDVRKTEETFGFKHIPYEAQVLDVVKQ
                      YLELPEKDEGVEISTTA"
-                     /protein_id="PIB02402.1"
-     gene            1657..3352
-                     /locus_tag="CB0940_00831"
+     aSDomain        58..765
+                     /aSDomain="NAD_binding_4"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00830_NAD_binding_4.1"
+                     /evalue="1.00E-10"
+                     /label="CB0940_00830_NAD_binding_4.1"
+                     /locus_tag="CB0940_00830"
+                     /protein_end="243"
+                     /protein_start="7"
+                     /score="32.9"
+                     /tool="antismash"
+                     /translation="LTGATGFIGFRILIELLRQGYSVRAVIRSAGKGQWLESRLTAVMK
+                     GSDYKDRFETTTVADFVTDGAFDQAAENTSYIIHVASPIVSSDNPDDWEHDFKRVAVKG
+                     SIGVLEAAKRSGTVRRVVITSSMVGLFSPKALFAEPSEVPLNAESRIPEMEPPYAHKML
+                     AYQAGKIASINSAEAWIKNEKPAFDLVHMHPSFVTGRDDLATTREDLRKFSSNWHSMQI
+                     VLGHKNPIGKPILTC"
      mRNA            join(1657..2045,2094..2659,2715..3153,3208..3352)
                      /locus_tag="CB0940_00831"
                      /product="putative transporter"
-     CDS             join(1657..2045,2094..2659,2715..3153,3208..3352)
-                     /product="putative transporter"
-                     /codon_start=1
+     gene            1657..3352
                      /locus_tag="CB0940_00831"
-                     /note="smCOG: SMCOG1106:major_facilitator_transporter
-                     (Score: 86.6; E-value: 2.3e-26);"
+     CDS             join(1657..2045,2094..2659,2715..3153,3208..3352)
+                     /codon_start=1
+                     /gene_functions="transport (smcogs) SMCOG1106:major
+                     facilitator transporter (Score: 86.6; E-value: 2.3e-26)"
+                     /gene_kind="transport"
+                     /locus_tag="CB0940_00831"
+                     /product="putative transporter"
+                     /protein_id="PIB02403.1"
+                     /transl_table=1
                      /translation="MALPITDDDLDGLKQPYVTFSSGSASPPQSTTDAMDLEEQVLDAI
                      KSDAFLVDWVGEDDKGNPQNLPYWRKWVITMSLALYALSTTFSSSVFGAATHVLAEEFA
                      LPAETVVLGCTSLFMVGFATGPIFWGPFSEAFGRTRPLLAGYLAFAVLQLPIADARSLT
@@ -72,18 +96,21 @@ FEATURES             Location/Qualifiers
                      TTASLPLISILVGVIIAGALLSFTTNSRWAPNAKEGRPQETRLLLMMVGAVSLPAGMFL
                      FAWTSSATMNPWPQILSGIPTGFGIHLINMQGMNYIIDSYKIYANSAIAANTFLRSLFA
                      AGFPILATSMYAAIGVKWGTTILALLAVAMIPIPILFYYFGAKIRAKSKWQPPL"
-                     /protein_id="PIB02403.1"
-     gene            complement(3849..5290)
-                     /locus_tag="CB0940_00832"
      mRNA            complement(join(3849..4958,5012..5290))
                      /locus_tag="CB0940_00832"
                      /product="6-hydroxytryprostatin B O-methyltransferase"
-     CDS             complement(join(3849..4958,5012..5290))
-                     /product="6-hydroxytryprostatin B O-methyltransferase"
-                     /codon_start=1
+     gene            complement(3849..5290)
                      /locus_tag="CB0940_00832"
-                     /note="smCOG: SMCOG1042:O-methyltransferase (Score: 183.4;
-                     E-value: 1.1e-55);"
+     CDS             complement(join(3849..4958,5012..5290))
+                     /codon_start=1
+                     /gene_functions="biosynthetic-additional (smcogs)
+                     SMCOG1042:O-methyltransferase (Score: 183.4; E-value:
+                     1.1e-55)"
+                     /gene_kind="biosynthetic-additional"
+                     /locus_tag="CB0940_00832"
+                     /product="6-hydroxytryprostatin B O-methyltransferase"
+                     /protein_id="PIB02404.1"
+                     /transl_table=1
                      /translation="MANRIEADNLFELTAELVSASAKLHKFLDQKNLPQPSFDAPAPSV
                      ALNTANKPYYDARSAIVEAAEQLIRLVRGPRDTLLALSFEHCATASMQVVFKYKFANHI
                      PLHGSTTYSKIAEAVGDGVTTALVERTIQHCASFGLFETIPGGYVTHNATSSLLVTDPD
@@ -93,42 +120,57 @@ FEATURES             Location/Qualifiers
                      DWSDKYATKIVQALATGLRPQDRIILNEVVVPEAGQVGRETERRMHDRDLLMLMNLNGR
                      ERTQSAFEAIFASVTPKLRLQRVIHPEQGELSLIEVTLDGVELPAQANGVNGHANGTNG
                      VNGH"
-                     /protein_id="PIB02404.1"
-     gene            complement(5842..12880)
-                     /locus_tag="CB0940_00833"
      mRNA            complement(join(5842..6517,6573..7885,7947..8321,
                      8375..11046,11094..11142,11200..11351,11399..12179,
                      12233..12536,12588..12880))
                      /locus_tag="CB0940_00833"
                      /product="CTB1"
+     gene            complement(5842..12880)
+                     /locus_tag="CB0940_00833"
      CDS             complement(join(5842..6517,6573..7885,7947..8321,
                      8375..11046,11094..11142,11200..11351,11399..12179,
                      12233..12536,12588..12880))
-                     /product="CTB1"
+                     /NRPS_PKS="Domain: SAT (10-250). E-value: 5.2e-65. Score:
+                     211.0. Matches aSDomain: nrpspksdomains_CB0940_00833_SAT.1"
+                     /NRPS_PKS="Domain: PKS_KS(Iterative-KS) (384-817). E-value:
+                     1.5e-142. Score: 467.1. Matches aSDomain:
+                     nrpspksdomains_CB0940_00833_PKS_KS.1"
+                     /NRPS_PKS="Domain: PKS_AT (923-1215). E-value: 1.7e-79.
+                     Score: 259.0. Matches aSDomain:
+                     nrpspksdomains_CB0940_00833_PKS_AT.1"
+                     /NRPS_PKS="Domain: PT (1298-1619). E-value: 8.8e-98. Score:
+                     319.2. Matches aSDomain: nrpspksdomains_CB0940_00833_PT.1"
+                     /NRPS_PKS="Domain: PP-binding (1688-1752). E-value:
+                     1.7e-12. Score: 39.4. Matches aSDomain:
+                     nrpspksdomains_CB0940_00833_PP-binding.1"
+                     /NRPS_PKS="Domain: PP-binding (1796-1854). E-value:
+                     8.5e-13. Score: 40.4. Matches aSDomain:
+                     nrpspksdomains_CB0940_00833_PP-binding.2"
+                     /NRPS_PKS="Domain: Thioesterase (1945-2197). E-value:
+                     1.9e-28. Score: 92.1. Matches aSDomain:
+                     nrpspksdomains_CB0940_00833_Thioesterase.1"
+                     /NRPS_PKS="type: Type I Iterative PKS"
                      /codon_start=1
+                     /gene_functions="biosynthetic (rule-based-clusters) T1PKS:
+                     PKS_AT"
+                     /gene_functions="biosynthetic (rule-based-clusters) T1PKS:
+                     itr_KS"
+                     /gene_functions="biosynthetic-additional
+                     (rule-based-clusters) PP-binding"
+                     /gene_functions="biosynthetic-additional (smcogs)
+                     SMCOG1093:Beta-ketoacyl synthase (Score: 74.3; E-value:
+                     1.3e-22)"
+                     /gene_kind="biosynthetic"
                      /locus_tag="CB0940_00833"
-                     /note="smCOG: SMCOG1022:Beta-ketoacyl_synthase (Score:
-                     187.0; E-value: 1e-56);"
-                     /sec_met="Type: t1pks"
-                     /sec_met="Domains detected: PP-binding (E-value: 5.4e-13,
-                     bitscore: 39.4, seeds: 164); PP-binding (E-value: 2.7e-13,
-                     bitscore: 40.4, seeds: 164); PKS_AT (E-value: 5.4e-80,
-                     bitscore: 259.0, seeds: 1682); itr_KS (E-value: 6.2e-150,
-                     bitscore: 489.6, seeds: 96)"
-                     /sec_met="Kind: biosynthetic"
-                     /sec_met="NRPS/PKS subtype: Type I Iterative PKS"
-                     /sec_met="NRPS/PKS Domain: PKS_KS (384-817). E-value:
-                     1.1e-142. Score: 467.1;"
-                     /sec_met="NRPS/PKS Domain: PKS_AT (923-1215). E-value:
-                     1.2e-79. Score: 259.0;"
-                     /sec_met="NRPS/PKS Domain: PKS_DH (1302-1461). E-value:
-                     5e-08. Score: 24.7;"
-                     /sec_met="NRPS/PKS Domain: ACP (1688-1754). E-value:
-                     2.9e-12. Score: 38.0;"
-                     /sec_met="NRPS/PKS Domain: ACP (1800-1849). E-value:
-                     9.2e-13. Score: 39.6;"
-                     /sec_met="NRPS/PKS Domain: Thioesterase (1945-2197).
-                     E-value: 1.4e-28. Score: 92.1;"
+                     /product="CTB1"
+                     /protein_id="PIB02405.1"
+                     /sec_met_domain="PP-binding (E-value: 3.9e-11, bitscore:
+                     40.4, seeds: 164, tool: rule-based-clusters)"
+                     /sec_met_domain="PKS_AT (E-value: 7.8e-78, bitscore: 259.0,
+                     seeds: 1682, tool: rule-based-clusters)"
+                     /sec_met_domain="itr_KS (E-value: 9e-148, bitscore: 489.6,
+                     seeds: 96, tool: rule-based-clusters)"
+                     /transl_table=1
                      /translation="MEDGAQMRVVAFGDQTYDCSEAVSQLLRVRDDAIVVDFLERATAV
                      LKAELARLSSEQQEETPRFATLAELVPRYRAGTLNPAVSQALTCITQLGLFIRQHSSGQ
                      EAYPTANDSCITGVCTGALTAVAVGSASSVTALVPLALHTVAVAVRLGARAWEIGSCLA
@@ -167,39 +209,262 @@ FEATURES             Location/Qualifiers
                      DRLPTRFFDHCTNVGLFGTELSRGSGGPNKTPEWLMPHFRASIELLHDYHAPPMKLGNK
                      TKVMVIWAGECAFDGVRYAHIPPSAGDTDEDTEGMKFLTEKRKDFGATEWASLFPGTDV
                      DARVVESEHHFSMMRDSGAQMLVEHMRDGLGIVSS"
-                     /protein_id="PIB02405.1"
-     CDS_motif       complement(6794..6868)
-                     /note="NRPS/PKS Motif: NRPS-te1 (e-value: 5.3e-13,
-                     bit-score: 41.2);"
-     CDS_motif       complement(6878..6937)
-                     /note="NRPS/PKS Motif: PKSI-AT-mM_m3 (e-value: 26.0,
-                     bit-score: -1.8);"
-     CDS_motif       complement(9758..9880)
-                     /note="NRPS/PKS Motif: PKSI-AT-M_m3 (e-value: 1.5e-15,
-                     bit-score: 49.3);"
-     CDS_motif       complement(10064..10111)
-                     /note="NRPS/PKS Motif: PKSI-AT-M_m1 (e-value: 0.0008,
-                     bit-score: 12.4);"
-     CDS_motif       complement(10661..10705)
-                     /note="NRPS/PKS Motif: PKSI-KS_m6 (e-value: 0.0049,
-                     bit-score: 9.7);"
-     CDS_motif       complement(11021..11059)
-                     /note="NRPS/PKS Motif: PKSI-KS_m4 (e-value: 0.00039,
-                     bit-score: 13.5);"
-     CDS_motif       complement(11201..11248)
-                     /note="NRPS/PKS Motif: PKSI-KS_m3 (e-value: 1.2e-06,
-                     bit-score: 20.4);"
-     gene            13555..16463
-                     /locus_tag="CB0940_00834"
+     aSDomain        complement(join(5866..6517,6573..6676))
+                     /aSDomain="Thioesterase"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_Thioesterase.1"
+                     /evalue="1.90E-28"
+                     /label="CB0940_00833_Thioesterase.1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="2197"
+                     /protein_start="1945"
+                     /score="92.1"
+                     /tool="antismash"
+                     /translation="LFLFPDGAGAATSYLSLPRLGEDIGVVAFNSPFMKTPHKFVDHTL
+                     PDVIASYVEGIRGRQAQGPYHLGGWSAGGILAYAVAQELIAAGEEVSTLLLIDSPSPTK
+                     GLDRLPTRFFDHCTNVGLFGTELSRGSGGPNKTPEWLMPHFRASIELLHDYHAPPMKLG
+                     NKTKVMVIWAGECAFDGVRYAHIPPSAGDTDEDTEGMKFLTEKRKDFGATEWASLFPGT
+                     DVDARVVESEHHFSMMRDSGAQMLVEHMRDG"
+     aSModule        5866..7123
+                     /domains="nrpspksdomains_CB0940_00833_PP-binding.2"
+                     /domains="nrpspksdomains_CB0940_00833_Thioesterase.1"
+                     /final_module
+                     /incomplete
+                     /locus_tags="CB0940_00833"
+                     /tool="antismash"
+                     /type="unknown"
+     CDS_motif       complement(6370..6444)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0007"
+                     /evalue="5.30E-13"
+                     /label="NRPS-te1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="2029"
+                     /protein_start="2004"
+                     /score="41.2"
+                     /tool="antismash"
+                     /translation="QAQGPYHLGGWSAGGILAYAVAQELI"
+     CDS_motif       complement(6454..6513)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0006"
+                     /evalue="2.60E+01"
+                     /label="PKSI-AT-mM_m3"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="2001"
+                     /protein_start="1981"
+                     /score="-1.8"
+                     /tool="antismash"
+                     /translation="PHKFVDHTLPDVIASYVEGIR"
+     aSDomain        complement(6950..7123)
+                     /aSDomain="PP-binding"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_PP-binding.2"
+                     /evalue="8.50E-13"
+                     /label="CB0940_00833_PP-binding.2"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="1854"
+                     /protein_start="1796"
+                     /score="40.4"
+                     /tool="antismash"
+                     /translation="LKILSEESGLTDEELTDDTSFADVGVDSLMSLVITSRLRDELDID
+                     FPDRALFEECQTIF"
+     aSDomain        complement(7256..7447)
+                     /aSDomain="PP-binding"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_PP-binding.1"
+                     /evalue="1.70E-12"
+                     /label="CB0940_00833_PP-binding.1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="1752"
+                     /protein_start="1688"
+                     /score="39.4"
+                     /tool="antismash"
+                     /translation="LEIVSEEIGMPIDELKDDIDFTDAGLDSLLSLVISSRMRDQLGIE
+                     FESAQFMEIGSIGGLKEFLT"
+     aSModule        7256..11624
+                     /complete
+                     /domains="nrpspksdomains_CB0940_00833_PKS_KS.1"
+                     /domains="nrpspksdomains_CB0940_00833_PKS_AT.1"
+                     /domains="nrpspksdomains_CB0940_00833_PP-binding.1"
+                     /iterative
+                     /locus_tags="CB0940_00833"
+                     /tool="antismash"
+                     /type="pks"
+     aSDomain        complement(join(7655..7885,7947..8321,8375..8731))
+                     /aSDomain="PT"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_PT.1"
+                     /evalue="8.80E-98"
+                     /label="CB0940_00833_PT.1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="1619"
+                     /protein_start="1298"
+                     /score="319.2"
+                     /tool="antismash"
+                     /translation="SSSIHKVITNTITANSDGELVVDADLSREDLHPMVQGHQVYGVPL
+                     CTPSVYADIALTLGEYIRQVIKPGEVAQTSVEVAEMNIQSALVANNTGRVQLLRTYAKF
+                     DPKAQVASCTFSSIKEDGSSVVEQHANCKIRFGSLEKEKTALESAALAAQARMAALKTQ
+                     VGQDDNTYRFSKGMIYKMIGQLADFDEKYRGLCAITLDNDAMEASGKVSFKGIPNEGKF
+                     HSSPAYLDALSQLGGFVMNANEGVDLEKEVFVNHGWGSMRFFAALDPAMTYYTHVKMTQ
+                     GKDKLWTGDVLIFDDKQALIGIVGGVALQGVPKRLMHYIVT"
+     aSDomain        complement(8981..9856)
+                     /aSDomain="PKS_AT"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_PKS_AT.1"
+                     /evalue="1.70E-79"
+                     /label="CB0940_00833_PKS_AT.1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="1215"
+                     /protein_start="923"
+                     /score="259.0"
+                     /tool="antismash"
+                     /translation="FTGQGSAFEGMGVDLYKRFASFRSDIARYDQICEGMSLPSIKAMF
+                     EDEKVFSTASPTLQQLTHVCFQMALYRLWKSLGVQAKAVVGHSLGEYAALYAAGVLSQS
+                     DTLYLVGRRAQLMEKHLSQGTHAMLAVRAKEEAIVAAIDGPPGEAYEFSCRNGEQRNVL
+                     GGTVAQIQAAKAALEAKKIRCQYLDTPMAFHTGQVDPILPELLQVAAACSIQDPQIPVI
+                     SPAYGKVIRSAKDFQPEYFTHHCRSSVNMVDALQSAVEEGLLDKNIIGLEIGPGPVVTQ
+                     FVKEAVGTTMQT"
+     CDS_motif       complement(9503..9625)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0005"
+                     /evalue="1.50E-15"
+                     /label="PKSI-AT-M_m3"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="1041"
+                     /protein_start="1000"
+                     /score="49.3"
+                     /tool="antismash"
+                     /translation="GVQAKAVVGHSLGEYAALYAAGVLSQSDTLYLVGRRAQLMEK"
+     CDS_motif       complement(9809..9856)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0004"
+                     /evalue="8.00E-04"
+                     /label="PKSI-AT-M_m1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="939"
+                     /protein_start="923"
+                     /score="12.4"
+                     /tool="antismash"
+                     /translation="FTGQGSAFEGMGVDLYK"
+     aSDomain        complement(join(10175..11046,11094..11142,11200..11351,
+                     11399..11624))
+                     /aSDomain="PKS_KS"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_PKS_KS.1"
+                     /evalue="1.50E-142"
+                     /label="CB0940_00833_PKS_KS.1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="817"
+                     /protein_start="384"
+                     /score="467.1"
+                     /tool="antismash"
+                     /translation="IAILAASGRFPQSSSMDQFWDVLINGVDTHELVPPTRWNAATHVS
+                     EDPKAKNVSGTGFGCWLHEAGEFDAAYFNMSPREAPQVDPAQRLALLTATEVLEQAGIV
+                     PNRTSSTQKNRVGVWYGATSNDWMETNSAQNVDTYFIPGGNRAFIPGRVNYFHKFSGPS
+                     YTIDTACSSSLAALHMACNALWRGEVDTAIVGGTNVLTNPDMTAGLDAGHFLSRSGNCK
+                     TFDDEADGYCRGEAVVTLILKRLPDAQADKDPIQASILGIATNHSAEAASITRPHAGAQ
+                     QDLFQQVLTETGLTANDISVCEMHGTGTQAGDSGETTSVVETLAPLNRSGSAVRTTPLY
+                     IGAVKSNVGHAESAAGVSSLAKILLMLKHSKIPPHVGIKTKLNHRLPDLAARNTHIART
+                     EVPWPRPKNGKRRVLLNNFSAAGGNTCLVLEDAPE"
+     CDS_motif       complement(10406..10450)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0003"
+                     /evalue="4.90E-03"
+                     /label="PKSI-KS_m6"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="740"
+                     /protein_start="725"
+                     /score="9.7"
+                     /tool="antismash"
+                     /translation="GAVKSNVGHAESAAGV"
+     CDS_motif       complement(10766..10804)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0002"
+                     /evalue="3.90E-04"
+                     /label="PKSI-KS_m4"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="620"
+                     /protein_start="607"
+                     /score="13.5"
+                     /tool="antismash"
+                     /translation="FDDEADGYCRGEAV"
+     CDS_motif       complement(10946..10993)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_CB0940_00833_0001"
+                     /evalue="1.20E-06"
+                     /label="PKSI-KS_m3"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="560"
+                     /protein_start="544"
+                     /score="20.4"
+                     /tool="antismash"
+                     /translation="GPSYTIDTACSSSLAAL"
+     aSDomain        complement(join(12027..12179,12233..12536,12588..12850))
+                     /aSDomain="SAT"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_CB0940_00833_SAT.1"
+                     /evalue="5.20E-65"
+                     /label="CB0940_00833_SAT.1"
+                     /locus_tag="CB0940_00833"
+                     /protein_end="250"
+                     /protein_start="10"
+                     /score="211.0"
+                     /tool="antismash"
+                     /translation="AFGDQTYDCSEAVSQLLRVRDDAIVVDFLERATAVLKAELARLSS
+                     EQQEETPRFATLAELVPRYRAGTLNPAVSQALTCITQLGLFIRQHSSGQEAYPTANDSC
+                     ITGVCTGALTAVAVGSASSVTALVPLALHTVAVAVRLGARAWEIGSCLADARRGANGRY
+                     ASWTSAVGGISPQDLQDRISAYMTEQALASVSVPYLSAAVGPGQSSVSAAPVILDAFLS
+                     TLLRPLTTTRLPITAPYHA"
+     aSModule        12027..12850
+                     /domains="nrpspksdomains_CB0940_00833_SAT.1"
+                     /incomplete
+                     /locus_tags="CB0940_00833"
+                     /starter_module
+                     /tool="antismash"
+                     /type="unknown"
      mRNA            join(13555..13975,14024..14275,14346..16463)
                      /locus_tag="CB0940_00834"
                      /product="6-hydroxytryprostatin B O-methyltransferase"
-     CDS             join(13730..13975,14024..14275,14346..16463)
-                     /product="6-hydroxytryprostatin B O-methyltransferase"
-                     /codon_start=1
+     gene            13555..16463
                      /locus_tag="CB0940_00834"
-                     /note="smCOG: SMCOG1042:O-methyltransferase (Score: 266.7;
-                     E-value: 5.2e-81);"
+     CDS             join(13730..13975,14024..14275,14346..16463)
+                     /codon_start=1
+                     /gene_functions="biosynthetic-additional (smcogs)
+                     SMCOG1042:O-methyltransferase (Score: 266.7; E-value:
+                     5.2e-81)"
+                     /gene_kind="biosynthetic-additional"
+                     /locus_tag="CB0940_00834"
+                     /product="6-hydroxytryprostatin B O-methyltransferase"
+                     /protein_id="PIB02398.1"
+                     /transl_table=1
                      /translation="MMQFQRDLEASLEAVSANAQELLKSLKSRKDVQDLNASLPKDPLD
                      NCDAQTQAARAQLAEAATRILRLSIRPQEYLEHLQNGYQHLTCFRWLVELNILDHLPHS
                      GTISYTDLARKASVPPMQLRSICRMAICNGFLEEPEANQVRHSRISALFARDESYLGWA
@@ -216,18 +481,21 @@ FEATURES             Location/Qualifiers
                      SLRALFELQDTKQASLIRVASTIPDIPSWESHSNVTVLGDSIHPMSPCGGVGANTAIVD
                      ADALAKVLVEHGTKPPVNAIAEFEAAMRTRAKRNIWRSEVGSKRMFGQKNLVDCSEFVF
                      "
-                     /protein_id="PIB02398.1"
-     gene            complement(16899..18538)
-                     /locus_tag="CB0940_00835"
      mRNA            complement(join(16899..18350,18407..18538))
                      /locus_tag="CB0940_00835"
                      /product="Bifunctional solanapyrone synthase"
-     CDS             complement(join(16899..18350,18407..18538))
-                     /product="Bifunctional solanapyrone synthase"
-                     /codon_start=1
+     gene            complement(16899..18538)
                      /locus_tag="CB0940_00835"
-                     /note="smCOG: SMCOG1138:FAD_linked_oxidase_domain_protein
-                     (Score: 161.0; E-value: 1.1e-48);"
+     CDS             complement(join(16899..18350,18407..18538))
+                     /codon_start=1
+                     /gene_functions="biosynthetic-additional (smcogs)
+                     SMCOG1138:FAD linked oxidase domain protein (Score: 161;
+                     E-value: 1.1e-48)"
+                     /gene_kind="biosynthetic-additional"
+                     /locus_tag="CB0940_00835"
+                     /product="Bifunctional solanapyrone synthase"
+                     /protein_id="PIB02399.1"
+                     /transl_table=1
                      /translation="MLGLNLQQVLSNVPTISSIVSGVGSYQHGSDSSAWASVAASKSCC
                      DALTKSLGKNSVVFPYDAAYSQSMGSYFSLKNSDLHPSCIALPRSAEDVSKAVRTLSLG
                      AHKWEGQCQFGVRGGGHTPFKGAASTDNGIVLDLLHMPSAGISPDYETITVSPSTTWDL
@@ -238,18 +506,20 @@ FEATURES             Location/Qualifiers
                      GFKLILNYQPAPTVQLERNGAVDSLGPIQTEGNVVFVHWAVSYDESEAQFDDAITKSVQ
                      DLFHAANAKAKELGIYRHFIQPTYADSWQSPFDYRSKSTIEELVATSKKYDPLQVFQKQ
                      VPGGFKLPQI"
-                     /protein_id="PIB02399.1"
-     gene            complement(19042..20791)
-                     /locus_tag="CB0940_00836"
      mRNA            complement(join(19042..19814,19959..20791))
                      /locus_tag="CB0940_00836"
                      /product="hypotheticalsprotein"
-     CDS             complement(join(19157..19814,19959..20560))
-                     /product="hypotheticalsprotein"
-                     /codon_start=1
+     gene            complement(19042..20791)
                      /locus_tag="CB0940_00836"
-                     /note="smCOG: SMCOG1087:hypothetical_protein (Score: 183.4;
-                     E-value: 1.3e-55);"
+     CDS             complement(join(19157..19814,19959..20560))
+                     /codon_start=1
+                     /gene_functions="other (smcogs) SMCOG1087:hypothetical
+                     protein (Score: 183.4; E-value: 1.3e-55)"
+                     /gene_kind="other"
+                     /locus_tag="CB0940_00836"
+                     /product="hypotheticalsprotein"
+                     /protein_id="PIB02400.1"
+                     /transl_table=1
                      /translation="MASSNRRVLVNGGGPAGAVTAFWLAKGGFEVVVTERSMSRPYGQG
                      VDVTGRASDIIKKMGLEQRIRDSTTGEAGLTVVDDQGEDVAPPLGTAPIEGGTASVTQE
                      IEIMRRDLTKIFVDAAEALPNVTFRYGCTVDEVQQHEKSITAVLSDTGKPEDFTAIIGA
@@ -258,15 +528,17 @@ FEATURES             Location/Qualifiers
                      DDFYFTRIVQIKLDSWHSGRAALVGDAGYSPSPLTGQGTTLAIIGAYVLAGEMAKSPDD
                      LERAFTSYYAILNKFVSESQEIPFGGQAPKLILPQSDWGIWLLRTFYKIISWTGIWRLL
                      NFGNETVKVELPEYDFGGLD"
-                     /protein_id="PIB02400.1"
-     gene            22173..23417
-                     /locus_tag="CB0940_00837"
      mRNA            join(22173..22256,22308..23417)
                      /locus_tag="CB0940_00837"
                      /product="Aflatoxin biosynthesis regulatory protein"
+     gene            22173..23417
+                     /locus_tag="CB0940_00837"
      CDS             join(22173..22256,22308..23417)
-                     /product="Aflatoxin biosynthesis regulatory protein"
                      /codon_start=1
+                     /locus_tag="CB0940_00837"
+                     /product="Aflatoxin biosynthesis regulatory protein"
+                     /protein_id="PIB02401.1"
+                     /transl_table=1
                      /translation="MAKGSAGDAPNTRDTSFKRPKIRESCTHCSSQKIRCTKERPACAR
                      CVNKGLLCQYNISRRTGTRRHSVRATPEPETTISNAPTSSVAPDSVKIDGKRSPAMSDF
                      ALLDGLETFDNSLWHQPITTDIQDIDMQYFDFFDPGGYQAEPEPINSFDIDSTLLCGTS
@@ -274,54 +546,57 @@ FEATURES             Location/Qualifiers
                      IAAGAPSHNIREFDHVLDSNRAALEKLSSILDCPPCCHDQEVLTALFLAVQKALSWYSA
                      ALDVAGDGEPTSPSSRVKSPPAFLGSYALGAQAQTLARAYVVMAQLQQHFQPLLAKLQR
                      ISSLSALGARSSSTTSLSSVSSLQSSTSGSAVIECQKRALQEALEDVVAKIEGIKRG"
-                     /locus_tag="CB0940_00837"
-                     /protein_id="PIB02401.1"
      assembly_gap    23440..23449
                      /estimated_length=10
-                     /linkage_evidence="map"
                      /gap_type="within scaffold"
-     gene            complement(23911..24909)
-                     /locus_tag="CB0940_00838"
+                     /linkage_evidence="map"
      mRNA            complement(23911..24909)
                      /locus_tag="CB0940_00838"
                      /product="hypothetical protein"
+     gene            complement(23911..24909)
+                     /locus_tag="CB0940_00838"
      CDS             complement(23911..24909)
-                     /product="hypothetical protein"
                      /codon_start=1
+                     /locus_tag="CB0940_00838"
+                     /product="hypothetical protein"
+                     /protein_id="PIB02406.1"
+                     /transl_table=1
                      /translation="MRPSAQKIRCGKERPSCARCFSKDICCNYSPSLRTGRHPGSVVDQ
                      QSYNLHGNVDLPASERNELDVSSPNGQSCSNGHDISDFLQDNWPWDKPLGGLADATAPV
                      HSHFSSSRDWATMDWTKAPSTRVTPLDWSPPHTLPPGMEHNNCPQHDCYATLLRLAAEQ
                      LHVPSQKCLNAASGVQADARCARDVDSLLTENREAIRLLDRSLSCACMSDMSVKLVAYM
                      VANKIVSMYGAIVGEPDCGDIVDSPIFIGSYALDTAARRSVRARTVLNEIRQQVEPVVA
                      RLPRFQPVIPSERGGPQEQTCVVKTDEAVPIECMLRTELQRVVAIANSMIY"
-                     /locus_tag="CB0940_00838"
-                     /protein_id="PIB02406.1"
-     gene            27925..28862
-                     /locus_tag="CB0940_00839"
      mRNA            27925..28862
                      /locus_tag="CB0940_00839"
                      /product="hypothetical protein"
+     gene            27925..28862
+                     /locus_tag="CB0940_00839"
      CDS             27957..28862
-                     /product="hypothetical protein"
                      /codon_start=1
+                     /locus_tag="CB0940_00839"
+                     /product="hypothetical protein"
+                     /protein_id="PIB02407.1"
+                     /transl_table=1
                      /translation="MTKDPASPPPDPNTEQEWPVTDASMLFDDLGWSLASDDVNIPASK
                      DIFDTQFFLDKDLAVLDATSNTTRAGADVLQYVPPAPIMTFEPLGHCRPLSATGESNPI
                      TSTGSSDCLTCIIQLLDDMHIRNPLCNDGAGYHHHPNSRSVDMVLMRNRIAVSTLAKAV
                      DCPCFSAQGSIHLASYLLVSAVVSGYGAILRADGKPATALSITDRVAPSPLFMGSYELN
                      EAAQRGIRGRIVLTELKNHLEPLLERLPRFRASLADEISQATDEESMPDVAMSNTPLEV
                      QECVLREQLRSLVSAASQIP"
-                     /locus_tag="CB0940_00839"
-                     /protein_id="PIB02407.1"
-     gene            31397..33919
-                     /locus_tag="CB0940_00840"
      mRNA            join(31397..31579,31629..31732,31830..32702,32799..32892,
                      32944..33405,33469..33919)
                      /locus_tag="CB0940_00840"
                      /product="Phenylalanine ammonia-lyase"
+     gene            31397..33919
+                     /locus_tag="CB0940_00840"
      CDS             join(31440..31579,31629..31732,31830..32702,32799..32892,
                      32944..33405,33469..33919)
-                     /product="Phenylalanine ammonia-lyase"
                      /codon_start=1
+                     /locus_tag="CB0940_00840"
+                     /product="Phenylalanine ammonia-lyase"
+                     /protein_id="PIB01160.1"
+                     /transl_table=1
                      /translation="MHRKSSRTPLTDLLCDTHRRVEELRANGDLRISGHTLDVASVVAV
                      ARHNVVPKIEEINGVLSLAKSVKVVQASYEKGETLYGINTGFGGSADVRSQNPDALQRS
                      LLQTLQSAVLTTRDRTGVANGIQSHALPAAWTKAMMAVRANSVLRGHSAISRDAVDALL
@@ -335,15 +610,16 @@ FEATURES             Location/Qualifiers
                      YVLHLAGLDPSSRSKIHLNLSIKDVNSLQAKIKSELLHTFTAKRATFLESPDTAQYLGA
                      GTRKLHGYVRNTLAVPMHHGLEAHPRCGSGDQGKRKTIGSQVSIIYEAIRDGILFGEVA
                      EAMHELGIVALPN"
-                     /locus_tag="CB0940_00840"
-                     /protein_id="PIB01160.1"
      CDS             join(34508..35198,35250..35649,35700..35909,35959..36481)
-                     /product="putative HC-toxin efflux carrier TOXA"
                      /codon_start=1
+                     /gene_functions="transport (smcogs) SMCOG1005:Drug
+                     resistance transporter, EmrB/QacA (Score: 321.3; E-value:
+                     1.3e-97)"
+                     /gene_kind="transport"
                      /locus_tag="CB0940_00841"
-                     /note="smCOG:
-                     SMCOG1005:Drug_resistance_transporter,_EmrB/QacA (Score:
-                     321.3; E-value: 1.3e-97);"
+                     /product="putative HC-toxin efflux carrier TOXA"
+                     /protein_id="PIB01159.1"
+                     /transl_table=1
                      /translation="MASPARSTHTDTESHDVVKSDSESKLELEHSDSDIQDEKPASKSA
                      ETPEAKSEEDEELNDQGEKYISGWPLVFLLLAMVSTVFIVALSNTIISTAIPAITTAFN
                      STRDIGWYNSGEALAATAFQLPFGRAYLLMDLKWTFLVSLTLYLIGSLICGVANSSVLL
@@ -355,49 +631,53 @@ FEATURES             Location/Qualifiers
                      VLPDAQIPAGTSLVLFVRLLGSAIPGPIGQSVLQTTLASRLGTEVAEQAYGGTGATEIR
                      SKLDNIFGAGTPEARDALDAFNDSVTKIFMVAIIVSCLSVLPLPLIELKSVKREKRDNE
                      DAKEGKKTNGTTGKTEDPEKGQSAEIAGKAV"
-                     /protein_id="PIB01159.1"
-     gene            34508..36483
-                     /locus_tag="CB0940_00841"
      mRNA            join(34508..35198,35250..35649,35700..35909,35959..36483)
                      /locus_tag="CB0940_00841"
                      /product="putative HC-toxin efflux carrier TOXA"
-     gene            complement(36858..37884)
-                     /locus_tag="CB0940_00842"
+     gene            34508..36483
+                     /locus_tag="CB0940_00841"
      mRNA            complement(join(36858..37455,37508..37884))
                      /locus_tag="CB0940_00842"
                      /product="hypothetical protein"
+     gene            complement(36858..37884)
+                     /locus_tag="CB0940_00842"
      CDS             complement(join(36858..37455,37508..37884))
-                     /product="hypothetical protein"
                      /codon_start=1
+                     /locus_tag="CB0940_00842"
+                     /product="hypothetical protein"
+                     /protein_id="PIB01162.1"
+                     /transl_table=1
                      /translation="MTSTITTTETLQDAVPFVAPPSPPEDTSNKELPEKPYYDVEFNYR
                      LDPRDGGDEVIWGGTVGLMRRKYETRTVRINNERGNEHNFNLDTHGFAWVKHKTSVTEF
                      ADYLAIRQGPYFGEVAEMLKRVTGATKVHVIGHLHRSLNYNDTTEEEKNAPDMTMTKGQ
                      TPGRFVHVDQSYQGAVRRLYLDLPQEEARRLEKTRWAIINVWRPVRKVTNEPLAVCDAR
                      SVREDELFNTLHLVPMRWPDAAPQENQMWAVAPPKTPTQHKWHYVSGMTEDEALLIKMF
                      DSKKDGTARRVPHSSFPTPDDFGEPRASTETRCFVFWEDQEAE"
-                     /locus_tag="CB0940_00842"
-                     /protein_id="PIB01162.1"
      CDS             complement(join(38437..38473,38541..38740,38803..38964))
-                     /product="hypothetical protein"
                      /codon_start=1
+                     /locus_tag="CB0940_00843"
+                     /product="hypothetical protein"
+                     /protein_id="PIB01161.1"
+                     /transl_table=1
                      /translation="MGSIGEPNRLLCWSIYVTKKPDQSEEDHHNHVSKVNAPMMIPFLK
                      KYGIVRYTVKHNDAHSKPKQAALMAGQPEENVLAYDTVFEMIVKDIESIQTMQKDEEFL
                      RTTIPDHFNFADMTRSKGSLTWIEEFTF"
-                     /locus_tag="CB0940_00843"
-                     /protein_id="PIB01161.1"
-     gene            complement(38437..39362)
-                     /locus_tag="CB0940_00843"
      mRNA            complement(join(38437..38473,38541..38740,38803..39362))
                      /locus_tag="CB0940_00843"
                      /product="hypothetical protein"
-     gene            complement(39420..40597)
-                     /locus_tag="CB0940_00844"
+     gene            complement(38437..39362)
+                     /locus_tag="CB0940_00843"
      mRNA            complement(join(39420..39625,39679..40597))
                      /locus_tag="CB0940_00844"
                      /product="hypothetical protein"
+     gene            complement(39420..40597)
+                     /locus_tag="CB0940_00844"
      CDS             complement(join(39420..39625,39679..40597))
-                     /product="hypothetical protein"
                      /codon_start=1
+                     /locus_tag="CB0940_00844"
+                     /product="hypothetical protein"
+                     /protein_id="PIB01156.1"
+                     /transl_table=1
                      /translation="MHFPALAVAGCLLSRATAQSLDQVLAKRDSFSLLRDLLHQHGLVD
                      ELEFTANATFFAMTNQALRSLADFGINLTTADPNIARAIFKYAQLDAIYTTDTVKALHH
                      EAKVVQTALQPHLFNNLTRGQAAKLRSNRTGGANGILVESGLGVLTPVVEADIPYDHGV
@@ -405,16 +685,17 @@ FEATURES             Location/Qualifiers
                      PILDMLTSEQLKSVVAQHAVPNRVLYQSLFDGVETLETLDGSTLRIRRGKRGEIFVNGA
                      EVVRTDLLLYGGVAHLIDGALLPEKDASCSTGLFAAAAGGSSRVWKILASHQLTLLAVL
                      AMALVSILYKAYQSRKQSHQLIRPSDGLGNYEKV"
-                     /locus_tag="CB0940_00844"
-                     /protein_id="PIB01156.1"
-     gene            40896..42806
-                     /locus_tag="CB0940_00845"
      mRNA            40896..42806
                      /locus_tag="CB0940_00845"
                      /product="Laccase-1"
+     gene            40896..42806
+                     /locus_tag="CB0940_00845"
      CDS             40896..42806
-                     /product="Laccase-1"
                      /codon_start=1
+                     /locus_tag="CB0940_00845"
+                     /product="Laccase-1"
+                     /protein_id="PIB01155.1"
+                     /transl_table=1
                      /translation="MWSVRLYPLALTLLFQCVSPAAARPSGCVDDVEVVQEIGSKEIQA
                      PVVRFEISLTTQSIDAAGIGFREAIFINDAFIGPTLYAKQGDRIEFVVHNYMQQDTSIH
                      FHGIDQRSTPWSDGVPGLTQSQIRPGASFLYNWTAHDAGTYFYHSHAKSQMMDGLYGAV
@@ -427,8 +708,6 @@ FEATURES             Location/Qualifiers
                      AHPMHKHGNKVFLIGSGSGSFPWESVEEAIPHLPEGTFNFQDPPYLDTFNTVEMEGQAN
                      DTWTAVRYKAEYAGAWLFHCHVQTHLSGGMGMVVLDGVDAWPEVPLAYQEWNGFEPPAL
                      S"
-                     /locus_tag="CB0940_00845"
-                     /protein_id="PIB01155.1"
 ORIGIN
         1 tctttcgaac accgctctgc acaacgtgcc gcaatcatgg ccgactctct cgttctattg
        61 actggtgcta ccggcttcat tggctttcgt atcttgattg agctgctccg tcaaggatac

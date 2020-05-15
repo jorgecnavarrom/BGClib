@@ -84,18 +84,33 @@ The PKS is in the reverse strand, but we can mirror the image with `--mirror`:
 
 The color mode in the default styling parameter file ([SVG_arrow_options](./SVG_arrow_options.cfg)) has been changed to `random-pastel`, that is why the colors are different.
 
-Another example with a multi-locus GenBank file, sophorolipid (no colors), from MIBiG 1.4 (currently not in MIBiG 2.0):
+Another example with a multi-locus GenBank file, sophorolipid (`color_mode=white`), from MIBiG 1.4 (currently not in MIBiG 2.0):
 
 ```
 ./BGC_SVG_generator.py --files ./examples/data/sophorolipid/BGC0001274.1.gbk --outputfolder examples/output/sophorolipid --include
 ```
 
-mibig 1.4
+![sophorolipid_multi_locus](examples/output/sophorolipid/BGC0001274.1.svg "sophorolipid. color_mode=white")
 
-sophorolipid single
-./BGC_SVG_generator.py --files examples/data/BGC0001274.1.gbk --hmm ~/Databases/pfam/32_top_JGI/top.hmm --outputfolder examples/output/sophorolipid --include
-./BGC_SVG_generator.py --files examples/data/BGC0001274.1.gbk --hmm ~/Databases/pfam/32_top_JGI/top.hmm --outputfolder examples/output/sophorolipid --include --mirror
+Now for a more interesting example, we'll stack the three BGCs encoding cercosporin (BGC001247 from MIBiG 1.4 and BGC0001541 and BGC0001542 from MIBiG 2.0):
 
+```
+./BGC_SVG_generator.py --inputfolder ./examples/data/cercosporin/ --outputfolder examples/output/cercosporin/ --include --stacked
+```
+
+![cercosporin_stacked](examples/output/cercosporin/stacked_BGC_figure.svg "cercosporin. color_mode=white")
+
+It's a bit messy but we can define an order and align according to a specific gene (by providing their corresponding Protein Id). For this we'll use a file like [this one](examples/data/cercosporin/cercosporin_MIBiG.tsv):
+
+```
+./BGC_SVG_generator.py --inputfolder ./examples/data/cercosporin/ --outputfolder examples/output/cercosporin/ --include --bgclist ./examples/data/cercosporin/cercosporin_MIBiG.tsv --stacked
+```
+
+![cercosporin_stacked_algn](examples/output/cercosporin/cercosporin_MIBiG.svg "cercosporin aligned. color_mode=white")
+
+Neat.
+
+examples/output/cercosporin/stacked_BGC_figure.svg
 cercosporin
 
 mibig 2.0

@@ -5,54 +5,6 @@
     <g>
       <title>AAT69682.1 [BGC0001247.1~L0+CDS1]</title>
       <polygon points="1496.3,60.0 1496.3,20.0 1785.85,20.0 1785.85,0.0 1825.85,40.0 1785.85,80.0 1785.85,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,SAT">
-        <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
-PF16073.5 - SAT</title>
-        <polygon points="1497.65,24.0 1533.65,24.0 1533.65,56.0 1497.65,56.0" fill="rgb(77,115,183)" stroke-linejoin="round"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1497.65 24.0 L 1533.65 24.0, 1533.65 56.0, 1497.65 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,ketoacyl-synt">
-        <title>Beta-ketoacyl synthase, N-terminal domain [KS]
-PF00109.26 - ketoacyl-synt</title>
-        <polygon points="1553.3,24.0 1590.8,24.0 1590.8,56.0 1553.3,56.0" fill="rgb(112,116,228)" stroke-linejoin="round"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1553.3 24.0 L 1590.8 24.0, 1590.8 56.0, 1553.3 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Ketoacyl-synt_C">
-        <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
-PF02801.22 - Ketoacyl-synt_C</title>
-        <polygon points="1592.0,24.0 1610.3,24.0 1610.3,56.0 1592.0,56.0" fill="rgb(215,78,102)" stroke-linejoin="round"/>
-        <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M1592.0 24.0 L 1610.3 24.0, 1610.3 56.0, 1592.0 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Acyl_transf_1">
-        <title>Acyl transferase domain [AT]
-PF00698.21 - Acyl_transf_1</title>
-        <polygon points="1634.45,24.0 1677.65,24.0 1677.65,56.0 1634.45,56.0" fill="rgb(59,176,209)" stroke-linejoin="round"/>
-        <path stroke="rgb(47,141,167)" stroke-linejoin="round" stroke-width="1" d="M1634.45 24.0 L 1677.65 24.0, 1677.65 56.0, 1634.45 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,TIGR04532">
-        <title>PT_fungal_PKS: polyketide product template domain [PT]
-TIGR04532 - TIGR04532</title>
-        <polygon points="1690.7,24.0 1737.8,24.0 1737.8,56.0 1690.7,56.0" fill="rgb(56,129,81)" stroke-linejoin="round"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1690.7 24.0 L 1737.8 24.0, 1737.8 56.0, 1690.7 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,PP-binding">
-        <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
-        <polygon points="1748.15,24.0 1757.6,24.0 1757.6,56.0 1748.15,56.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
-        <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M1748.15 24.0 L 1757.6 24.0, 1757.6 56.0, 1748.15 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,PP-binding">
-        <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
-        <polygon points="1764.5,24.0 1773.05,24.0 1773.05,56.0 1764.5,56.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
-        <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M1764.5 24.0 L 1773.05 24.0, 1773.05 56.0, 1764.5 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Thioesterase">
-        <title>Thioesterase domain [TE]
-PF00975.20 - Thioesterase</title>
-        <polygon points="1786.55,24.0 1809.85,24.0 1824.2,39.0 1824.2,41.0 1809.85,56.0 1786.55,56.0" fill="rgb(207,80,138)" stroke-linejoin="round"/>
-        <path stroke="rgb(166,64,110)" stroke-linejoin="round" stroke-width="1" d="M1824.2 39.0 L 1809.85 24.0, 1786.55 24.0, 1786.55 56.0, 1809.85 56.0, 1824.2 41.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M1825 40 L 1840 40"/>
@@ -64,18 +16,6 @@ PF00975.20 - Thioesterase</title>
     <g>
       <title>ABC79591.2 [BGC0001247.1~L1+CDS1]</title>
       <polygon points="1865.85,60.0 1865.85,20.0 1956.65,20.0 1956.65,0.0 1996.65,40.0 1956.65,80.0 1956.65,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,Methyltransf_2">
-        <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="1896.3,24.0 1926.6,24.0 1926.6,56.0 1896.3,56.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M1896.3 24.0 L 1926.6 24.0, 1926.6 56.0, 1896.3 56.0 Z" fill="none"/>
-      </g>
-      <g class="domain,NAD_binding_8">
-        <title>NAD(P)-binding Rossmann-like domain 
-PF13450.6 - NAD_binding_8</title>
-        <polygon points="1934.55,24.0 1939.2,24.0 1939.2,56.0 1934.55,56.0" fill="rgb(91,180,227)" stroke-linejoin="round"/>
-        <path stroke="rgb(73,144,182)" stroke-linejoin="round" stroke-width="1" d="M1934.55 24.0 L 1939.2 24.0, 1939.2 56.0, 1934.55 56.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M1996 40 L 2011 40"/>
@@ -89,12 +29,6 @@ PF13450.6 - NAD_binding_8</title>
       <polygon points="2063.85,60.0 2063.85,20.0 2077.8,20.0 2077.8,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="2080.45,60.0 2080.45,20.0 2095.8,20.0 2095.8,0.0 2135.8,40.0 2095.8,80.0 2095.8,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="2077.85,60.0 2077.85,20.0 2080.4,20.0 2080.4,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Methyltransf_2">
-        <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="2105.15,24.0 2119.8,24.0 2127.8,32.0 2127.8,48.0 2119.8,56.0 2105.15,56.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M2127.8 32.0 L 2119.8 24.0, 2105.15 24.0, 2105.15 56.0, 2119.8 56.0, 2127.8 48.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M2156 40 L 2171 40"/>
@@ -112,15 +46,6 @@ PF00891.18 - Methyltransf_2</title>
       <polygon points="2266.0,60.0 2266.0,20.0 2263.7,20.0 2263.7,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="2235.3,74.6 2235.3,5.4 2232.55,8.15 2232.55,71.85" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="2210.5,49.8 2210.5,30.2 2208.0,32.7 2208.0,47.3" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,MFS_1">
-        <title>Major Facilitator Superfamily 
-PF07690.16 - MFS_1</title>
-        <polygon points="2273.65,24.0 2266.05,24.0 2266.0,35.0 2263.7,35.0 2263.65,24.0 2235.35,24.0 2235.3,35.0 2232.55,35.0 2232.5,24.0 2216.7,24.0 2211.5,30.0 2211.5,50.0 2216.7,56.0 2232.5,56.0 2232.55,45.0 2235.3,45.0 2235.35,56.0 2263.65,56.0 2263.7,45.0 2266.0,45.0 2266.05,56.0 2273.65,56.0" fill="rgb(193,224,74)" stroke-linejoin="round"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2266.05 24.0 L 2273.65 24.0, 2273.65 56.0, 2266.05 56.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2263.65 24.0 L 2235.35 24.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2263.65 56.0 L 2235.35 56.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2232.5 24.0 L 2216.7 24.0, 2211.5 30.0, 2211.5 50.0, 2216.7 56.0, 2232.5 56.0" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M2310 40 L 2325 40"/>
@@ -132,12 +57,6 @@ PF07690.16 - MFS_1</title>
     <g>
       <title>ABK64182.1 [BGC0001247.1~L4+CDS1]</title>
       <polygon points="2384.7,60.0 2384.7,20.0 2413.7,20.0 2413.7,0.0 2453.7,40.0 2413.7,80.0 2413.7,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,FAD_binding_4">
-        <title>FAD binding domain 
-PF01565.23 - FAD_binding_4</title>
-        <polygon points="2386.5,24.0 2407.8,24.0 2407.8,56.0 2386.5,56.0" fill="rgb(226,88,136)" stroke-linejoin="round"/>
-        <path stroke="rgb(181,70,109)" stroke-linejoin="round" stroke-width="1" d="M2386.5 24.0 L 2407.8 24.0, 2407.8 56.0, 2386.5 56.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M2470 40 L 2485 40"/>
@@ -149,12 +68,6 @@ PF01565.23 - FAD_binding_4</title>
     <g>
       <title>ABK64183.1 [BGC0001247.1~L5+CDS1]</title>
       <polygon points="2572.6,60.0 2572.6,20.0 2558.9,20.0 2558.9,0.0 2518.9,40.0 2558.9,80.0 2558.9,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,Epimerase">
-        <title>NAD dependent epimerase/dehydratase family 
-PF01370.21 - Epimerase</title>
-        <polygon points="2572.0,24.0 2534.9,24.0 2534.05,25.0 2534.05,55.0 2534.9,56.0 2572.0,56.0" fill="rgb(98,102,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(78,82,171)" stroke-linejoin="round" stroke-width="1" d="M2534.05 25.0 L 2534.9 24.0, 2572.0 24.0, 2572.0 56.0, 2534.9 56.0, 2534.05 55.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M2597 40 L 2612 40"/>
@@ -168,12 +81,6 @@ PF01370.21 - Epimerase</title>
       <polygon points="2707.45,60.0 2707.45,20.0 2737.5,20.0 2737.5,0.0 2742.35,4.85 2742.35,75.15 2737.5,80.0 2737.5,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="2744.75,72.75 2744.75,7.25 2777.5,40.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="2742.4,75.1 2742.4,4.9 2744.7,7.2 2744.7,72.8" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,FAD_binding_3">
-        <title>FAD binding domain 
-PF01494.19 - FAD_binding_3</title>
-        <polygon points="2708.2,24.0 2733.1,24.0 2733.1,56.0 2708.2,56.0" fill="rgb(182,175,59)" stroke-linejoin="round"/>
-        <path stroke="rgb(146,140,47)" stroke-linejoin="round" stroke-width="1" d="M2708.2 24.0 L 2733.1 24.0, 2733.1 56.0, 2708.2 56.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M2784 40 L 2799 40"/>
@@ -187,19 +94,6 @@ PF01494.19 - FAD_binding_3</title>
       <polygon points="2900.35,60.0 2900.35,20.0 2896.15,20.0 2896.15,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="2893.6,60.0 2893.6,20.0 2878.1,20.0 2878.1,0.0 2838.1,40.0 2878.1,80.0 2878.1,60.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="2896.1,60.0 2896.1,20.0 2893.65,20.0 2893.65,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Zn_clus">
-        <title>Fungal Zn(2)-Cys(6) binuclear cluster domain 
-PF00172.18 - Zn_clus</title>
-        <polygon points="2896.9,24.0 2896.15,24.0 2896.1,35.0 2893.65,35.0 2893.6,24.0 2889.0,24.0 2889.0,56.0 2893.6,56.0 2893.65,45.0 2896.1,45.0 2896.15,56.0 2896.9,56.0" fill="rgb(121,178,76)" stroke-linejoin="round"/>
-        <path stroke="rgb(97,142,61)" stroke-linejoin="round" stroke-width="1" d="M2896.15 24.0 L 2896.9 24.0, 2896.9 56.0, 2896.15 56.0" fill="none"/>
-        <path stroke="rgb(97,142,61)" stroke-linejoin="round" stroke-width="1" d="M2893.6 24.0 L 2889.0 24.0, 2889.0 56.0, 2893.6 56.0" fill="none"/>
-      </g>
-      <g class="domain,AflR">
-        <title>Aflatoxin regulatory protein 
-PF08493.10 - AflR</title>
-        <polygon points="2885.25,24.0 2855.1,24.0 2855.1,56.0 2885.25,56.0" fill="rgb(86,63,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(69,50,171)" stroke-linejoin="round" stroke-width="1" d="M2885.25 24.0 L 2855.1 24.0, 2855.1 56.0, 2885.25 56.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M2932 40 L 2947 40"/>
@@ -217,15 +111,6 @@ PF08493.10 - AflR</title>
       <polygon points="3027.25,60.0 3027.25,20.0 3024.75,20.0 3024.75,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="3004.45,63.6 3004.45,16.4 3001.8,19.05 3001.8,60.95" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="2992.55,51.7 2992.55,28.3 2990.0,30.85 2990.0,49.15" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,EMC3_TMCO1">
-        <title>Integral membrane protein EMC3/TMCO1-like 
-PF01956.16 - EMC3_TMCO1</title>
-        <polygon points="3027.55,24.0 3027.3,24.0 3027.25,35.0 3024.75,35.0 3024.7,24.0 3004.5,24.0 3004.45,35.0 3001.8,35.0 3001.75,24.0 2996.85,24.0 2992.9,28.0 2992.9,52.0 2996.85,56.0 3001.75,56.0 3001.8,45.0 3004.45,45.0 3004.5,56.0 3024.7,56.0 3024.75,45.0 3027.25,45.0 3027.3,56.0 3027.55,56.0" fill="rgb(209,224,69)" stroke-linejoin="round"/>
-        <path stroke="rgb(167,179,55)" stroke-linejoin="round" stroke-width="1" d="M3027.3 24.0 L 3027.55 24.0, 3027.55 56.0, 3027.3 56.0" fill="none"/>
-        <path stroke="rgb(167,179,55)" stroke-linejoin="round" stroke-width="1" d="M3024.7 24.0 L 3004.5 24.0" fill="none"/>
-        <path stroke="rgb(167,179,55)" stroke-linejoin="round" stroke-width="1" d="M3024.7 56.0 L 3004.5 56.0" fill="none"/>
-        <path stroke="rgb(167,179,55)" stroke-linejoin="round" stroke-width="1" d="M3001.75 24.0 L 2996.85 24.0, 2992.9 28.0, 2992.9 52.0, 2996.85 56.0, 3001.75 56.0" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M3062 40 L 3077 40"/>
@@ -243,12 +128,6 @@ PF01956.16 - EMC3_TMCO1</title>
       <polygon points="3171.35,60.0 3171.35,20.0 3167.9,20.0 3167.9,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="3150.1,69.25 3150.1,10.75 3147.4,13.45 3147.4,66.55" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="3131.65,50.8 3131.65,29.2 3128.25,32.6 3128.25,47.4" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,HET">
-        <title>Heterokaryon incompatibility protein (HET) 
-PF06985.11 - HET</title>
-        <polygon points="3187.1,24.0 3174.35,24.0 3174.35,56.0 3187.1,56.0" fill="rgb(222,108,192)" stroke-linejoin="round"/>
-        <path stroke="rgb(178,86,154)" stroke-linejoin="round" stroke-width="1" d="M3187.1 24.0 L 3174.35 24.0, 3174.35 56.0, 3187.1 56.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <path stroke="#464646" stroke-width="3" d="M3210 40 L 3225 40"/>
@@ -279,12 +158,6 @@ PF06985.11 - HET</title>
     <g>
       <title>PIB02402.1 [BGC0001541.1~L0+CDS1]</title>
       <polygon points="2138.65,142.0 2138.65,102.0 2124.95,102.0 2124.95,82.0 2084.95,122.0 2124.95,162.0 2124.95,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,Epimerase">
-        <title>NAD dependent epimerase/dehydratase family 
-PF01370.21 - Epimerase</title>
-        <polygon points="2138.05,106.0 2100.95,106.0 2099.95,107.0 2099.95,137.0 2100.95,138.0 2138.05,138.0" fill="rgb(98,102,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(78,82,171)" stroke-linejoin="round" stroke-width="1" d="M2099.95 107.0 L 2100.95 106.0, 2138.05 106.0, 2138.05 138.0, 2100.95 138.0, 2099.95 137.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02403.1 [BGC0001541.1~L0+CDS2]</title>
@@ -295,27 +168,12 @@ PF01370.21 - Epimerase</title>
       <polygon points="2038.15,142.0 2038.15,102.0 2035.85,102.0 2035.85,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="2007.45,156.6 2007.45,87.4 2004.8,90.05 2004.8,153.95" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1982.75,131.9 1982.75,112.1 1980.15,114.7 1980.15,129.3" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,MFS_1">
-        <title>Major Facilitator Superfamily 
-PF07690.16 - MFS_1</title>
-        <polygon points="2045.8,106.0 2038.2,106.0 2038.15,117.0 2035.85,117.0 2035.8,106.0 2007.5,106.0 2007.45,117.0 2004.8,117.0 2004.75,106.0 1988.85,106.0 1983.75,112.0 1983.75,132.0 1988.85,138.0 2004.75,138.0 2004.8,127.0 2007.45,127.0 2007.5,138.0 2035.8,138.0 2035.85,127.0 2038.15,127.0 2038.2,138.0 2045.8,138.0" fill="rgb(193,224,74)" stroke-linejoin="round"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2038.2 106.0 L 2045.8 106.0, 2045.8 138.0, 2038.2 138.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2035.8 106.0 L 2007.5 106.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2035.8 138.0 L 2007.5 138.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2004.75 106.0 L 1988.85 106.0, 1983.75 112.0, 1983.75 132.0, 1988.85 138.0, 2004.75 138.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02404.1 [BGC0001541.1~L0+CDS3]</title>
       <polygon points="1875.95,142.0 1875.95,102.0 1889.9,102.0 1889.9,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1892.55,142.0 1892.55,102.0 1908.05,102.0 1908.05,82.0 1948.05,122.0 1908.05,162.0 1908.05,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1889.95,142.0 1889.95,102.0 1892.5,102.0 1892.5,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Methyltransf_2">
-        <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="1917.4,106.0 1932.05,106.0 1940.05,114.0 1940.05,130.0 1932.05,138.0 1917.4,138.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M1940.05 114.0 L 1932.05 106.0, 1917.4 106.0, 1917.4 138.0, 1932.05 138.0, 1940.05 130.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02405.1 [BGC0001541.1~L0+CDS4]</title>
@@ -336,66 +194,6 @@ PF00891.18 - Methyltransf_2</title>
       <polygon points="1721.8,142.0 1721.8,102.0 1724.35,102.0 1724.35,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1743.2,142.0 1743.2,102.0 1746.15,102.0 1746.15,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1811.9,158.5 1811.9,85.5 1814.55,88.15 1814.55,155.85" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,SAT">
-        <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
-PF16073.5 - SAT</title>
-        <polygon points="1497.8,106.0 1511.1,106.0 1511.15,117.0 1513.6,117.0 1513.65,106.0 1528.85,106.0 1528.9,117.0 1531.45,117.0 1531.5,106.0 1538.9,106.0 1538.9,138.0 1531.5,138.0 1531.45,127.0 1528.9,127.0 1528.85,138.0 1513.65,138.0 1513.6,127.0 1511.15,127.0 1511.1,138.0 1497.8,138.0" fill="rgb(77,115,183)" stroke-linejoin="round"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1511.1 106.0 L 1497.8 106.0, 1497.8 138.0, 1511.1 138.0" fill="none"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1513.65 106.0 L 1528.85 106.0" fill="none"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1513.65 138.0 L 1528.85 138.0" fill="none"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1531.5 106.0 L 1538.9 106.0, 1538.9 138.0, 1531.5 138.0" fill="none"/>
-      </g>
-      <g class="domain,ketoacyl-synt">
-        <title>Beta-ketoacyl synthase, N-terminal domain [KS]
-PF00109.26 - ketoacyl-synt</title>
-        <polygon points="1558.7,106.0 1570.55,106.0 1570.6,117.0 1572.85,117.0 1572.9,106.0 1580.5,106.0 1580.55,117.0 1583.3,117.0 1583.35,106.0 1585.8,106.0 1585.85,117.0 1588.1,117.0 1588.15,106.0 1603.6,106.0 1603.6,138.0 1588.15,138.0 1588.1,127.0 1585.85,127.0 1585.8,138.0 1583.35,138.0 1583.3,127.0 1580.55,127.0 1580.5,138.0 1572.9,138.0 1572.85,127.0 1570.6,127.0 1570.55,138.0 1558.7,138.0" fill="rgb(112,116,228)" stroke-linejoin="round"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1570.55 106.0 L 1558.7 106.0, 1558.7 138.0, 1570.55 138.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1572.9 106.0 L 1580.5 106.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1572.9 138.0 L 1580.5 138.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1583.35 106.0 L 1585.8 106.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1583.35 138.0 L 1585.8 138.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1588.15 106.0 L 1603.6 106.0, 1603.6 138.0, 1588.15 138.0" fill="none"/>
-      </g>
-      <g class="domain,Ketoacyl-synt_C">
-        <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
-PF02801.22 - Ketoacyl-synt_C</title>
-        <polygon points="1604.8,106.0 1623.1,106.0 1623.1,138.0 1604.8,138.0" fill="rgb(215,78,102)" stroke-linejoin="round"/>
-        <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M1604.8 106.0 L 1623.1 106.0, 1623.1 138.0, 1604.8 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Acyl_transf_1">
-        <title>Acyl transferase domain [AT]
-PF00698.21 - Acyl_transf_1</title>
-        <polygon points="1647.25,106.0 1690.45,106.0 1690.45,138.0 1647.25,138.0" fill="rgb(59,176,209)" stroke-linejoin="round"/>
-        <path stroke="rgb(47,141,167)" stroke-linejoin="round" stroke-width="1" d="M1647.25 106.0 L 1690.45 106.0, 1690.45 138.0, 1647.25 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,TIGR04532">
-        <title>PT_fungal_PKS: polyketide product template domain [PT]
-TIGR04532 - TIGR04532</title>
-        <polygon points="1703.5,106.0 1721.75,106.0 1721.8,117.0 1724.35,117.0 1724.4,106.0 1743.15,106.0 1743.2,117.0 1746.15,117.0 1746.2,106.0 1757.25,106.0 1757.25,138.0 1746.2,138.0 1746.15,127.0 1743.2,127.0 1743.15,138.0 1724.4,138.0 1724.35,127.0 1721.8,127.0 1721.75,138.0 1703.5,138.0" fill="rgb(56,129,81)" stroke-linejoin="round"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1721.75 106.0 L 1703.5 106.0, 1703.5 138.0, 1721.75 138.0" fill="none"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1724.4 106.0 L 1743.15 106.0" fill="none"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1724.4 138.0 L 1743.15 138.0" fill="none"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1746.2 106.0 L 1757.25 106.0, 1757.25 138.0, 1746.2 138.0" fill="none"/>
-      </g>
-      <g class="domain,PP-binding">
-        <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
-        <polygon points="1767.6,106.0 1777.05,106.0 1777.05,138.0 1767.6,138.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
-        <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M1767.6 106.0 L 1777.05 106.0, 1777.05 138.0, 1767.6 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,PP-binding">
-        <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
-        <polygon points="1783.95,106.0 1792.5,106.0 1792.5,138.0 1783.95,138.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
-        <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M1783.95 106.0 L 1792.5 106.0, 1792.5 138.0, 1783.95 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Thioesterase">
-        <title>Thioesterase domain [TE]
-PF00975.20 - Thioesterase</title>
-        <polygon points="1806.0,106.0 1811.85,106.0 1811.9,117.0 1814.55,117.0 1814.6,106.0 1832.4,106.0 1846.35,120.0 1846.35,124.0 1832.4,138.0 1814.6,138.0 1814.55,127.0 1811.9,127.0 1811.85,138.0 1806.0,138.0" fill="rgb(207,80,138)" stroke-linejoin="round"/>
-        <path stroke="rgb(166,64,110)" stroke-linejoin="round" stroke-width="1" d="M1811.85 106.0 L 1806.0 106.0, 1806.0 138.0, 1811.85 138.0" fill="none"/>
-        <path stroke="rgb(166,64,110)" stroke-linejoin="round" stroke-width="1" d="M1814.6 106.0 L 1832.4 106.0, 1846.35 120.0, 1846.35 124.0, 1832.4 138.0, 1814.6 138.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02398.1 [BGC0001541.1~L0+CDS5]</title>
@@ -404,68 +202,24 @@ PF00975.20 - Thioesterase</title>
       <polygon points="1423.2,142.0 1423.2,102.0 1357.3,102.0 1357.3,82.0 1317.3,122.0 1357.3,162.0 1357.3,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1441.65,142.0 1441.65,102.0 1439.35,102.0 1439.35,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1426.65,142.0 1426.65,102.0 1423.25,102.0 1423.25,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Methyltransf_2">
-        <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="1417.75,106.0 1387.45,106.0 1387.45,138.0 1417.75,138.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M1417.75 106.0 L 1387.45 106.0, 1387.45 138.0, 1417.75 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,NAD_binding_8">
-        <title>NAD(P)-binding Rossmann-like domain 
-PF13450.6 - NAD_binding_8</title>
-        <polygon points="1379.5,106.0 1374.85,106.0 1374.85,138.0 1379.5,138.0" fill="rgb(91,180,227)" stroke-linejoin="round"/>
-        <path stroke="rgb(73,144,182)" stroke-linejoin="round" stroke-width="1" d="M1379.5 106.0 L 1374.85 106.0, 1374.85 138.0, 1379.5 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,FAD_binding_3">
-        <title>FAD binding domain 
-PF01494.19 - FAD_binding_3</title>
-        <polygon points="1330.6,108.7 1324.6,114.7 1324.6,129.3 1330.6,135.3" fill="rgb(182,175,59)" stroke-linejoin="round"/>
-        <path stroke="rgb(146,140,47)" stroke-linejoin="round" stroke-width="1" d="M1324.6 114.7 L 1330.6 108.7, 1330.6 135.3, 1324.6 129.3 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02399.1 [BGC0001541.1~L0+CDS6]</title>
       <polygon points="1213.55,142.0 1213.55,102.0 1220.15,102.0 1220.15,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1222.95,142.0 1222.95,102.0 1255.55,102.0 1255.55,82.0 1295.55,122.0 1255.55,162.0 1255.55,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1220.2,142.0 1220.2,102.0 1222.9,102.0 1222.9,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,FAD_binding_4">
-        <title>FAD binding domain 
-PF01565.23 - FAD_binding_4</title>
-        <polygon points="1228.3,106.0 1249.6,106.0 1249.6,138.0 1228.3,138.0" fill="rgb(226,88,136)" stroke-linejoin="round"/>
-        <path stroke="rgb(181,70,109)" stroke-linejoin="round" stroke-width="1" d="M1228.3 106.0 L 1249.6 106.0, 1249.6 138.0, 1228.3 138.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02400.1 [BGC0001541.1~L0+CDS7]</title>
       <polygon points="1112.45,142.0 1112.45,102.0 1142.55,102.0 1142.55,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1149.75,154.9 1149.75,89.1 1182.65,122.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1142.6,142.0 1142.6,102.0 1142.65,102.0 1142.65,82.0 1149.7,89.05 1149.7,154.95 1142.65,162.0 1142.65,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,FAD_binding_3">
-        <title>FAD binding domain 
-PF01494.19 - FAD_binding_3</title>
-        <polygon points="1113.2,106.0 1142.55,106.0 1142.6,117.0 1149.7,117.0 1149.75,106.0 1166.65,106.0 1169.7,110.0 1169.7,134.0 1166.65,138.0 1149.75,138.0 1149.7,127.0 1142.6,127.0 1142.55,138.0 1113.2,138.0" fill="rgb(182,175,59)" stroke-linejoin="round"/>
-        <path stroke="rgb(146,140,47)" stroke-linejoin="round" stroke-width="1" d="M1142.55 106.0 L 1113.2 106.0, 1113.2 138.0, 1142.55 138.0" fill="none"/>
-        <path stroke="rgb(146,140,47)" stroke-linejoin="round" stroke-width="1" d="M1149.75 106.0 L 1166.65 106.0, 1169.7 110.0, 1169.7 134.0, 1166.65 138.0, 1149.75 138.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02401.1 [BGC0001541.1~L0+CDS8]</title>
       <polygon points="1031.85,142.0 1031.85,102.0 1027.65,102.0 1027.65,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1025.1,142.0 1025.1,102.0 1009.6,102.0 1009.6,82.0 969.6,122.0 1009.6,162.0 1009.6,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1027.6,142.0 1027.6,102.0 1025.15,102.0 1025.15,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Zn_clus">
-        <title>Fungal Zn(2)-Cys(6) binuclear cluster domain 
-PF00172.18 - Zn_clus</title>
-        <polygon points="1028.4,106.0 1027.65,106.0 1027.6,117.0 1025.15,117.0 1025.1,106.0 1020.5,106.0 1020.5,138.0 1025.1,138.0 1025.15,127.0 1027.6,127.0 1027.65,138.0 1028.4,138.0" fill="rgb(121,178,76)" stroke-linejoin="round"/>
-        <path stroke="rgb(97,142,61)" stroke-linejoin="round" stroke-width="1" d="M1027.65 106.0 L 1028.4 106.0, 1028.4 138.0, 1027.65 138.0" fill="none"/>
-        <path stroke="rgb(97,142,61)" stroke-linejoin="round" stroke-width="1" d="M1025.1 106.0 L 1020.5 106.0, 1020.5 138.0, 1025.1 138.0" fill="none"/>
-      </g>
-      <g class="domain,AflR">
-        <title>Aflatoxin regulatory protein 
-PF08493.10 - AflR</title>
-        <polygon points="1019.15,106.0 986.6,106.0 986.6,138.0 1019.15,138.0" fill="rgb(86,63,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(69,50,171)" stroke-linejoin="round" stroke-width="1" d="M1019.15 106.0 L 986.6 106.0, 986.6 138.0, 1019.15 138.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB02406.1 [BGC0001541.1~L0+CDS9]</title>
@@ -474,12 +228,6 @@ PF08493.10 - AflR</title>
     <g>
       <title>PIB02407.1 [BGC0001541.1~L0+CDS10]</title>
       <polygon points="742.65,142.0 742.65,102.0 737.35,102.0 737.35,82.0 697.35,122.0 737.35,162.0 737.35,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,AflR">
-        <title>Aflatoxin regulatory protein 
-PF08493.10 - AflR</title>
-        <polygon points="727.95,106.0 714.15,106.0 714.15,138.0 727.95,138.0" fill="rgb(86,63,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(69,50,171)" stroke-linejoin="round" stroke-width="1" d="M727.95 106.0 L 714.15 106.0, 714.15 138.0, 727.95 138.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB01160.1 [BGC0001541.1~L0+CDS11]</title>
@@ -494,19 +242,6 @@ PF08493.10 - AflR</title>
       <polygon points="505.3,142.0 505.3,102.0 500.6,102.0 500.6,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="495.8,142.0 495.8,102.0 493.35,102.0 493.35,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="470.15,147.65 470.15,96.35 467.1,99.4 467.1,144.6" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Lyase_aromatic">
-        <title>Aromatic amino acid lyase 
-PF00221.19 - Lyase_aromatic</title>
-        <polygon points="563.25,106.0 561.5,106.0 561.45,117.0 559.1,117.0 559.05,106.0 553.85,106.0 553.8,117.0 549.05,117.0 549.0,106.0 505.35,106.0 505.3,117.0 500.6,117.0 500.55,106.0 495.85,106.0 495.8,117.0 493.35,117.0 493.3,106.0 477.1,106.0 477.1,138.0 493.3,138.0 493.35,127.0 495.8,127.0 495.85,138.0 500.55,138.0 500.6,127.0 505.3,127.0 505.35,138.0 549.0,138.0 549.05,127.0 553.8,127.0 553.85,138.0 559.05,138.0 559.1,127.0 561.45,127.0 561.5,138.0 563.25,138.0" fill="rgb(182,133,62)" stroke-linejoin="round"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M561.5 106.0 L 563.25 106.0, 563.25 138.0, 561.5 138.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M559.05 106.0 L 553.85 106.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M559.05 138.0 L 553.85 138.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M549.0 106.0 L 505.35 106.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M549.0 138.0 L 505.35 138.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M500.55 106.0 L 495.85 106.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M500.55 138.0 L 495.85 138.0" fill="none"/>
-        <path stroke="rgb(146,106,50)" stroke-linejoin="round" stroke-width="1" d="M493.3 106.0 L 477.1 106.0, 477.1 138.0, 493.3 138.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB01159.1 [BGC0001541.1~L0+CDS12]</title>
@@ -517,17 +252,6 @@ PF00221.19 - Lyase_aromatic</title>
       <polygon points="380.5,142.0 380.5,102.0 378.05,102.0 378.05,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="357.95,142.0 357.95,102.0 356.4,102.0 356.4,82.0 355.55,82.85 355.55,161.15 356.4,162.0 356.4,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="344.95,150.55 344.95,93.45 342.6,95.8 342.6,148.2" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,MFS_1">
-        <title>Major Facilitator Superfamily 
-PF07690.16 - MFS_1</title>
-        <polygon points="403.4,106.0 380.55,106.0 380.5,117.0 378.05,117.0 378.0,106.0 358.0,106.0 357.95,117.0 355.55,117.0 355.5,106.0 345.0,106.0 344.95,117.0 342.6,117.0 342.55,106.0 335.6,106.0 335.6,138.0 342.55,138.0 342.6,127.0 344.95,127.0 345.0,138.0 355.5,138.0 355.55,127.0 357.95,127.0 358.0,138.0 378.0,138.0 378.05,127.0 380.5,127.0 380.55,138.0 403.4,138.0" fill="rgb(193,224,74)" stroke-linejoin="round"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M380.55 106.0 L 403.4 106.0, 403.4 138.0, 380.55 138.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M378.0 106.0 L 358.0 106.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M378.0 138.0 L 358.0 138.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M355.5 106.0 L 345.0 106.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M355.5 138.0 L 345.0 138.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M342.55 106.0 L 335.6 106.0, 335.6 138.0, 342.55 138.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB01162.1 [BGC0001541.1~L0+CDS13]</title>
@@ -542,53 +266,16 @@ PF07690.16 - MFS_1</title>
       <polygon points="216.8,124.8 216.8,119.2 218.65,122.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="200.4,149.65 200.4,94.35 203.4,98.89 203.4,145.11" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="213.5,129.8 213.5,114.2 216.75,119.12 216.75,124.88" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,EthD">
-        <title>EthD domain 
-PF07110.11 - EthD</title>
-        <polygon points="195.1,106.0 200.35,106.0 200.4,117.0 203.4,117.0 203.45,106.0 208.09,106.0 212.7,113.0 212.7,131.0 208.09,138.0 203.45,138.0 203.4,127.0 200.4,127.0 200.35,138.0 195.1,138.0" fill="rgb(64,130,182)" stroke-linejoin="round"/>
-        <path stroke="rgb(51,104,146)" stroke-linejoin="round" stroke-width="1" d="M200.35 106.0 L 195.1 106.0, 195.1 138.0, 200.35 138.0" fill="none"/>
-        <path stroke="rgb(51,104,146)" stroke-linejoin="round" stroke-width="1" d="M203.45 106.0 L 208.09 106.0, 212.7 113.0, 212.7 131.0, 208.09 138.0, 203.45 138.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB01156.1 [BGC0001541.1~L0+CDS15]</title>
       <polygon points="110.6,142.0 110.6,102.0 129.5,102.0 129.5,82.0 156.55,109.05 156.55,134.95 129.5,162.0 129.5,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="159.2,132.3 159.2,111.7 169.5,122.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="156.6,134.9 156.6,109.1 159.15,111.65 159.15,132.35" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Fasciclin">
-        <title>Fasciclin domain 
-PF02469.22 - Fasciclin</title>
-        <polygon points="114.8,106.0 136.1,106.0 136.1,138.0 114.8,138.0" fill="rgb(216,185,71)" stroke-linejoin="round"/>
-        <path stroke="rgb(173,148,57)" stroke-linejoin="round" stroke-width="1" d="M114.8 106.0 L 136.1 106.0, 136.1 138.0, 114.8 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Fasciclin">
-        <title>Fasciclin domain 
-PF02469.22 - Fasciclin</title>
-        <polygon points="138.05,106.0 153.5,106.0 156.05,109.0 156.05,135.0 153.5,138.0 138.05,138.0" fill="rgb(216,185,71)" stroke-linejoin="round"/>
-        <path stroke="rgb(173,148,57)" stroke-linejoin="round" stroke-width="1" d="M156.05 109.0 L 153.5 106.0, 138.05 106.0, 138.05 138.0, 153.5 138.0, 156.05 135.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>PIB01155.1 [BGC0001541.1~L0+CDS16]</title>
       <polygon points="95.7,142.0 95.7,102.0 40.15,102.0 40.15,82.0 0.15,122.0 40.15,162.0 40.15,142.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,Cu-oxidase_3">
-        <title>Multicopper oxidase 
-PF07732.15 - Cu-oxidase_3</title>
-        <polygon points="86.7,106.0 70.65,106.0 70.65,138.0 86.7,138.0" fill="rgb(80,81,179)" stroke-linejoin="round"/>
-        <path stroke="rgb(64,65,143)" stroke-linejoin="round" stroke-width="1" d="M86.7 106.0 L 70.65 106.0, 70.65 138.0, 86.7 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Cu-oxidase">
-        <title>Multicopper oxidase 
-PF00394.22 - Cu-oxidase</title>
-        <polygon points="48.3,106.0 38.7,106.0 38.7,138.0 48.3,138.0" fill="rgb(172,188,74)" stroke-linejoin="round"/>
-        <path stroke="rgb(138,150,59)" stroke-linejoin="round" stroke-width="1" d="M48.3 106.0 L 38.7 106.0, 38.7 138.0, 48.3 138.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Cu-oxidase_2">
-        <title>Multicopper oxidase 
-PF07731.14 - Cu-oxidase_2</title>
-        <polygon points="23.1,106.0 16.15,106.0 3.9,119.0 3.9,125.0 16.15,138.0 23.1,138.0" fill="rgb(183,55,192)" stroke-linejoin="round"/>
-        <path stroke="rgb(146,44,154)" stroke-linejoin="round" stroke-width="1" d="M3.9 119.0 L 16.15 106.0, 23.1 106.0, 23.1 138.0, 16.15 138.0, 3.9 125.0 Z" fill="none"/>
-      </g>
     </g>
   </g>
   <g>
@@ -603,30 +290,10 @@ PF07731.14 - Cu-oxidase_2</title>
       <polygon points="1055.7,224.0 1055.7,184.0 1053.25,184.0 1053.25,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1032.55,243.05 1032.55,164.95 1031.6,165.9 1031.6,242.1" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1004.75,215.25 1004.75,192.75 1002.0,195.5 1002.0,212.5" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Zn_clus">
-        <title>Fungal Zn(2)-Cys(6) binuclear cluster domain 
-PF00172.18 - Zn_clus</title>
-        <polygon points="1056.5,188.0 1055.75,188.0 1055.7,199.0 1053.25,199.0 1053.2,188.0 1048.6,188.0 1048.6,220.0 1053.2,220.0 1053.25,209.0 1055.7,209.0 1055.75,220.0 1056.5,220.0" fill="rgb(121,178,76)" stroke-linejoin="round"/>
-        <path stroke="rgb(97,142,61)" stroke-linejoin="round" stroke-width="1" d="M1055.75 188.0 L 1056.5 188.0, 1056.5 220.0, 1055.75 220.0" fill="none"/>
-        <path stroke="rgb(97,142,61)" stroke-linejoin="round" stroke-width="1" d="M1053.2 188.0 L 1048.6 188.0, 1048.6 220.0, 1053.2 220.0" fill="none"/>
-      </g>
-      <g class="domain,AflR">
-        <title>Aflatoxin regulatory protein 
-PF08493.10 - AflR</title>
-        <polygon points="1045.75,188.0 1032.6,188.0 1032.55,199.0 1031.6,199.0 1031.55,188.0 1011.3,188.0 1011.3,220.0 1031.55,220.0 1031.6,209.0 1032.55,209.0 1032.6,220.0 1045.75,220.0" fill="rgb(86,63,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(69,50,171)" stroke-linejoin="round" stroke-width="1" d="M1032.6 188.0 L 1045.75 188.0, 1045.75 220.0, 1032.6 220.0" fill="none"/>
-        <path stroke="rgb(69,50,171)" stroke-linejoin="round" stroke-width="1" d="M1031.55 188.0 L 1011.3 188.0, 1011.3 220.0, 1031.55 220.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>ARU80378.1 [BGC0001542.1~L0+CDS2]</title>
       <polygon points="1220.75,224.0 1220.75,184.0 1250.05,184.0 1250.05,164.0 1290.05,204.0 1250.05,244.0 1250.05,224.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,FAD_binding_4">
-        <title>FAD binding domain 
-PF01565.23 - FAD_binding_4</title>
-        <polygon points="1222.55,188.0 1243.85,188.0 1243.85,220.0 1222.55,220.0" fill="rgb(226,88,136)" stroke-linejoin="round"/>
-        <path stroke="rgb(181,70,109)" stroke-linejoin="round" stroke-width="1" d="M1222.55 188.0 L 1243.85 188.0, 1243.85 220.0, 1222.55 220.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>ARU80379.1 [BGC0001542.1~L0+CDS3]</title>
@@ -635,18 +302,6 @@ PF01565.23 - FAD_binding_4</title>
       <polygon points="1429.75,224.0 1429.75,184.0 1363.7,184.0 1363.7,164.0 1323.7,204.0 1363.7,244.0 1363.7,224.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <polygon points="1449.65,224.0 1449.65,184.0 1447.05,184.0 1447.05,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1434.35,224.0 1434.35,184.0 1429.8,184.0 1429.8,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,Methyltransf_2">
-        <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="1424.3,188.0 1394.0,188.0 1394.0,220.0 1424.3,220.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M1424.3 188.0 L 1394.0 188.0, 1394.0 220.0, 1424.3 220.0 Z" fill="none"/>
-      </g>
-      <g class="domain,FAD_binding_3">
-        <title>FAD binding domain 
-PF01494.19 - FAD_binding_3</title>
-        <polygon points="1386.5,188.0 1339.7,188.0 1327.7,200.0 1327.7,208.0 1339.7,220.0 1386.5,220.0" fill="rgb(182,175,59)" stroke-linejoin="round"/>
-        <path stroke="rgb(146,140,47)" stroke-linejoin="round" stroke-width="1" d="M1327.7 200.0 L 1339.7 188.0, 1386.5 188.0, 1386.5 220.0, 1339.7 220.0, 1327.7 208.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>ARU80380.1 [BGC0001542.1~L0+CDS4]</title>
@@ -669,78 +324,10 @@ PF01494.19 - FAD_binding_3</title>
       <polygon points="1713.85,224.0 1713.85,184.0 1716.2,184.0 1716.2,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1726.95,224.0 1726.95,184.0 1729.55,184.0 1729.55,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1812.85,240.55 1812.85,167.45 1815.55,170.15 1815.55,237.85" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,SAT">
-        <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
-PF16073.5 - SAT</title>
-        <polygon points="1497.5,188.0 1510.95,188.0 1511.0,199.0 1513.45,199.0 1513.5,188.0 1528.7,188.0 1528.75,199.0 1531.75,199.0 1531.8,188.0 1539.2,188.0 1539.2,220.0 1531.8,220.0 1531.75,209.0 1528.75,209.0 1528.7,220.0 1513.5,220.0 1513.45,209.0 1511.0,209.0 1510.95,220.0 1497.5,220.0" fill="rgb(77,115,183)" stroke-linejoin="round"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1510.95 188.0 L 1497.5 188.0, 1497.5 220.0, 1510.95 220.0" fill="none"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1513.5 188.0 L 1528.7 188.0" fill="none"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1513.5 220.0 L 1528.7 220.0" fill="none"/>
-        <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M1531.8 188.0 L 1539.2 188.0, 1539.2 220.0, 1531.8 220.0" fill="none"/>
-      </g>
-      <g class="domain,ketoacyl-synt">
-        <title>Beta-ketoacyl synthase, N-terminal domain [KS]
-PF00109.26 - ketoacyl-synt</title>
-        <polygon points="1558.85,188.0 1570.7,188.0 1570.75,199.0 1573.0,199.0 1573.05,188.0 1580.65,188.0 1580.7,199.0 1583.25,199.0 1583.3,188.0 1585.75,188.0 1585.8,199.0 1588.05,199.0 1588.1,188.0 1597.3,188.0 1597.35,199.0 1600.0,199.0 1600.05,188.0 1606.25,188.0 1606.25,220.0 1600.05,220.0 1600.0,209.0 1597.35,209.0 1597.3,220.0 1588.1,220.0 1588.05,209.0 1585.8,209.0 1585.75,220.0 1583.3,220.0 1583.25,209.0 1580.7,209.0 1580.65,220.0 1573.05,220.0 1573.0,209.0 1570.75,209.0 1570.7,220.0 1558.85,220.0" fill="rgb(112,116,228)" stroke-linejoin="round"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1570.7 188.0 L 1558.85 188.0, 1558.85 220.0, 1570.7 220.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1573.05 188.0 L 1580.65 188.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1573.05 220.0 L 1580.65 220.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1583.3 188.0 L 1585.75 188.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1583.3 220.0 L 1585.75 220.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1588.1 188.0 L 1597.3 188.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1588.1 220.0 L 1597.3 220.0" fill="none"/>
-        <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M1600.05 188.0 L 1606.25 188.0, 1606.25 220.0, 1600.05 220.0" fill="none"/>
-      </g>
-      <g class="domain,Ketoacyl-synt_C">
-        <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
-PF02801.22 - Ketoacyl-synt_C</title>
-        <polygon points="1607.45,188.0 1626.05,188.0 1626.05,220.0 1607.45,220.0" fill="rgb(215,78,102)" stroke-linejoin="round"/>
-        <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M1607.45 188.0 L 1626.05 188.0, 1626.05 220.0, 1607.45 220.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Acyl_transf_1">
-        <title>Acyl transferase domain [AT]
-PF00698.21 - Acyl_transf_1</title>
-        <polygon points="1649.75,188.0 1693.1,188.0 1693.1,220.0 1649.75,220.0" fill="rgb(59,176,209)" stroke-linejoin="round"/>
-        <path stroke="rgb(47,141,167)" stroke-linejoin="round" stroke-width="1" d="M1649.75 188.0 L 1693.1 188.0, 1693.1 220.0, 1649.75 220.0 Z" fill="none"/>
-      </g>
-      <g class="domain,TIGR04532">
-        <title>PT_fungal_PKS: polyketide product template domain [PT]
-TIGR04532 - TIGR04532</title>
-        <polygon points="1706.3,188.0 1713.8,188.0 1713.85,199.0 1716.2,199.0 1716.25,188.0 1726.9,188.0 1726.95,199.0 1729.55,199.0 1729.6,188.0 1759.35,188.0 1759.35,220.0 1729.6,220.0 1729.55,209.0 1726.95,209.0 1726.9,220.0 1716.25,220.0 1716.2,209.0 1713.85,209.0 1713.8,220.0 1706.3,220.0" fill="rgb(56,129,81)" stroke-linejoin="round"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1713.8 188.0 L 1706.3 188.0, 1706.3 220.0, 1713.8 220.0" fill="none"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1716.25 188.0 L 1726.9 188.0" fill="none"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1716.25 220.0 L 1726.9 220.0" fill="none"/>
-        <path stroke="rgb(45,103,65)" stroke-linejoin="round" stroke-width="1" d="M1729.6 188.0 L 1759.35 188.0, 1759.35 220.0, 1729.6 220.0" fill="none"/>
-      </g>
-      <g class="domain,PP-binding">
-        <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
-        <polygon points="1768.65,188.0 1778.25,188.0 1778.25,220.0 1768.65,220.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
-        <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M1768.65 188.0 L 1778.25 188.0, 1778.25 220.0, 1768.65 220.0 Z" fill="none"/>
-      </g>
-      <g class="domain,PP-binding">
-        <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
-        <polygon points="1785.0,188.0 1794.0,188.0 1794.0,220.0 1785.0,220.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
-        <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M1785.0 188.0 L 1794.0 188.0, 1794.0 220.0, 1785.0 220.0 Z" fill="none"/>
-      </g>
-      <g class="domain,Thioesterase">
-        <title>Thioesterase domain [TE]
-PF00975.20 - Thioesterase</title>
-        <polygon points="1806.9,188.0 1812.8,188.0 1812.85,199.0 1815.55,199.0 1815.6,188.0 1833.4,188.0 1847.15,202.0 1847.15,206.0 1833.4,220.0 1815.6,220.0 1815.55,209.0 1812.85,209.0 1812.8,220.0 1806.9,220.0" fill="rgb(207,80,138)" stroke-linejoin="round"/>
-        <path stroke="rgb(166,64,110)" stroke-linejoin="round" stroke-width="1" d="M1812.8 188.0 L 1806.9 188.0, 1806.9 220.0, 1812.8 220.0" fill="none"/>
-        <path stroke="rgb(166,64,110)" stroke-linejoin="round" stroke-width="1" d="M1815.6 188.0 L 1833.4 188.0, 1847.15 202.0, 1847.15 206.0, 1833.4 220.0, 1815.6 220.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>ARU80381.1 [BGC0001542.1~L0+CDS5]</title>
       <polygon points="1874.55,224.0 1874.55,184.0 1902.5,184.0 1902.5,164.0 1942.5,204.0 1902.5,244.0 1902.5,224.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,Methyltransf_2">
-        <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="1913.4,188.0 1926.5,188.0 1936.05,198.0 1936.05,210.0 1926.5,220.0 1913.4,220.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M1936.05 198.0 L 1926.5 188.0, 1913.4 188.0, 1913.4 220.0, 1926.5 220.0, 1936.05 210.0 Z" fill="none"/>
-      </g>
     </g>
     <g>
       <title>ARU80382.1 [BGC0001542.1~L0+CDS6]</title>
@@ -751,25 +338,10 @@ PF00891.18 - Methyltransf_2</title>
       <polygon points="2029.75,224.0 2029.75,184.0 2027.1,184.0 2027.1,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1998.7,238.6 1998.7,169.4 1996.25,171.85 1996.25,236.15" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <polygon points="1973.9,213.8 1973.9,194.2 1971.4,196.7 1971.4,211.3" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
-      <g class="domain,MFS_1">
-        <title>Major Facilitator Superfamily 
-PF07690.16 - MFS_1</title>
-        <polygon points="2037.4,188.0 2029.8,188.0 2029.75,199.0 2027.1,199.0 2027.05,188.0 1998.75,188.0 1998.7,199.0 1996.25,199.0 1996.2,188.0 1980.1,188.0 1975.05,194.0 1975.05,214.0 1980.1,220.0 1996.2,220.0 1996.25,209.0 1998.7,209.0 1998.75,220.0 2027.05,220.0 2027.1,209.0 2029.75,209.0 2029.8,220.0 2037.4,220.0" fill="rgb(193,224,74)" stroke-linejoin="round"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2029.8 188.0 L 2037.4 188.0, 2037.4 220.0, 2029.8 220.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2027.05 188.0 L 1998.75 188.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M2027.05 220.0 L 1998.75 220.0" fill="none"/>
-        <path stroke="rgb(154,179,59)" stroke-linejoin="round" stroke-width="1" d="M1996.2 188.0 L 1980.1 188.0, 1975.05 194.0, 1975.05 214.0, 1980.1 220.0, 1996.2 220.0" fill="none"/>
-      </g>
     </g>
     <g>
       <title>ARU80383.1 [BGC0001542.1~L0+CDS7]</title>
       <polygon points="2133.35,224.0 2133.35,184.0 2120.1,184.0 2120.1,164.0 2080.1,204.0 2120.1,244.0 2120.1,224.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
-      <g class="domain,Epimerase">
-        <title>NAD dependent epimerase/dehydratase family 
-PF01370.21 - Epimerase</title>
-        <polygon points="2132.75,188.0 2096.1,188.0 2094.8,190.0 2094.8,218.0 2096.1,220.0 2132.75,220.0" fill="rgb(98,102,214)" stroke-linejoin="round"/>
-        <path stroke="rgb(78,82,171)" stroke-linejoin="round" stroke-width="1" d="M2094.8 190.0 L 2096.1 188.0, 2132.75 188.0, 2132.75 220.0, 2096.1 220.0, 2094.8 218.0 Z" fill="none"/>
-      </g>
     </g>
   </g>
 </svg>
