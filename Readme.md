@@ -84,7 +84,9 @@ The PKS is in the reverse strand, but we can mirror the image with `--mirror`:
 
 The color mode in the default styling parameter file ([SVG_arrow_options](./SVG_arrow_options.cfg)) has been changed to `random-pastel`, that is why the colors are different.
 
-Another example with a multi-locus GenBank file, sophorolipid (`color_mode=white`), from MIBiG 1.4 (currently not in MIBiG 2.0):
+Now we'll use some BGCs from [MIBiG](https://mibig.secondarymetabolites.org/).
+
+First, an example with a multi-locus GenBank file, sophorolipid (`color_mode=white`), from MIBiG 1.4 (currently not in MIBiG 2.0):
 
 ```
 ./BGC_SVG_generator.py --files ./examples/data/sophorolipid/BGC0001274.1.gbk --outputfolder examples/output/sophorolipid --include
@@ -100,7 +102,7 @@ Now for a more interesting example, we'll stack the three BGCs encoding cercospo
 
 ![cercosporin_stacked](examples/output/cercosporin/stacked_BGC_figure.svg "cercosporin. color_mode=white")
 
-It's a bit messy but we can define an order and align according to a specific gene (by providing their corresponding Protein Id). For this we'll use a file like [this one](examples/data/cercosporin/cercosporin_MIBiG.tsv):
+It's a bit messy but we can define an order and align according to a specific gene (by providing their corresponding Protein Id). For this we'll use a file like [this one](examples/data/cercosporin/cercosporin_MIBiG.tsv). BGCs will be mirrored as needed:
 
 ```
 ./BGC_SVG_generator.py --inputfolder ./examples/data/cercosporin/ --outputfolder examples/output/cercosporin/ --include --bgclist ./examples/data/cercosporin/cercosporin_MIBiG.tsv --stacked
@@ -110,7 +112,7 @@ It's a bit messy but we can define an order and align according to a specific ge
 
 Neat.
 
-Finally, let's use three mycophenolic acid BGCs from MIBiG 2.0 with domain annotation (using version 33 of Pfam):
+Finally, let's use three mycophenolic acid BGCs from MIBiG 2.0 with domain annotation (using version 33 of [Pfam](https://pfam.xfam.org/)):
 
 ```
 ./BGC_SVG_generator.py --inputfolder ./examples/data/mycophenolic\ acid/ --outputfolder examples/output/mycophenolic\ acid/ --include --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG.tsv --stacked --hmm ~/Databases/pfam/33/Pfam-A.hmm
@@ -129,6 +131,12 @@ Now with an alternative alignment to the genes encoding proteins with domain DUF
 ![mycophenolic_stacked_algn2](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG_DUF2236.svg "mycophenolic aligned v2. color_mode=white")
 
 Domain colors are [already defined](BGClib/data/domain_color_file_ID.tsv) and were generated randomly
+
+Playing with the style file, `color_mode=domains` + `outline=False` will produce:
+
+![mycophenolic_stacked_algn2](examples/output/mycophenolic acid/alt_style/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=domains; outline=False")
+
+where the color of the arrows takes the color of the first domain (core biosynthetic genes will have their own pre-defined colors). Some of these options are experimental and will probably change in the future.
 
 # BGC Toolkit
 
