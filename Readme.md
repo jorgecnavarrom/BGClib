@@ -110,15 +110,27 @@ It's a bit messy but we can define an order and align according to a specific ge
 
 Neat.
 
-examples/output/cercosporin/stacked_BGC_figure.svg
-cercosporin
+Finally, let's use three mycophenolic acid BGCs from MIBiG 2.0 with domain annotation (using version 33 of Pfam):
 
-mibig 2.0
-mycophenolic acid (single, stacked, aligned)
+```
+./BGC_SVG_generator.py --inputfolder ./examples/data/mycophenolic\ acid/ --outputfolder examples/output/mycophenolic\ acid/ --include --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG.tsv --stacked --hmm ~/Databases/pfam/33/Pfam-A.hmm
+```
 
-different styles
+![mycophenolic_stacked_algn](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=white")
+
+Now with an alternative alignment using a different file
+
+```
+./BGC_SVG_generator.py --inputfolder ./examples/data/mycophenolic\ acid/ --outputfolder examples/output/mycophenolic\ acid/ --include --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG_DUF2236.tsv --stacked --hmm ~/Databases/pfam/33/Pfam-A.hmm
+```
+
+![mycophenolic_stacked_algn2](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG_DUF2236.svg "mycophenolic aligned v2. color_mode=white")
+
+Domain colors are [already defined](BGClib/data/domain_color_file_ID.tsv) and were generated randomly
 
 # BGC Toolkit
+
+TODO
 
 # Requirements
 

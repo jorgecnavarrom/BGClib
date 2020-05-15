@@ -11,9 +11,11 @@
       <polygon points="1241.1,73.35 1241.1,6.65 1244.65,10.2 1244.65,69.8" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,UbiA">
         <title>UbiA prenyltransferase family 
-PF01040.18 - UbiA</title>
-        <polygon points="1229.95,24.0 1241.05,24.0 1241.1,35.0 1244.65,35.0 1244.7,24.0 1258.45,24.0 1268.2,34.0 1268.2,46.0 1258.45,56.0 1244.7,56.0 1244.65,45.0 1241.1,45.0 1241.05,56.0 1229.95,56.0" fill="rgb(189,57,100)" stroke-linejoin="round"/>
-        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1241.05 24.0 L 1229.95 24.0, 1229.95 56.0, 1241.05 56.0" fill="none"/>
+PF01040.19 - UbiA</title>
+        <polygon points="1222.25,24.0 1222.9,24.0 1222.95,35.0 1228.65,35.0 1228.7,24.0 1241.05,24.0 1241.1,35.0 1244.65,35.0 1244.7,24.0 1258.45,24.0 1268.2,34.0 1268.2,46.0 1258.45,56.0 1244.7,56.0 1244.65,45.0 1241.1,45.0 1241.05,56.0 1228.7,56.0 1228.65,45.0 1222.95,45.0 1222.9,56.0 1222.25,56.0" fill="rgb(189,57,100)" stroke-linejoin="round"/>
+        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1222.9 24.0 L 1222.25 24.0, 1222.25 56.0, 1222.9 56.0" fill="none"/>
+        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1228.7 24.0 L 1241.05 24.0" fill="none"/>
+        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1228.7 56.0 L 1241.05 56.0" fill="none"/>
         <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1244.7 24.0 L 1258.45 24.0, 1268.2 34.0, 1268.2 46.0, 1258.45 56.0, 1244.7 56.0" fill="none"/>
       </g>
     </g>
@@ -28,12 +30,12 @@ PF01040.18 - UbiA</title>
       <polygon points="1076.65,48.2 1076.65,31.8 1074.1,34.35 1074.1,45.65" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,DUF2236">
         <title>Uncharacterized protein conserved in bacteria (DUF2236) 
-PF09995.9 - DUF2236</title>
-        <polygon points="1130.0,24.0 1128.05,24.0 1128.0,35.0 1123.2,35.0 1123.15,24.0 1098.4,24.0 1098.35,35.0 1091.1,35.0 1091.05,24.0 1085.45,24.0 1085.45,56.0 1091.05,56.0 1091.1,45.0 1098.35,45.0 1098.4,56.0 1123.15,56.0 1123.2,45.0 1128.0,45.0 1128.05,56.0 1130.0,56.0" fill="rgb(194,179,92)" stroke-linejoin="round"/>
-        <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1128.05 24.0 L 1130.0 24.0, 1130.0 56.0, 1128.05 56.0" fill="none"/>
+PF09995.10 - DUF2236</title>
+        <polygon points="1130.15,24.0 1128.05,24.0 1128.0,35.0 1123.2,35.0 1123.15,24.0 1098.4,24.0 1098.35,35.0 1091.1,35.0 1091.05,24.0 1085.9,24.0 1085.9,56.0 1091.05,56.0 1091.1,45.0 1098.35,45.0 1098.4,56.0 1123.15,56.0 1123.2,45.0 1128.0,45.0 1128.05,56.0 1130.15,56.0" fill="rgb(194,179,92)" stroke-linejoin="round"/>
+        <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1128.05 24.0 L 1130.15 24.0, 1130.15 56.0, 1128.05 56.0" fill="none"/>
         <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1123.15 24.0 L 1098.4 24.0" fill="none"/>
         <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1123.15 56.0 L 1098.4 56.0" fill="none"/>
-        <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1091.05 24.0 L 1085.45 24.0, 1085.45 56.0, 1091.05 56.0" fill="none"/>
+        <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1091.05 24.0 L 1085.9 24.0, 1085.9 56.0, 1091.05 56.0" fill="none"/>
       </g>
     </g>
     <g>
@@ -49,64 +51,64 @@ PF09995.9 - DUF2236</title>
       <polygon points="997.75,60.0 997.75,20.0 1001.35,20.0 1001.35,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,SAT">
         <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
-PF16073.5 - SAT</title>
+PF16073.6 - SAT</title>
         <polygon points="680.55,24.0 687.0,24.0 687.0,56.0 680.55,56.0" fill="rgb(77,115,183)" stroke-linejoin="round"/>
         <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M680.55 24.0 L 687.0 24.0, 687.0 56.0, 680.55 56.0 Z" fill="none"/>
       </g>
       <g class="domain,ketoacyl-synt">
         <title>Beta-ketoacyl synthase, N-terminal domain [KS]
-PF00109.26 - ketoacyl-synt</title>
+PF00109.27 - ketoacyl-synt</title>
         <polygon points="724.15,24.0 750.9,24.0 750.95,35.0 753.75,35.0 753.8,24.0 763.45,24.0 763.45,56.0 753.8,56.0 753.75,45.0 750.95,45.0 750.9,56.0 724.15,56.0" fill="rgb(112,116,228)" stroke-linejoin="round"/>
         <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M750.9 24.0 L 724.15 24.0, 724.15 56.0, 750.9 56.0" fill="none"/>
         <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M753.8 24.0 L 763.45 24.0, 763.45 56.0, 753.8 56.0" fill="none"/>
       </g>
       <g class="domain,Ketoacyl-synt_C">
         <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
-PF02801.22 - Ketoacyl-synt_C</title>
+PF02801.23 - Ketoacyl-synt_C</title>
         <polygon points="764.5,24.0 772.6,24.0 772.65,35.0 775.8,35.0 775.85,24.0 785.25,24.0 785.25,56.0 775.85,56.0 775.8,45.0 772.65,45.0 772.6,56.0 764.5,56.0" fill="rgb(215,78,102)" stroke-linejoin="round"/>
         <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M772.6 24.0 L 764.5 24.0, 764.5 56.0, 772.6 56.0" fill="none"/>
         <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M775.85 24.0 L 785.25 24.0, 785.25 56.0, 775.85 56.0" fill="none"/>
       </g>
       <g class="domain,Acyl_transf_1">
         <title>Acyl transferase domain [AT]
-PF00698.21 - Acyl_transf_1</title>
+PF00698.22 - Acyl_transf_1</title>
         <polygon points="816.75,24.0 850.2,24.0 850.2,56.0 816.75,56.0" fill="rgb(59,176,209)" stroke-linejoin="round"/>
         <path stroke="rgb(47,141,167)" stroke-linejoin="round" stroke-width="1" d="M816.75 24.0 L 850.2 24.0, 850.2 56.0, 816.75 56.0 Z" fill="none"/>
       </g>
       <g class="domain,PS-DH">
         <title>Polyketide synthase dehydratase [DH]
-PF14765.6 - PS-DH</title>
+PF14765.7 - PS-DH</title>
         <polygon points="869.55,24.0 910.8,24.0 910.8,56.0 869.55,56.0" fill="rgb(173,56,182)" stroke-linejoin="round"/>
         <path stroke="rgb(138,45,146)" stroke-linejoin="round" stroke-width="1" d="M869.55 24.0 L 910.8 24.0, 910.8 56.0, 869.55 56.0 Z" fill="none"/>
       </g>
       <g class="domain,PP-binding">
         <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
+PF00550.26 - PP-binding</title>
         <polygon points="918.45,24.0 928.35,24.0 928.35,56.0 918.45,56.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
         <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M918.45 24.0 L 928.35 24.0, 928.35 56.0, 918.45 56.0 Z" fill="none"/>
       </g>
       <g class="domain,HTH_51">
         <title>Helix-turn-helix domain 
-PF18558.1 - HTH_51</title>
-        <polygon points="936.3,24.0 947.85,24.0 947.85,56.0 936.3,56.0" fill="rgb(195,163,57)" stroke-linejoin="round"/>
-        <path stroke="rgb(156,130,46)" stroke-linejoin="round" stroke-width="1" d="M936.3 24.0 L 947.85 24.0, 947.85 56.0, 936.3 56.0 Z" fill="none"/>
+PF18558.2 - HTH_51</title>
+        <polygon points="936.15,24.0 947.85,24.0 947.85,56.0 936.15,56.0" fill="rgb(195,163,57)" stroke-linejoin="round"/>
+        <path stroke="rgb(156,130,46)" stroke-linejoin="round" stroke-width="1" d="M936.15 24.0 L 947.85 24.0, 947.85 56.0, 936.15 56.0 Z" fill="none"/>
       </g>
       <g class="domain,Methyltransf_12">
         <title>Methyltransferase domain [CMeT]
-PF08242.12 - Methyltransf_12</title>
+PF08242.13 - Methyltransf_12</title>
         <polygon points="963.75,24.0 979.35,24.0 979.35,56.0 963.75,56.0" fill="rgb(187,59,115)" stroke-linejoin="round"/>
         <path stroke="rgb(150,47,92)" stroke-linejoin="round" stroke-width="1" d="M963.75 24.0 L 979.35 24.0, 979.35 56.0, 963.75 56.0 Z" fill="none"/>
       </g>
       <g class="domain,Abhydrolase_3">
         <title>alpha/beta hydrolase fold 
-PF07859.13 - Abhydrolase_3</title>
-        <polygon points="997.5,24.0 997.7,24.0 997.75,35.0 1001.35,35.0 1001.4,24.0 1018.7,24.0 1018.7,56.0 1001.4,56.0 1001.35,45.0 997.75,45.0 997.7,56.0 997.5,56.0" fill="rgb(183,51,179)" stroke-linejoin="round"/>
+PF07859.14 - Abhydrolase_3</title>
+        <polygon points="997.5,24.0 997.7,24.0 997.75,35.0 1001.35,35.0 1001.4,24.0 1018.85,24.0 1018.85,56.0 1001.4,56.0 1001.35,45.0 997.75,45.0 997.7,56.0 997.5,56.0" fill="rgb(183,51,179)" stroke-linejoin="round"/>
         <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M997.7 24.0 L 997.5 24.0, 997.5 56.0, 997.7 56.0" fill="none"/>
-        <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M1001.4 24.0 L 1018.7 24.0, 1018.7 56.0, 1001.4 56.0" fill="none"/>
+        <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M1001.4 24.0 L 1018.85 24.0, 1018.85 56.0, 1001.4 56.0" fill="none"/>
       </g>
       <g class="domain,Peptidase_S9">
         <title>Prolyl oligopeptidase family 
-PF00326.21 - Peptidase_S9</title>
+PF00326.22 - Peptidase_S9</title>
         <polygon points="1033.4,25.7 1046.9,39.2 1046.9,40.8 1033.4,54.3" fill="rgb(77,97,209)" stroke-linejoin="round"/>
         <path stroke="rgb(62,78,167)" stroke-linejoin="round" stroke-width="1" d="M1046.9 39.2 L 1033.4 25.7, 1033.4 54.3, 1046.9 40.8 Z" fill="none"/>
       </g>
@@ -120,7 +122,7 @@ PF00326.21 - Peptidase_S9</title>
       <polygon points="443.5,68.05 443.5,11.95 440.45,15.0 440.45,65.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,p450">
         <title>Cytochrome P450 
-PF00067.22 - p450</title>
+PF00067.23 - p450</title>
         <polygon points="459.6,24.0 457.2,24.0 457.15,35.0 449.85,35.0 449.8,24.0 443.55,24.0 443.5,35.0 440.45,35.0 440.4,24.0 431.45,24.0 419.9,36.0 419.9,44.0 431.45,56.0 440.4,56.0 440.45,45.0 443.5,45.0 443.55,56.0 449.8,56.0 449.85,45.0 457.15,45.0 457.2,56.0 459.6,56.0" fill="rgb(85,216,107)" stroke-linejoin="round"/>
         <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M457.2 24.0 L 459.6 24.0, 459.6 56.0, 457.2 56.0" fill="none"/>
         <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M449.8 24.0 L 443.55 24.0" fill="none"/>
@@ -133,7 +135,7 @@ PF00067.22 - p450</title>
       <polygon points="387.5,80.0 387.5,0.0 348.2,40.0" stroke-width="2" class="exon" fill="#ffffff" stroke="#0a0a0a"/>
       <g class="domain,Lactamase_B">
         <title>Metallo-beta-lactamase superfamily 
-PF00753.27 - Lactamase_B</title>
+PF00753.28 - Lactamase_B</title>
         <polygon points="384.5,24.0 380.6,24.0 380.6,56.0 384.5,56.0" fill="rgb(206,198,96)" stroke-linejoin="round"/>
         <path stroke="rgb(165,158,77)" stroke-linejoin="round" stroke-width="1" d="M384.5 24.0 L 380.6 24.0, 380.6 56.0, 384.5 56.0 Z" fill="none"/>
       </g>
@@ -147,7 +149,7 @@ PF00753.27 - Lactamase_B</title>
       <polygon points="267.15,60.0 267.15,20.0 270.2,20.0 270.2,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,IMPDH">
         <title>IMP dehydrogenase / GMP reductase domain 
-PF00478.25 - IMPDH</title>
+PF00478.26 - IMPDH</title>
         <polygon points="246.7,24.0 249.0,24.0 249.05,35.0 251.6,35.0 251.65,24.0 267.1,24.0 267.15,35.0 270.2,35.0 270.25,24.0 310.6,24.0 324.4,38.0 324.4,42.0 310.6,56.0 270.25,56.0 270.2,45.0 267.15,45.0 267.1,56.0 251.65,56.0 251.6,45.0 249.05,45.0 249.0,56.0 246.7,56.0" fill="rgb(225,99,218)" stroke-linejoin="round"/>
         <path stroke="rgb(180,79,174)" stroke-linejoin="round" stroke-width="1" d="M249.0 24.0 L 246.7 24.0, 246.7 56.0, 249.0 56.0" fill="none"/>
         <path stroke="rgb(180,79,174)" stroke-linejoin="round" stroke-width="1" d="M251.65 24.0 L 267.1 24.0" fill="none"/>
@@ -162,7 +164,7 @@ PF00478.25 - IMPDH</title>
       <polygon points="156.75,60.0 156.75,20.0 159.25,20.0 159.25,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,Methyltransf_2">
         <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
+PF00891.19 - Methyltransf_2</title>
         <polygon points="183.55,24.0 194.75,24.0 207.25,37.0 207.25,43.0 194.75,56.0 183.55,56.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
         <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M207.25 37.0 L 194.75 24.0, 183.55 24.0, 183.55 56.0, 194.75 56.0, 207.25 43.0 Z" fill="none"/>
       </g>
@@ -178,14 +180,14 @@ PF00891.18 - Methyltransf_2</title>
       <polygon points="27.3,60.0 27.3,20.0 30.75,20.0 30.75,60.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,Abhydrolase_6">
         <title>Alpha/beta hydrolase family 
-PF12697.7 - Abhydrolase_6</title>
-        <polygon points="8.4,24.0 9.75,24.0 9.8,35.0 12.45,35.0 12.5,24.0 19.15,24.0 19.2,35.0 21.75,35.0 21.8,24.0 27.25,24.0 27.3,35.0 30.75,35.0 30.8,24.0 45.55,24.0 45.55,56.0 30.8,56.0 30.75,45.0 27.3,45.0 27.25,56.0 21.8,56.0 21.75,45.0 19.2,45.0 19.15,56.0 12.5,56.0 12.45,45.0 9.8,45.0 9.75,56.0 8.4,56.0" fill="rgb(113,71,219)" stroke-linejoin="round"/>
+PF12697.8 - Abhydrolase_6</title>
+        <polygon points="8.4,24.0 9.75,24.0 9.8,35.0 12.45,35.0 12.5,24.0 19.15,24.0 19.2,35.0 21.75,35.0 21.8,24.0 27.25,24.0 27.3,35.0 30.75,35.0 30.8,24.0 46.15,24.0 46.15,56.0 30.8,56.0 30.75,45.0 27.3,45.0 27.25,56.0 21.8,56.0 21.75,45.0 19.2,45.0 19.15,56.0 12.5,56.0 12.45,45.0 9.8,45.0 9.75,56.0 8.4,56.0" fill="rgb(113,71,219)" stroke-linejoin="round"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M9.75 24.0 L 8.4 24.0, 8.4 56.0, 9.75 56.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M12.5 24.0 L 19.15 24.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M12.5 56.0 L 19.15 56.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M21.8 24.0 L 27.25 24.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M21.8 56.0 L 27.25 56.0" fill="none"/>
-        <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M30.8 24.0 L 45.55 24.0, 45.55 56.0, 30.8 56.0" fill="none"/>
+        <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M30.8 24.0 L 46.15 24.0, 46.15 56.0, 30.8 56.0" fill="none"/>
       </g>
     </g>
   </g>
@@ -203,14 +205,14 @@ PF12697.7 - Abhydrolase_6</title>
       <polygon points="102.6,142.0 102.6,102.0 105.8,102.0 105.8,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,Abhydrolase_6">
         <title>Alpha/beta hydrolase family 
-PF12697.7 - Abhydrolase_6</title>
-        <polygon points="83.4,106.0 84.9,106.0 84.95,117.0 87.55,117.0 87.6,106.0 94.25,106.0 94.3,117.0 97.05,117.0 97.1,106.0 102.55,106.0 102.6,117.0 105.8,117.0 105.85,106.0 127.65,106.0 127.65,138.0 105.85,138.0 105.8,127.0 102.6,127.0 102.55,138.0 97.1,138.0 97.05,127.0 94.3,127.0 94.25,138.0 87.6,138.0 87.55,127.0 84.95,127.0 84.9,138.0 83.4,138.0" fill="rgb(113,71,219)" stroke-linejoin="round"/>
+PF12697.8 - Abhydrolase_6</title>
+        <polygon points="83.4,106.0 84.9,106.0 84.95,117.0 87.55,117.0 87.6,106.0 94.25,106.0 94.3,117.0 97.05,117.0 97.1,106.0 102.55,106.0 102.6,117.0 105.8,117.0 105.85,106.0 133.25,106.0 139.35,113.0 139.35,131.0 133.25,138.0 105.85,138.0 105.8,127.0 102.6,127.0 102.55,138.0 97.1,138.0 97.05,127.0 94.3,127.0 94.25,138.0 87.6,138.0 87.55,127.0 84.95,127.0 84.9,138.0 83.4,138.0" fill="rgb(113,71,219)" stroke-linejoin="round"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M84.9 106.0 L 83.4 106.0, 83.4 138.0, 84.9 138.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M87.6 106.0 L 94.25 106.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M87.6 138.0 L 94.25 138.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M97.1 106.0 L 102.55 106.0" fill="none"/>
         <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M97.1 138.0 L 102.55 138.0" fill="none"/>
-        <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M105.85 106.0 L 127.65 106.0, 127.65 138.0, 105.85 138.0" fill="none"/>
+        <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M105.85 106.0 L 133.25 106.0, 139.35 113.0, 139.35 131.0, 133.25 138.0, 105.85 138.0" fill="none"/>
       </g>
     </g>
     <g>
@@ -220,7 +222,7 @@ PF12697.7 - Abhydrolase_6</title>
       <polygon points="209.75,142.0 209.75,102.0 212.3,102.0 212.3,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,Methyltransf_2">
         <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
+PF00891.19 - Methyltransf_2</title>
         <polygon points="236.75,106.0 247.8,106.0 260.3,119.0 260.3,125.0 247.8,138.0 236.75,138.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
         <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M260.3 119.0 L 247.8 106.0, 236.75 106.0, 236.75 138.0, 247.8 138.0, 260.3 125.0 Z" fill="none"/>
       </g>
@@ -234,7 +236,7 @@ PF00891.18 - Methyltransf_2</title>
       <polygon points="318.2,142.0 318.2,102.0 321.85,102.0 321.85,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,IMPDH">
         <title>IMP dehydrogenase / GMP reductase domain 
-PF00478.25 - IMPDH</title>
+PF00478.26 - IMPDH</title>
         <polygon points="297.8,106.0 300.1,106.0 300.15,117.0 302.65,117.0 302.7,106.0 318.15,106.0 318.2,117.0 321.85,117.0 321.9,106.0 362.25,106.0 376.05,120.0 376.05,124.0 362.25,138.0 321.9,138.0 321.85,127.0 318.2,127.0 318.15,138.0 302.7,138.0 302.65,127.0 300.15,127.0 300.1,138.0 297.8,138.0" fill="rgb(225,99,218)" stroke-linejoin="round"/>
         <path stroke="rgb(180,79,174)" stroke-linejoin="round" stroke-width="1" d="M300.1 106.0 L 297.8 106.0, 297.8 138.0, 300.1 138.0" fill="none"/>
         <path stroke="rgb(180,79,174)" stroke-linejoin="round" stroke-width="1" d="M302.7 106.0 L 318.15 106.0" fill="none"/>
@@ -263,7 +265,7 @@ PF00478.25 - IMPDH</title>
       <polygon points="440.7,142.0 440.7,102.0 438.15,102.0 438.15,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,p450">
         <title>Cytochrome P450 
-PF00067.22 - p450</title>
+PF00067.23 - p450</title>
         <polygon points="530.1,106.0 521.9,106.0 521.85,117.0 518.25,117.0 518.2,106.0 499.75,106.0 499.7,117.0 496.7,117.0 496.65,106.0 486.05,106.0 486.0,117.0 482.85,117.0 482.8,106.0 460.25,106.0 460.2,117.0 457.6,117.0 457.55,106.0 453.05,106.0 453.0,117.0 450.35,117.0 450.3,106.0 448.85,106.0 448.85,138.0 450.3,138.0 450.35,127.0 453.0,127.0 453.05,138.0 457.55,138.0 457.6,127.0 460.2,127.0 460.25,138.0 482.8,138.0 482.85,127.0 486.0,127.0 486.05,138.0 496.65,138.0 496.7,127.0 499.7,127.0 499.75,138.0 518.2,138.0 518.25,127.0 521.85,127.0 521.9,138.0 530.1,138.0" fill="rgb(85,216,107)" stroke-linejoin="round"/>
         <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M521.9 106.0 L 530.1 106.0, 530.1 138.0, 521.9 138.0" fill="none"/>
         <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M518.2 106.0 L 499.75 106.0" fill="none"/>
@@ -278,7 +280,7 @@ PF00067.22 - p450</title>
       </g>
       <g class="domain,Lactamase_B">
         <title>Metallo-beta-lactamase superfamily 
-PF00753.27 - Lactamase_B</title>
+PF00753.28 - Lactamase_B</title>
         <polygon points="435.0,106.0 423.0,106.0 423.0,138.0 435.0,138.0" fill="rgb(206,198,96)" stroke-linejoin="round"/>
         <path stroke="rgb(165,158,77)" stroke-linejoin="round" stroke-width="1" d="M435.0 106.0 L 423.0 106.0, 423.0 138.0, 435.0 138.0 Z" fill="none"/>
       </g>
@@ -304,58 +306,58 @@ PF00753.27 - Lactamase_B</title>
       <polygon points="997.9,142.0 997.9,102.0 1001.35,102.0 1001.35,142.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,SAT">
         <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
-PF16073.5 - SAT</title>
+PF16073.6 - SAT</title>
         <polygon points="672.9,106.0 692.1,106.0 692.15,117.0 695.05,117.0 695.1,106.0 701.95,106.0 701.95,138.0 695.1,138.0 695.05,127.0 692.15,127.0 692.1,138.0 672.9,138.0" fill="rgb(77,115,183)" stroke-linejoin="round"/>
         <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M692.1 106.0 L 672.9 106.0, 672.9 138.0, 692.1 138.0" fill="none"/>
         <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M695.1 106.0 L 701.95 106.0, 701.95 138.0, 695.1 138.0" fill="none"/>
       </g>
       <g class="domain,ketoacyl-synt">
         <title>Beta-ketoacyl synthase, N-terminal domain [KS]
-PF00109.26 - ketoacyl-synt</title>
+PF00109.27 - ketoacyl-synt</title>
         <polygon points="723.55,106.0 750.3,106.0 750.35,117.0 753.5,117.0 753.55,106.0 763.2,106.0 763.2,138.0 753.55,138.0 753.5,127.0 750.35,127.0 750.3,138.0 723.55,138.0" fill="rgb(112,116,228)" stroke-linejoin="round"/>
         <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M750.3 106.0 L 723.55 106.0, 723.55 138.0, 750.3 138.0" fill="none"/>
         <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M753.55 106.0 L 763.2 106.0, 763.2 138.0, 753.55 138.0" fill="none"/>
       </g>
       <g class="domain,Ketoacyl-synt_C">
         <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
-PF02801.22 - Ketoacyl-synt_C</title>
+PF02801.23 - Ketoacyl-synt_C</title>
         <polygon points="764.25,106.0 772.35,106.0 772.4,117.0 776.55,117.0 776.6,106.0 786.0,106.0 786.0,138.0 776.6,138.0 776.55,127.0 772.4,127.0 772.35,138.0 764.25,138.0" fill="rgb(215,78,102)" stroke-linejoin="round"/>
         <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M772.35 106.0 L 764.25 106.0, 764.25 138.0, 772.35 138.0" fill="none"/>
         <path stroke="rgb(172,62,82)" stroke-linejoin="round" stroke-width="1" d="M776.6 106.0 L 786.0 106.0, 786.0 138.0, 776.6 138.0" fill="none"/>
       </g>
       <g class="domain,Acyl_transf_1">
         <title>Acyl transferase domain [AT]
-PF00698.21 - Acyl_transf_1</title>
+PF00698.22 - Acyl_transf_1</title>
         <polygon points="817.5,106.0 850.35,106.0 850.35,138.0 817.5,138.0" fill="rgb(59,176,209)" stroke-linejoin="round"/>
         <path stroke="rgb(47,141,167)" stroke-linejoin="round" stroke-width="1" d="M817.5 106.0 L 850.35 106.0, 850.35 138.0, 817.5 138.0 Z" fill="none"/>
       </g>
       <g class="domain,PS-DH">
         <title>Polyketide synthase dehydratase [DH]
-PF14765.6 - PS-DH</title>
+PF14765.7 - PS-DH</title>
         <polygon points="870.6,106.0 911.85,106.0 911.85,138.0 870.6,138.0" fill="rgb(173,56,182)" stroke-linejoin="round"/>
         <path stroke="rgb(138,45,146)" stroke-linejoin="round" stroke-width="1" d="M870.6 106.0 L 911.85 106.0, 911.85 138.0, 870.6 138.0 Z" fill="none"/>
       </g>
       <g class="domain,PP-binding">
         <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
+PF00550.26 - PP-binding</title>
         <polygon points="918.75,106.0 928.65,106.0 928.65,138.0 918.75,138.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
         <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M918.75 106.0 L 928.65 106.0, 928.65 138.0, 918.75 138.0 Z" fill="none"/>
       </g>
       <g class="domain,HTH_51">
         <title>Helix-turn-helix domain 
-PF18558.1 - HTH_51</title>
+PF18558.2 - HTH_51</title>
         <polygon points="936.9,106.0 948.3,106.0 948.3,138.0 936.9,138.0" fill="rgb(195,163,57)" stroke-linejoin="round"/>
         <path stroke="rgb(156,130,46)" stroke-linejoin="round" stroke-width="1" d="M936.9 106.0 L 948.3 106.0, 948.3 138.0, 936.9 138.0 Z" fill="none"/>
       </g>
       <g class="domain,Methyltransf_12">
         <title>Methyltransferase domain [CMeT]
-PF08242.12 - Methyltransf_12</title>
+PF08242.13 - Methyltransf_12</title>
         <polygon points="964.05,106.0 979.65,106.0 979.65,138.0 964.05,138.0" fill="rgb(187,59,115)" stroke-linejoin="round"/>
         <path stroke="rgb(150,47,92)" stroke-linejoin="round" stroke-width="1" d="M964.05 106.0 L 979.65 106.0, 979.65 138.0, 964.05 138.0 Z" fill="none"/>
       </g>
       <g class="domain,Abhydrolase_3">
         <title>alpha/beta hydrolase fold 
-PF07859.13 - Abhydrolase_3</title>
+PF07859.14 - Abhydrolase_3</title>
         <polygon points="997.65,106.0 997.85,106.0 997.9,117.0 1001.35,117.0 1001.4,106.0 1019.0,106.0 1019.0,138.0 1001.4,138.0 1001.35,127.0 997.9,127.0 997.85,138.0 997.65,138.0" fill="rgb(183,51,179)" stroke-linejoin="round"/>
         <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M997.85 106.0 L 997.65 106.0, 997.65 138.0, 997.85 138.0" fill="none"/>
         <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M1001.4 106.0 L 1019.0 106.0, 1019.0 138.0, 1001.4 138.0" fill="none"/>
@@ -368,7 +370,7 @@ PF07859.13 - Abhydrolase_3</title>
       <polygon points="1109.9,154.55 1109.9,89.45 1107.4,91.95 1107.4,152.05" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,DUF2236">
         <title>Uncharacterized protein conserved in bacteria (DUF2236) 
-PF09995.9 - DUF2236</title>
+PF09995.10 - DUF2236</title>
         <polygon points="1112.2,106.0 1109.95,106.0 1109.9,117.0 1107.4,117.0 1107.35,106.0 1093.35,106.0 1078.3,122.0 1078.3,122.0 1093.35,138.0 1107.35,138.0 1107.4,127.0 1109.9,127.0 1109.95,138.0 1112.2,138.0" fill="rgb(194,179,92)" stroke-linejoin="round"/>
         <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1109.95 106.0 L 1112.2 106.0, 1112.2 138.0, 1109.95 138.0" fill="none"/>
         <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1107.35 106.0 L 1093.35 106.0, 1078.3 122.0, 1078.3 122.0, 1093.35 138.0, 1107.35 138.0" fill="none"/>
@@ -383,7 +385,7 @@ PF09995.9 - DUF2236</title>
       <polygon points="1200.4,154.75 1200.4,89.25 1204.25,93.1 1204.25,150.9" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,UbiA">
         <title>UbiA prenyltransferase family 
-PF01040.18 - UbiA</title>
+PF01040.19 - UbiA</title>
         <polygon points="1181.95,106.0 1182.15,106.0 1182.2,117.0 1185.55,117.0 1185.6,106.0 1200.35,106.0 1200.4,117.0 1204.25,117.0 1204.3,106.0 1217.15,106.0 1227.8,117.0 1227.8,127.0 1217.15,138.0 1204.3,138.0 1204.25,127.0 1200.4,127.0 1200.35,138.0 1185.6,138.0 1185.55,127.0 1182.2,127.0 1182.15,138.0 1181.95,138.0" fill="rgb(189,57,100)" stroke-linejoin="round"/>
         <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1182.15 106.0 L 1181.95 106.0, 1181.95 138.0, 1182.15 138.0" fill="none"/>
         <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1185.6 106.0 L 1200.35 106.0" fill="none"/>
@@ -402,9 +404,9 @@ PF01040.18 - UbiA</title>
       <polygon points="85.25,224.0 85.25,184.0 97.75,184.0 97.75,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,Abhydrolase_6">
         <title>Alpha/beta hydrolase family 
-PF12697.7 - Abhydrolase_6</title>
-        <polygon points="98.95,188.0 128.05,188.0 128.05,220.0 98.95,220.0" fill="rgb(113,71,219)" stroke-linejoin="round"/>
-        <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M98.95 188.0 L 128.05 188.0, 128.05 220.0, 98.95 220.0 Z" fill="none"/>
+PF12697.8 - Abhydrolase_6</title>
+        <polygon points="98.95,188.0 133.55,188.0 139.75,195.0 139.75,213.0 133.55,220.0 98.95,220.0" fill="rgb(113,71,219)" stroke-linejoin="round"/>
+        <path stroke="rgb(90,57,175)" stroke-linejoin="round" stroke-width="1" d="M139.75 195.0 L 133.55 188.0, 98.95 188.0, 98.95 220.0, 133.55 220.0, 139.75 213.0 Z" fill="none"/>
       </g>
     </g>
     <g>
@@ -414,9 +416,9 @@ PF12697.7 - Abhydrolase_6</title>
       <polygon points="209.45,224.0 209.45,184.0 214.1,184.0 214.1,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,Methyltransf_2">
         <title>O-methyltransferase domain 
-PF00891.18 - Methyltransf_2</title>
-        <polygon points="236.45,188.0 247.5,188.0 260.0,201.0 260.0,207.0 247.5,220.0 236.45,220.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
-        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M260.0 201.0 L 247.5 188.0, 236.45 188.0, 236.45 220.0, 247.5 220.0, 260.0 207.0 Z" fill="none"/>
+PF00891.19 - Methyltransf_2</title>
+        <polygon points="236.6,188.0 247.5,188.0 260.0,201.0 260.0,207.0 247.5,220.0 236.6,220.0" fill="rgb(50,51,190)" stroke-linejoin="round"/>
+        <path stroke="rgb(40,41,152)" stroke-linejoin="round" stroke-width="1" d="M260.0 201.0 L 247.5 188.0, 236.6 188.0, 236.6 220.0, 247.5 220.0, 260.0 207.0 Z" fill="none"/>
       </g>
     </g>
     <g>
@@ -428,7 +430,7 @@ PF00891.18 - Methyltransf_2</title>
       <polygon points="318.1,224.0 318.1,184.0 326.4,184.0 326.4,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,IMPDH">
         <title>IMP dehydrogenase / GMP reductase domain 
-PF00478.25 - IMPDH</title>
+PF00478.26 - IMPDH</title>
         <polygon points="299.55,188.0 300.0,188.0 300.05,199.0 306.6,199.0 306.65,188.0 318.05,188.0 318.1,199.0 326.4,199.0 326.45,188.0 362.2,188.0 376.0,202.0 376.0,206.0 362.2,220.0 326.45,220.0 326.4,209.0 318.1,209.0 318.05,220.0 306.65,220.0 306.6,209.0 300.05,209.0 300.0,220.0 299.55,220.0" fill="rgb(225,99,218)" stroke-linejoin="round"/>
         <path stroke="rgb(180,79,174)" stroke-linejoin="round" stroke-width="1" d="M300.0 188.0 L 299.55 188.0, 299.55 220.0, 300.0 220.0" fill="none"/>
         <path stroke="rgb(180,79,174)" stroke-linejoin="round" stroke-width="1" d="M306.65 188.0 L 318.05 188.0" fill="none"/>
@@ -451,7 +453,7 @@ PF00478.25 - IMPDH</title>
       <polygon points="460.2,224.0 460.2,184.0 430.2,184.0 430.2,164.0 429.55,164.65 429.55,243.35 430.2,244.0 430.2,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,p450">
         <title>Cytochrome P450 
-PF00067.22 - p450</title>
+PF00067.23 - p450</title>
         <polygon points="524.2,188.0 521.9,188.0 521.85,199.0 515.85,199.0 515.8,188.0 499.75,188.0 499.7,199.0 496.7,199.0 496.65,188.0 486.0,188.0 485.95,199.0 481.3,199.0 481.25,188.0 462.55,188.0 462.55,220.0 481.25,220.0 481.3,209.0 485.95,209.0 486.0,220.0 496.65,220.0 496.7,209.0 499.7,209.0 499.75,220.0 515.8,220.0 515.85,209.0 521.85,209.0 521.9,220.0 524.2,220.0" fill="rgb(85,216,107)" stroke-linejoin="round"/>
         <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M521.9 188.0 L 524.2 188.0, 524.2 220.0, 521.9 220.0" fill="none"/>
         <path stroke="rgb(68,173,86)" stroke-linejoin="round" stroke-width="1" d="M515.8 188.0 L 499.75 188.0" fill="none"/>
@@ -472,58 +474,58 @@ PF00067.22 - p450</title>
       <polygon points="997.7,224.0 997.7,184.0 1001.6,184.0 1001.6,224.0" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,SAT">
         <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
-PF16073.5 - SAT</title>
+PF16073.6 - SAT</title>
         <polygon points="672.9,188.0 686.85,188.0 686.85,220.0 672.9,220.0" fill="rgb(77,115,183)" stroke-linejoin="round"/>
         <path stroke="rgb(62,92,146)" stroke-linejoin="round" stroke-width="1" d="M672.9 188.0 L 686.85 188.0, 686.85 220.0, 672.9 220.0 Z" fill="none"/>
       </g>
       <g class="domain,ketoacyl-synt">
         <title>Beta-ketoacyl synthase, N-terminal domain [KS]
-PF00109.26 - ketoacyl-synt</title>
+PF00109.27 - ketoacyl-synt</title>
         <polygon points="723.55,188.0 750.1,188.0 750.1,220.0 723.55,220.0" fill="rgb(112,116,228)" stroke-linejoin="round"/>
         <path stroke="rgb(90,93,182)" stroke-linejoin="round" stroke-width="1" d="M723.55 188.0 L 750.1 188.0, 750.1 220.0, 723.55 220.0 Z" fill="none"/>
       </g>
       <g class="domain,Acyl_transf_1">
         <title>Acyl transferase domain [AT]
-PF00698.21 - Acyl_transf_1</title>
+PF00698.22 - Acyl_transf_1</title>
         <polygon points="817.55,188.0 850.4,188.0 850.4,220.0 817.55,220.0" fill="rgb(59,176,209)" stroke-linejoin="round"/>
         <path stroke="rgb(47,141,167)" stroke-linejoin="round" stroke-width="1" d="M817.55 188.0 L 850.4 188.0, 850.4 220.0, 817.55 220.0 Z" fill="none"/>
       </g>
       <g class="domain,PS-DH">
         <title>Polyketide synthase dehydratase [DH]
-PF14765.6 - PS-DH</title>
+PF14765.7 - PS-DH</title>
         <polygon points="870.65,188.0 911.9,188.0 911.9,220.0 870.65,220.0" fill="rgb(173,56,182)" stroke-linejoin="round"/>
         <path stroke="rgb(138,45,146)" stroke-linejoin="round" stroke-width="1" d="M870.65 188.0 L 911.9 188.0, 911.9 220.0, 870.65 220.0 Z" fill="none"/>
       </g>
       <g class="domain,PP-binding">
         <title>Phosphopantetheine attachment site [T/ACP]
-PF00550.25 - PP-binding</title>
+PF00550.26 - PP-binding</title>
         <polygon points="918.8,188.0 928.7,188.0 928.7,220.0 918.8,220.0" fill="rgb(103,191,88)" stroke-linejoin="round"/>
         <path stroke="rgb(82,153,70)" stroke-linejoin="round" stroke-width="1" d="M918.8 188.0 L 928.7 188.0, 928.7 220.0, 918.8 220.0 Z" fill="none"/>
       </g>
       <g class="domain,HTH_51">
         <title>Helix-turn-helix domain 
-PF18558.1 - HTH_51</title>
+PF18558.2 - HTH_51</title>
         <polygon points="936.95,188.0 948.35,188.0 948.35,220.0 936.95,220.0" fill="rgb(195,163,57)" stroke-linejoin="round"/>
         <path stroke="rgb(156,130,46)" stroke-linejoin="round" stroke-width="1" d="M936.95 188.0 L 948.35 188.0, 948.35 220.0, 936.95 220.0 Z" fill="none"/>
       </g>
       <g class="domain,Methyltransf_12">
         <title>Methyltransferase domain [CMeT]
-PF08242.12 - Methyltransf_12</title>
+PF08242.13 - Methyltransf_12</title>
         <polygon points="964.1,188.0 979.7,188.0 979.7,220.0 964.1,220.0" fill="rgb(187,59,115)" stroke-linejoin="round"/>
         <path stroke="rgb(150,47,92)" stroke-linejoin="round" stroke-width="1" d="M964.1 188.0 L 979.7 188.0, 979.7 220.0, 964.1 220.0 Z" fill="none"/>
       </g>
       <g class="domain,Abhydrolase_3">
         <title>alpha/beta hydrolase fold 
-PF07859.13 - Abhydrolase_3</title>
+PF07859.14 - Abhydrolase_3</title>
         <polygon points="997.55,188.0 997.65,188.0 997.7,199.0 1001.6,199.0 1001.65,188.0 1019.05,188.0 1019.05,220.0 1001.65,220.0 1001.6,209.0 997.7,209.0 997.65,220.0 997.55,220.0" fill="rgb(183,51,179)" stroke-linejoin="round"/>
         <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M997.65 188.0 L 997.55 188.0, 997.55 220.0, 997.65 220.0" fill="none"/>
         <path stroke="rgb(146,41,143)" stroke-linejoin="round" stroke-width="1" d="M1001.65 188.0 L 1019.05 188.0, 1019.05 220.0, 1001.65 220.0" fill="none"/>
       </g>
       <g class="domain,Peptidase_S9">
         <title>Prolyl oligopeptidase family 
-PF00326.21 - Peptidase_S9</title>
-        <polygon points="1033.0,188.85 1046.5,202.35 1046.5,205.65 1033.0,219.15" fill="rgb(77,97,209)" stroke-linejoin="round"/>
-        <path stroke="rgb(62,78,167)" stroke-linejoin="round" stroke-width="1" d="M1046.5 202.35 L 1033.0 188.85, 1033.0 219.15, 1046.5 205.65 Z" fill="none"/>
+PF00326.22 - Peptidase_S9</title>
+        <polygon points="1033.3,189.15 1046.5,202.35 1046.5,205.65 1033.3,218.85" fill="rgb(77,97,209)" stroke-linejoin="round"/>
+        <path stroke="rgb(62,78,167)" stroke-linejoin="round" stroke-width="1" d="M1046.5 202.35 L 1033.3 189.15, 1033.3 218.85, 1046.5 205.65 Z" fill="none"/>
       </g>
     </g>
     <g>
@@ -533,9 +535,9 @@ PF00326.21 - Peptidase_S9</title>
       <polygon points="1118.6,236.55 1118.6,171.45 1110.7,179.35 1110.7,228.65" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,DUF2236">
         <title>Uncharacterized protein conserved in bacteria (DUF2236) 
-PF09995.9 - DUF2236</title>
-        <polygon points="1118.95,188.0 1118.65,188.0 1118.6,199.0 1110.7,199.0 1110.65,188.0 1102.05,188.0 1087.0,204.0 1087.0,204.0 1102.05,220.0 1110.65,220.0 1110.7,209.0 1118.6,209.0 1118.65,220.0 1118.95,220.0" fill="rgb(194,179,92)" stroke-linejoin="round"/>
-        <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1118.65 188.0 L 1118.95 188.0, 1118.95 220.0, 1118.65 220.0" fill="none"/>
+PF09995.10 - DUF2236</title>
+        <polygon points="1118.8,188.0 1118.65,188.0 1118.6,199.0 1110.7,199.0 1110.65,188.0 1102.05,188.0 1087.0,204.0 1087.0,204.0 1102.05,220.0 1110.65,220.0 1110.7,209.0 1118.6,209.0 1118.65,220.0 1118.8,220.0" fill="rgb(194,179,92)" stroke-linejoin="round"/>
+        <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1118.65 188.0 L 1118.8 188.0, 1118.8 220.0, 1118.65 220.0" fill="none"/>
         <path stroke="rgb(155,143,74)" stroke-linejoin="round" stroke-width="1" d="M1110.65 188.0 L 1102.05 188.0, 1087.0 204.0, 1087.0 204.0, 1102.05 220.0, 1110.65 220.0" fill="none"/>
       </g>
     </g>
@@ -548,12 +550,12 @@ PF09995.9 - DUF2236</title>
       <polygon points="1209.0,236.85 1209.0,171.15 1213.45,175.6 1213.45,232.4" stroke-width="2" class="intron" fill="#dddddd" stroke-dasharray="2,2" stroke="#919191"/>
       <g class="domain,UbiA">
         <title>UbiA prenyltransferase family 
-PF01040.18 - UbiA</title>
-        <polygon points="1190.65,188.0 1190.8,188.0 1190.85,199.0 1203.35,199.0 1203.4,188.0 1208.95,188.0 1209.0,199.0 1213.45,199.0 1213.5,188.0 1225.85,188.0 1236.65,199.0 1236.65,209.0 1225.85,220.0 1213.5,220.0 1213.45,209.0 1209.0,209.0 1208.95,220.0 1203.4,220.0 1203.35,209.0 1190.85,209.0 1190.8,220.0 1190.65,220.0" fill="rgb(189,57,100)" stroke-linejoin="round"/>
-        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1190.8 188.0 L 1190.65 188.0, 1190.65 220.0, 1190.8 220.0" fill="none"/>
+PF01040.19 - UbiA</title>
+        <polygon points="1190.5,188.0 1190.8,188.0 1190.85,199.0 1203.35,199.0 1203.4,188.0 1208.95,188.0 1209.0,199.0 1213.45,199.0 1213.5,188.0 1225.85,188.0 1236.5,199.0 1236.5,209.0 1225.85,220.0 1213.5,220.0 1213.45,209.0 1209.0,209.0 1208.95,220.0 1203.4,220.0 1203.35,209.0 1190.85,209.0 1190.8,220.0 1190.5,220.0" fill="rgb(189,57,100)" stroke-linejoin="round"/>
+        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1190.8 188.0 L 1190.5 188.0, 1190.5 220.0, 1190.8 220.0" fill="none"/>
         <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1203.4 188.0 L 1208.95 188.0" fill="none"/>
         <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1203.4 220.0 L 1208.95 220.0" fill="none"/>
-        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1213.5 188.0 L 1225.85 188.0, 1236.65 199.0, 1236.65 209.0, 1225.85 220.0, 1213.5 220.0" fill="none"/>
+        <path stroke="rgb(151,46,80)" stroke-linejoin="round" stroke-width="1" d="M1213.5 188.0 L 1225.85 188.0, 1236.5 199.0, 1236.5 209.0, 1225.85 220.0, 1213.5 220.0" fill="none"/>
       </g>
     </g>
   </g>
