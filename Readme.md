@@ -84,6 +84,12 @@ The PKS is in the reverse strand, but we can mirror the image with `--mirror`:
 
 The color mode in the default styling parameter file ([SVG_arrow_options](./SVG_arrow_options.cfg)) has been changed to `random-pastel`, that is why the colors are different.
 
+Another example with a multi-locus GenBank file, sophorolipid (no colors), from MIBiG 1.4 (currently not in MIBiG 2.0):
+
+```
+./BGC_SVG_generator.py --files ./examples/data/sophorolipid/BGC0001274.1.gbk --outputfolder examples/output/sophorolipid --include
+```
+
 mibig 1.4
 
 sophorolipid single
