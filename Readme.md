@@ -63,13 +63,26 @@ Output:
 ## Examples
 
 Here is a simple example with the cladofulvin BGC:
+
 ```
 ./BGC_SVG_generator.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --outputfolder examples/output/cladofulvin --include
 ```
 
-It has been renamed from a fungiSMASH result, so it doesn't include the usual 'region' string and we have to disable that filter by using `--include`. This command will produce
+It has been renamed from a fungiSMASH result, so it doesn't include the usual 'region' string and we have to disable that filter by using `--include` without arguments. This command will produce
 
 ![Cladofulvin_Final](examples/output/cladofulvin/Cladofulvin_Final.svg "Cladofulvin. color_mode=random-pastel")
+
+If you open the SVG in another window, you'll see that putting your cursor on top of the arrows will display the Protein Id and the internal identifier.
+
+The PKS is in the reverse strand, but we can mirror the image with `--mirror`:
+
+```
+./BGC_SVG_generator.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --outputfolder examples/output/cladofulvin --include --mirror
+```
+
+![Cladofulvin_Final mirrored](examples/output/cladofulvin/Cladofulvin_Final_m.svg "Cladofulvin mirrored. color_mode=random-pastel")
+
+The color mode in the default styling parameter file ([SVG_arrow_options](./SVG_arrow_options.cfg)) has been changed to `random-pastel`, that is why the colors are different.
 
 mibig 1.4
 
