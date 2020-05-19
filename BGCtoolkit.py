@@ -132,9 +132,11 @@ def check_input_data(inputfiles, inputfolders, hmms, bgclist):
             f = Path(file_)
             if f.suffix == ".bgccase":
                 try:
-                    shelve.open(str(f), 'r')
+                    s = shelve.open(str(f), 'r')
                 except:
                     sys.exit("Error (--files): {} not a valid bgccase database".format(f))
+                else:
+                    s.close()
             else:
                 if not f.is_file():
                     sys.exit("Error (--files): {} is not a file".format(f))
