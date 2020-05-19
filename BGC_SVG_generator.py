@@ -1,14 +1,30 @@
 #!/usr/bin/env python
 
 """
-This script will use the BGC library to predict protein domains of a GenBank
-file and create svg figures of the whole cluster as well as for every protein
+Handle Biosynthetic Gene Cluster objects
+- Input:
+    * .gb/.gbk files
+    * .bgc/.bgccase files
+- Filter:
+    * Include string
+    * Exclude string
+    * The user's own list (bgclist)
+- Analysis:
+    * Domain prediction
+- Output:
+    * Figures (individual or stacked)
+    * BGC objects (.bgc or .bgccase)
+    * Metadata (list of protein ids)
+
+TODO: 
+    * Convert fasta files into .bgcprotein or .bgcproteincase
 """
 
 import os
 import argparse
-from multiprocessing import cpu_count
 import pickle
+import shelve
+from multiprocessing import cpu_count
 from BGClib import *
 
 __author__ = "Jorge Navarro"
@@ -19,9 +35,9 @@ __email__ = "j.navarro@wi.knaw.nl"
 
 # Prepare arguments for the script
 def CMD_parser():
-    parser = argparse.ArgumentParser(description="BGC SVG generator.\
-        Generate SVG figures from GenBank files or serialized .bgc objects \
-        [v{}]".format(__version__))
+    parser = argparse.ArgumentParser(description="BGC toolkit.\
+        Store protein and domain information from GenBank files and generate \
+        SVG figures. [v{}]".format(__version__))
     
     group_input = parser.add_argument_group("Input")
     
@@ -82,13 +98,21 @@ def CMD_parser():
     
     group_output = parser.add_argument_group("Output")
     
+    group_output.add_argument("--svg", default=False, 
+        action="store_true", help="Toggle to enable SVG output")
+    group_output.add_argument("--bgc", default=False,
+        action="store_true", help="Toggle to enable BGC Library objects (.bgc \
+            .bgccase)")
     group_output.add_argument("-o", "--outputfolder", 
         default=(Path(__file__).parent/"output"), help="Folder where results \
         will be put (default='output')")
-    group_output.add_argument("-s", "--stacked", default=False, 
-        action="store_true", help="If used, all BGCs will be put in the same \
-        figure. Default: each BGC has its own SVG.")
-    group_output.add_argument("-g", "--gaps", default=False, action="store_true",
+    group_output.add_argument("-s", "--stacked", type=str, help="If used, all \
+        BGCs will be put in the same figure. The argument of this parameter is\
+        the filename (no extension)")
+    group_output.add_argument("-g", "--group", type=str, help="If used, all\
+        BGCs will be put in the same .bgccase file. The argument of this \
+        parameter is the filename (no extension)")
+    group_output.add_argument("--gaps", default=False, action="store_true",
         help="If --stacked is used, toggle this option to leave gaps\
         when a particular BGC is not found in the input data")
     
@@ -105,8 +129,15 @@ def check_input_data(inputfiles, inputfolders, hmms, bgclist):
         
     if inputfiles:
         for file_ in inputfiles:
-            if not Path(file_).is_file():
-                sys.exit("Error (--files): {} is not a file".format(file_))
+            f = Path(file_)
+            if f.suffix == ".bgccase":
+                try:
+                    shelve.open(str(f), 'r')
+                except:
+                    sys.exit("Error (--files): {} not a valid bgccase database".format(f))
+            else:
+                if not f.is_file():
+                    sys.exit("Error (--files): {} is not a file".format(f))
                 
     if inputfolders:
         for folder in inputfolders:
@@ -197,7 +228,7 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                         print("Warning: substituting {} \n\twith {}\
                                 ".format(input_bgc_files[bgc_id], f))
                         if not override:
-                            del collection_working[bgc_id]
+                            del collection_working.bgcs[bgc_id]
                     
                     if override:
                         # flag this bgc to re-predict domains
@@ -208,7 +239,7 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                     input_bgc_files[bgc_id] = f
                         
             elif f.suffix.lower() == ".bgccase":
-                with shelve.open(f, flag='r') as col:
+                with shelve.open(str(f), flag='r') as col:
                     # if we've got a filter list, use it
                     if len(filter_bgc) > 0:
                         for bgc_id in filter_bgc:
@@ -224,7 +255,7 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                                           bgc in collection {}".format(\
                                               input_bgc_files[bgc_id], f))
                                     if not override:
-                                        del collection_working[bgc_id]
+                                        del collection_working.bgcs[bgc_id]
                                 
                                 if override:
                                     collection_working.bgcs[bgc_id] = bgc
@@ -241,7 +272,7 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                                             bgc in collection {}".format(\
                                                 input_bgc_files[bgc_id], f))
                                     if not override:
-                                        del collection_working[bgc_id]
+                                        del collection_working.bgcs[bgc_id]
                                 
                                 if override:
                                     collection_working.bgcs[bgc_id] = bgc
@@ -415,8 +446,10 @@ if __name__ == "__main__":
     # Verify user typed paths correctly
     check_input_data(args.files, args.inputfolders, args.hmm, args.bgclist)
     
+    if not (args.svg or args.bgc):
+        sys.exit("Error: No output enabled. Use --svg and/or --bgc")
+
     # Get parameters
-    stacked = args.stacked
     outputfolder = args.outputfolder
     override = args.override
     mirror = args.mirror
@@ -495,20 +528,29 @@ if __name__ == "__main__":
         collection_working.predict_domains(hmmdbs, cpus=hmmdbs.cores)
         print("\tdone!")
     
-    svg_collection = BGCCollection() # BGCs that will be rendered
-    svg_collection.bgcs.update(collection_working.bgcs)
-    svg_collection.bgcs.update(collection_external.bgcs)
-    svg_collection.classify_proteins(args.cpus)
+    output_collection = BGCCollection() # BGCs that will be rendered
+    output_collection.bgcs.update(collection_working.bgcs)
+    output_collection.bgcs.update(collection_external.bgcs)
+    output_collection.classify_proteins(args.cpus)
     
-    if stacked:
-        print("Generating stacked figure")
-        if args.bgclist:
-            filename = o / "{}.svg".format(args.bgclist.stem)
+    if args.bgc:
+        if args.group:
+            filename = o / "{}.bgccase".format(args.group)
+            with shelve.open(str(filename)) as bgc_shelf:
+                for bgc_id in output_collection.bgcs:
+                    bgc_shelf[bgc_id] = output_collection.bgcs[bgc_id]
         else:
-            filename = o / "stacked_BGC_figure.svg"
-        draw_svg_stacked(filename, svg_collection, svgopts, hmmdbs, gaps, filter_bgc, filter_bgc_order)
-    else:
-        print("Generating individual figures")
-        draw_svg_individual(o, svg_collection, svgopts, hmmdbs, mirror, filter_bgc)
+            for bgc_id in output_collection.bgcs:
+                with open(o / "{}.bgc".format(bgc_id), "wb") as b:
+                    pickle.dump(output_collection.bgcs[bgc_id], b)
+
+    if args.svg:
+        if args.stacked:
+            print("Generating stacked figure")
+            filename = o / "{}.svg".format(args.stacked)
+            draw_svg_stacked(filename, output_collection, svgopts, hmmdbs, gaps, filter_bgc, filter_bgc_order)
+        else:
+            print("Generating individual figures")
+            draw_svg_individual(o, output_collection, svgopts, hmmdbs, mirror, filter_bgc)
         
 
