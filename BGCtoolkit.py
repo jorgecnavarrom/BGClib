@@ -483,7 +483,8 @@ if __name__ == "__main__":
     
     # Add hmm databases
     hmmdbs = HMM_DB()
-    if svgopts.draw_domains and args.hmm:
+    if (args.svg and svgopts.draw_domains and args.hmm) or \
+        (args.bgc and args.hmm):
         hmmdbs = HMM_DB()
         hmmdbs.cores = args.cpus
         hmmdbs.add_included_database()
