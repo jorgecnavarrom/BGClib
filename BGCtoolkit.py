@@ -21,11 +21,14 @@ TODO:
 """
 
 import os
+import sys
 import argparse
 import pickle
-import shelve
+# import shelve
+from lxml import etree
+from pathlib import Path
 from multiprocessing import cpu_count
-from BGClib import *
+from BGClib import HMM_DB, BGC, BGCCollection, ArrowerOpts
 
 __author__ = "Jorge Navarro"
 __version__ = "1"
@@ -130,16 +133,18 @@ def check_input_data(inputfiles, inputfolders, hmms, bgclist):
     if inputfiles:
         for file_ in inputfiles:
             f = Path(file_)
-            if f.suffix == ".bgccase":
-                try:
-                    s = shelve.open(str(f), 'r')
-                except:
-                    sys.exit("Error (--files): {} not a valid bgccase database".format(f))
-                else:
-                    s.close()
-            else:
-                if not f.is_file():
-                    sys.exit("Error (--files): {} is not a file".format(f))
+            if not f.is_file():
+                sys.exit("Error (--files): {} is not a file".format(f))
+            # if f.suffix == ".bgccase":
+            #     try:
+            #         s = shelve.open(str(f), 'r')
+            #     except:
+            #         sys.exit("Error (--files): {} not a valid bgccase database".format(f))
+            #     else:
+            #         s.close()
+            # else:
+            #     if not f.is_file():
+            #         sys.exit("Error (--files): {} is not a file".format(f))
                 
     if inputfolders:
         for folder in inputfolders:
@@ -241,7 +246,12 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                     input_bgc_files[bgc_id] = f
                         
             elif f.suffix.lower() == ".bgccase":
-                with shelve.open(str(f), flag='r') as col:
+                # TODO: fix shelves to always use the same backend or find
+                # another solution
+                # with shelve.open(str(f), flag='r') as col:
+                with open(f, "rb") as dc:
+                    col = pickle.load(dc)
+
                     # if we've got a filter list, use it
                     if len(filter_bgc) > 0:
                         for bgc_id in filter_bgc:
@@ -265,8 +275,8 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                                     collection_external.bgcs[bgc_id] = bgc
                     # no filter list. Check all content in the collection
                     else:
-                        for bgc_id in col:
-                            bgc = col[bgc_id]
+                        for bgc_id in col.bgcs:
+                            bgc = col.bgcs[bgc_id]
                             if valid_name(bgc_id, include, exclude, \
                                 filter_bgc):
                                 if bgc_id in input_bgc_files:
@@ -531,17 +541,48 @@ if __name__ == "__main__":
         collection_working.predict_domains(hmmdbs, cpus=hmmdbs.cores)
         print("\tdone!")
     
-    output_collection = BGCCollection() # BGCs that will be rendered
+    output_collection = BGCCollection() # BGCs that will be rendered/processed
     output_collection.bgcs.update(collection_working.bgcs)
     output_collection.bgcs.update(collection_external.bgcs)
+    print("Applying classification rules")
     output_collection.classify_proteins(args.cpus)
-    
+    print("\tdone!")
+
+    # # TODO remove this
+    # all_terpene = {"SQHop_cyclase_N", "SQHop_cyclase_C", "TRI5",
+    #     "Terpene_syn_C_2", "polyprenyl_synt", "UbiA", "Terpene_synth", 
+    #     "Terpene_synth_C", "SQS_PSY", "Lycopene_cyc", "Lycopene_cycl",
+    #     "Prenyltrans", "PPTA", "mero_tc", "diterpene_tc"}
+
     if args.bgc:
         if args.group:
             filename = o / "{}.bgccase".format(args.group)
-            with shelve.open(str(filename)) as bgc_shelf:
-                for bgc_id in output_collection.bgcs:
-                    bgc_shelf[bgc_id] = output_collection.bgcs[bgc_id]
+            with open(filename, "wb") as c:
+                pickle.dump(output_collection, c)
+            with open(o / "{}.metadata.tsv".format(args.group), "w") as m:
+                m.write("BGC\tDefinition\tantiSMASH products\tCore Proteins\tCore Proteins IDs\n")
+                for bgc_id in sorted(output_collection.bgcs):
+                    bgc = output_collection.bgcs[bgc_id]
+                    list_core_types = list()
+                    list_protein_ids = list()
+                    all_domains = set() # TODO remove this. Just for testing
+                    for protein in bgc.protein_list:
+                        all_domains.update(protein.domain_set)
+                        if protein.role == "biosynthetic":
+                            list_core_types.append(protein.protein_type)
+                            list_protein_ids.append(protein.protein_id)
+                    m.write("{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
+                        bgc.definition, ", ".join(bgc.products), 
+                        ", ".join(list_core_types), 
+                        ", ".join(list_protein_ids)))
+                    # m.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
+                    #     bgc.definition, ", ".join(bgc.products), 
+                    #     ", ".join(list_core_types), 
+                    #     ", ".join(list_protein_ids), 
+                    #     ", ".join(sorted(all_domains & all_terpene))))
+            # with shelve.open(str(filename)) as bgc_shelf:
+            #     for bgc_id in output_collection.bgcs:
+            #         bgc_shelf[bgc_id] = output_collection.bgcs[bgc_id]
         else:
             for bgc_id in output_collection.bgcs:
                 with open(o / "{}.bgc".format(bgc_id), "wb") as b:

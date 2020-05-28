@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.8"
+__version__ = "0.5.9"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -40,13 +40,29 @@ PKS3_domains = {"Chal_sti_synt_N", "Chal_sti_synt_C"}
 NRPS_domains = {"Condensation", "AMP-binding", "AMP-binding_C"}
 reducing_domains = {"PKS_ER", "KR", "PS-DH"}
 NRPS_Independent_Siderophore_domains = {"IucA_IucC"}
-Terpene_domains = {"Terpene_synth", "Terpene_synth_C", "Lycopene_cycl", 
-                   "SQHop_cyclase_N", "SQHop_cyclase_C", "Prenyltrans", 
-                   "SQS_PSY", "TRI5", "polyprenyl_synt", "UbiA" }
+Terpene_meroterpenoid_domains = {"mero_tc"}
+Terpene_diterpene_domains = {"diterpene_tc"}
+Terpene_triterpene_domains = {"SQHop_cyclase_N", "SQHop_cyclase_C"}
+Terpene_sesquiterpene_domains = {"TRI5", "Terpene_syn_C_2"}
+Terpene_sesquiterpene_bifunc_domains = {"Terpene_syn_C_2", "polyprenyl_synt"}
+Terpene_squalestatin_domains = {"SQS_PSY"}
+Terpene_UbiA_domains = {"UbiA"}
+Other_terpene_domains = {"Terpene_synth", "Terpene_synth_C", "Lycopene_cycl",
+    "Prenyltrans"}
+Terpene_domains =  Terpene_meroterpenoid_domains | Terpene_diterpene_domains \
+    | Terpene_triterpene_domains | Terpene_sesquiterpene_domains \
+    | Terpene_sesquiterpene_bifunc_domains | Terpene_squalestatin_domains \
+    | Terpene_UbiA_domains | Other_terpene_domains
+                   
 DMATS_domain = {"Trp_DMAT"}
 
+# Precursors
 FAS_domains_A = {"Fas_alpha_ACP" ,"FAS_I_H", "ACPS"}
 FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
+precursor_domains = FAS_domains_A | FAS_domains_B
+
+# TODO: add PT domain until in this set until we have a better model?
+hmmdbs_without_tc = {"mero_tc", "diterpene_tc"}
 
 valid_CBP_types = {"nrPKS": "#76b7f4", # blue
                    "rPKS": "#2c9cdc", # darker blue
@@ -1072,14 +1088,15 @@ class ProteinCollection:
         for db in hmmdb.db_list:
             #command = ['hmmscan', '--cpu', str(cpus), '--noali', '--notextw']
             command = ['hmmscan', '--cpu', str(cpus), '--notextw', '--qformat', 'fasta']
-            if tc:
+            if tc and db.stem not in hmmdbs_without_tc:
                 command.append('--cut_tc')
             if domtblout_path != "":
                 path = str(domtblout_path / ("output_" + db.stem + ".domtable"))
                 command.extend(['--domtblout', path ])
             dbpath = str(db)
             command.extend([ dbpath, '-'])
-            
+            print(" ".join(command))
+
             proc_hmmscan = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
             out, err = proc_hmmscan.communicate(input="\n".join(protein_list).encode("utf-8"))
             
@@ -1649,18 +1666,20 @@ class BGCProtein:
         cbp_type = ""
         
         # pks/nrps hybrid
-        if len(self.domain_set & (FAS_domains_A | FAS_domains_B)) > 1:
+        if self.domain_set & precursor_domains:
             self.role = "precursor"
             
-            if len(self.domain_set & FAS_domains_A & FAS_domains_B) > 0:
+            if self.domain_set & FAS_domains_A & FAS_domains_B:
                 self.protein_type = "Fatty Acid Synthase"
-            elif len(self.domain_set & FAS_domains_A) > 0:
+            elif self.domain_set & FAS_domains_A:
                 self.protein_type = "Fatty Acid Synthase A"
-            else:
+            elif self.domain_set & FAS_domains_B:
                 self.protein_type = "Fatty Acid Synthase B"
-                
+            else:
+                # shouldn't really happen
+                self.protein_type = "unknown_precursor"
             return
-        elif len(self.domain_set & PKS_domains) > 0 and len(self.domain_set & NRPS_domains) > 0:
+        elif (self.domain_set & PKS_domains) and (self.domain_set & NRPS_domains):
             for d in self.domain_list:
                 if d.ID in PKS_domains:
                     # Detect PKS/multi-modular NRPS. Count both C and A domains 
@@ -1681,13 +1700,13 @@ class BGCProtein:
                 else:
                     pass
         # nrPKS or (h/p)rPKS
-        elif len(self.domain_set & PKS_domains) > 0:
+        elif self.domain_set & PKS_domains:
             # try to set appart FAS-like sequences of e.g. azaphilone
             if "ketoacyl-synt" not in self.domain_set:
                 cbp_type = "unknown_PKS"
                 self.role = "unknown"
                 
-            elif len(self.domain_set & {"TIGR04532","SAT"}) > 0:
+            elif self.domain_set & {"TIGR04532","SAT"}:
                 # assume that having a SAT domain is enough for labeling as nrPKS
                 # but note that in this category, there seem to be three cases for PT:
                 # - PT detected by TIGR04532
@@ -1697,28 +1716,50 @@ class BGCProtein:
                 # to detect all three+ cases
                 cbp_type = "nrPKS"
                 self.role = "biosynthetic"
-            elif len(self.domain_set & reducing_domains) > 0:
+            elif self.domain_set & reducing_domains:
                 cbp_type = "rPKS"
                 self.role = "biosynthetic"
             else:
                 cbp_type = "other_PKS"
                 self.role = "biosynthetic"
-        elif len(self.domain_set & PKS3_domains) > 0:
+        elif self.domain_set & PKS3_domains:
             cbp_type = "t3PKS"
             self.role = "biosynthetic"
-        elif len(self.domain_set & NRPS_domains) > 0:
+        elif self.domain_set & NRPS_domains:
             if "Condensation" in self.domain_set:
                 cbp_type = "NRPS"
             else:
                 cbp_type = "NRPS-like"
             self.role = "biosynthetic"
-        elif len(self.domain_set & NRPS_Independent_Siderophore_domains) > 0:
+        elif self.domain_set & NRPS_Independent_Siderophore_domains:
             cbp_type = "NIS"
             self.role = "biosynthetic"
-        elif len(self.domain_set & Terpene_domains) > 0:
-            cbp_type = "Terpene"
+        elif self.domain_set & Terpene_domains:
             self.role = "biosynthetic"
-        elif len(self.domain_set & DMATS_domain) > 0:
+            if self.domain_set & Terpene_meroterpenoid_domains:
+                cbp_type = "Meroterpenoid_synthase"
+            elif self.domain_set & Terpene_diterpene_domains:
+                cbp_type = "Diterpene_synthase"
+            elif self.domain_set & Terpene_triterpene_domains:
+                cbp_type = "Triterpene_synthase"
+            elif self.domain_set & Terpene_sesquiterpene_domains:
+                cbp_type = "Sesquiterpene_synthase"
+            elif self.domain_set & Terpene_sesquiterpene_bifunc_domains:
+                if Terpene_sesquiterpene_bifunc_domains <= self.domain_set:
+                    cbp_type = "Sesquiterpene_bifunctional_synthase"
+                elif "Terpene_syn_C_2" in self.domain_set:
+                    cbp_type = "Terpene_other"
+                else:
+                    self.role = "precursor"
+                    cbp_type = "Polyprenyl transferase"
+                    return
+            elif self.domain_set & Terpene_squalestatin_domains:
+                cbp_type = "Squalestatin_synthase"
+            elif self.domain_set & Terpene_UbiA_domains:
+                cbp_type = "UbiA-type_terpene"
+            else:
+                cbp_type = "Terpene_other"
+        elif self.domain_set & DMATS_domain:
             cbp_type = "DMATS"
             self.role = "biosynthetic"
         else:
