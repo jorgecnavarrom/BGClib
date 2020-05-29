@@ -45,13 +45,13 @@ Terpene_diterpene_domains = {"diterpene_tc"}
 Terpene_triterpene_domains = {"SQHop_cyclase_N", "SQHop_cyclase_C"}
 Terpene_sesquiterpene_domains = {"TRI5", "Terpene_syn_C_2"}
 Terpene_sesquiterpene_bifunc_domains = {"Terpene_syn_C_2", "polyprenyl_synt"}
-Terpene_squalestatin_domains = {"SQS_PSY"}
+Terpene_squalene_domains = {"SQS_PSY"}
 Terpene_UbiA_domains = {"UbiA"}
 Other_terpene_domains = {"Terpene_synth", "Terpene_synth_C", "Lycopene_cycl",
     "Prenyltrans"}
 Terpene_domains =  Terpene_meroterpenoid_domains | Terpene_diterpene_domains \
     | Terpene_triterpene_domains | Terpene_sesquiterpene_domains \
-    | Terpene_sesquiterpene_bifunc_domains | Terpene_squalestatin_domains \
+    | Terpene_sesquiterpene_bifunc_domains | Terpene_squalene_domains \
     | Terpene_UbiA_domains | Other_terpene_domains
                    
 DMATS_domain = {"Trp_DMAT"}
@@ -1753,8 +1753,8 @@ class BGCProtein:
                     self.role = "precursor"
                     cbp_type = "Polyprenyl transferase"
                     return
-            elif self.domain_set & Terpene_squalestatin_domains:
-                cbp_type = "Squalestatin_synthase"
+            elif self.domain_set & Terpene_squalene_domains:
+                cbp_type = "Squalene_synthase"
             elif self.domain_set & Terpene_UbiA_domains:
                 cbp_type = "UbiA-type_terpene"
             else:
