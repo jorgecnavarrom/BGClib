@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.5.9"
+__version__ = "0.6.0"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -64,6 +64,7 @@ precursor_domains = FAS_domains_A | FAS_domains_B
 # TODO: add PT domain until in this set until we have a better model?
 hmmdbs_without_tc = {"mero_tc", "diterpene_tc"}
 
+# TODO: choose colors for the last ones
 valid_CBP_types = {"nrPKS": "#76b7f4", # blue
                    "rPKS": "#2c9cdc", # darker blue
                    "t3PKS": "#3cb5a1", #007dfb", # a bit more dark blue
@@ -74,11 +75,22 @@ valid_CBP_types = {"nrPKS": "#76b7f4", # blue
                    "PKS-NRPS_hybrid": "#aa007f", # purple
                    "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
                    "NRPS-PKS_hybrid": "#a25fe6", # violet
-                   "unknown": "#f4f4fc", # super light lilac
-                   "other": "#fcdcdc", # very light pink
-                   "no_domains": "#ffffff", # white
-                   "NIS": "#c20c28" # red blood
+                   "NIS": "#c20c28", # red blood
+                   "Meroterpenoid_synthase": "#f4f4fc", # super light lilac
+                   "Diterpene_synthase": "#f4f4fc", # super light lilac
+                   "Triterpene_synthase": "#f4f4fc", # super light lilac
+                   "Sesquiterpene_synthase": "#f4f4fc", # super light lilac
+                   "Sesquiterpene_bifunctional_synthase: "#f4f4fc", # super light lilac
+                   "Terpene_other": "#f4f4fc", # super light lilac
+                   "Squalene_synthase": "#f4f4fc", # super light lilac
+                   "UbiA-type_terpene": "#f4f4fc", # super light lilac
+                   "Terpene_other": "#f4f4fc", # super light lilac
+                   "DMATS": "#f4f4fc" # super light lilac
                     }
+# other colors
+# "unknown": "#f4f4fc", # super light lilac
+# "other": "#fcdcdc", # very light pink
+# no_domains": "#ffffff", # white. For stuff like RiPPs (TODO)
 
 role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "tailoring":"#8fc889", # green, rgb(143, 200, 137)
@@ -1284,6 +1296,24 @@ class ProteinCollection:
         return
     
     
+    def get_fasta(self):
+        """
+        Returns a string with the fasta sequences of all proteins in the
+        collection. Header will be the protein accession, if present. Otherwise
+        the protein's identifier will be used. 
+        """
+        sequences = []
+        for p_id in self.proteins:
+            p = self.proteins[p_id]
+            header = p.protein_id
+            if p.protein_id == "":
+                header = p.identifier
+                # print("Warning: {} has no protein id".format(p.identifier))
+            sequences.append(">{}\n{}".format(header, p.sequence80()))
+
+        return "".join(sequences)
+
+
 
 class BGCProtein:
     """
@@ -1320,8 +1350,6 @@ class BGCProtein:
         self.product = ""           # From NCBI's GenBank annotations
         self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
                                     #   resistance, unknown]. See role_colors
-        
-        
         
         
         self.compound_family = ""   # Compound family e.g. "emodin-like"
@@ -1389,8 +1417,13 @@ class BGCProtein:
             self.compound_family, self.compound, self.source, self.organism, 
             self.TaxId)
     
-    # TODO fix this
+
     def sequence80(self, start=0, end=None):
+        """
+        Returns a prettified sequence (broken at 80 chars.)
+        0-based coordinates
+        """
+
         if end == None: # NOTE parameter can't be 'end=self.length' (check)
             end = self.length
             
@@ -1398,19 +1431,17 @@ class BGCProtein:
             return ""
         
         length = end - start + 1
+        seq = self._sequence[start:end]
         
-        part_one = "\n".join([self._sequence[i:i+80] for i in range(length // 80)])
+        part_one = "\n".join([seq[row*80:(row+1)*80] for row in \
+            range(length // 80)])
         
         part_two = ""
         remainder = length % 80
         if remainder > 0:
-            part_two = "{}\n".format(self._sequence[-remainder:])
+            part_two = "{}\n".format(seq[-remainder:])
             
-        print(self._sequence)
-        print(start, end)
-        print("{}{}".format(part_one, part_two))
-        sys.exit("test")
-        return "{}{}".format(part_one, part_two)
+        return "{}\n{}".format(part_one, part_two)
         
         
     # TODO rename to "get_fasta"?

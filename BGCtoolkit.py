@@ -28,7 +28,8 @@ import pickle
 from lxml import etree
 from pathlib import Path
 from multiprocessing import cpu_count
-from BGClib import HMM_DB, BGC, BGCCollection, ArrowerOpts
+from BGClib import HMM_DB, BGC, BGCCollection, ArrowerOpts, valid_CBP_types, \
+    ProteinCollection
 
 __author__ = "Jorge Navarro"
 __version__ = "1"
@@ -101,23 +102,30 @@ def CMD_parser():
     
     group_output = parser.add_argument_group("Output")
     
-    group_output.add_argument("--svg", default=False, 
-        action="store_true", help="Toggle to enable SVG output")
-    group_output.add_argument("--bgc", default=False,
-        action="store_true", help="Toggle to enable BGC Library objects (.bgc \
-            .bgccase)")
     group_output.add_argument("-o", "--outputfolder", 
         default=(Path(__file__).parent/"output"), help="Folder where results \
         will be put (default='output')")
-    group_output.add_argument("-s", "--stacked", type=str, help="If used, all \
-        BGCs will be put in the same figure. The argument of this parameter is\
-        the filename (no extension)")
-    group_output.add_argument("-g", "--group", type=str, help="If used, all\
-        BGCs will be put in the same .bgccase file. The argument of this \
-        parameter is the filename (no extension)")
+    group_output.add_argument("--svg", default=False, 
+        action="store_true", help="Toggle to enable SVG output")
+    group_output.add_argument("-s", "--stacked", type=str, help="If used with \
+        --svg, all BGC SVGs will be put in the same figure. The argument of \
+        this parameter is the filename (no extension)")
     group_output.add_argument("--gaps", default=False, action="store_true",
         help="If --stacked is used, toggle this option to leave gaps\
         when a particular BGC is not found in the input data")
+    group_output.add_argument("--bgc", default=False,
+        action="store_true", help="Toggle to save binary files with the \
+            content of each BGC (.bgc)")
+    group_output.add_argument("-g", "--group", type=str, help="If used with \
+        --bgc, all BGCs will be put in the same binary file (.bgccase). The \
+        argument of this parameter is the filename (no extension)")
+    group_output.add_argument("--metadata", help="Output a \
+        tab-separated-file with metadata of the core biosynthetic proteins \
+        contained in the input. Argument is the name of the file (no \
+        extension)")
+    group_output.add_argument("--fasta", default=False, action="store_true",
+        help="Toggle to output sequences of Core Biosynthetic Proteins \
+        defined in the 'Core_Biosynthetic_Protein_fasta_options.cfg' file")
     
     return parser.parse_args()
 
@@ -452,14 +460,24 @@ def draw_svg_stacked(filename, svg_collection, svgopts, hmmdbs, gaps, filter_bgc
         f.write(etree.tostring(root, pretty_print=True))
         
 
+def read_cbp_cfg(cfg_file):
+    cbp_types = set()
+
+    with open(cfg_file) as f:
+        for line in f:
+            if line[0] == "#":
+                continue
+            bgctype, decision = line.strip().split("=")[:2]
+            if decision.strip().lower() == "true":
+                cbp_types.add(bgctype.strip())
+    return cbp_types
+
+
 if __name__ == "__main__":
     args = CMD_parser()
 
     # Verify user typed paths correctly
     check_input_data(args.files, args.inputfolders, args.hmm, args.bgclist)
-    
-    if not (args.svg or args.bgc):
-        sys.exit("Error: No output enabled. Use --svg and/or --bgc")
 
     # Get parameters
     outputfolder = args.outputfolder
@@ -548,38 +566,11 @@ if __name__ == "__main__":
     output_collection.classify_proteins(args.cpus)
     print("\tdone!")
 
-    # # TODO remove this
-    # all_terpene = {"SQHop_cyclase_N", "SQHop_cyclase_C", "TRI5",
-    #     "Terpene_syn_C_2", "polyprenyl_synt", "UbiA", "Terpene_synth", 
-    #     "Terpene_synth_C", "SQS_PSY", "Lycopene_cyc", "Lycopene_cycl",
-    #     "Prenyltrans", "PPTA", "mero_tc", "diterpene_tc"}
-
     if args.bgc:
         if args.group:
             filename = o / "{}.bgccase".format(args.group)
             with open(filename, "wb") as c:
                 pickle.dump(output_collection, c)
-            with open(o / "{}.metadata.tsv".format(args.group), "w") as m:
-                m.write("BGC\tDefinition\tantiSMASH products\tCore Proteins\tCore Proteins IDs\n")
-                for bgc_id in sorted(output_collection.bgcs):
-                    bgc = output_collection.bgcs[bgc_id]
-                    list_core_types = list()
-                    list_protein_ids = list()
-                    all_domains = set() # TODO remove this. Just for testing
-                    for protein in bgc.protein_list:
-                        all_domains.update(protein.domain_set)
-                        if protein.role == "biosynthetic":
-                            list_core_types.append(protein.protein_type)
-                            list_protein_ids.append(protein.protein_id)
-                    m.write("{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
-                        bgc.definition, ", ".join(bgc.products), 
-                        ", ".join(list_core_types), 
-                        ", ".join(list_protein_ids)))
-                    # m.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
-                    #     bgc.definition, ", ".join(bgc.products), 
-                    #     ", ".join(list_core_types), 
-                    #     ", ".join(list_protein_ids), 
-                    #     ", ".join(sorted(all_domains & all_terpene))))
             # with shelve.open(str(filename)) as bgc_shelf:
             #     for bgc_id in output_collection.bgcs:
             #         bgc_shelf[bgc_id] = output_collection.bgcs[bgc_id]
@@ -587,6 +578,179 @@ if __name__ == "__main__":
             for bgc_id in output_collection.bgcs:
                 with open(o / "{}.bgc".format(bgc_id), "wb") as b:
                     pickle.dump(output_collection.bgcs[bgc_id], b)
+
+    if args.metadata:
+        with open(o / "{}.metadata.tsv".format(args.group), "w") as m:
+            m.write("BGC\tDefinition\tantiSMASH products\tCore Proteins\tCore Proteins IDs\n")
+            for bgc_id in sorted(output_collection.bgcs):
+                bgc = output_collection.bgcs[bgc_id]
+                list_core_types = list()
+                list_protein_ids = list()
+                all_domains = set() # TODO remove this. Just for testing
+                for protein in bgc.protein_list:
+                    all_domains.update(protein.domain_set)
+                    if protein.role == "biosynthetic":
+                        list_core_types.append(protein.protein_type)
+                        list_protein_ids.append(protein.protein_id)
+                m.write("{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
+                    bgc.definition, ", ".join(bgc.products), 
+                    ", ".join(list_core_types), 
+                    ", ".join(list_protein_ids)))
+
+    if args.fasta:
+        cfg_file = Path(__file__).parent/"Core_Biosynthetic_Protein_fasta_options.cfg"
+        if not cfg_file.is_file():
+            print("Error (--fasta): cannot find configuration file for fasta extraction")
+        else:
+            requested_cbp_types = read_cbp_cfg(cfg_file)
+
+            extract_A_domain = False
+            if "NRPS-A-Domains" in requested_cbp_types:
+                extract_A_domain = True
+                proteins_w_A_domains = ProteinCollection()
+                requested_cbp_types.remove("NRPS-A-Domains")
+            extract_C_domain = False
+            if "NRPS-C-Domains" in requested_cbp_types:
+                extract_C_domain = True
+                proteins_w_C_domains = ProteinCollection()
+                requested_cbp_types.remove("NRPS-C-Domains")
+            extract_KS_domain = False
+            if "PKS-KS-Domain" in requested_cbp_types:
+                extract_KS_domain = True
+                proteins_w_KS_domains = ProteinCollection()
+                requested_cbp_types.remove("PKS-KS-Domain")
+
+            types_with_A_domain = {"NRPS", "NRPS-like", "PKS-NRPS_hybrid", \
+                "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid"}
+            types_with_C_domain = {"NRPS", "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid"}
+            types_with_KS_domain = {"nrPKS", "rPKS", "other_PKS", \
+                "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid"}
+
+            # Make sure user didn't change types in cfg file
+            working_cbp_types = requested_cbp_types & set(valid_CBP_types)
+            
+            # populate protein collections for each target type
+            # Basically
+            # valid_CBP_types >= required_cbp_types >= types actually in data
+            proteins_by_type = dict()
+            for bgc_id in output_collection.bgcs:
+                bgc = output_collection.bgcs[bgc_id]
+                for cbp_type in (bgc.CBPtypes_set & working_cbp_types):
+                    # p = protein object with target type
+                    for p in bgc.CBPcontent[cbp_type]:
+                        try:
+                            proteins_by_type[cbp_type].proteins[p.identifier] = p
+                        except KeyError:
+                            proteins_by_type[cbp_type] = ProteinCollection()
+                            proteins_by_type[cbp_type].proteins[p.identifier] = p
+
+                        # TODO: optimize this
+                        if extract_A_domain and cbp_type in types_with_A_domain:
+                            proteins_w_A_domains.proteins[p.identifier] = p
+                        if extract_C_domain and cbp_type in types_with_C_domain:
+                            proteins_w_C_domains.proteins[p.identifier] = p
+                        if extract_KS_domain and cbp_type in types_with_KS_domain:
+                            proteins_w_KS_domains.proteins[p.identifier] = p
+
+            # write sequences
+            for cbp_type in working_cbp_types:
+                try:
+                    prot_col = proteins_by_type[cbp_type]
+                except KeyError:
+                    continue
+                
+                folder = o / cbp_type
+                if not folder.is_dir():
+                    os.makedirs(folder, exist_ok=True)
+
+                fasta_file = folder / (cbp_type + ".fasta")
+                with open(fasta_file, "w") as f:
+                    f.write(prot_col.get_fasta())
+
+            # write domain subsequences
+            if len(proteins_w_A_domains.proteins) > 0:
+                folder = o / "All_A_domains"
+                if not folder.is_dir():
+                    os.makedirs(folder, exist_ok=True)
+                
+                subsequences = []
+                metadata = []
+                for pid in proteins_w_A_domains.proteins:
+                    p = proteins_w_A_domains.proteins[pid]
+                    d_num = 1
+                    for d in p.domain_list:
+                        if d.ID == "AMP-binding":
+                            if p.protein_id == "":
+                                header = "{}_A{}".format(p.identifier, d_num)
+                            else:
+                                header = "{}_A{}".format(p.protein_id, d_num)
+                            subsequences.append(">{}\n{}".format(header, \
+                                p.sequence80(d.ali_from, d.ali_to+1)))
+                            metadata.append((p.identifier, p.protein_id, \
+                                str(d_num), p.protein_type))
+                            d_num += 1
+                with open(folder / "All_A_domains.fasta", "w") as f:
+                    f.write("".join(subsequences))
+                with open(folder / "All_A_domains.metadata.tsv", "w") as f:
+                    f.write("Internal protein identifier\tAnnotated protein id\tDomain number\tProtein type\n")
+                    for m in metadata:
+                        f.write("{}\n".format("\t".join(m)))
+
+            if len(proteins_w_C_domains.proteins) > 0:
+                folder = o / "All_C_domains"
+                if not folder.is_dir():
+                    os.makedirs(folder, exist_ok=True)
+
+                subsequences = []
+                metadata = []
+                for pid in proteins_w_C_domains.proteins:
+                    p = proteins_w_C_domains.proteins[pid]
+                    d_num = 1
+                    for d in p.domain_list:
+                        if d.ID == "Condensation":
+                            if p.protein_id == "":
+                                header = "{}_C{}".format(p.identifier, d_num)
+                            else:
+                                header = "{}_C{}".format(p.protein_id, d_num)
+                            subsequences.append(">{}\n{}".format(header, \
+                                p.sequence80(d.ali_from, d.ali_to+1)))
+                            metadata.append((p.identifier, p.protein_id, \
+                                str(d_num), p.protein_type))
+                            d_num += 1
+                with open(folder / "All_C_domains.fasta", "w") as f:
+                    f.write("".join(subsequences))
+                with open(folder / "All_C_domains.metadata.tsv", "w") as f:
+                    f.write("Internal protein identifier\tAnnotated protein id\tDomain number\tProtein type\n")
+                    for m in metadata:
+                        f.write("{}\n".format("\t".join(m)))
+
+            if len(proteins_w_KS_domains.proteins) > 0:
+                folder = o / "All_KS_domains"
+                if not folder.is_dir():
+                    os.makedirs(folder, exist_ok=True)
+                
+                    subsequences = []
+                    metadata = []
+                    for pid in proteins_w_KS_domains.proteins:
+                        p = proteins_w_KS_domains.proteins[pid]
+                        # d_num = 1 # should not have more than 1 KS domain
+                        for d in p.domain_list:
+                            if d.ID == "ketoacyl-synt":
+                                if p.protein_id == "":
+                                    header = "{}_KS".format(p.identifier)
+                                else:
+                                    header = "{}_KS".format(p.protein_id)
+                                subsequences.append(">{}\n{}".format(header, \
+                                    p.sequence80(d.ali_from, d.ali_to+1)))
+                                # d_num += 1
+                                metadata.append((p.identifier, p.protein_id, \
+                                    p.protein_type))
+                with open(folder / "All_KS_domains.fasta", "w") as f:
+                    f.write("".join(subsequences))
+                with open(folder / "All_KS_domains.metadata.tsv", "w") as f:
+                    f.write("Internal protein identifier\tAnnotated protein id\tProtein type\n")
+                    for m in metadata:
+                        f.write("{}\n".format("\t".join(m)))
 
     if args.svg:
         if args.stacked:
