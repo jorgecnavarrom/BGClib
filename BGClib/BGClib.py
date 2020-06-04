@@ -23,22 +23,19 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
 
 # Static data
 
-# these should all have an alias in CBP_domains.tsv
-
-# Turns out there's a few NRPS that contain the Acyl_transf_1 domain (but not
-# ks etc.) so they get mixed with hybrids
+# Don't include Acyl_transf_1 domain as some NRPS have it
 PKS_domains = {"SAT", "ketoacyl-synt", "Ketoacyl-synt_C", "KAsynt_C_assoc",
                 "TIGR04532"}
+reducing_domains = {"PKS_ER", "KR", "PS-DH"}
 PKS3_domains = {"Chal_sti_synt_N", "Chal_sti_synt_C"}
 NRPS_domains = {"Condensation", "AMP-binding", "AMP-binding_C"}
-reducing_domains = {"PKS_ER", "KR", "PS-DH"}
 NRPS_Independent_Siderophore_domains = {"IucA_IucC"}
 Terpene_meroterpenoid_domains = {"mero_tc"}
 Terpene_diterpene_domains = {"diterpene_tc"}
@@ -46,6 +43,7 @@ Terpene_triterpene_domains = {"SQHop_cyclase_N", "SQHop_cyclase_C"}
 Terpene_sesquiterpene_domains = {"TRI5", "Terpene_syn_C_2"}
 Terpene_sesquiterpene_bifunc_domains = {"Terpene_syn_C_2", "polyprenyl_synt"}
 Terpene_squalene_domains = {"SQS_PSY"}
+Terpene_carotenoid_domains = {"TIGR03462"}
 Terpene_UbiA_domains = {"UbiA"}
 Other_terpene_domains = {"Terpene_synth", "Terpene_synth_C", "Lycopene_cycl",
     "Prenyltrans"}
@@ -62,7 +60,7 @@ FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
 precursor_domains = FAS_domains_A | FAS_domains_B
 
 # TODO: add PT domain until in this set until we have a better model?
-hmmdbs_without_tc = {"mero_tc", "diterpene_tc"}
+hmmdbs_without_tc = {"FNP_terpene_models"}
 
 # TODO: choose colors for the last ones
 valid_CBP_types = {"nrPKS": "#76b7f4", # blue
@@ -82,6 +80,7 @@ valid_CBP_types = {"nrPKS": "#76b7f4", # blue
                    "Sesquiterpene_synthase": "#f4f4fc", # super light lilac
                    "Sesquiterpene_bifunctional_synthase: "#f4f4fc", # super light lilac
                    "Terpene_other": "#f4f4fc", # super light lilac
+                   "Carotenoid_synthase": "#f4f4fc", # super light lilac
                    "Squalene_synthase": "#f4f4fc", # super light lilac
                    "UbiA-type_terpene": "#f4f4fc", # super light lilac
                    "Terpene_other": "#f4f4fc", # super light lilac
@@ -277,6 +276,7 @@ class HMM_DB:
                             db_ID_to_AC[ID] = AC
                             db_ID_to_DE[ID] = DE
 
+            # TODO domain_info_file is empty...?
             with open(domain_info_file, "w") as dif:
                 for ID in db_ID_to_AC:
                     AC = db_ID_to_AC[ID]
@@ -583,7 +583,7 @@ class BGCCollection:
 
 class BGC:
     def __init__(self, gbkfile=None):
-        self.identifier = ""    # usually the file name
+        self.identifier = ""        # usually the file name
         
         self.CBPtypes = []          # Core Biosynthetic Protein List: simple
                                     #  list of biosynthetic types
@@ -600,7 +600,7 @@ class BGC:
     
         self.protein_list = []      # should also be present in loci
         self.proteins = {}          # direct access with protein identifier
-        # TODO Implement: gene_complement_domain_set, core_biosynthetic_protein_list
+        # TODO Implement: gene_complement_domain_set
         self.loci = []
 
         # TODO consider removing these/create another class for metadata
@@ -773,11 +773,11 @@ class BGC:
     
     def inter_loci_element(self, xoffset, yoffset, svg_options=ArrowerOpts()):
         """
-        Draws the following SVG figure to link loci genomic stripes:
+        Draws the following SVG figure as xml code to link loci genomic stripes:
         __/ /__
          / /
         
-        And returns the corresponding etree element
+        and returns the corresponding etree element
         """
         
         H = svg_options.arrow_height
@@ -1136,11 +1136,13 @@ class ProteinCollection:
                         #seq_identifier = qresult.id
                         hmm_id = hit.id
                         
-                        # NOTE: these are 1-based indices
-                        ali_from = hspf.query_start - 1
-                        ali_to = hspf.query_end - 1
-                        hmm_from = hspf.hit_start - 1
-                        hmm_to = hspf.hit_end - 1
+                        # NOTE: these are 1-based indices but biopython takes
+                        # care of this and shifts automatically (e.g. hmmscan
+                        # position 1 transforms to array index 0)
+                        ali_from = hspf.query_start
+                        ali_to = hspf.query_end
+                        hmm_from = hspf.hit_start
+                        hmm_to = hspf.hit_end
                         #env_from = hsp.env_start
                         #env_to = hsp.env_end
                         
@@ -1421,7 +1423,8 @@ class BGCProtein:
     def sequence80(self, start=0, end=None):
         """
         Returns a prettified sequence (broken at 80 chars.)
-        0-based coordinates
+        0-based coordinates (i.e. 'start' coordinate is included but 'end' is
+        not)
         """
 
         if end == None: # NOTE parameter can't be 'end=self.length' (check)
@@ -1430,7 +1433,7 @@ class BGCProtein:
         if start >= end or start < 0 or end > self.length:
             return ""
         
-        length = end - start + 1
+        length = end - start
         seq = self._sequence[start:end]
         
         part_one = "\n".join([seq[row*80:(row+1)*80] for row in \
@@ -1440,7 +1443,6 @@ class BGCProtein:
         remainder = length % 80
         if remainder > 0:
             part_two = "{}\n".format(seq[-remainder:])
-            
         return "{}\n{}".format(part_one, part_two)
         
         
@@ -1785,7 +1787,10 @@ class BGCProtein:
                     cbp_type = "Polyprenyl transferase"
                     return
             elif self.domain_set & Terpene_squalene_domains:
-                cbp_type = "Squalene_synthase"
+                if self.domain_set & Terpene_carotenoid_domains:
+                    cbp_type = "Carotenoid_synthase"
+                else:
+                    cbp_type = "Squalene_synthase"
             elif self.domain_set & Terpene_UbiA_domains:
                 cbp_type = "UbiA-type_terpene"
             else:
@@ -2770,7 +2775,7 @@ class BGCDomain:
         self.algn_seq = algn_seq    # Sequence of hit, aligned to the hmm profile
         
     def get_sequence(self):
-        return self.protein.sequence[self.ali_from:self.ali_to + 1]
+        return self.protein.sequence[self.ali_from:self.ali_to]
 
     def get_aligned_sequence(self):
         return "{}{}{}".format("-"*self.hmm_from, self.algn_seq, "-"*(self.hmm_size-self.hmm_to))

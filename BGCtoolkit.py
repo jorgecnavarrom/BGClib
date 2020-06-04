@@ -9,12 +9,14 @@ Handle Biosynthetic Gene Cluster objects
     * Include string
     * Exclude string
     * The user's own list (bgclist)
-- Analysis:
+- Processing:
     * Domain prediction
+    * Merge split domains
 - Output:
     * Figures (individual or stacked)
     * BGC objects (.bgc or .bgccase)
     * Metadata (list of protein ids)
+    * Sequences (core biosynthetic proteins + selected domains)
 
 TODO: 
     * Convert fasta files into .bgcprotein or .bgcproteincase
@@ -24,12 +26,13 @@ import os
 import sys
 import argparse
 import pickle
+from collections import defaultdict
 # import shelve
 from lxml import etree
 from pathlib import Path
 from multiprocessing import cpu_count
 from BGClib import HMM_DB, BGC, BGCCollection, ArrowerOpts, valid_CBP_types, \
-    ProteinCollection
+    ProteinCollection, BGCDomain
 
 __author__ = "Jorge Navarro"
 __version__ = "1"
@@ -53,10 +56,6 @@ def CMD_parser():
         .bgc and .bgccase files, inclusion rules by --include, --exclude\
         and --bgclist will be applied to the internal BGC identifier, not the\
         name of the file")
-    group_input.add_argument("--hmm", nargs='+', help="Location of .hmm file(s).\
-        This will also enable internal hmm models. Note that if the SVG style \
-        options have 'draw_domains=False', no domain prediction will be made, \
-        even if .hmm files are specified")
     group_input.add_argument("-l", "--bgclist", help="A file containing a list \
         of BGC identifiers (i.e. filename without .gb or .gbk extension).\
         If specified, use it to filter all the BGCs found with --inputfolders \
@@ -86,17 +85,21 @@ def CMD_parser():
     
     group_processing = parser.add_argument_group("Processing options")
     
-    group_processing.add_argument("--cfg", 
+    group_processing.add_argument("--hmm", nargs='*', help="List of paths to \
+        .hmm file(s). This will also enable internal hmm models (use without \
+        arguments to only use internal models).")
+    group_processing.add_argument("--override", help="Use domain prediction in \
+        .bgc and .bgccase files, even if they already contain domain \
+        data.", default=False, action="store_true")
+    group_processing.add_argument("--svgcfg", 
         default=(Path(__file__).parent/"SVG_arrow_options.cfg"),
         help="Configuration file with SVG style. Default: \
         'SVG_arrow_options.cfg'")
     group_processing.add_argument("-m", "--mirror", default=False, 
         action="store_true", help="Toggle to mirror each BGC figure. Ignored \
         with --stacked or --bgclist")
-    group_processing.add_argument("--override", help="Use domain prediction in \
-        .bgc and .bgccase files, even if they already contain domain \
-        data (does not overwrite input files).", default=False, 
-        action="store_true")
+    group_processing.add_argument("--merge", default=False, action="store_true",
+        help="Try to fix successive domains that have been split ")
     group_processing.add_argument("-c", "--cpus", type=int, default=cpu_count(), 
         help="Number of CPUs used for domain prdiction. Default: all available")
     
@@ -119,9 +122,9 @@ def CMD_parser():
     group_output.add_argument("-g", "--group", type=str, help="If used with \
         --bgc, all BGCs will be put in the same binary file (.bgccase). The \
         argument of this parameter is the filename (no extension)")
-    group_output.add_argument("--metadata", help="Output a \
+    group_output.add_argument("--metadata", type=str, help="Output a \
         tab-separated-file with metadata of the core biosynthetic proteins \
-        contained in the input. Argument is the name of the file (no \
+        contained in the input. Argument is the basename of the file (no \
         extension)")
     group_output.add_argument("--fasta", default=False, action="store_true",
         help="Toggle to output sequences of Core Biosynthetic Proteins \
@@ -304,6 +307,75 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
     return collection_working, collection_external
 
 
+def fix_core_split_domains(output_collection):
+    """
+    Finds repeated domains and tries to merge them in a single one
+    Currently for domains found in core biosynthetic proteins
+    """
+
+    # key: BGCProtein. 
+    # Value: list whose elements are themselves lists of consecutive domain IDs
+    protein_to_broken_doms = defaultdict(list) 
+
+    # collect data
+    for bgc_id in output_collection.bgcs:
+        bgc = output_collection.bgcs[bgc_id]
+        for cbp_type in bgc.CBPcontent:
+            for protein in bgc.CBPcontent[cbp_type]:
+                consecutive_domain_list = [] # consecutive doms relative to hmm
+                current_id = ""
+                for current_dom_num in range(len(protein.domain_list)-1):
+                    current_dom = protein.domain_list[current_dom_num]
+                    if current_id != current_dom.ID:
+                        if consecutive_domain_list:
+                            protein_to_broken_doms[protein].append(consecutive_domain_list)
+                        
+                        consecutive_domain_list = []
+                        
+                        # look ahead to see if we need to start a new list
+                        next_dom = protein.domain_list[current_dom_num+1]
+                        if current_dom.ID == next_dom.ID and \
+                                current_dom.hmm_to < next_dom.hmm_from:
+                            consecutive_domain_list.append(current_dom)
+
+                        current_id = current_dom.ID
+                    elif consecutive_domain_list:
+                        if consecutive_domain_list[-1].hmm_to < current_dom.hmm_from:
+                            consecutive_domain_list.append(current_dom)
+                # check last domain
+                current_dom = protein.domain_list[-1]
+                if current_id != current_dom.ID:
+                    if consecutive_domain_list:
+                        protein_to_broken_doms[protein].append(consecutive_domain_list)
+                # could have same ID but hmm coordinates don't indicate splitting
+                elif consecutive_domain_list:
+                    if consecutive_domain_list[-1].hmm_to < current_dom.hmm_from:
+                        consecutive_domain_list.append(current_dom)
+                        protein_to_broken_doms[protein].append(consecutive_domain_list)
+
+    for protein in protein_to_broken_doms:
+        # print(protein.identifier)
+        for consecutive_domain_list in protein_to_broken_doms[protein]:
+            # for d in consecutive_domain_list:
+                # print("{}\t{}\t{}\t{}\t{}\t{}".format(protein.protein_id, \
+                #     d.ID, d.hmm_from, d.hmm_to, d.ali_from, d.ali_to))
+                # print(d.get_sequence())
+            # print("")
+
+            first_dom = consecutive_domain_list[0]
+            last_dom = consecutive_domain_list[-1]
+            # Warning! Score of the new domain is naively asssigned to be the
+            # simple sum of the scores of its parts
+            merged_domain = BGCDomain(protein, first_dom.ID, \
+                first_dom.ali_from, last_dom.ali_to, first_dom.hmm_from, \
+                last_dom.hmm_to, 0, \
+                sum(d.score for d in consecutive_domain_list), 0, "")
+            for d in consecutive_domain_list:
+                protein.domain_list.remove(d)
+            protein.domain_list.append(merged_domain)
+            protein.domain_list.sort(key=lambda x:x.ali_from)
+
+
 def draw_svg_individual(o, svg_collection, svgopts, hmmdbs, mirror, filter_bgc):
     for bgc_id in svg_collection.bgcs:
         bgc = svg_collection.bgcs[bgc_id]
@@ -473,6 +545,163 @@ def read_cbp_cfg(cfg_file):
     return cbp_types
 
 
+def make_fasta_files(o, requested_cbp_types, output_collection):
+    """
+    Based on options found in Core_Biosynthetic_Protein_fasta_options.cfg,
+    this function extracts protein sequences of core biosynthetic proteins.
+    It optionally also extracts selected domains (A, C and KS)
+    """
+    
+    extract_A_domain = False
+    if "NRPS-A-Domains" in requested_cbp_types:
+        extract_A_domain = True
+        proteins_w_A_domains = ProteinCollection()
+        requested_cbp_types.remove("NRPS-A-Domains")
+    extract_C_domain = False
+    if "NRPS-C-Domains" in requested_cbp_types:
+        extract_C_domain = True
+        proteins_w_C_domains = ProteinCollection()
+        requested_cbp_types.remove("NRPS-C-Domains")
+    extract_KS_domain = False
+    if "PKS-KS-Domain" in requested_cbp_types:
+        extract_KS_domain = True
+        proteins_w_KS_domains = ProteinCollection()
+        requested_cbp_types.remove("PKS-KS-Domain")
+
+    types_with_A_domain = {"NRPS", "NRPS-like", "PKS-NRPS_hybrid", \
+        "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid"}
+    types_with_C_domain = {"NRPS", "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid"}
+    types_with_KS_domain = {"nrPKS", "rPKS", "other_PKS", \
+        "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid"}
+
+    # Make sure user didn't change types in cfg file
+    working_cbp_types = requested_cbp_types & set(valid_CBP_types)
+    
+    # populate protein collections for each target type
+    # Basically
+    # valid_CBP_types >= required_cbp_types >= types actually in data
+    proteins_by_type = dict()
+    for bgc_id in output_collection.bgcs:
+        bgc = output_collection.bgcs[bgc_id]
+        for cbp_type in (bgc.CBPtypes_set & working_cbp_types):
+            # p = protein object with target type
+            for p in bgc.CBPcontent[cbp_type]:
+                try:
+                    proteins_by_type[cbp_type].proteins[p.identifier] = p
+                except KeyError:
+                    proteins_by_type[cbp_type] = ProteinCollection()
+                    proteins_by_type[cbp_type].proteins[p.identifier] = p
+
+                # TODO: optimize this
+                if extract_A_domain and cbp_type in types_with_A_domain:
+                    proteins_w_A_domains.proteins[p.identifier] = p
+                if extract_C_domain and cbp_type in types_with_C_domain:
+                    proteins_w_C_domains.proteins[p.identifier] = p
+                if extract_KS_domain and cbp_type in types_with_KS_domain:
+                    proteins_w_KS_domains.proteins[p.identifier] = p
+
+    # write sequences
+    for cbp_type in working_cbp_types:
+        try:
+            prot_col = proteins_by_type[cbp_type]
+        except KeyError:
+            continue
+        
+        folder = o / cbp_type
+        if not folder.is_dir():
+            os.makedirs(folder, exist_ok=True)
+
+        fasta_file = folder / (cbp_type + ".fasta")
+        with open(fasta_file, "w") as f:
+            f.write(prot_col.get_fasta())
+
+    # write domain subsequences
+    if len(proteins_w_A_domains.proteins) > 0:
+        folder = o / "All_A_domains"
+        if not folder.is_dir():
+            os.makedirs(folder, exist_ok=True)
+        
+        subsequences = []
+        metadata = []
+        for pid in proteins_w_A_domains.proteins:
+            p = proteins_w_A_domains.proteins[pid]
+            d_num = 1
+            for d in p.domain_list:
+                if d.ID == "AMP-binding":
+                    if p.protein_id == "":
+                        header = "{}_A{}".format(p.identifier, d_num)
+                    else:
+                        header = "{}_A{}".format(p.protein_id, d_num)
+                    subsequences.append(">{}\n{}".format(header, \
+                        p.sequence80(d.ali_from, d.ali_to)))
+                    metadata.append((p.identifier, p.protein_id, \
+                        str(d_num), p.protein_type))
+                    d_num += 1
+        with open(folder / "All_A_domains.fasta", "w") as f:
+            f.write("".join(subsequences))
+        with open(folder / "All_A_domains.metadata.tsv", "w") as f:
+            f.write("Internal protein identifier\tAnnotated protein id\tDomain number\tProtein type\n")
+            for m in metadata:
+                f.write("{}\n".format("\t".join(m)))
+
+    if len(proteins_w_C_domains.proteins) > 0:
+        folder = o / "All_C_domains"
+        if not folder.is_dir():
+            os.makedirs(folder, exist_ok=True)
+
+        subsequences = []
+        metadata = []
+        for pid in proteins_w_C_domains.proteins:
+            p = proteins_w_C_domains.proteins[pid]
+            d_num = 1
+            for d in p.domain_list:
+                if d.ID == "Condensation":
+                    if p.protein_id == "":
+                        header = "{}_C{}".format(p.identifier, d_num)
+                    else:
+                        header = "{}_C{}".format(p.protein_id, d_num)
+                    subsequences.append(">{}\n{}".format(header, \
+                        p.sequence80(d.ali_from, d.ali_to)))
+                    metadata.append((p.identifier, p.protein_id, \
+                        str(d_num), p.protein_type))
+                    d_num += 1
+        with open(folder / "All_C_domains.fasta", "w") as f:
+            f.write("".join(subsequences))
+        with open(folder / "All_C_domains.metadata.tsv", "w") as f:
+            f.write("Internal protein identifier\tAnnotated protein id\tDomain number\tProtein type\n")
+            for m in metadata:
+                f.write("{}\n".format("\t".join(m)))
+
+    if len(proteins_w_KS_domains.proteins) > 0:
+        folder = o / "All_KS_domains"
+        if not folder.is_dir():
+            os.makedirs(folder, exist_ok=True)
+        
+            subsequences = []
+            metadata = []
+            for pid in proteins_w_KS_domains.proteins:
+                p = proteins_w_KS_domains.proteins[pid]
+                # d_num = 1 # should not have more than 1 KS domain
+                for d in p.domain_list:
+                    if d.ID == "ketoacyl-synt":
+                        if p.protein_id == "":
+                            header = "{}_KS".format(p.identifier)
+                        else:
+                            header = "{}_KS".format(p.protein_id)
+                        subsequences.append(">{}\n{}".format(header, \
+                            p.sequence80(d.ali_from, d.ali_to)))
+                        # d_num += 1
+                        metadata.append((p.identifier, p.protein_id, \
+                            p.protein_type))
+        with open(folder / "All_KS_domains.fasta", "w") as f:
+            f.write("".join(subsequences))
+        with open(folder / "All_KS_domains.metadata.tsv", "w") as f:
+            f.write("Internal protein identifier\tAnnotated protein id\tProtein type\n")
+            for m in metadata:
+                f.write("{}\n".format("\t".join(m)))
+
+
+
 if __name__ == "__main__":
     args = CMD_parser()
 
@@ -507,19 +736,19 @@ if __name__ == "__main__":
             sys.exit("Error: filter BGC list given but the file is empty...")
 
     # Style options
-    svgopts = ArrowerOpts(args.cfg)
+    svgopts = ArrowerOpts(args.svgcfg)
     
     # Add hmm databases
     hmmdbs = HMM_DB()
     if (args.svg and svgopts.draw_domains and args.hmm) or \
-        (args.bgc and args.hmm):
+        (args.bgc and args.hmm is not None):
         hmmdbs = HMM_DB()
         hmmdbs.cores = args.cpus
         hmmdbs.add_included_database()
         
         for hmm in args.hmm:
             hmmdbs.add_database(Path(hmm))
-        
+            
     # Read input data:
     print("Collecting data")
     if len(args.include) > 0:
@@ -554,7 +783,7 @@ if __name__ == "__main__":
             os.makedirs(o, exist_ok=True)
             
     # Ready to start
-    if svgopts.draw_domains and args.hmm:
+    if svgopts.draw_domains and args.hmm is not None:
         print("Predicting domains...")
         collection_working.predict_domains(hmmdbs, cpus=hmmdbs.cores)
         print("\tdone!")
@@ -565,6 +794,11 @@ if __name__ == "__main__":
     print("Applying classification rules")
     output_collection.classify_proteins(args.cpus)
     print("\tdone!")
+
+    if args.merge:
+        print("\nTrying to fix split domains (--merge)")
+        fix_core_split_domains(output_collection)
+        print("\tdone!")
 
     if args.bgc:
         if args.group:
@@ -580,8 +814,8 @@ if __name__ == "__main__":
                     pickle.dump(output_collection.bgcs[bgc_id], b)
 
     if args.metadata:
-        with open(o / "{}.metadata.tsv".format(args.group), "w") as m:
-            m.write("BGC\tDefinition\tantiSMASH products\tCore Proteins\tCore Proteins IDs\n")
+        with open(o / "{}.metadata.tsv".format(args.metadata), "w") as m:
+            m.write("BGC\tDefinition\tantiSMASH products\tCore Biosynthetic Protein content\tCore Biosynthetic Protein IDs\n")
             for bgc_id in sorted(output_collection.bgcs):
                 bgc = output_collection.bgcs[bgc_id]
                 list_core_types = list()
@@ -603,154 +837,7 @@ if __name__ == "__main__":
             print("Error (--fasta): cannot find configuration file for fasta extraction")
         else:
             requested_cbp_types = read_cbp_cfg(cfg_file)
-
-            extract_A_domain = False
-            if "NRPS-A-Domains" in requested_cbp_types:
-                extract_A_domain = True
-                proteins_w_A_domains = ProteinCollection()
-                requested_cbp_types.remove("NRPS-A-Domains")
-            extract_C_domain = False
-            if "NRPS-C-Domains" in requested_cbp_types:
-                extract_C_domain = True
-                proteins_w_C_domains = ProteinCollection()
-                requested_cbp_types.remove("NRPS-C-Domains")
-            extract_KS_domain = False
-            if "PKS-KS-Domain" in requested_cbp_types:
-                extract_KS_domain = True
-                proteins_w_KS_domains = ProteinCollection()
-                requested_cbp_types.remove("PKS-KS-Domain")
-
-            types_with_A_domain = {"NRPS", "NRPS-like", "PKS-NRPS_hybrid", \
-                "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid"}
-            types_with_C_domain = {"NRPS", "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid"}
-            types_with_KS_domain = {"nrPKS", "rPKS", "other_PKS", \
-                "PKS-NRPS_hybrid", "PKS-mmNRPS_hybrid", "NRPS-PKS_hybrid"}
-
-            # Make sure user didn't change types in cfg file
-            working_cbp_types = requested_cbp_types & set(valid_CBP_types)
-            
-            # populate protein collections for each target type
-            # Basically
-            # valid_CBP_types >= required_cbp_types >= types actually in data
-            proteins_by_type = dict()
-            for bgc_id in output_collection.bgcs:
-                bgc = output_collection.bgcs[bgc_id]
-                for cbp_type in (bgc.CBPtypes_set & working_cbp_types):
-                    # p = protein object with target type
-                    for p in bgc.CBPcontent[cbp_type]:
-                        try:
-                            proteins_by_type[cbp_type].proteins[p.identifier] = p
-                        except KeyError:
-                            proteins_by_type[cbp_type] = ProteinCollection()
-                            proteins_by_type[cbp_type].proteins[p.identifier] = p
-
-                        # TODO: optimize this
-                        if extract_A_domain and cbp_type in types_with_A_domain:
-                            proteins_w_A_domains.proteins[p.identifier] = p
-                        if extract_C_domain and cbp_type in types_with_C_domain:
-                            proteins_w_C_domains.proteins[p.identifier] = p
-                        if extract_KS_domain and cbp_type in types_with_KS_domain:
-                            proteins_w_KS_domains.proteins[p.identifier] = p
-
-            # write sequences
-            for cbp_type in working_cbp_types:
-                try:
-                    prot_col = proteins_by_type[cbp_type]
-                except KeyError:
-                    continue
-                
-                folder = o / cbp_type
-                if not folder.is_dir():
-                    os.makedirs(folder, exist_ok=True)
-
-                fasta_file = folder / (cbp_type + ".fasta")
-                with open(fasta_file, "w") as f:
-                    f.write(prot_col.get_fasta())
-
-            # write domain subsequences
-            if len(proteins_w_A_domains.proteins) > 0:
-                folder = o / "All_A_domains"
-                if not folder.is_dir():
-                    os.makedirs(folder, exist_ok=True)
-                
-                subsequences = []
-                metadata = []
-                for pid in proteins_w_A_domains.proteins:
-                    p = proteins_w_A_domains.proteins[pid]
-                    d_num = 1
-                    for d in p.domain_list:
-                        if d.ID == "AMP-binding":
-                            if p.protein_id == "":
-                                header = "{}_A{}".format(p.identifier, d_num)
-                            else:
-                                header = "{}_A{}".format(p.protein_id, d_num)
-                            subsequences.append(">{}\n{}".format(header, \
-                                p.sequence80(d.ali_from, d.ali_to+1)))
-                            metadata.append((p.identifier, p.protein_id, \
-                                str(d_num), p.protein_type))
-                            d_num += 1
-                with open(folder / "All_A_domains.fasta", "w") as f:
-                    f.write("".join(subsequences))
-                with open(folder / "All_A_domains.metadata.tsv", "w") as f:
-                    f.write("Internal protein identifier\tAnnotated protein id\tDomain number\tProtein type\n")
-                    for m in metadata:
-                        f.write("{}\n".format("\t".join(m)))
-
-            if len(proteins_w_C_domains.proteins) > 0:
-                folder = o / "All_C_domains"
-                if not folder.is_dir():
-                    os.makedirs(folder, exist_ok=True)
-
-                subsequences = []
-                metadata = []
-                for pid in proteins_w_C_domains.proteins:
-                    p = proteins_w_C_domains.proteins[pid]
-                    d_num = 1
-                    for d in p.domain_list:
-                        if d.ID == "Condensation":
-                            if p.protein_id == "":
-                                header = "{}_C{}".format(p.identifier, d_num)
-                            else:
-                                header = "{}_C{}".format(p.protein_id, d_num)
-                            subsequences.append(">{}\n{}".format(header, \
-                                p.sequence80(d.ali_from, d.ali_to+1)))
-                            metadata.append((p.identifier, p.protein_id, \
-                                str(d_num), p.protein_type))
-                            d_num += 1
-                with open(folder / "All_C_domains.fasta", "w") as f:
-                    f.write("".join(subsequences))
-                with open(folder / "All_C_domains.metadata.tsv", "w") as f:
-                    f.write("Internal protein identifier\tAnnotated protein id\tDomain number\tProtein type\n")
-                    for m in metadata:
-                        f.write("{}\n".format("\t".join(m)))
-
-            if len(proteins_w_KS_domains.proteins) > 0:
-                folder = o / "All_KS_domains"
-                if not folder.is_dir():
-                    os.makedirs(folder, exist_ok=True)
-                
-                    subsequences = []
-                    metadata = []
-                    for pid in proteins_w_KS_domains.proteins:
-                        p = proteins_w_KS_domains.proteins[pid]
-                        # d_num = 1 # should not have more than 1 KS domain
-                        for d in p.domain_list:
-                            if d.ID == "ketoacyl-synt":
-                                if p.protein_id == "":
-                                    header = "{}_KS".format(p.identifier)
-                                else:
-                                    header = "{}_KS".format(p.protein_id)
-                                subsequences.append(">{}\n{}".format(header, \
-                                    p.sequence80(d.ali_from, d.ali_to+1)))
-                                # d_num += 1
-                                metadata.append((p.identifier, p.protein_id, \
-                                    p.protein_type))
-                with open(folder / "All_KS_domains.fasta", "w") as f:
-                    f.write("".join(subsequences))
-                with open(folder / "All_KS_domains.metadata.tsv", "w") as f:
-                    f.write("Internal protein identifier\tAnnotated protein id\tProtein type\n")
-                    for m in metadata:
-                        f.write("{}\n".format("\t".join(m)))
+            make_fasta_files(o, requested_cbp_types, output_collection)
 
     if args.svg:
         if args.stacked:
