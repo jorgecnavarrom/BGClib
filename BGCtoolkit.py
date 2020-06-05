@@ -56,7 +56,9 @@ def CMD_parser():
         .bgc and .bgccase files, inclusion rules by --include, --exclude\
         and --bgclist will be applied to the internal BGC identifier, not the\
         name of the file")
-    group_input.add_argument("-l", "--bgclist", help="A file containing a list \
+
+    group_filtering = parser.add_argument_group("Filtering")
+    group_filtering.add_argument("-l", "--bgclist", help="A file containing a list \
         of BGC identifiers (i.e. filename without .gb or .gbk extension).\
         If specified, use it to filter all the BGCs found with --inputfolders \
         or --files. \
@@ -71,14 +73,14 @@ def CMD_parser():
         ignored.\
         The BGC identifiers in this file are treated case-sensitive.",
         type=Path)
-    group_input.add_argument("--include", nargs='*', default=['region', 'cluster'], 
+    group_filtering.add_argument("--include", nargs='*', default=['region', 'cluster'], 
         help="Specify string(s) to filter which BGCs will be accepted. In the \
         case of .gb or .gbk files, the filter is applied to the filename. For \
         data stored as .bgc or .bgccase files, the filter is applied to the \
         BGC(s) identifier. If the argument is present but no parameters are \
         given, the filter will be ignored. If the argument is not present, \
         the default is to use the strings 'region' and 'cluster')")
-    group_input.add_argument("--exclude", nargs='*', default=['final'], 
+    group_filtering.add_argument("--exclude", nargs='*', default=['final'], 
         help="Specify string(s) to filter which BGCs will be rejected. \
         Similar rules are applied as with --include. If the argument is not \
         present, the default is to use 'final'.")
@@ -91,13 +93,6 @@ def CMD_parser():
     group_processing.add_argument("--override", help="Use domain prediction in \
         .bgc and .bgccase files, even if they already contain domain \
         data.", default=False, action="store_true")
-    group_processing.add_argument("--svgcfg", 
-        default=(Path(__file__).parent/"SVG_arrow_options.cfg"),
-        help="Configuration file with SVG style. Default: \
-        'SVG_arrow_options.cfg'")
-    group_processing.add_argument("-m", "--mirror", default=False, 
-        action="store_true", help="Toggle to mirror each BGC figure. Ignored \
-        with --stacked or --bgclist")
     group_processing.add_argument("--merge", default=False, action="store_true",
         help="Try to fix successive domains that have been split ")
     group_processing.add_argument("-c", "--cpus", type=int, default=cpu_count(), 
@@ -115,7 +110,14 @@ def CMD_parser():
         this parameter is the filename (no extension)")
     group_output.add_argument("--gaps", default=False, action="store_true",
         help="If --stacked is used, toggle this option to leave gaps\
-        when a particular BGC is not found in the input data")
+        when a particular BGC is not found in the input data (--bgclist).")
+    group_output.add_argument("--svgcfg", 
+        default=(Path(__file__).parent/"SVG_arrow_options.cfg"),
+        help="Configuration file with SVG style. Default: \
+        'SVG_arrow_options.cfg'")
+    group_output.add_argument("-m", "--mirror", default=False, 
+        action="store_true", help="Toggle to mirror each BGC figure. Ignored \
+        with --stacked or --bgclist")
     group_output.add_argument("--bgc", default=False,
         action="store_true", help="Toggle to save binary files with the \
             content of each BGC (.bgc)")
@@ -815,21 +817,24 @@ if __name__ == "__main__":
 
     if args.metadata:
         with open(o / "{}.metadata.tsv".format(args.metadata), "w") as m:
-            m.write("BGC\tDefinition\tantiSMASH products\tCore Biosynthetic Protein content\tCore Biosynthetic Protein IDs\n")
+            m.write("BGC\tDefinition\tantiSMASH products\tCore Biosynthetic Protein content\tCore Biosynthetic Protein IDs\tCore Biosynthetic Protein Identifiers\n")
             for bgc_id in sorted(output_collection.bgcs):
                 bgc = output_collection.bgcs[bgc_id]
-                list_core_types = list()
-                list_protein_ids = list()
+                list_core_types = []
+                list_protein_ids = []
+                list_protein_identifiers = []
                 all_domains = set() # TODO remove this. Just for testing
                 for protein in bgc.protein_list:
                     all_domains.update(protein.domain_set)
                     if protein.role == "biosynthetic":
                         list_core_types.append(protein.protein_type)
                         list_protein_ids.append(protein.protein_id)
-                m.write("{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
+                        list_protein_identifiers.append(protein.identifier)
+                m.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
                     bgc.definition, ", ".join(bgc.products), 
                     ", ".join(list_core_types), 
-                    ", ".join(list_protein_ids)))
+                    ", ".join(list_protein_ids)),
+                    ", ".join(list_protein_identifiers))
 
     if args.fasta:
         cfg_file = Path(__file__).parent/"Core_Biosynthetic_Protein_fasta_options.cfg"
