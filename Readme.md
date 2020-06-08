@@ -43,7 +43,7 @@ If you open the SVG alone in a new tab, you'll see that putting your cursor on t
 The PKS is in the reverse strand, but we can mirror the image with `--mirror`:
 
 ```
-./BGCtoolkit.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --outputfolder examples/output/cladofulvin --include --svg --mirror
+./BGCtoolkit.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --include --outputfolder examples/output/cladofulvin --svg --mirror
 ```
 
 ![Cladofulvin_Final mirrored](examples/output/cladofulvin/Cladofulvin_Final_m.svg "Cladofulvin mirrored. color_mode=random-pastel")
@@ -55,7 +55,7 @@ Now we'll use some BGCs from [MIBiG](https://mibig.secondarymetabolites.org/).
 First, an example with a multi-locus GenBank file, sophorolipid (`color_mode=white`), from MIBiG 1.4 (currently not in MIBiG 2.0):
 
 ```
-./BGCtoolkit.py --files ./examples/data/sophorolipid/BGC0001274.1.gbk --outputfolder examples/output/sophorolipid --include --svg
+./BGCtoolkit.py --files ./examples/data/sophorolipid/BGC0001274.1.gbk --include --outputfolder examples/output/sophorolipid --svg
 ```
 
 ![sophorolipid_multi_locus](examples/output/sophorolipid/BGC0001274.1.svg "sophorolipid. color_mode=white")
@@ -63,7 +63,7 @@ First, an example with a multi-locus GenBank file, sophorolipid (`color_mode=whi
 Now for a more interesting example, we'll stack the three BGCs encoding cercosporin (BGC001247 from MIBiG 1.4 and BGC0001541 and BGC0001542 from MIBiG 2.0):
 
 ```
-./BGCtoolkit.py --inputfolder ./examples/data/cercosporin/ --outputfolder examples/output/cercosporin/ --include --svg --stacked stacked_BGC_figure
+./BGCtoolkit.py --inputfolder ./examples/data/cercosporin/ --include --outputfolder examples/output/cercosporin/ --svg --stacked stacked_BGC_figure
 ```
 
 ![cercosporin_stacked](examples/output/cercosporin/stacked_BGC_figure.svg "cercosporin. color_mode=white")
@@ -71,7 +71,7 @@ Now for a more interesting example, we'll stack the three BGCs encoding cercospo
 It's a bit messy but we can define an order and align according to a specific gene (by providing their corresponding Protein Id). For this we'll use a file like [this one](examples/data/cercosporin/cercosporin_MIBiG.tsv). BGCs will be mirrored as needed:
 
 ```
-./BGCtoolkit.py --inputfolder ./examples/data/cercosporin/ --outputfolder examples/output/cercosporin/ --include --svg --bgclist ./examples/data/cercosporin/cercosporin_MIBiG.tsv --stacked cercosporin_MIBiG
+./BGCtoolkit.py --inputfolder ./examples/data/cercosporin/ --include --outputfolder examples/output/cercosporin/ --svg --bgclist ./examples/data/cercosporin/cercosporin_MIBiG.tsv --stacked cercosporin_MIBiG
 ```
 
 ![cercosporin_stacked_algn](examples/output/cercosporin/cercosporin_MIBiG.svg "cercosporin aligned. color_mode=white")
@@ -81,7 +81,7 @@ Neat.
 Finally, let's use three mycophenolic acid BGCs from MIBiG 2.0 with domain annotation (using version 33 of [Pfam](https://pfam.xfam.org/)):
 
 ```
-./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic\ acid/ --outputfolder examples/output/mycophenolic\ acid/ --include --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG.tsv --stacked mycophenolic_acid_MIBiG --hmm ~/Databases/pfam/33/Pfam-A.hmm
+./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic\ acid/ --include --outputfolder examples/output/mycophenolic\ acid/ --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG.tsv --stacked mycophenolic_acid_MIBiG --hmm ~/Databases/pfam/33/Pfam-A.hmm
 ```
 
 ![mycophenolic_stacked_algn](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=white")
@@ -91,7 +91,7 @@ There is some questionable gene calling going on.
 Now with an alternative alignment to the genes encoding proteins containing domain DUF2236. We'll use a different file
 
 ```
-./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic\ acid/ --outputfolder examples/output/mycophenolic\ acid/ --include --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG_DUF2236.tsv --stacked mycophenolic_acid_MIBiG_DUF2236 --hmm ~/Databases/pfam/33/Pfam-A.hmm
+./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic\ acid/ --include --outputfolder examples/output/mycophenolic\ acid/ --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG_DUF2236.tsv --stacked mycophenolic_acid_MIBiG_DUF2236 --hmm ~/Databases/pfam/33/Pfam-A.hmm
 ```
 
 ![mycophenolic_stacked_algn2](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG_DUF2236.svg "mycophenolic aligned v2. color_mode=white")
