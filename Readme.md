@@ -31,7 +31,7 @@ This companion script harnesses the capabilities of BGClib to ease the processin
 Here is a simple example with the cladofulvin BGC:
 
 ```
-./BGCtoolkit.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --outputfolder examples/output/cladofulvin --include --svg
+./BGCtoolkit.py --files ./examples/data/cladofulvin/Cladofulvin_Final.gbk --include --outputfolder examples/output/cladofulvin --svg
 ```
 
 It has been renamed from a fungiSMASH result, so it doesn't include the usual 'region' string and we have to disable that filter by using `--include` without arguments. This command will produce
