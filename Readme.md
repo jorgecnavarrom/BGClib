@@ -10,9 +10,9 @@ For more information on BGClib, see [here](./BGClib/Readme.md).
 
 This companion script harnesses the capabilities of BGClib to ease the processing of certain BGC data.
 
-## Quick features
+## Features overview
 
-* GenBank and binary input [^1]
+* GenBank and binary [^1] input 
 * Input filters (default values tailored for antiSMASH output)
 * Domain prediction with the possibility of combining several hmm libraries.
 * Classify (fungal) core biosynthetic proteins. Distinguish between reducing and non-reducing PKS, NRPS/PKS and PKS/NRPS hybrids etc. (uses included hmm models, mostly from Pfam)
