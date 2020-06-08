@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.1"
+__version__ = "0.6.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -1307,10 +1307,9 @@ class ProteinCollection:
         sequences = []
         for p_id in self.proteins:
             p = self.proteins[p_id]
-            header = p.protein_id
-            if p.protein_id == "":
-                header = p.identifier
-                # print("Warning: {} has no protein id".format(p.identifier))
+            header = "{} ProteinId:{} GeneId:{}".format(p.identifier, \
+                p.protein_id, p.gene)
+
             sequences.append(">{}\n{}".format(header, p.sequence80()))
 
         return "".join(sequences)

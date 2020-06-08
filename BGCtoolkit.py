@@ -630,10 +630,8 @@ def make_fasta_files(o, requested_cbp_types, output_collection):
             d_num = 1
             for d in p.domain_list:
                 if d.ID == "AMP-binding":
-                    if p.protein_id == "":
-                        header = "{}_A{}".format(p.identifier, d_num)
-                    else:
-                        header = "{}_A{}".format(p.protein_id, d_num)
+                    header = "{}_A{} ProteinId:{} GeneId:{}".format(p.identifier, \
+                        d_num, p.protein_id, p.gene)
                     subsequences.append(">{}\n{}".format(header, \
                         p.sequence80(d.ali_from, d.ali_to)))
                     metadata.append((p.identifier, p.protein_id, \
@@ -658,10 +656,8 @@ def make_fasta_files(o, requested_cbp_types, output_collection):
             d_num = 1
             for d in p.domain_list:
                 if d.ID == "Condensation":
-                    if p.protein_id == "":
-                        header = "{}_C{}".format(p.identifier, d_num)
-                    else:
-                        header = "{}_C{}".format(p.protein_id, d_num)
+                    header = "{}_C{} ProteinId:{} GeneId:{}".format(p.identifier, \
+                        d_num, p.protein_id, p.gene)
                     subsequences.append(">{}\n{}".format(header, \
                         p.sequence80(d.ali_from, d.ali_to)))
                     metadata.append((p.identifier, p.protein_id, \
@@ -686,10 +682,8 @@ def make_fasta_files(o, requested_cbp_types, output_collection):
                 # d_num = 1 # should not have more than 1 KS domain
                 for d in p.domain_list:
                     if d.ID == "ketoacyl-synt":
-                        if p.protein_id == "":
-                            header = "{}_KS".format(p.identifier)
-                        else:
-                            header = "{}_KS".format(p.protein_id)
+                        header = "{}_KS ProteinId:{} GeneId:{}".format(p.identifier, \
+                            p.protein_id, p.gene)
                         subsequences.append(">{}\n{}".format(header, \
                             p.sequence80(d.ali_from, d.ali_to)))
                         # d_num += 1
@@ -833,13 +827,14 @@ if __name__ == "__main__":
                 m.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
                     bgc.definition, ", ".join(bgc.products), 
                     ", ".join(list_core_types), 
-                    ", ".join(list_protein_ids)),
-                    ", ".join(list_protein_identifiers))
+                    ", ".join(list_protein_ids), 
+                    ", ".join(list_protein_identifiers)))
 
     if args.fasta:
-        cfg_file = Path(__file__).parent/"Core_Biosynthetic_Protein_fasta_options.cfg"
+        cfg_file = Path(__file__).parent/"CBP_fasta_options.cfg"
         if not cfg_file.is_file():
-            print("Error (--fasta): cannot find configuration file for fasta extraction")
+            print("Error (--fasta): mising configuration file for fasta extraction")
+            print("(Core_Biosynthetic_Protein_fasta_options.cfg)")
         else:
             requested_cbp_types = read_cbp_cfg(cfg_file)
             make_fasta_files(o, requested_cbp_types, output_collection)
