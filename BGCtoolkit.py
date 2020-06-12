@@ -24,6 +24,7 @@ TODO:
 
 import os
 import sys
+import json
 import argparse
 import pickle
 from collections import defaultdict
@@ -93,6 +94,9 @@ def CMD_parser():
     group_processing.add_argument("--override", help="Use domain prediction in \
         .bgc and .bgccase files, even if they already contain domain \
         data.", default=False, action="store_true")
+    group_processing.add_argument("--jsonfolders", nargs='+', type=Path, \
+        help="Use MIBiG-style JSON files to annotate metadata (organism, \
+        metabolites, literature)")
     group_processing.add_argument("--merge", default=False, action="store_true",
         help="Try to fix successive domains that have been split ")
     group_processing.add_argument("-c", "--cpus", type=int, default=cpu_count(), 
@@ -547,7 +551,7 @@ def read_cbp_cfg(cfg_file):
     return cbp_types
 
 
-def make_fasta_files(o, requested_cbp_types, output_collection):
+def make_fasta_files(o, requested_cbp_types, output_collection, dom_alias):
     """
     Based on options found in Core_Biosynthetic_Protein_fasta_options.cfg,
     this function extracts protein sequences of core biosynthetic proteins.
@@ -616,6 +620,18 @@ def make_fasta_files(o, requested_cbp_types, output_collection):
         fasta_file = folder / (cbp_type + ".fasta")
         with open(fasta_file, "w") as f:
             f.write(prot_col.get_fasta())
+
+        # write domain composition file
+        domain_composition_file = folder / "{}_domains.tsv".format(cbp_type)
+        with open(domain_composition_file, "w") as f:
+            for p_id in sorted(prot_col.proteins):
+                protein = prot_col.proteins[p_id]
+                organism = ""
+                if protein.parent_cluster.organism is not None:
+                    organism = protein.parent_cluster.organism.fullname
+                f.write("{}\t{}\t{}\t{}\t{}\n".format(protein.identifier, \
+                    protein.protein_id, protein.gene, \
+                    protein.domain_string(dom_alias), organism))
 
     # write domain subsequences
     if len(proteins_w_A_domains.proteins) > 0:
@@ -732,7 +748,8 @@ if __name__ == "__main__":
             sys.exit("Error: filter BGC list given but the file is empty...")
 
     # Style options
-    svgopts = ArrowerOpts(args.svgcfg)
+    if args.svg:
+        svgopts = ArrowerOpts(args.svgcfg)
     
     # Add hmm databases
     hmmdbs = HMM_DB()
@@ -745,6 +762,11 @@ if __name__ == "__main__":
         for hmm in args.hmm:
             hmmdbs.add_database(Path(hmm))
             
+    # Read annotation files
+    if args.jsonfolders:
+        print(args.jsonfolders)
+        sys.exit("wip")
+
     # Read input data:
     print("Collecting data")
     if len(args.include) > 0:
@@ -779,7 +801,7 @@ if __name__ == "__main__":
             os.makedirs(o, exist_ok=True)
             
     # Ready to start
-    if svgopts.draw_domains and args.hmm is not None:
+    if args.hmm is not None:
         print("Predicting domains...")
         collection_working.predict_domains(hmmdbs, cpus=hmmdbs.cores)
         print("\tdone!")
@@ -837,7 +859,7 @@ if __name__ == "__main__":
             print("(Core_Biosynthetic_Protein_fasta_options.cfg)")
         else:
             requested_cbp_types = read_cbp_cfg(cfg_file)
-            make_fasta_files(o, requested_cbp_types, output_collection)
+            make_fasta_files(o, requested_cbp_types, output_collection, hmmdbs.alias)
 
     if args.svg:
         if args.stacked:

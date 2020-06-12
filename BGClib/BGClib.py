@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.2"
+__version__ = "0.6.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -603,12 +603,15 @@ class BGC:
         # TODO Implement: gene_complement_domain_set
         self.loci = []
 
+        # These will be linked to Metadata Objects
+        self.metabolites = []
+        self.organism = None
         # TODO consider removing these/create another class for metadata
-        self.accession = ""
-        self.definition = ""
-        self.organism = ""
-        self.taxonomy = ""
-        self.TaxId = ""
+        # self.accession = ""
+        # self.definition = ""
+        # self.organism = ""
+        # self.taxonomy = ""
+        # self.TaxId = ""
         
         # try to initialize object with GenBank content
         if gbkfile is not None:
@@ -637,8 +640,11 @@ class BGC:
         else:
             self.accession = records[0].id
             self.definition = records[0].description
-            self.organism = records[0].annotations["organism"]
-            self.taxonomy = records[0].annotations["taxonomy"]
+
+            if records[0].annotations["organism"] != "":
+                self.organism = Organism()
+                self.organism.fullname = records[0].annotations["organism"]
+                self.organism.lineage = records[0].annotations["taxonomy"]
             
             cds_list = []
             
@@ -843,7 +849,6 @@ class BGC:
         # width, height, xoffset and yoffset must be corrected or the corners
         # with sharp angles will be chopped off
         thickness = bgc_svg_options.gene_contour_thickness
-        correction = 2*thickness
         Xoffset = xoffset + thickness
         Yoffset = yoffset + thickness
         base_attribs = {"version":"1.1", 
@@ -1474,7 +1479,7 @@ class BGCProtein:
         return ">{}{}\n{}".format(self.identifier, compound, self.sequence80(start, end))
 
 
-    def domain_string(self, domain_alias, original_orientation=True):
+    def domain_string(self, domain_alias, original_orientation=False, simple=True):
         """Returns a basic domain-organization string
         
         - It uses the hmm model name (not accession number)
@@ -1487,28 +1492,31 @@ class BGCProtein:
         out: 
             a string
         """
-        
-        # get names
-        domain_name_list = [x.ID for x in self.domain_list]
-        
-        # try to convert names to alias
+
+        # get names; try to convert them to alias
         domain_alias_list = []
-        for d in domain_name_list:
-            if d in domain_alias:
-                domain_alias_list.append(domain_alias[d])
+        for d in self.domain_list:
+            if d.ID in domain_alias:
+                domain_alias_list.append(domain_alias[d.ID])
             else:
-                domain_alias_list.append(d)
+                domain_alias_list.append(d.ID)
         
-        tag = self.identifier
-        if self.organism != "":
-            tag += "_[{}]".format(self.organism)
-        if self.compound != "":
-            tag += "_[{}]".format(self.compound)
-        
+        # tag = self.identifier
+        # if self.organism != "":
+        #     tag += "_[{}]".format(self.organism)
+        # if self.compound != "":
+        #     tag += "_[{}]".format(self.compound)
+
         if original_orientation and not self.forward:
-            return "<--[{}]--|\t{}".format("]-[".join(list(reversed(domain_alias_list))), tag)
+            if simple:
+                return "< {}".format(" | ".join(reversed(domain_alias_list)))
+            else:
+                return "<--[{}]--|".format("]-[".join(reversed(domain_alias_list)))
         else:
-            return "|--[{}]-->\t{}".format("]-[".join(domain_alias_list), tag)
+            if simple:
+                return "{} >".format(" | ".join(domain_alias_list))
+            else:
+                return "|--[{}]-->".format("]-[".join(domain_alias_list))
         
         
     def recursive_interval(self, interval_list):
@@ -2324,7 +2332,7 @@ class BGCProtein:
                 if domain.ID in hmmdb.ID_to_DE:
                     title = hmmdb.ID_to_DE[domain.ID] + " "
                 if domain.ID in hmmdb.alias:
-                    title += "[{}]".format(hmmdb.alias[domain.ID])
+                    title += "[{}] ".format(hmmdb.alias[domain.ID])
                 if domain.ID in hmmdb.ID_to_AC:
                     title += "\n{} - ".format(hmmdb.ID_to_AC[domain.ID])
                 title += domain.ID
@@ -2778,3 +2786,21 @@ class BGCDomain:
 
     def get_aligned_sequence(self):
         return "{}{}{}".format("-"*self.hmm_from, self.algn_seq, "-"*(self.hmm_size-self.hmm_to))
+
+
+
+class Organism:
+    def __init__(self):
+        self.shortname = ""
+        self.fullname = ""
+        self.taxid = ""              # NCBI tax Id
+        self.lineage = []
+
+
+
+class Metabolite:
+    def __init__(self):
+        self.name = ""                   # Main name
+        self.alias = []                  # Alternative names
+        self.database = {}               # Key=database (PubChem, ChemSpider, etc.)
+        self.SMILES = ""
