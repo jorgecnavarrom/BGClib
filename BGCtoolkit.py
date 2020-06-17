@@ -91,9 +91,12 @@ def CMD_parser():
     group_processing.add_argument("--hmm", nargs='*', help="List of paths to \
         .hmm file(s). This will also enable internal hmm models (use without \
         arguments to only use internal models).")
-    group_processing.add_argument("--override", help="Use domain prediction in \
-        .bgc and .bgccase files, even if they already contain domain \
+    group_processing.add_argument("--hmmupdate", help="Use domain prediction \
+        in .bgc and .bgccase files, even if they already contain domain \
         data.", default=False, action="store_true")
+    group_processing.add_argument("--hmmclean", help="Clean all domain data \
+        from binary input before domain prediction", default=False, \
+        action="store_true")
     group_processing.add_argument("--jsonfolders", nargs='+', type=Path, \
         help="Use MIBiG-style JSON files to annotate metadata (organism, \
         metabolites, literature)")
@@ -125,9 +128,9 @@ def CMD_parser():
     group_output.add_argument("--bgc", default=False,
         action="store_true", help="Toggle to save binary files with the \
             content of each BGC (.bgc)")
-    group_output.add_argument("-g", "--group", type=str, help="If used with \
-        --bgc, all BGCs will be put in the same binary file (.bgccase). The \
-        argument of this parameter is the filename (no extension)")
+    group_output.add_argument("--bgccase", type=str, help="Output a single \
+        binary file with all BGCs (.bgccase). The argument of this parameter \
+        is the filename (no extension)")
     group_output.add_argument("--metadata", type=str, help="Output a \
         tab-separated-file with metadata of the core biosynthetic proteins \
         contained in the input. Argument is the basename of the file (no \
@@ -251,15 +254,9 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                     if bgc_id in input_bgc_files:
                         print("Warning: substituting {} \n\twith {}\
                                 ".format(input_bgc_files[bgc_id], f))
-                        if not override:
-                            del collection_working.bgcs[bgc_id]
+                        del collection_working.bgcs[bgc_id]
                     
-                    if override:
-                        # flag this bgc to re-predict domains
-                        collection_working.bgcs[bgc_id] = bgc
-                    else:
-                        collection_external.bgcs[bgc_id] = bgc
-                    
+                    collection_external.bgcs[bgc_id] = bgc
                     input_bgc_files[bgc_id] = f
                         
             elif f.suffix.lower() == ".bgccase":
@@ -273,7 +270,7 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                     if len(filter_bgc) > 0:
                         for bgc_id in filter_bgc:
                             try:
-                                bgc = col[bgc_id]
+                                bgc = col.bgcs[bgc_id]
                             except KeyError:
                                 continue
                             
@@ -283,13 +280,9 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                                     print("Warning: substituting {} \n\t with \
                                           bgc in collection {}".format(\
                                               input_bgc_files[bgc_id], f))
-                                    if not override:
-                                        del collection_working.bgcs[bgc_id]
+                                    del collection_working.bgcs[bgc_id]
                                 
-                                if override:
-                                    collection_working.bgcs[bgc_id] = bgc
-                                else:
-                                    collection_external.bgcs[bgc_id] = bgc
+                                collection_external.bgcs[bgc_id] = bgc
                     # no filter list. Check all content in the collection
                     else:
                         for bgc_id in col.bgcs:
@@ -300,13 +293,9 @@ def get_bgc_files(inputfolders, files, include, exclude, filter_bgc):
                                     print("Warning: substituting {} \n\t with \
                                             bgc in collection {}".format(\
                                                 input_bgc_files[bgc_id], f))
-                                    if not override:
-                                        del collection_working.bgcs[bgc_id]
+                                    del collection_working.bgcs[bgc_id]
                                 
-                                if override:
-                                    collection_working.bgcs[bgc_id] = bgc
-                                else:
-                                    collection_external.bgcs[bgc_id] = bgc
+                                collection_external.bgcs[bgc_id] = bgc
             else:
                 print("Warning: unknown format ({})".format(f))
 
@@ -551,6 +540,69 @@ def read_cbp_cfg(cfg_file):
     return cbp_types
 
 
+def write_metadata(metadata_base, output_collection, dom_alias):
+    """
+    Writes information files at three levels:
+    - A summary of the whole collection
+    - A summary per BGC (core biosynthetic protein content)
+    - A summary per core protein (domain organization)
+    """
+
+    # Whole collection summary
+    with open(o / "{}.metadata.summary.txt".format(metadata_base), "w") as s:
+        s.write("{} summary file\n\n".format(metadata_base))
+        s.write("This collection contains {} BGCs\n\n".format(len(output_collection.bgcs)))
+        cbp_type_histogram = defaultdict(int)
+        cbp_type_bgcs = defaultdict(list)
+        for bgc_id in output_collection.bgcs:
+            bgc = output_collection.bgcs[bgc_id]
+            cbp_comp = ", ".join(sorted(bgc.CBPtypes_set))
+            if cbp_comp == "":
+                cbp_comp = "Other"
+            cbp_type_histogram[cbp_comp] += 1
+            cbp_type_bgcs[cbp_comp].append(bgc_id)
+        s.write("Core Biosynthetic Composition count:\n")
+        for cbp_comp in sorted(cbp_type_histogram):
+            s.write("{}\t{}\t{}\n".format(cbp_type_histogram[cbp_comp], \
+                cbp_comp, ", ".join(cbp_type_bgcs[cbp_comp])))
+
+    # BGC summary
+    with open(o / "{}.metadata.BGCs.tsv".format(metadata_base), "w") as m:
+            header = "BGC\tantiSMASH products\tCore Biosynthetic Protein content\tCore Biosynthetic Protein IDs\tCore Biosynthetic Protein Identifiers\tMetabolites\n"
+            m.write(header)
+            for bgc_id in sorted(output_collection.bgcs):
+                bgc = output_collection.bgcs[bgc_id]
+                list_core_types = []
+                list_protein_ids = []
+                list_protein_identifiers = []
+                all_domains = set() # TODO remove this. Just for testing
+                for protein in bgc.protein_list:
+                    all_domains.update(protein.domain_set)
+                    if protein.role == "biosynthetic":
+                        list_core_types.append(protein.protein_type)
+                        list_protein_ids.append(protein.protein_id)
+                        list_protein_identifiers.append(protein.identifier)
+                metabolites = ", ".join(m.name for m in bgc.metabolites)
+                m.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
+                    ", ".join(bgc.products), 
+                    ", ".join(list_core_types), 
+                    ", ".join(list_protein_ids), 
+                    ", ".join(list_protein_identifiers),
+                    metabolites))
+
+    # CBP summary
+    with open(o / "{}.metadata.CBPs.tsv".format(metadata_base), "w") as c:
+        header = "BGC\tCore Biosynthetic Protein type\tProtein identifier\tProtein Id\tDomain composition\n"
+        c.write(header)
+        for bgc_id in sorted(output_collection.bgcs):
+            bgc = output_collection.bgcs[bgc_id]
+            for cbp_type in bgc.CBPcontent:
+                for protein in bgc.CBPcontent[cbp_type]:
+                    c.write("{}\t{}\t{}\t{}\t{}\n".format(bgc_id, \
+                        cbp_type, protein.identifier, protein.protein_id, \
+                        protein.domain_string(dom_alias)))
+
+
 def make_fasta_files(o, requested_cbp_types, output_collection, dom_alias):
     """
     Based on options found in Core_Biosynthetic_Protein_fasta_options.cfg,
@@ -717,19 +769,22 @@ def make_fasta_files(o, requested_cbp_types, output_collection, dom_alias):
 if __name__ == "__main__":
     args = CMD_parser()
 
+    # Stop if no output was selected
+    if not (args.svg or args.bgc or args.bgccase or args.metadata or args.fasta):
+        sys.exit("\nStop: no output options were selected (use --svg, --bgc, etc.)")
+
     # Verify user typed paths correctly
     check_input_data(args.files, args.inputfolders, args.hmm, args.bgclist)
 
     # Get parameters
     outputfolder = args.outputfolder
-    override = args.override
     mirror = args.mirror
     gaps = args.gaps
     
     # Read filter list
     filter_bgc = dict()
-    filter_bgc_order = list() # Dictionaries should keep order in Python
-                            # 3.something but let's make sure
+    filter_bgc_order = list()   # Dictionaries should keep order in Python 3
+                                #  but let's make sure
     if args.bgclist:
         with open(args.bgclist) as f:
             for line in f:
@@ -753,12 +808,9 @@ if __name__ == "__main__":
     
     # Add hmm databases
     hmmdbs = HMM_DB()
-    if (args.svg and svgopts.draw_domains and args.hmm) or \
-        (args.bgc and args.hmm is not None):
-        hmmdbs = HMM_DB()
-        hmmdbs.cores = args.cpus
+    hmmdbs.cores = args.cpus
+    if args.hmm is not None:
         hmmdbs.add_included_database()
-        
         for hmm in args.hmm:
             hmmdbs.add_database(Path(hmm))
             
@@ -786,7 +838,7 @@ if __name__ == "__main__":
         sys.exit("No valid files were found")
     else:
         print("Working with {} BGC(s)".format(total_bgcs))
-    
+
     #  Output folder
     if args.outputfolder:
         o = Path(args.outputfolder)
@@ -801,6 +853,20 @@ if __name__ == "__main__":
             os.makedirs(o, exist_ok=True)
             
     # Ready to start
+    if args.hmmclean or args.hmmupdate:
+        if args.hmmclean:
+            print("Cleaning previous domain data")
+            # CBPtypes, CBPtypes_set and CBPcontent will be re-calculated
+            # with BGC().classify_proteins()
+            for bgc_id in collection_external.bgcs:
+                bgc = collection_external.bgcs[bgc_id]
+                for protein in bgc.protein_list:
+                    protein.protein_type = ""
+                    protein.role = "unknown"
+                    del protein.domain_list[:]
+                    protein.domain_set.clear()
+                    protein.attempted_domain_prediction = False
+        collection_working.bgcs.update(collection_external.bgcs)
     if args.hmm is not None:
         print("Predicting domains...")
         collection_working.predict_domains(hmmdbs, cpus=hmmdbs.cores)
@@ -808,8 +874,9 @@ if __name__ == "__main__":
     
     output_collection = BGCCollection() # BGCs that will be rendered/processed
     output_collection.bgcs.update(collection_working.bgcs)
-    output_collection.bgcs.update(collection_external.bgcs)
-    print("Applying classification rules")
+    if not (args.hmmclean or args.hmmupdate):
+        output_collection.bgcs.update(collection_external.bgcs)
+    print("\nApplying classification rules")
     output_collection.classify_proteins(args.cpus)
     print("\tdone!")
 
@@ -819,38 +886,20 @@ if __name__ == "__main__":
         print("\tdone!")
 
     if args.bgc:
-        if args.group:
-            filename = o / "{}.bgccase".format(args.group)
-            with open(filename, "wb") as c:
-                pickle.dump(output_collection, c)
-            # with shelve.open(str(filename)) as bgc_shelf:
-            #     for bgc_id in output_collection.bgcs:
-            #         bgc_shelf[bgc_id] = output_collection.bgcs[bgc_id]
-        else:
-            for bgc_id in output_collection.bgcs:
-                with open(o / "{}.bgc".format(bgc_id), "wb") as b:
-                    pickle.dump(output_collection.bgcs[bgc_id], b)
+        for bgc_id in output_collection.bgcs:
+            with open(o / "{}.bgc".format(bgc_id), "wb") as b:
+                pickle.dump(output_collection.bgcs[bgc_id], b)
 
+    if args.bgccase:
+        filename = o / "{}.bgccase".format(args.bgccase)
+        with open(filename, "wb") as c:
+            pickle.dump(output_collection, c)
+        # with shelve.open(str(filename)) as bgc_shelf:
+        #     for bgc_id in output_collection.bgcs:
+        #         bgc_shelf[bgc_id] = output_collection.bgcs[bgc_id]
+            
     if args.metadata:
-        with open(o / "{}.metadata.tsv".format(args.metadata), "w") as m:
-            m.write("BGC\tDefinition\tantiSMASH products\tCore Biosynthetic Protein content\tCore Biosynthetic Protein IDs\tCore Biosynthetic Protein Identifiers\n")
-            for bgc_id in sorted(output_collection.bgcs):
-                bgc = output_collection.bgcs[bgc_id]
-                list_core_types = []
-                list_protein_ids = []
-                list_protein_identifiers = []
-                all_domains = set() # TODO remove this. Just for testing
-                for protein in bgc.protein_list:
-                    all_domains.update(protein.domain_set)
-                    if protein.role == "biosynthetic":
-                        list_core_types.append(protein.protein_type)
-                        list_protein_ids.append(protein.protein_id)
-                        list_protein_identifiers.append(protein.identifier)
-                m.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bgc.identifier, 
-                    bgc.definition, ", ".join(bgc.products), 
-                    ", ".join(list_core_types), 
-                    ", ".join(list_protein_ids), 
-                    ", ".join(list_protein_identifiers)))
+        write_metadata(args.metadata, output_collection, hmmdbs.alias)
 
     if args.fasta:
         cfg_file = Path(__file__).parent/"CBP_fasta_options.cfg"

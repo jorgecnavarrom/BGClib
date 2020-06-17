@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.3"
+__version__ = "0.6.4"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -586,14 +586,14 @@ class BGC:
         self.identifier = ""        # usually the file name
         
         self.CBPtypes = []          # Core Biosynthetic Protein List: simple
-                                    #  list of biosynthetic types
+                                    #  ordered list of biosynthetic types
         self.CBPtypes_set = set()
         self.CBPcontent = {}        # Core Biosynthetic Protein Content. Every 
                                     #  biosynthetic-type returns a list of 
                                     #  pointers to each Protein object
         
-        self.products = set()   # All different 'product' qualifiers annotated 
-                                #  by antiSMASH
+        self.products = set()       # All different 'product' qualifiers  
+                                    #  annotated by antiSMASH
         self.contig_edge = False    # antiSMASH v4+ was not able to fully 
                                     #  complete the extension phase. BGC *might*
                                     #  be fragmented
@@ -720,9 +720,9 @@ class BGC:
                             protein_id = CDS.qualifiers["proteinId"][0]
                             
                         # also found in JGI
-                        elif "gene" in CDS.qualifiers:
-                            temp = CDS.qualifiers["gene"][0]
-                            protein_id = temp.split("_")[-1]
+                        # elif "gene" in CDS.qualifiers:
+                        #     temp = CDS.qualifiers["gene"][0]
+                        #     protein_id = temp.split("_")[-1]
                             
                         gene = ""
                         if "gene" in CDS.qualifiers:
@@ -731,7 +731,6 @@ class BGC:
                         protein = BGCProtein()
                         
                         protein.identifier = identifier
-                        #protein.accession = accession
                         protein.product = product
                         protein.protein_id = protein_id
                         protein.gene = gene
@@ -1358,11 +1357,11 @@ class BGCProtein:
                                     #   resistance, unknown]. See role_colors
         
         
-        self.compound_family = ""   # Compound family e.g. "emodin-like"
-        self.compound = ""
-        self.source = "unknown"     # e.g. MIBiG, curated document etc.
-        self.organism = ""
-        self.TaxId = ""
+        # self.compound_family = ""   # Compound family e.g. "emodin-like"
+        # self.compound = ""
+        # self.source = "unknown"     # e.g. MIBiG, curated document etc.
+        # self.organism = ""
+        # self.TaxId = ""
         
         self.forward = True
         
@@ -1415,13 +1414,13 @@ class BGCProtein:
     
     
     # TODO delete
-    def get_annotations(self):
-        gca = ""
-        return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
-            self.parent_cluster, self.identifier, self.ref_accession, 
-            self.ncbi_id, self.ncbi_ipg_id, self.protein_type, "", "", 
-            self.compound_family, self.compound, self.source, self.organism, 
-            self.TaxId)
+    # def get_annotations(self):
+    #     gca = ""
+    #     return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+    #         self.parent_cluster, self.identifier, self.ref_accession, 
+    #         self.ncbi_id, self.ncbi_ipg_id, self.protein_type, "", "", 
+    #         self.compound_family, self.compound, self.source, self.organism, 
+    #         self.TaxId)
     
 
     def sequence80(self, start=0, end=None):
@@ -2793,14 +2792,16 @@ class Organism:
     def __init__(self):
         self.shortname = ""
         self.fullname = ""
-        self.taxid = ""              # NCBI tax Id
+        self.taxid = ""                 # NCBI tax Id
         self.lineage = []
 
 
 
 class Metabolite:
     def __init__(self):
-        self.name = ""                   # Main name
-        self.alias = []                  # Alternative names
-        self.database = {}               # Key=database (PubChem, ChemSpider, etc.)
+        self.name = ""                  # Main name
+        self.alias = []                 # Alternative names
+        self.database = {}              # Key=database (PubChem, 
+                                        #  ChemSpider, etc.). Item=id
         self.SMILES = ""
+        self.compound_family = ""       # semi-arbitrary e.g. "azaphilone"
