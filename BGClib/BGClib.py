@@ -23,11 +23,10 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.5"
+__version__ = "0.6.6"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
-print("BGClib v{}".format(__version__))
 
 # Static data
 
@@ -64,33 +63,49 @@ FAS_domains_A = {"Fas_alpha_ACP" ,"FAS_I_H", "ACPS"}
 FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
 precursor_domains = FAS_domains_A | FAS_domains_B
 
-# TODO: add PT domain until in this set until we have a better model?
+# TODO: add PT domain in this set until we have a better model?
 hmmdbs_without_tc = {"FNP_terpene_models"}
 
 # TODO: choose colors for the last ones
-valid_CBP_types = {"nrPKS": "#76b7f4", # blue
-                   "rPKS": "#2c9cdc", # darker blue
-                   "t3PKS": "#3cb5a1", #007dfb", # a bit more dark blue
-                   "NRPS": "#ffc755", # orange
-                   "NRPS-like": "#ffeb87", # light orange / yellow
-                   "other_PKS": "#00ffff", # another blue. Intense-ish 
-                   "unknown_PKS": "#aaffff", # lighter version of previous
-                   "PKS-NRPS_hybrid": "#aa007f", # purple
-                   "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
-                   "NRPS-PKS_hybrid": "#a25fe6", # violet
-                   "NIS": "#c20c28", # red blood
-                   "Meroterpenoid_synthase": "#f4f4fc", # super light lilac
-                   "Diterpene_synthase": "#f4f4fc", # super light lilac
-                   "Triterpene_synthase": "#f4f4fc", # super light lilac
-                   "Sesquiterpene_synthase": "#f4f4fc", # super light lilac
-                   "Sesquiterpene_bifunctional_synthase: "#f4f4fc", # super light lilac
-                   "Terpene_other": "#f4f4fc", # super light lilac
-                   "Carotenoid_synthase": "#f4f4fc", # super light lilac
-                   "Squalene_synthase": "#f4f4fc", # super light lilac
-                   "UbiA-type_terpene": "#f4f4fc", # super light lilac
-                   "Terpene_other": "#f4f4fc", # super light lilac
-                   "DMATS": "#f4f4fc" # super light lilac
-                    }
+valid_CBP_types_fungal = {\
+    "nrPKS": "#76b7f4", # blue
+    "rPKS": "#2c9cdc", # darker blue
+    "t3PKS": "#3cb5a1", #007dfb", # a bit more dark blue
+    "NRPS": "#ffc755", # orange
+    "NRPS-like": "#ffeb87", # light orange / yellow
+    "other_PKS": "#00ffff", # another blue. Intense-ish 
+    "unknown_PKS": "#aaffff", # lighter version of previous
+    "PKS-NRPS_hybrid": "#aa007f", # purple
+    "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
+    "NRPS-PKS_hybrid": "#a25fe6", # violet
+    "NIS": "#c20c28", # red blood
+    "Meroterpenoid_synthase": "#f4f4fc", # super light lilac
+    "Diterpene_synthase": "#f4f4fc", # super light lilac
+    "Triterpene_synthase": "#f4f4fc", # super light lilac
+    "Sesquiterpene_synthase": "#f4f4fc", # super light lilac
+    "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # super light lilac
+    "Carotenoid_synthase": "#f4f4fc", # super light lilac
+    "Squalene_synthase": "#f4f4fc", # super light lilac
+    "UbiA-type_terpene": "#f4f4fc", # super light lilac
+    "Terpene_other": "#f4f4fc", # super light lilac
+    "DMATS": "#f4f4fc" # super light lilac
+    }
+# antiSMASH list retrieved 2020-08-19
+valid_CBP_types_antiSMASH_set = {'T1PKS', 'T2PKS', 'T3PKS', 'transAT-PKS', \
+    'transAT-PKS-like', 'PpyS-KS', 'hglE-KS', 'CDPS', 'PKS-like', 'arylpolyene', \
+    'resorcinol', 'ladderane', 'PUFA', 'nrps', 'nrps-like', 'thioamide-NRP', \
+    'terpene', 'lanthipeptide', 'lipolanthine', 'bacteriocin', 'betalactone', \
+    'thiopeptide', 'linaridin', 'cyanobactin', 'glycocin', 'LAP', 'lassopeptide', \
+    'sactipeptide', 'bottromycin', 'head_to_tail', 'microviridin', 'proteusin', \
+    'blactam', 'amglyccycl', 'aminocoumarin', 'siderophore', 'ectoine', \
+    'butyrolactone', 'indole', 'nucleoside', 'phosphoglycolipid', 'melanin', \
+    'oligosaccharide', 'furan', 'hserlactone', 'phenazine', 'phosphonate', \
+    'fused', 'PBDE', 'acyl_amino_acids', 'tropodithietic-acid', 'NAGGN', \
+    'RaS-RiPP', 'fungal-RiPP', 'TfuA-related', 'other', 'saccharide', \
+    'fatty_acid', 'halogenated'}
+valid_CBP_types_antiSMASH = dict.fromkeys(valid_CBP_types_antiSMASH_set, "#f06c6e")
+
+valid_CBP_types = valid_CBP_types_fungal.keys() | valid_CBP_types_antiSMASH
 # other colors
 # "unknown": "#f4f4fc", # super light lilac
 # "other": "#fcdcdc", # very light pink
@@ -99,11 +114,12 @@ valid_CBP_types = {"nrPKS": "#76b7f4", # blue
 role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "tailoring":"#8fc889", # green, rgb(143, 200, 137)
                "transport":"#f0d963", # yellow, rgb(240, 217, 99)
-               "regulation":"#33c1f0", # blue, rgb(51, 193, 240)
+               "regulatory":"#33c1f0", # blue, rgb(51, 193, 240)
                "other":"#eff0f1", # light gray, rgb(239, 240, 241)
                "precursor":"#9797dc", # lilac, rgb(151,151,220)
-               "unknown":"#dcdcdc"} # gray, rgb(220, 220, 220)
-
+               "unknown":"#dcdcdc", # gray, rgb(220, 220, 220)
+               "resistance":"#f0a1ac", # light red, rgb(240, 161, 172) 
+               "biosynthetic-additional":"#f0986b"} # orange rgb(240, 152, 107)
 
 # Auxiliary functions
 def random_color_tuple(h_, s_, v_):
@@ -521,7 +537,8 @@ class ArrowerOpts:
                     else:
                         truefalse_errors.append(option)
                 else:
-                    print("ArrowerOpts configuration file: unknown option {}".format(option))
+                    pass
+                    # print("ArrowerOpts configuration file: unknown option {}".format(option))
                     
                 if len(truefalse_errors) > 0:
                     print("ArrowerOpts configuration file: the following options must have a value of True or False {}".format(option))
@@ -542,12 +559,12 @@ class BGCCollection:
         self.name = ""
     
 
-    def add_gbk(self, gbk):
+    def add_gbk(self, gbk, identifier=""):
         """
         Creates a BGC from a gbk file and adds it to the collection
         """
         
-        bgc = BGC(gbk)
+        bgc = BGC(gbk, identifier)
         if bgc.identifier in self.bgcs:
             print("Warning: {} already in BGC Collection. Skipping".format(bgc.identifier))
         else:
@@ -582,6 +599,7 @@ class BGCCollection:
         
         for bgc in self.bgcs.values():
             bgc.attempted_domain_prediction = True
+            bgc.calculate_domain_sets()
 
         return
 
@@ -621,16 +639,17 @@ class BGCCollection:
 
 
         for bgc in self.bgcs.values():
-            pass
+            for protein in bgc.protein_list:
+                protein.role = "unknown"
 
 
 
 class BGC:
-    def __init__(self, gbkfile=None):
-        self.identifier = ""        # usually the file name
+    def __init__(self, gbkfile=None, identifier=""):
+        self.identifier = identifier        # usually the file name
         
         self.CBPtypes = []          # Core Biosynthetic Protein List: simple
-                                    #  ordered list of biosynthetic types
+                                    #  5'-3' ordered list of biosynthetic types
         self.CBPtypes_set = set()
         self.CBPcontent = {}        # Core Biosynthetic Protein Content. Every 
                                     #  biosynthetic-type returns a list of 
@@ -659,10 +678,10 @@ class BGC:
         
         # try to initialize object with GenBank content
         if gbkfile is not None:
-            self.load(gbkfile)
+            self.load(gbkfile, identifier)
         
         
-    def load(self, _gbk):
+    def load(self, _gbk, _id):
         """
         Initializes the object by reading all CDS fields from a GenBank file
         
@@ -673,9 +692,9 @@ class BGC:
             gbk = _gbk
         else:
             gbk = Path(_gbk)
-        clusterName = gbk.stem
         
-        self.identifier = clusterName
+        if self.identifier == "":
+            self.identifier = gbk.stem
         
         try:
             records = list(SeqIO.parse(str(gbk), "genbank"))
@@ -736,16 +755,9 @@ class BGC:
                         
                         cds_start = max(0, int(CDS.location.start))
                         cds_end = max(0, int(CDS.location.end))
-                        
-                        
-                        #accession = ""
-                        #if "protein_id" in CDS.qualifiers:
-                            #accession = CDS.qualifiers["protein_id"][0]
-                        
-                        identifier = "{}~L{}+CDS{}".format(clusterName, locus_num, cds_num)
-                        #if accession != "":
-                            #identifier += "~" + accession
-                            
+
+                        identifier = "{}~L{}+CDS{}".format(self.identifier, locus_num, cds_num)
+
                         product = ""
                         if "product" in CDS.qualifiers:
                             product = ", ".join(CDS.qualifiers["product"])
@@ -762,22 +774,37 @@ class BGC:
                             protein_id = CDS.qualifiers["proteinID"][0]
                         elif "proteinId" in CDS.qualifiers:
                             protein_id = CDS.qualifiers["proteinId"][0]
-                            
-                        # also found in JGI
-                        # elif "gene" in CDS.qualifiers:
-                        #     temp = CDS.qualifiers["gene"][0]
-                        #     protein_id = temp.split("_")[-1]
-                            
+
                         gene = ""
                         if "gene" in CDS.qualifiers:
                             gene = CDS.qualifiers["gene"][0]
-                            
+
+                        role = ""
+                        if "gene_kind" in CDS.qualifiers:
+                            role = CDS.qualifiers["gene_kind"][0]
+
+                        # TODO: test this. It's a bit tricky with antiSMASH 5 now with regions
+                        protein_type = ""
+                        if role == "biosynthetic" and "gene_functions" in CDS.qualifiers:
+                            protein_types = []
+                            for x in CDS.qualifiers["gene_functions"]:
+                                if x.startswith("biosynthetic (rule-based-clusters)"):
+                                    protein_types.append(x.split("biosynthetic (rule-based-clusters) ")[1].split(":")[0])
+                            if len(set(protein_types)) == 1:
+                                protein_type = protein_types[0]
+                            elif "NRPS_PKS" in CDS.qualifiers:
+                                for x in CDS.qualifiers["NRPS_PKS"]:
+                                    if x.startswith("type:"):
+                                        protein_type = x.split("type: ")[1]
+
                         protein = BGCProtein()
                         
                         protein.identifier = identifier
                         protein.product = product
                         protein.protein_id = protein_id
                         protein.gene = gene
+                        protein.role = role
+                        protein.protein_type = protein_type
                         
                         # TODO: check if the 'translation' annotation is really 
                         # there. If not, try to manually translate from dna
@@ -803,13 +830,17 @@ class BGC:
 
                         self.protein_list.append(protein)
                         self.proteins[protein.identifier] = protein
-                        locus.identifier = "{}~{}".format(clusterName, locus_num)
+                        locus.identifier = "{}~{}".format(self.identifier, locus_num)
                         locus.protein_list.append(protein)
                         locus.gene_coordinates.append((cds_start,cds_end))
 
                 self.loci.append(locus)
                 locus_num += 1
     
+        self.set_CBP_content()
+
+        return
+
     
     # TODO: finish
     def load_fasta(self, fasta):
@@ -992,9 +1023,15 @@ class BGC:
         for p in self.protein_list:
             p.classify_sequence()
         
-        del self.CBPtypes[:]
-        self.CBPtypes_set.clear()
-        self.CBPcontent.clear()
+        self.set_CBP_content()
+
+        return
+
+    
+    def set_CBP_content(self):
+        del self.CBPtypes[:]        # ordered list
+        self.CBPtypes_set.clear()   # a set of all CBTs
+        self.CBPcontent.clear()     # CBT to list of BGCProtein
         for protein in self.protein_list:
             if protein.role == "biosynthetic":
                 self.CBPtypes.append(protein.protein_type)
@@ -1031,6 +1068,7 @@ class BGC:
         pc.predict_domains(hmmdb, domtblout_path, cpus, tc, filterdoms)
         
         self.attempted_domain_prediction = True
+        self.calculate_domain_sets()
 
         return
     
@@ -1372,21 +1410,25 @@ class ProteinCollection:
         """
         
         with Pool(cpus) as pool:
-            for p_id in self.proteins:
-                pool.apply_async(self.proteins[p_id].classify_sequence())
+            for protein in self.proteins.values():
+                pool.apply_async(protein.classify_sequence())
             pool.close()
             pool.join()
         return
     
     
-    def get_fasta(self):
+    def get_fasta(self, sort=True):
         """
         Returns a string with the fasta sequences of all proteins in the
         collection. Header will be the protein accession, if present. Otherwise
         the protein's identifier will be used. 
         """
         sequences = []
-        for p_id in self.proteins:
+        if sort:
+            seq_list = sorted(self.proteins.keys())
+        else:
+            seq_list = self.proteins.keys()
+        for p_id in seq_list:
             p = self.proteins[p_id]
             header = "{} ProteinId:{} GeneId:{}".format(p.identifier, \
                 p.protein_id, p.gene)
@@ -1714,56 +1756,21 @@ class BGCProtein:
     
     
     # TODO substitute for a call to ProteinCollection.predict_domains
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=0):
+    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
         """
         domtblout_path is the path where the domtableout file will be deposited. 
         If present, a Path-like object is expected
         """
+
         assert(isinstance(hmmdb, HMM_DB))
         if domtblout_path != "":
             assert(isinstance(domtblout_path, Path))
         
-        for db in hmmdb.db_list:
-            command = ['hmmscan', '--cpu', str(cpus), '--cut_tc', '--noali', '--notextw']
-            if domtblout_path != "":
-                path = str(domtblout_path / (self.identifier + "_" + db.stem + ".domtable"))
-                command.extend(['--domtblout', path ])
-            dbpath = str(db)
-            command.extend([ dbpath, '-'])
-            
-            proc_hmmscan = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-            out, err = proc_hmmscan.communicate(input=self.fasta().encode("utf-8"))
-            
-            # "SearchIO parses a search output file's contents into a hierarchy of four 
-            # nested objects: QueryResult, Hit, HSP, and HSPFragment"
-            # http://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
-            results = SearchIO.parse(StringIO(out.decode()), 'hmmer3-text')
-            for qresult in results:
-                for hit in qresult:
-                    for hsp in hit:
-                        hspf = hsp[0] # access to HSPFragment
-
-                        seq_id = qresult.id
-                        hmm_id = hit.id
-                        ali_from = hspf.query_start
-                        ali_to = hspf.query_end
-                        hmm_from = hspf.hit_start
-                        hmm_to = hspf.hit_end
-                        env_from = hsp.env_start
-                        env_to = hsp.env_end
-                        
-                        Evalue = hsp.evalue
-                        score = hsp.bitscore
-                        
-                        domain = BGCDomain(self, hmm_id, env_from, env_to, ali_from, 
-                                           ali_to, hmm_from, hmm_to, hmm_size, score, 
-                                           Evalue)
-                        
-                        self.domain_list.append(domain)
+        pc = ProteinCollection()
+        pc.proteins[self.identifier] = self
+        pc.predict_domains(hmmdb, domtblout_path, cpus, tc, filterdoms)
         
-        self.filter_domains()
-        
-        self.attempted_domain_prediction = True
+        self.classify_sequence(hmmdb)
         
         return
     
@@ -2203,12 +2210,12 @@ class BGCProtein:
         # If only one domain and color_mode == 'domains', don't draw domains even
         # if requested (instead, whole arrow will be filled with domain's color)
         core_type = ""
+        if self.role == "biosynthetic":
+            core_type = "\n{}".format(self.protein_type)
         d_info = ""
+
         if svg_options.color_mode == "domains":
             draw_domains = False
-            
-            if self.role == "biosynthetic":
-                core_type = "\n{}".format(self.protein_type)
                 
             try:
                 d_info = "\n{}".format(" + ".join([hmmdb.ID_to_DE[d.ID] for d in self.domain_list]))
@@ -2264,7 +2271,7 @@ class BGCProtein:
         center = Y + h
         Hl = H/l # alpha = (H*(L-start)/l) distance from center to colission with head
         HL = H/L # for shorter arrows
-        intron_offset = 0
+        # intron_offset = 0
         
 
         # - EXON / INTRON REGIONS
