@@ -2892,7 +2892,7 @@ class BGCDomain:
             hmm_from, hmm_to, hmm_size, score, Evalue, algn_seq):
         self.protein = protein
         self.ID = ID                # domain short name e.g. 'ketoacyl-synt'
-        self.ACC = AC              # domain accession. e.g. 'PF00109.27'
+        self.AC = AC                # domain accession. e.g. 'PF00109.27'
         self.DE = DE                # domain description. e.g. 'Beta-ketoacyl synthase, N-terminal domain'
         self.alias = alias          # domain alias e.g. 'KS'
         self.ali_from = ali_from    # Position in target sequence at which the 
