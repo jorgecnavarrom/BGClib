@@ -1479,7 +1479,7 @@ def save_genbank(o: Path, cbt_types: set, cbt_domains: dict, \
     """
 
     if not cbt_types or cbt_domains:
-        for bgc_id in bgc_col.keys():
+        for bgc_id in bgc_col.bgcs.keys():
             try:
                 original_gbk = gbk_files[bgc_id]
             except KeyError:
