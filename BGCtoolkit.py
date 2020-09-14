@@ -1550,7 +1550,7 @@ if __name__ == "__main__":
         filter_bgc_prot = read_bgc_list(args.bgclist)
     
     # Read alias file
-    if args.alias:
+    if args.alias_file:
         external_alias = read_alias_file(args.alias_file)
 
     # Add hmm databases
