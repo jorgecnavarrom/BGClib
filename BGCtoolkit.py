@@ -25,6 +25,7 @@ TODO:
 
 import os
 import sys
+from shutil import copyfile
 from typing import Tuple
 import json
 import argparse
@@ -40,7 +41,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
     valid_CBP_types_fungal
 
 __author__ = "Jorge Navarro"
-__version__ = "0.1"
+__version__ = "0.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -56,8 +57,9 @@ def CMD_parser():
     # TODO: change to --inputfoldersgbk? (and add --inputfoldersbgc?)
     group_input.add_argument("-i", "--inputfolders", nargs='+', type=Path, \
         help="Folder(s) to search (recursively) for .gb and .gbk files. If \
-        the file starts with 'scaffold' or 'contig', the parent folder's name \
-        will be used in the internal BGC name for that file.")
+        the file starts with generic terms ('scaffold', 'contig', \
+        'Supercontig'), the parent folder's name will be used in the internal \
+        BGC name for that file.")
     group_input.add_argument("-f", "--files", nargs='+', type=Path, \
         help="Input individual files (accepted: .gb .gbk, .bgc, .bgccase, \
         .fasta, .proteincase).")
@@ -100,6 +102,13 @@ def CMD_parser():
         from input before domain prediction.", default=False, action="store_true")
     group_processing.add_argument("-c", "--cpus", type=int, default=cpu_count(), 
         help="Number of CPUs used for domain prediction. Default: all available.")
+    internal_alias_file = Path(__file__).parent / "BGClib" / "data" / "CBP_domains.tsv"
+    group_processing.add_argument("--alias", type=Path, help="Argument is a \
+        tab-separated file with domain alias. First column: domain ID, Second \
+        column: alias. If domain prediction is used, this information will also \
+        be stored (e.g. to use afterwards when making SVG figures). Default \
+        aliases are stored in the special file {}".format(internal_alias_file), \
+        dest='alias_file')
 
     group_post_proc = parser.add_argument_group("Post-processing options")
 
@@ -114,9 +123,10 @@ def CMD_parser():
     group_output = parser.add_argument_group(title="Output", 
         description="Basic output options")
     
+    default_output = Path("./") / "output"
     group_output.add_argument("-o", "--outputfolder", 
-        default=(Path(__file__).parent/"output"), help="Base folder where \
-        results will be put (default='./output').")
+        default=default_output, help="Base folder where \
+        results will be put (default='{}').".format(default_output))
     group_output.add_argument("--metadata", type=str, help="Writes \
         information files at three levels: a summary of the whole collection, \
         a summary per BGC (CBP content) and a summary per core protein (domain \
@@ -167,7 +177,9 @@ def CMD_parser():
         help="A space-separated list of core biosynthetic types to use when \
         organizing output. If 'all' or not argument is given, all posible CBTs \
         will be used. Additionally for this parameter, it is possible to \
-        search for specific domains (e.g. 'all:C' or 'nrPKS:SAT')")
+        search for specific domains (e.g. 'all:C' or 'nrPKS:SAT'). Domains \
+        may be the model's ID, the stored alias, or the alias given in the \
+        file specified with --alias")
     group_organize.add_argument("--cbt-exclude", type=str, nargs='+', \
         help="A space-separated list of all the CBTs to exclude.")
 
@@ -196,7 +208,6 @@ def CMD_parser():
         'CBP_output_types.cfg' file. Only available when cbt* options are \
         enabled.")
 
-    
     return parser.parse_args()
 
 
@@ -236,6 +247,10 @@ def check_parameters(args):
     if args.cbt_file:
         if not args.cbt_file.is_file():
             sys.exit("Error (--cbt-file): cannot open specified file")
+
+    if args.alias_file:
+        if not args.alias_file.is_file():
+            sys.exit("Error (--alias): cannot open specified file")
 
     if inputfiles:
         for file_ in inputfiles:
@@ -333,6 +348,24 @@ def read_bgc_list(bgclist):
         sys.exit("Error: filter BGC list given but the file is empty...")
 
     return(filterlist)
+
+
+def read_alias_file(alias_file: Path):
+    external_alias = dict()
+    with open(alias_file) as a:
+        for line in a:
+            if line[0] == "#" or line.strip() == "":
+                continue
+            xline = line.strip().split("\t")
+            try:
+                ID, alias = xline[0], xline[1]
+            except IndexError:
+                # there should be at least two columns, separated by tabs
+                continue
+            else:
+                external_alias[ID] = alias
+
+    return external_alias
 
 
 def get_files(args, outputfolder:Path, filter_bgc_prot) -> Tuple[BGCCollection, ProteinCollection]:
@@ -638,6 +671,7 @@ def fix_core_split_domains(bgc_col, prot_col):
             # Warning! Score of the new domain is naively asssigned to be the
             # simple sum of the scores of its parts
             merged_domain = BGCDomain(protein, first_dom.ID, \
+                first_dom.AC, first_dom.DE, first_dom.alias, \
                 first_dom.ali_from, last_dom.ali_to, first_dom.hmm_from, \
                 last_dom.hmm_to, 0, \
                 sum(d.score for d in consecutive_domain_list), 0, "")
@@ -812,7 +846,7 @@ def draw_svg_stacked(args, o: Path, bgc_col: BGCCollection, \
 
             # Couldn't find protein specified by user; typo?
             if protein is None:
-                print("\tSVG (stacked, bgclist): Warning, cannot find reference Protein Id {} for {}".format(pid, bgc_id))
+                print("\tSVG (stacked, bgclist): Warning, cannot find reference Protein Id [{}] for {}".format(pid, bgc_id))
                 needs_mirroring[bgc_id] = False
                 bgc_distance_to_target[bgc_id] = -1
                 continue
@@ -1183,7 +1217,7 @@ def save_bgc_output(args, o: Path, cbt_types: set, cbt_domains: dict, \
     folder_to_suffix = dict()
 
     # Strategy is put every BGC in a collection linked to the target folder
-    for bgc_id, bgc in bgc_collection.bgcs.items():
+    for bgc_id, bgc in bgc_col.bgcs.items():
         # target by type
         for cbt in (bgc.CBPtypes_set & cbt_types):
             target_folder = o / cbt
@@ -1195,8 +1229,10 @@ def save_bgc_output(args, o: Path, cbt_types: set, cbt_domains: dict, \
                 folder_to_collection[target_folder].bgcs[bgc_id] = bgc
 
         # Extend the set of the current BGC to hold all valid aliases
-        extended_bgc_domain_set = bgc.domain_set | set(alias[d] for d in bgc.domain_set if d in alias)
-        
+        extended_bgc_domain_set = bgc.domain_set | \
+            set(d.alias for d in bgc.domani_set if d.alias != "") | \
+            set(alias[d] for d in bgc.domain_set if d in alias)
+
         # target by domain content
         for cbt in (bgc.CBPtypes_set & cbt_domains.keys()):
             # dom_ID will contain the alias so target names will use it
@@ -1289,11 +1325,13 @@ def save_protein_output(args, o: Path, cbt_types: set, cbt_domains: dict, \
                 folder_to_collection[target_folder].proteins[p_id] = protein
 
         # extend the protein domains to include their aliases
-        extended_prot_set = protein.domain_set | set(alias[d] for d in protein.domain_set if d in alias)
+        extended_prot_domain_set = protein.domain_set | \
+            set(d.alias for d in protein.domani_set if d.alias != "") | \
+            set(alias[d] for d in protein.domain_set if d in alias)
 
         # target by type + domain content
         if ptype in cbt_domains:
-            for dom_ID in (extended_prot_set & cbt_domains[ptype]):
+            for dom_ID in (extended_prot_domain_set & cbt_domains[ptype]):
                 target_folder = o / ptype / "{}_{}".format(ptype, dom_ID)
                 folder_to_suffix[target_folder] = "_{}_{}".format(ptype, dom_ID)
                 try:
@@ -1303,8 +1341,8 @@ def save_protein_output(args, o: Path, cbt_types: set, cbt_domains: dict, \
                     folder_to_collection[target_folder].proteins[p_id] = protein
 
         # target by domain
-        if "all" in cbt_domains and (extended_prot_set & cbt_domains["all"]):
-            for dom_ID in (extended_prot_set & cbt_domains["all"]):
+        if "all" in cbt_domains and (extended_prot_domain_set & cbt_domains["all"]):
+            for dom_ID in (extended_prot_domain_set & cbt_domains["all"]):
                 target_folder = o / "domains_{}".format(dom_ID)
                 folder_to_suffix[target_folder] = "_domains_{}".format(dom_ID)
             try:
@@ -1370,11 +1408,13 @@ def save_fasta(o: Path, cbt_types: set, cbt_domains: dict, bgc_col: BGCCollectio
                 folder_to_col_cbt[target_folder].proteins[p_id] = protein
 
         # extend the protein domains to include their aliases
-        extended_prot_set = protein.domain_set | set(alias[d] for d in protein.domain_set if d in alias)
-
+        extended_prot_domain_set = protein.domain_set | \
+            set(d.alias for d in protein.domani_set if d.alias != "") | \
+            set(alias[d] for d in protein.domain_set if d in alias)
+        
         # target by type + domain content
         if ptype in cbt_domains:
-            for dom_ID in (extended_prot_set & cbt_domains[ptype]):
+            for dom_ID in (extended_prot_domain_set & cbt_domains[ptype]):
                 target_folder = o / ptype / "{}_{}".format(ptype, dom_ID)
                 folder_to_suffix[target_folder] = "{}_{}".format(ptype, dom_ID)
                 folder_to_dom[target_folder] = dom_ID
@@ -1385,8 +1425,8 @@ def save_fasta(o: Path, cbt_types: set, cbt_domains: dict, bgc_col: BGCCollectio
                     folder_to_col_dom[target_folder].proteins[p_id] = protein
 
         # target by domain
-        if "all" in cbt_domains and (extended_prot_set & cbt_domains["all"]):
-            for dom_ID in (extended_prot_set & cbt_domains["all"]):
+        if "all" in cbt_domains and (extended_prot_domain_set & cbt_domains["all"]):
+            for dom_ID in (extended_prot_domain_set & cbt_domains["all"]):
                 target_folder = o / "domains_{}".format(dom_ID)
                 folder_to_suffix[target_folder] = "all_{}_domains".format(dom_ID)
                 folder_to_dom[target_folder] = dom_ID
@@ -1431,6 +1471,73 @@ def save_fasta(o: Path, cbt_types: set, cbt_domains: dict, bgc_col: BGCCollectio
     return
 
 
+def save_genbank(o: Path, cbt_types: set, cbt_domains: dict, \
+        bgc_col: BGCCollection, gbk_files: dict, alias: dict) -> None:
+    """
+    Saves the original gbk files that were used as input. Currently, this works
+    mostly to filter and organize files
+    """
+
+    if not cbt_types or cbt_domains:
+        for bgc_id in bgc_col.keys():
+            try:
+                original_gbk = gbk_files[bgc_id]
+            except KeyError:
+                # that bgc came from .bgccase or .bgc files
+                continue
+
+            if original_gbk.stem != bgc_id:
+                # if a different bgc_id was given, it's probably b/c it had a generic name
+                copyfile(original_gbk, o / "{}.gbk".format(bgc_id))
+            else:
+                copyfile(original_gbk, o / "{}.gbk".format(original_gbk.name))
+        return
+
+    # For output organization:
+    folder_to_list = defaultdict(list)
+
+    for bgc_id, bgc in bgc_col.bgcs.items():
+        # discard bgc if not linked to physical .gbk file
+        if bgc_id not in gbk_files:
+            continue
+
+        # target by type
+        for cbt in (bgc.CBPtypes_set & cbt_types):
+            target_folder = o / cbt
+            folder_to_list[target_folder].append(bgc_id)
+
+        # Extend set of domains of this BGC with its aliases
+        extended_bgc_domain_set = bgc.domain_set | \
+            set(d.alias for d in bgc.domani_set if d.alias != "") | \
+            set(alias[d] for d in bgc.domain_set if d in alias)
+
+        # target by domain content
+        for cbt in (bgc.CBPtypes_set & cbt_domains.keys()):
+            # dom_target can be a proper dom.ID or a dom.alias
+            for dom_target in (extended_bgc_domain_set & cbt_domains[cbt]):
+                target_folder = o / cbt / "{}_{}".format(cbt, dom_target)
+                folder_to_list[target_folder].append(bgc_id)
+
+        # special case, "all"
+        if "all" in cbt_domains and (extended_bgc_domain_set & cbt_domains['all']):
+            for dom_target in extended_bgc_domain_set & cbt_domains['all']:
+                target_folder = o / "domains_{}".format(dom_target)
+                folder_to_list[target_folder].append(bgc_id)
+
+    # Everything classified, copy:
+    for target_folder, bgc_list in folder_to_list.items():
+        create_folder(target_folder)
+        
+        for bgc_id in bgc_list:
+            original_gbk = gbk_files[bgc_id]
+            if original_gbk.stem != bgc_id:
+                # Probably b/c this BGC had a generic name (e.g. scaffoldXX.region...)
+                copyfile(original_gbk, target_folder / "{}.gbk".format(bgc_id))
+            else:
+                copyfile(original_gbk, target_folder / "{}.gbk".format(original_gbk.name))
+    return
+
+
 if __name__ == "__main__":
     args = CMD_parser()
 
@@ -1442,6 +1549,10 @@ if __name__ == "__main__":
     if args.bgclist:
         filter_bgc_prot = read_bgc_list(args.bgclist)
     
+    # Read alias file
+    if args.alias:
+        external_alias = read_alias_file(args.alias_file)
+
     # Add hmm databases
     hmmdbs = HMM_DB()
     hmmdbs.cores = args.cpus
@@ -1449,7 +1560,10 @@ if __name__ == "__main__":
         hmmdbs.add_included_database()
         for hmm in args.hmms:
             hmmdbs.add_database(Path(hmm))
-            
+    # use domain aliases given by user, if present.
+    if external_alias:
+        hmmdbs.alias.update(external_alias)
+
     # Read annotation files
     # if args.jsonfolders:
     #     print(args.jsonfolders)
@@ -1506,6 +1620,7 @@ if __name__ == "__main__":
     if args.svg:
         if args.stacked:
             print("SVG: Generating stacked figure")
+            # Note: the HMM_DB object provides color data
             draw_svg_stacked(args, o, bgc_collection, protein_collection, \
                 hmmdbs, filter_bgc_prot)
         else:
@@ -1535,7 +1650,6 @@ if __name__ == "__main__":
             protein_collection, hmmdbs.alias)
         
     if args.genbank:
-        # save_genbank(o, cbt_types, cbt_domains, bgc_collection, gbk_files)
-        pass
+        save_genbank(o, cbt_types, cbt_domains, bgc_collection, gbk_files, hmmdbs.alias)
         
 

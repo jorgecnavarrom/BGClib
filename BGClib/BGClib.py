@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.6"
+__version__ = "0.6.7"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -1254,6 +1254,20 @@ class ProteinCollection:
 
                         #seq_identifier = qresult.id
                         hmm_id = hit.id
+                        try:
+                            AC = hmmdb.ID_to_AC[hmm_id]
+                        except KeyError:
+                            AC = ""
+
+                        try:
+                            DE = hmmdb.ID_to_DE[hmm_id]
+                        except KeyError:
+                            DE = ""
+                        
+                        try:
+                            alias = hmmdb.alias[hmm_id]
+                        except KeyError:
+                            alias = ""
                         
                         # NOTE: these are 1-based indices but biopython takes
                         # care of this and shifts automatically (e.g. hmmscan
@@ -1301,9 +1315,10 @@ class ProteinCollection:
                         Evalue = hsp.evalue
                         score = hsp.bitscore
                         
-                        domain = BGCDomain(self.proteins[seq_identifier], 
-                                           hmm_id, ali_from, ali_to, 
-                                           hmm_from, hmm_to, hmm_size, 
+                        domain = BGCDomain(self.proteins[seq_identifier], \
+                                           hmm_id, AC, DE, alias, \
+                                            ali_from, ali_to, 
+                                           hmm_from, hmm_to, hmm_size, \
                                            score, Evalue, algn_seq)
                         
                         self.proteins[seq_identifier].domain_list.append(domain)
@@ -1617,12 +1632,17 @@ class BGCProtein:
         """
 
         # get names; try to convert them to alias
+        # First try to get internal alias. Then try external alias dictionary
         domain_alias_list = []
         for d in self.domain_list:
-            if d.ID in domain_alias:
-                domain_alias_list.append(domain_alias[d.ID])
-            else:
-                domain_alias_list.append(d.ID)
+            title = d.ID
+
+            try:
+                title = domain_alias[d.ID]
+            except KeyError:
+                title = d.alias
+
+            domain_alias_list.append(title)
         
         # tag = self.identifier
         # if self.organism != "":
@@ -1974,11 +1994,13 @@ class BGCProtein:
             except KeyError:
                 color = "150,150,150"
                 
+            title = domain.ID
             try:
                 title = hmmdb.alias[domain.ID]
             except KeyError:
-                title = domain.ID
-            
+                if domain.alias != "":
+                    title = domain.alias
+
             domain_title = etree.Element("title")
             domain_title.text = title
             
@@ -2205,20 +2227,22 @@ class BGCProtein:
         # add title
         arrow_title = etree.Element("title")
         
-        arrow_identifier = "{} [{}]".format(self.protein_id, self.identifier)
+        arrow_identifier = self.identifier
+        if self.protein_id:
+            arrow_identifier = "{} [{}]".format(self.identifier, self.protein_id)
         
         # If only one domain and color_mode == 'domains', don't draw domains even
         # if requested (instead, whole arrow will be filled with domain's color)
         core_type = ""
         if self.role == "biosynthetic":
             core_type = "\n{}".format(self.protein_type)
-        d_info = ""
 
+        d_info = ""
         if svg_options.color_mode == "domains":
             draw_domains = False
                 
             try:
-                d_info = "\n{}".format(" + ".join([hmmdb.ID_to_DE[d.ID] for d in self.domain_list]))
+                d_info = "\n{}".format(" + ".join([d.DE for d in self.domain_list]))
             except KeyError:
                 d_info = "\n{}".format(" + ".join([d.ID for d in self.domain_list]))
         
@@ -2424,13 +2448,16 @@ class BGCProtein:
                     color_outline = "210,210,210"
                 
                 title = ""
-                if domain.ID in hmmdb.ID_to_DE:
-                    title = hmmdb.ID_to_DE[domain.ID] + " "
-                if domain.ID in hmmdb.alias:
-                    title += "[{}] ".format(hmmdb.alias[domain.ID])
-                if domain.ID in hmmdb.ID_to_AC:
-                    title += "\n{} - ".format(hmmdb.ID_to_AC[domain.ID])
-                title += domain.ID
+                title = domain.DE
+                try:
+                    title = "{} [{}]".format(title, hmmdb.alias[domain.ID])
+                except KeyError:
+                    if domain.alias != "":
+                        title = "{} [{}]".format(title, domain.alias)
+                title = "{}\n".format(title)
+                if domain.AC != "":
+                    title = "{} {} - ".format(title, domain.AC)
+                title = "{}{}".format(title, domain.ID)
                 domain_title = etree.Element("title")
                 domain_title.text = title
                 
@@ -2861,12 +2888,13 @@ class BGCProtein:
 
 
 class BGCDomain:
-    def __init__(self, protein, ID, ali_from, ali_to, hmm_from, hmm_to, hmm_size, score, Evalue, algn_seq):
-        # TODO: consider removing `env_from` and `env_to` for good 
+    def __init__(self, protein, ID, AC, DE, alias, ali_from, ali_to, \
+            hmm_from, hmm_to, hmm_size, score, Evalue, algn_seq):
         self.protein = protein
         self.ID = ID                # domain short name e.g. 'ketoacyl-synt'
-        #self.env_from = env_from    # Pos. in target seq. at which surr. envelope 
-        #self.env_to = env_to        #   starts/ends.
+        self.ACC = AC              # domain accession. e.g. 'PF00109.27'
+        self.DE = DE                # domain description. e.g. 'Beta-ketoacyl synthase, N-terminal domain'
+        self.alias = alias          # domain alias e.g. 'KS'
         self.ali_from = ali_from    # Position in target sequence at which the 
         self.ali_to = ali_to        #   hit starts/ends
         self.hmm_from = hmm_from    # Position in the hmm at which the hit 
