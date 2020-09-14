@@ -1490,7 +1490,7 @@ def save_genbank(o: Path, cbt_types: set, cbt_domains: dict, \
                 # if a different bgc_id was given, it's probably b/c it had a generic name
                 copyfile(original_gbk, o / "{}.gbk".format(bgc_id))
             else:
-                copyfile(original_gbk, o / "{}.gbk".format(original_gbk.name))
+                copyfile(original_gbk, o / original_gbk.name)
         return
 
     # For output organization:
@@ -1534,7 +1534,7 @@ def save_genbank(o: Path, cbt_types: set, cbt_domains: dict, \
                 # Probably b/c this BGC had a generic name (e.g. scaffoldXX.region...)
                 copyfile(original_gbk, target_folder / "{}.gbk".format(bgc_id))
             else:
-                copyfile(original_gbk, target_folder / "{}.gbk".format(original_gbk.name))
+                copyfile(original_gbk, target_folder / original_gbk.name)
     return
 
 
