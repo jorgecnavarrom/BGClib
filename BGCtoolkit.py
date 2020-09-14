@@ -1550,6 +1550,7 @@ if __name__ == "__main__":
         filter_bgc_prot = read_bgc_list(args.bgclist)
     
     # Read alias file
+    external_alias = dict()
     if args.alias_file:
         external_alias = read_alias_file(args.alias_file)
 
