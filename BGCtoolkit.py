@@ -41,7 +41,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
     valid_CBP_types_fungal
 
 __author__ = "Jorge Navarro"
-__version__ = "0.2"
+__version__ = "0.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -56,8 +56,8 @@ def CMD_parser():
     
     # TODO: change to --inputfoldersgbk? (and add --inputfoldersbgc?)
     group_input.add_argument("-i", "--inputfolders", nargs='+', type=Path, \
-        help="Folder(s) to search (recursively) for .gb and .gbk files. If \
-        the file starts with generic terms ('scaffold', 'contig', \
+        help="Folder(s) to search (recursively) for .gb, .gbk and .gbff files.\
+        If the file starts with generic terms ('scaffold', 'contig', \
         'Supercontig'), the parent folder's name will be used in the internal \
         BGC name for that file.")
     group_input.add_argument("-f", "--files", nargs='+', type=Path, \
@@ -410,7 +410,7 @@ def get_files(args, outputfolder:Path, filter_bgc_prot) -> Tuple[BGCCollection, 
 
     if files:
         for f in files:
-            if f.suffix.lower() in {".gb", ".gbk"}:
+            if f.suffix.lower() in {".gb", ".gbk", ".gbff"}:
                 if valid_name(f.stem, include, exclude, filter_bgc_set):
                     identifier = f.stem
                     if any([identifier.startswith(fword) for fword in forbidden_words]):
@@ -1229,8 +1229,13 @@ def save_bgc_output(args, o: Path, cbt_types: set, cbt_domains: dict, \
                 folder_to_collection[target_folder].bgcs[bgc_id] = bgc
 
         # Extend the set of the current BGC to hold all valid aliases
+        internal_aliases = set() # work out internal aliases first
+        for p in bgc.protein_list:
+            for d in p.domain_list:
+                if d.alias != "":
+                    internal_aliases.add(d.alias)
         extended_bgc_domain_set = bgc.domain_set | \
-            set(d.alias for d in bgc.domani_set if d.alias != "") | \
+            internal_aliases | \
             set(alias[d] for d in bgc.domain_set if d in alias)
 
         # target by domain content
@@ -1326,7 +1331,7 @@ def save_protein_output(args, o: Path, cbt_types: set, cbt_domains: dict, \
 
         # extend the protein domains to include their aliases
         extended_prot_domain_set = protein.domain_set | \
-            set(d.alias for d in protein.domani_set if d.alias != "") | \
+            set(d.alias for d in protein.domain_list if d.alias != "") | \
             set(alias[d] for d in protein.domain_set if d in alias)
 
         # target by type + domain content
@@ -1409,7 +1414,7 @@ def save_fasta(o: Path, cbt_types: set, cbt_domains: dict, bgc_col: BGCCollectio
 
         # extend the protein domains to include their aliases
         extended_prot_domain_set = protein.domain_set | \
-            set(d.alias for d in protein.domani_set if d.alias != "") | \
+            set(d.alias for d in protein.domain_list if d.alias != "") | \
             set(alias[d] for d in protein.domain_set if d in alias)
         
         # target by type + domain content
@@ -1507,8 +1512,13 @@ def save_genbank(o: Path, cbt_types: set, cbt_domains: dict, \
             folder_to_list[target_folder].append(bgc_id)
 
         # Extend set of domains of this BGC with its aliases
+        internal_aliases = set() # work out internal aliases first
+        for p in bgc.protein_list:
+            for d in p.domain_list:
+                if d.alias != "":
+                    internal_aliases.add(d.alias)
         extended_bgc_domain_set = bgc.domain_set | \
-            set(d.alias for d in bgc.domani_set if d.alias != "") | \
+            internal_aliases | \
             set(alias[d] for d in bgc.domain_set if d in alias)
 
         # target by domain content

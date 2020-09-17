@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.7"
+__version__ = "0.6.8"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -2083,7 +2083,10 @@ class BGCProtein:
         elif mode == "none":
             return "none"
         elif mode == "roles":
-            return role_colors[self.role]
+            try:
+                return role_colors[self.role]
+            except KeyError:
+                return "#dcdcdc"
         elif mode == "domains":
             # colors based on protein domains. 
             # If role is 'biosynthetic' or 'precursor' use color or role
