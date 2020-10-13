@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.8"
+__version__ = "0.6.9"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -2096,7 +2096,7 @@ class BGCProtein:
             # If it's a CBP, it has a defined color already
             if self.role == "biosynthetic":
                 try:
-                    color = valid_CBP_types[self.protein_type]
+                    color = valid_CBP_types_antiSMASH[self.protein_type]
                 except KeyError:
                     # unknown core gene type??
                     color = "#d59d7c"
