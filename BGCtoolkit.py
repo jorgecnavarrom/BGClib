@@ -39,6 +39,7 @@ from multiprocessing import cpu_count
 from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
     ArrowerOpts, BGCDomain, valid_CBP_types, valid_CBP_types_antiSMASH, \
     valid_CBP_types_fungal
+from datetime import datetime
 
 __author__ = "Jorge Navarro"
 __version__ = "0.3"
@@ -1550,6 +1551,7 @@ def save_genbank(o: Path, cbt_types: set, cbt_domains: dict, \
 
 if __name__ == "__main__":
     args = CMD_parser()
+    start_time = datetime.now()
 
     # Verify parameters
     check_parameters(args)
@@ -1664,3 +1666,5 @@ if __name__ == "__main__":
         save_genbank(o, cbt_types, cbt_domains, bgc_collection, gbk_files, hmmdbs.alias)
         
 
+    end_time = datetime.now()
+    print('Time: ', end_time - start_time) 
