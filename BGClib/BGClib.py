@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.6.9"
+__version__ = "0.7.0"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -88,7 +88,7 @@ valid_CBP_types_fungal = {\
     "Squalene_synthase": "#f4f4fc", # super light lilac
     "UbiA-type_terpene": "#f4f4fc", # super light lilac
     "Terpene_other": "#f4f4fc", # super light lilac
-    "DMATS": "#f4f4fc" # super light lilac
+    "DMATS": "#d1e8dd" # super light pistachio
     }
 # antiSMASH list retrieved 2020-08-19
 valid_CBP_types_antiSMASH_set = {'T1PKS', 'T2PKS', 'T3PKS', 'transAT-PKS', \
@@ -104,6 +104,9 @@ valid_CBP_types_antiSMASH_set = {'T1PKS', 'T2PKS', 'T3PKS', 'transAT-PKS', \
     'RaS-RiPP', 'fungal-RiPP', 'TfuA-related', 'other', 'saccharide', \
     'fatty_acid', 'halogenated'}
 valid_CBP_types_antiSMASH = dict.fromkeys(valid_CBP_types_antiSMASH_set, "#f06c6e")
+
+valid_CBP_types_colors = valid_CBP_types_fungal
+valid_CBP_types_colors.update(valid_CBP_types_antiSMASH)
 
 valid_CBP_types = valid_CBP_types_fungal.keys() | valid_CBP_types_antiSMASH
 # other colors
@@ -793,9 +796,13 @@ class BGC:
                             if len(set(protein_types)) == 1:
                                 protein_type = protein_types[0]
                             elif "NRPS_PKS" in CDS.qualifiers:
-                                for x in CDS.qualifiers["NRPS_PKS"]:
-                                    if x.startswith("type:"):
-                                        protein_type = x.split("type: ")[1]
+                                protein_type = "PKS-NRPS_hybrid"
+                                # TODO delete these
+                                #for x in CDS.qualifiers["NRPS_PKS"]:
+                                    #if x.startswith("type:"):
+                                        #protein_type = x.split("type: ")[1]
+                                # as they're not informative. e.g.: 
+                                # /NRPS_PKS="type: Type I Iterative PKS"
 
                         protein = BGCProtein()
                         
@@ -2096,7 +2103,7 @@ class BGCProtein:
             # If it's a CBP, it has a defined color already
             if self.role == "biosynthetic":
                 try:
-                    color = valid_CBP_types_antiSMASH[self.protein_type]
+                    color = valid_CBP_types_colors[self.protein_type]
                 except KeyError:
                     # unknown core gene type??
                     color = "#d59d7c"
