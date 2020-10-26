@@ -70,25 +70,25 @@ hmmdbs_without_tc = {"FNP_terpene_models"}
 valid_CBP_types_fungal = {\
     "nrPKS": "#76b7f4", # blue
     "rPKS": "#2c9cdc", # darker blue
-    "t3PKS": "#3cb5a1", #007dfb", # a bit more dark blue
+    "t3PKS": "#3368c8", #007dfb", # a bit more dark blue
     "NRPS": "#ffc755", # orange
     "NRPS-like": "#ffeb87", # light orange / yellow
-    "other_PKS": "#00ffff", # another blue. Intense-ish 
+    "other_PKS": "#80d8eb", # another blue. Intense-ish 
     "unknown_PKS": "#aaffff", # lighter version of previous
     "PKS-NRPS_hybrid": "#aa007f", # purple
     "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
     "NRPS-PKS_hybrid": "#a25fe6", # violet
     "NIS": "#c20c28", # red blood
-    "Meroterpenoid_synthase": "#f4f4fc", # super light lilac
-    "Diterpene_synthase": "#f4f4fc", # super light lilac
-    "Triterpene_synthase": "#f4f4fc", # super light lilac
-    "Sesquiterpene_synthase": "#f4f4fc", # super light lilac
-    "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # super light lilac
-    "Carotenoid_synthase": "#f4f4fc", # super light lilac
-    "Squalene_synthase": "#f4f4fc", # super light lilac
-    "UbiA-type_terpene": "#f4f4fc", # super light lilac
-    "Terpene_other": "#f4f4fc", # super light lilac
-    "DMATS": "#d1e8dd" # super light pistachio
+    "Meroterpenoid_synthase": "#b42d2d", # shades of brown/dark orange
+    "Diterpene_synthase": "#ba5454", # shades of brown/dark orange
+    "Triterpene_synthase": "#e04d37", # shades of brown/dark orange
+    "Sesquiterpene_synthase": "#995358", # shades of brown/dark orange
+    "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # shades of brown/dark orange
+    "Carotenoid_synthase": "#f4815c", # shades of brown/dark orange
+    "Squalene_synthase": "#be480a", # shades of brown/dark orange
+    "UbiA-type_terpene": "#da746e", # shades of brown/dark orange
+    "Terpene_other": "#ca8a73", # shades of brown/dark orange
+    "DMATS": "#c5c55d" # "gold"
     }
 # antiSMASH list retrieved 2020-08-19
 valid_CBP_types_antiSMASH_set = {'T1PKS', 'T2PKS', 'T3PKS', 'transAT-PKS', \
@@ -104,6 +104,25 @@ valid_CBP_types_antiSMASH_set = {'T1PKS', 'T2PKS', 'T3PKS', 'transAT-PKS', \
     'RaS-RiPP', 'fungal-RiPP', 'TfuA-related', 'other', 'saccharide', \
     'fatty_acid', 'halogenated'}
 valid_CBP_types_antiSMASH = dict.fromkeys(valid_CBP_types_antiSMASH_set, "#f06c6e")
+valid_CBP_types_antiSMASH["T1PKS"] = "34b4eb"
+valid_CBP_types_antiSMASH["T3PKS"] = "3368c8"
+valid_CBP_types_antiSMASH["siderophore"] = "c20c28"
+valid_CBP_types_antiSMASH["fungal-RiPP"] = "3cb5a1"
+valid_CBP_types_antiSMASH["microviridin"] = "31b568"
+valid_CBP_types_antiSMASH["bacteriocin"] = "70b598"
+valid_CBP_types_antiSMASH["lanthipeptide"] = "5b9950"
+valid_CBP_types_antiSMASH["thiopeptide"] = "90b442"
+valid_CBP_types_antiSMASH["terpene"] = "b44c3a"
+valid_CBP_types_antiSMASH["hserlactone"] = "bca8ad"
+valid_CBP_types_antiSMASH["butyrolactone"] = "b1b0bc"
+valid_CBP_types_antiSMASH["arylpolyene"] = "cdc5c0"
+valid_CBP_types_antiSMASH["betalactone"] = "b8cdc5"
+valid_CBP_types_antiSMASH["ladderane"] = "cdc69f"
+valid_CBP_types_antiSMASH["CDPS"] = "cccdac"
+valid_CBP_types_antiSMASH["phosphonate"] = "f6f9d4"
+valid_CBP_types_antiSMASH["other"] = "999999"
+
+
 
 valid_CBP_types_colors = valid_CBP_types_fungal
 valid_CBP_types_colors.update(valid_CBP_types_antiSMASH)
