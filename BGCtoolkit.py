@@ -415,7 +415,7 @@ def get_files(args, outputfolder:Path, filter_bgc_prot) -> Tuple[BGCCollection, 
                 if valid_name(f.stem, include, exclude, filter_bgc_set):
                     identifier = f.stem
                     if any([identifier.startswith(fword) for fword in forbidden_words]):
-                        identifier = "{}.{}".format(gbk_file.parts[-2], identifier)
+                        identifier = "{}.{}".format(f.resolve().parts[-2], identifier)
                     gbk_files[identifier] = f
                     all_bgcs[identifier].append(f)
 
