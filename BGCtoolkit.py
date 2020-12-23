@@ -584,6 +584,9 @@ def fix_core_split_domains(bgc_col, prot_col):
     for bgc in bgc_col.bgcs.values():
         for cbp_type in bgc.CBPcontent:
             for protein in bgc.CBPcontent[cbp_type]:
+                if not protein.domain_list:
+                    continue
+                
                 consecutive_domain_list = [] # consecutive dom objs relative to hmm
                 current_id = ""
                 for current_dom_num in range(len(protein.domain_list)-1):
