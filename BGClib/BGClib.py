@@ -68,60 +68,92 @@ hmmdbs_without_tc = {"FNP_terpene_models"}
 
 # TODO: choose colors for the last ones
 valid_CBP_types_fungal = {\
-    "nrPKS": "#76b7f4", # blue
-    "rPKS": "#2c9cdc", # darker blue
-    "t3PKS": "#3368c8", #007dfb", # a bit more dark blue
-    "NRPS": "#ffc755", # orange
-    "NRPS-like": "#ffeb87", # light orange / yellow
-    "other_PKS": "#80d8eb", # another blue. Intense-ish 
-    "unknown_PKS": "#aaffff", # lighter version of previous
-    "PKS-NRPS_hybrid": "#aa007f", # purple
-    "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
-    "NRPS-PKS_hybrid": "#a25fe6", # violet
-    "NIS": "#c20c28", # red blood
-    "Meroterpenoid_synthase": "#b42d2d", # shades of brown/dark orange
-    "Diterpene_synthase": "#ba5454", # shades of brown/dark orange
-    "Triterpene_synthase": "#e04d37", # shades of brown/dark orange
-    "Sesquiterpene_synthase": "#995358", # shades of brown/dark orange
-    "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # shades of brown/dark orange
-    "Carotenoid_synthase": "#f4815c", # shades of brown/dark orange
-    "Squalene_synthase": "#be480a", # shades of brown/dark orange
-    "UbiA-type_terpene": "#da746e", # shades of brown/dark orange
-    "Terpene_other": "#ca8a73", # shades of brown/dark orange
-    "DMATS": "#c5c55d" # "gold"
+        "nrPKS": "#76b7f4", # blue
+        "rPKS": "#2c9cdc", # darker blue
+        "t3PKS": "#3368c8", #007dfb", # a bit more dark blue
+        "NRPS": "#ffc755", # orange
+        "NRPS-like": "#ffeb87", # light orange / yellow
+        "other_PKS": "#80d8eb", # another blue. Intense-ish 
+        "unknown_PKS": "#aaffff", # lighter version of previous
+        "PKS-NRPS_hybrid": "#aa007f", # purple
+        "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
+        "NRPS-PKS_hybrid": "#a25fe6", # violet
+        "NIS": "#c20c28", # red blood
+        "Meroterpenoid_synthase": "#b42d2d", # shades of brown/dark orange
+        "Diterpene_synthase": "#ba5454", # shades of brown/dark orange
+        "Triterpene_synthase": "#e04d37", # shades of brown/dark orange
+        "Sesquiterpene_synthase": "#995358", # shades of brown/dark orange
+        "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # shades of brown/dark orange
+        "Carotenoid_synthase": "#f4815c", # shades of brown/dark orange
+        "Squalene_synthase": "#be480a", # shades of brown/dark orange
+        "UbiA-type_terpene": "#da746e", # shades of brown/dark orange
+        "Terpene_other": "#ca8a73", # shades of brown/dark orange
+        "DMATS": "#c5c55d" # "gold"
     }
-# antiSMASH list retrieved 2020-08-19
-valid_CBP_types_antiSMASH_set = {'T1PKS', 'T2PKS', 'T3PKS', 'transAT-PKS', \
-    'transAT-PKS-like', 'PpyS-KS', 'hglE-KS', 'CDPS', 'PKS-like', 'arylpolyene', \
-    'resorcinol', 'ladderane', 'PUFA', 'nrps', 'nrps-like', 'thioamide-NRP', \
-    'terpene', 'lanthipeptide', 'lipolanthine', 'bacteriocin', 'betalactone', \
-    'thiopeptide', 'linaridin', 'cyanobactin', 'glycocin', 'LAP', 'lassopeptide', \
-    'sactipeptide', 'bottromycin', 'head_to_tail', 'microviridin', 'proteusin', \
-    'blactam', 'amglyccycl', 'aminocoumarin', 'siderophore', 'ectoine', \
-    'butyrolactone', 'indole', 'nucleoside', 'phosphoglycolipid', 'melanin', \
-    'oligosaccharide', 'furan', 'hserlactone', 'phenazine', 'phosphonate', \
-    'fused', 'PBDE', 'acyl_amino_acids', 'tropodithietic-acid', 'NAGGN', \
-    'RaS-RiPP', 'fungal-RiPP', 'TfuA-related', 'other', 'saccharide', \
-    'fatty_acid', 'halogenated'}
-valid_CBP_types_antiSMASH = dict.fromkeys(valid_CBP_types_antiSMASH_set, "#f06c6e")
-valid_CBP_types_antiSMASH["T1PKS"] = "34b4eb"
-valid_CBP_types_antiSMASH["T3PKS"] = "3368c8"
-valid_CBP_types_antiSMASH["siderophore"] = "c20c28"
-valid_CBP_types_antiSMASH["fungal-RiPP"] = "3cb5a1"
-valid_CBP_types_antiSMASH["microviridin"] = "31b568"
-valid_CBP_types_antiSMASH["bacteriocin"] = "70b598"
-valid_CBP_types_antiSMASH["lanthipeptide"] = "5b9950"
-valid_CBP_types_antiSMASH["thiopeptide"] = "90b442"
-valid_CBP_types_antiSMASH["terpene"] = "b44c3a"
-valid_CBP_types_antiSMASH["hserlactone"] = "bca8ad"
-valid_CBP_types_antiSMASH["butyrolactone"] = "b1b0bc"
-valid_CBP_types_antiSMASH["arylpolyene"] = "cdc5c0"
-valid_CBP_types_antiSMASH["betalactone"] = "b8cdc5"
-valid_CBP_types_antiSMASH["ladderane"] = "cdc69f"
-valid_CBP_types_antiSMASH["CDPS"] = "cccdac"
-valid_CBP_types_antiSMASH["phosphonate"] = "f6f9d4"
-valid_CBP_types_antiSMASH["other"] = "999999"
 
+# antiSMASH list retrieved 2020-08-19
+valid_CBP_types_antiSMASH = {\
+        'T1PKS': '#34b4eb',
+        'T2PKS': '#999999',
+        'T3PKS': '#3368c8',
+        'transAT-PKS': '#999999',
+        'transAT-PKS-like': '#999999',
+        'PpyS-KS': '#999999',
+        'hglE-KS': '#999999',
+        'CDPS': '#cccdac',
+        'PKS-like': '#999999',
+        'arylpolyene': '#cdc5c0',
+        'resorcinol': '#999999',
+        'ladderane': '#cdc69f',
+        'PUFA': '#999999',
+        'nrps': '#999999',
+        'nrps-like': '#999999',
+        'thioamide-NRP': '#999999',
+        'terpene': '#b44c3a',
+        'lanthipeptide': '#5b9950',
+        'lipolanthine': '#999999',
+        'bacteriocin': '#70b598',
+        'betalactone': '#b8cdc5',
+        'thiopeptide': '#90b442',
+        'linaridin': '#999999',
+        'cyanobactin': '#999999',
+        'glycocin': '#999999',
+        'LAP': '#999999',
+        'lassopeptide': '#999999',
+        'sactipeptide': '#999999',
+        'bottromycin': '#999999',
+        'head_to_tail': '#999999',
+        'microviridin': '#31b568',
+        'proteusin': '#999999',
+        'blactam': '#999999',
+        'amglyccycl': '#999999',
+        'aminocoumarin': '#999999',
+        'siderophore': '#c20c28',
+        'ectoine': '#999999',
+        'butyrolactone': '#b1b0bc',
+        'indole': '#999999',
+        'nucleoside': '#999999',
+        'phosphoglycolipid': '#999999',
+        'melanin': '#999999',
+        'oligosaccharide': '#999999',
+        'furan': '#999999',
+        'hserlactone': '#bca8ad',
+        'phenazine': '#999999',
+        'phosphonate': '#f6f9d4',
+        'fused': '#999999',
+        'PBDE': '#999999',
+        'acyl_amino_acids': '#999999',
+        'tropodithietic-acid': '#999999',
+        'NAGGN': '#999999',
+        'RaS-RiPP': '#999999',
+        'fungal-RiPP': '#3cb5a1',
+        'TfuA-related': '#999999',
+        'other': '#999999',
+        'saccharide': '#999999',
+        'fatty_acid': '#999999',
+        'halogenated': '#999999'
+    }
+valid_CBP_types_antiSMASH_set = set(valid_CBP_types_antiSMASH.keys())
 
 
 valid_CBP_types_colors = valid_CBP_types_fungal
@@ -1524,7 +1556,7 @@ class BGCProtein:
         # self.organism = ""
         # self.TaxId = ""
         
-        self.forward = True
+        self.forward = True         # orientation of the gene encoding this protein
         
         self.cds_regions = tuple()  # collection of start/stop CDS regions (to 
                                     # draw intron position).
@@ -1666,7 +1698,10 @@ class BGCProtein:
             try:
                 title = domain_alias[d.ID]
             except KeyError:
-                title = d.alias
+                if d.alias != "":
+                    title = d.alias
+                else:
+                    title = d.ID
 
             domain_alias_list.append(title)
         
