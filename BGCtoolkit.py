@@ -415,7 +415,7 @@ def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollect
                 if valid_name(f.stem, include, exclude, filter_bgc_set):
                     identifier = f.stem
                     if any([identifier.startswith(fword) for fword in forbidden_words]):
-                        identifier = "{}.{}".format(gbk_file.parts[-2], identifier)
+                        identifier = "{}.{}".format(f.resolve().parts[-2], identifier)
                     gbk_files[identifier] = f
                     all_bgcs[identifier].append(f)
 
@@ -584,6 +584,9 @@ def fix_core_split_domains(bgc_col, prot_col):
     for bgc in bgc_col.bgcs.values():
         for cbp_type in bgc.CBPcontent:
             for protein in bgc.CBPcontent[cbp_type]:
+                if not protein.domain_list:
+                    continue
+                
                 consecutive_domain_list = [] # consecutive dom objs relative to hmm
                 current_id = ""
                 for current_dom_num in range(len(protein.domain_list)-1):
