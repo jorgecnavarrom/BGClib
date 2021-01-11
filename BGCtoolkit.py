@@ -369,7 +369,7 @@ def read_alias_file(alias_file: Path):
     return external_alias
 
 
-def get_files(args, outputfolder:Path, filter_bgc_prot) -> Tuple[BGCCollection, ProteinCollection]:
+def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollection]:
     """
     Collect all data from the input, using filters defined by user to produce
      the collection of data to work with.
@@ -1605,8 +1605,7 @@ if __name__ == "__main__":
         print(" - Excluding all BGCs with the following:")
         print("\t{}".format("\n\t".join(args.exclude)))
     
-    bgc_collection, protein_collection, gbk_files = get_files(args, o, \
-        filter_bgc_prot)
+    bgc_collection, protein_collection, gbk_files = get_files(args, filter_bgc_prot)
     print(" ...done")
     if len(bgc_collection.bgcs) + len(protein_collection.proteins) == 0:
         sys.exit("Stop: no valid BGCs or proteins found (check filters)")
