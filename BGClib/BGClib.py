@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.0"
+__version__ = "0.7.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -97,10 +97,10 @@ valid_CBP_types_antiSMASH = {\
         'T2PKS': '#999999',
         'T3PKS': '#3368c8',
         'transAT-PKS': '#999999',
-        'transAT-PKS-like': '#999999',
+        'transAT-PKS-like': '#999999', # "Trans-AT PKS fragment, with trans-AT domain not found"
         'PpyS-KS': '#999999',
         'hglE-KS': '#999999',
-        'CDPS': '#cccdac',
+        'CDPS': '#cccdac', # "tRNA-dependent cyclodipeptide synthases"
         'PKS-like': '#999999',
         'arylpolyene': '#cdc5c0',
         'resorcinol': '#999999',
@@ -110,7 +110,7 @@ valid_CBP_types_antiSMASH = {\
         'nrps-like': '#999999',
         'thioamide-NRP': '#999999',
         'terpene': '#b44c3a',
-        'lanthipeptide': '#5b9950',
+        'lanthipeptide': '#5b9950', # Obsolete: split into subclasses in antiSMASH6
         'lipolanthine': '#999999',
         'bacteriocin': '#70b598',
         'betalactone': '#b8cdc5',
@@ -225,7 +225,7 @@ class HMM_DB:
         self.read_domain_colors(Path(__file__).parent / "data/domain_color_file_ID.tsv")
         self.read_domain_roles(Path(__file__).parent / "data/SM_domain_roles.tsv")
         self.read_protein_types(Path(__file__).parent / "data/protein_types.tsv")
-        self.read_alias_file(Path(__file__).parent / "data/CBP_domains.tsv")
+        self.read_domain_alias_file(Path(__file__).parent / "data/domains_alias.tsv")
         
         return
     
@@ -365,7 +365,7 @@ class HMM_DB:
         return True
 
 
-    def read_alias_file(self, alias_file):
+    def read_domain_alias_file(self, alias_file):
         try:
             with open(alias_file, "r") as f:
                 for line in f:
@@ -373,8 +373,8 @@ class HMM_DB:
                         continue
                     
                     line = line.split("\t")
-                    hmm_alias = line[2]
-                    hmm_ID = line[3]
+                    hmm_ID = line[0]
+                    hmm_alias = line[1]
                     
                     self.alias[hmm_ID] = hmm_alias
         except FileNotFoundError:

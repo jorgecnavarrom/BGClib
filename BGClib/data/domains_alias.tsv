@@ -1,0 +1,58 @@
+# Domain ID / alias / source / reference ACcession / DEscription / comment
+#
+# Included for classification of core biosynthetic proteins:
+#
+# PKS (KS):
+ketoacyl-synt	KS	Pfam 33.1	PF00109.27	Beta-ketoacyl synthase, N-terminal domain	
+Ketoacyl-synt_C	KS_C	Pfam 33.1	PF02801.23	Beta-ketoacyl synthase, C-terminal domain	
+KAsynt_C_assoc	KS_Ce	Pfam 33.1	PF16197.6	Ketoacyl-synthetase C-terminal extension	
+#
+# PKS non-reducing domains
+SAT	SAT	Pfam 33.1	PF16073.6	Starter unit:ACP transacylase in aflatoxin biosynthesis	
+TIGR04532	PT	TIGRFAMs 15	TIGR04532	PT_fungal_PKS: polyketide product template domain	
+#
+# PKS reducing domains:
+PKS_ER	ER	antiSMASH	PKS_ER	Enoylreductase in Polyketide synthases.	
+KR	KR	Pfam 33.1	PF08659.11	KR domain	
+PS-DH	DH	Pfam 33.1	PF14765.7	Polyketide synthase dehydratase	
+#
+# PKS3:
+Chal_sti_synt_N	ChS_N	Pfam 33.1	PF00195.20	Chalcone and stilbene synthases, N-terminal domain	
+Chal_sti_synt_C	ChS_C	Pfam 33.1	PF02797.16	Chalcone and stilbene synthases, C-terminal domain	
+#
+# NRPS:
+Condensation	C	Pfam 33.1	PF00668.21	Condensation domain	
+AMP-binding	A	Pfam 33.1	PF00501.29	AMP-binding enzyme	
+AMP-binding_C	A_C	Pfam 33.1	PF13193.7	AMP-binding enzyme C-terminal domain	
+#
+# NIS:
+IucA_IucC	IucA_IucC	Pfam 33.1	PF04183.13	IucA / IucC family	NRPS-Independent Siderophore
+#
+# Terpenes:
+mero_tc	TC_mero	FNP models	mero_tc	Terpene meroterpenoid synthase	
+diterpene_tc	TC_dit	FNP models	diterpene_tc	Diterpene synthase	
+SQHop_cyclase_N	SQ_hopN	Pfam 33.1	PF13249.7	Squalene-hopene cyclase N-terminal domain	Triterpene
+SQHop_cyclase_C	SQ_hopC	Pfam 33.1	PF13243.7	Squalene-hopene cyclase C-terminal domain	Triterpene
+TRI5	SsqTerp	Pfam 33.1	PF06330.12	Trichodiene synthase (TRI5)	Sesquiterpene
+Terpene synthase family 2, C-terminal metal binding	TrpSynt2	Pfam 33.1	PF19086.1	Terpene_syn_C_2	Sesquiterpene
+polyprenyl_synt	PPS	Pfam 33.1	PF00348.18	Polyprenyl synthetase	Sesquiterpene bifunctional (together with Terpene_syn_C_2)
+SQS_PSY	SQS_PSY	Pfam 33.1	PF00494.20	Squalene/phytoene synthase	
+TIGR03462	LycCyc	TIGRFAMs 15	TIGR03462	CarR_dom_SF: lycopene cyclase domain	Carotenoid synthase (together with SQS_PSY)
+UbiA	UbiA	Pfam 33.1	PF01040.19	UbiA prenyltransferase family	
+#
+# Other terpene-related domains:
+Terpene_synth	TrpS	Pfam 33.1	PF01397.22	Terpene synthase, N-terminal domain	
+Terpene_synth_C	TrpS_C	Pfam 33.1	PF03936.17	Terpene synthase family, metal binding domain	
+Lycopene_cycl	LycC	Pfam 33.1	PF05834.13	Lycopene cyclase protein	
+Prenyltrans	Prenyltrans	Pfam 33.1	PF00432.22	Prenyltransferase and squalene oxidase repeat	
+#
+# DMAT
+Trp_DMAT	DMAT	Pfam 33.1	PF11991.9	Tryptophan dimethylallyltransferase	
+#
+# Other domains (hmms not included)
+Acyl_transf_1	AT	Pfam 33.1	PF00698.22	Acyl transferase domain	
+PP-binding	T/ACP	Pfam 33.1	PF00550.26	Phosphopantetheine attachment site	(NRPS: T, PKS: ACP)
+Thioesterase	TE	Pfam 33.1	PF00975.21	Thioesterase	
+Methyltransf_12	CMeT	Pfam 33.1	PF08242.13	Methyltransferase domain	
+Epimerization	E	antiSMASH	Epimerization	Epimerization domain for NRPS	
+Condensation_DCL	C_T	antiSMASH	Condensation_DCL	Terminal condensation domain in NRPS	
