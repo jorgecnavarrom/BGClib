@@ -42,7 +42,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
 from datetime import datetime
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3"
+__version__ = "0.3.1"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -77,11 +77,11 @@ def CMD_parser():
         BGC(s) identifier. If the option is present but no arguments are \
         given, the filter will be ignored (all BGCs will be included). If the \
         argument is not present, the default is to use the strings 'region' \
-        and 'cluster').")
+        and 'cluster').", type=str)
     group_filtering.add_argument("--exclude", nargs='*', default=['final'], 
         help="Specify string(s) to filter which BGCs will be rejected. \
         Similar rules are applied as with --include. If the argument is not \
-        present, the default is to use 'final'.")
+        present, the default is to use 'final'.", type=str)
     group_filtering.add_argument("-l", "--bgclist", help="A tab-separated file \
         containing a list of BGC names (first column) and protein names (second\
         column). The BGC names filter input from --files and --inputfolder. If \
@@ -212,9 +212,10 @@ def CMD_parser():
     return parser.parse_args()
 
 
-def sanitize(filename):
+def sanitize(filename: str) -> str:
     """
     Remove illegal characters of strings that are intended to be used as filenames
+    If found, illegal characters will be replaced by underscores
     """
     illegal = r"/|\:<>*"
     sanitized_filename = filename
@@ -225,7 +226,7 @@ def sanitize(filename):
 
 
 # Basic validation of input files
-def check_parameters(args):
+def check_parameters(args) -> None:
     """
     Checkes whether parameters are valid and paths exist
     """
@@ -296,13 +297,13 @@ def check_parameters(args):
 
 
 # Input stage
-def valid_name(name, include, exclude, filter_bgc):
+def valid_name(name: str, include: list, exclude: list, filter_bgc: list) -> bool:
     """
     Checks whether a filename is valid and should be included in the analysis
     based on the allowed strings (args.include) or strings to be avoided
     (args.exclude) as well as the criterium that the BGC is included in the
     filter list.
-    It is expected that the parameter 'name' is the name of the file \
+    It is expected that the parameter 'name' is the name of the BGC or the file,
     without extension
     """
     
@@ -321,16 +322,16 @@ def valid_name(name, include, exclude, filter_bgc):
     return True
 
 
-def read_bgc_list(bgclist):
+def read_bgc_list(bgclist: Path) -> list:
     """
     Reads the bgclist file
     * Tab-separated file
     * First column: bgc id. Can be empty
-    * Second column: protein identifier or protein_id
+    * Second column: protein identifier or protein_id. Can be empty
     * Third column: comment (or any line starting with #)
     """
     filterlist = list()
-    with open(args.bgclist) as f:
+    with open(bgclist) as f:
         for line in f:
             if line[0] == "#" or line.strip() == "":
                 continue
@@ -348,10 +349,10 @@ def read_bgc_list(bgclist):
     if len(filterlist) == 0:
         sys.exit("Error: filter BGC list given but the file is empty...")
 
-    return(filterlist)
+    return filterlist
 
 
-def read_alias_file(alias_file: Path):
+def read_alias_file(alias_file: Path) -> dict:
     external_alias = dict()
     with open(alias_file) as a:
         for line in a:
@@ -422,6 +423,8 @@ def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollect
             elif f.suffix.lower() == ".bgc":
                 with open(f, "rb") as dc:
                     bgc = pickle.load(dc)
+                    # make sure it's a valid bgc:
+                    assert(isinstance(bgc, BGC))
                     bgc_id = bgc.identifier
                 if valid_name(bgc_id, include, exclude, filter_bgc_set):
                     bgc_col.bgcs[bgc_id] = bgc
@@ -437,6 +440,8 @@ def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollect
                 # with shelve.open(str(f), flag='r') as col:
                 with open(f, "rb") as dc:
                     col = pickle.load(dc)
+                    # make sure it's a valid collection
+                    assert(isinstance(col, BGCCollection))
 
                 # if we've got a filter list, it's faster to use it
                 if filter_bgc_set:
@@ -471,6 +476,7 @@ def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollect
             elif f.suffix.lower() == ".proteincase":
                 with open(f, 'rb') as pc:
                     temp_prot_col = pickle.load(pc)
+                    assert(isinstance(temp_prot_col, ProteinCollection))
 
                 if temp_prot_col.proteins.keys() & prot_col.proteins.keys():
                     print("\tWarning! Over-writing proteins with the same header. Make sure you have unique headers in all your protein inputs. This will probably result in unintended results")
@@ -1003,7 +1009,7 @@ def draw_svg_stacked_simple(args, o, bgc_col, prot_col, hmmdbs) -> None:
 
 # Output: metadata
 def write_metadata(o: Path, metadata_base: str, bgc_col: BGCCollection, \
-    prot_col: ProteinCollection, alias: dict):
+    prot_col: ProteinCollection, alias: dict) -> None:
     """
     Writes information files at three levels:
     - A summary of the whole collection
@@ -1015,10 +1021,10 @@ def write_metadata(o: Path, metadata_base: str, bgc_col: BGCCollection, \
     with open(o / "{}.metadata.summary.txt".format(metadata_base), "w") as s:
         s.write("{} summary file\n\n".format(metadata_base))
         s.write("This collection contains\n")
-        s.write("* {} BGCs\n".format(len(bgc_col.bgcs)))
-        s.write("* {} Proteins\n".format(len(prot_col.proteins)))
+        s.write("* {} BGCs\n".format(len(bgc_col)))
+        s.write("* {} Proteins\n".format(len(prot_col)))
 
-        if len(bgc_col.bgcs) > 0:
+        if len(bgc_col) > 0:
             cbp_type_histogram = defaultdict(int)
             # cbp_type_bgcs = defaultdict(list)
             for bgc in bgc_col.bgcs.values():
@@ -1033,7 +1039,7 @@ def write_metadata(o: Path, metadata_base: str, bgc_col: BGCCollection, \
                 #     cbp_comp, ", ".join(cbp_type_bgcs[cbp_comp])))
                 s.write("{}\t{}\n".format(cbp_type_histogram[cbp_comp], cbp_comp))
 
-        if len(prot_col.proteins) > 0:
+        if len(prot_col) > 0:
             cbp_type_histogram = defaultdict(int)
             # cbp_type_prots = defaultdict(list)
             for protein in prot_col.proteins.values():
@@ -1048,7 +1054,7 @@ def write_metadata(o: Path, metadata_base: str, bgc_col: BGCCollection, \
                 s.write("{}\t{}\n".format(cbp_type_histogram[cbp_comp], cbp_comp))
 
     # BGC summary
-    if len(bgc_col.bgcs) > 0:
+    if len(bgc_col) > 0:
         with open(o / "{}.metadata.BGCs.tsv".format(metadata_base), "w") as m:
             header = "BGC\tantiSMASH products\tCore Biosynthetic Protein content\tCore Biosynthetic Protein IDs\tCore Biosynthetic Protein Identifiers\tMetabolites\n"
             m.write(header)
@@ -1098,7 +1104,7 @@ def write_metadata(o: Path, metadata_base: str, bgc_col: BGCCollection, \
 
 
 # Output: organize data
-def read_cbp_cfg(cbt_file):
+def read_cbp_cfg(cbt_file: Path) -> set:
     cbp_types = set()
 
     with open(cbt_file) as f:
@@ -1111,7 +1117,7 @@ def read_cbp_cfg(cbt_file):
     return cbp_types
 
 
-def get_cbt_types(args, bgc_col, prot_col) -> Tuple[set, dict]:
+def get_cbt_types(args, bgc_col: BGCCollection, prot_col: ProteinCollection) -> Tuple[set, dict]:
     """
     Reads input parameters from the "Organize biosynthetic output" section
     and produces a set that contains the valid core biosynthetic types
@@ -1587,17 +1593,8 @@ if __name__ == "__main__":
 
     # Output folder. Even if no files to work with are found, it needs
     #  to be created now in case there are files with repeated names/ids 
-    if args.outputfolder:
-        o = Path(args.outputfolder)
-        if not o.is_dir():
-            print("Trying to create output folder")
-            os.makedirs(o, exist_ok=True) # recursive folder creation
-    else:
-        # There is a default value for this parameter so we should actually not
-        # have this case...
-        o = (Path(__file__).parent / "output")
-        if not o.is_dir():
-            os.makedirs(o, exist_ok=True)
+    o = Path(args.outputfolder)
+    create_folder(o)
 
     # Read input data:
     print("\nCollecting data and filtering")
@@ -1610,10 +1607,10 @@ if __name__ == "__main__":
     
     bgc_collection, protein_collection, gbk_files = get_files(args, filter_bgc_prot)
     print(" ...done")
-    if len(bgc_collection.bgcs) + len(protein_collection.proteins) == 0:
+    if len(bgc_collection) + len(protein_collection) == 0:
         sys.exit("Stop: no valid BGCs or proteins found (check filters)")
     else:
-        print("\nWorking with {} BGC(s) and {} Protein(s)".format(len(bgc_collection.bgcs), len(protein_collection.proteins)))    
+        print("\nWorking with {} BGC(s) and {} Protein(s)".format(len(bgc_collection), len(protein_collection)))    
 
     # Domain prediction stage
     if args.hmms is not None:

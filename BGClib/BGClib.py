@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.1"
+__version__ = "0.7.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -611,6 +611,10 @@ class BGCCollection:
     def __init__(self):
         self.bgcs = {}
         self.name = ""
+
+
+    def __len__(self):
+        return len(self.bgcs)
     
 
     def add_gbk(self, gbk, identifier=""):
@@ -870,6 +874,9 @@ class BGC:
                             print(" Warning. Skipping CDS without 'translation' qualifier: {}".format(identifier))
                             continue
                         protein.sequence = CDS.qualifiers["translation"][0]
+                        # TODO: verify sequence doesn't contain stop codons at the end (anywhere?)
+
+                        # TODO: verify that len(CDS.location.parts) == len(protein.sequence)
                         
                         # NOTE what happens if there is no strand info (strand=None)?
                         if CDS.location.strand != 1:
@@ -1187,7 +1194,11 @@ class ProteinCollection:
         
         if fastafile is not None:
             self.fasta_load(fastafile)
-            
+    
+    
+    def __len__(self):
+        return len(self.proteins)
+
             
     def fasta_load(self, fastafile):
         """
@@ -1678,13 +1689,15 @@ class BGCProtein:
     def domain_string(self, domain_alias, original_orientation=False, simple=True):
         """Returns a basic domain-organization string
         
-        - It uses the hmm model name (not accession number)
-        - Does NOT check if the domains are already ordered by start coordinate
+        Hierarchy for each domain's label:
+        - If present, use alias from external domain_alias. If not,
+        - If present, use the original alias recorded in the domain object. If not,
+        - Uses the hmm model ID (not accession number)
+        
+        Does NOT check if the domains are already ordered by start coordinate
         
         in:
-            domain_alias: extracted from CBP_domains.tsv
-            domains: list of tuples with domain hit information
-            seq_id: identifier of the sequence
+            domain_alias (optional): external dictionary for domain ID aliases
         out: 
             a string
         """
@@ -1693,17 +1706,17 @@ class BGCProtein:
         # First try to get internal alias. Then try external alias dictionary
         domain_alias_list = []
         for d in self.domain_list:
-            title = d.ID
+            label = d.ID
 
             try:
-                title = domain_alias[d.ID]
+                label = domain_alias[d.ID]
             except KeyError:
                 if d.alias != "":
-                    title = d.alias
+                    label = d.alias
                 else:
-                    title = d.ID
+                    label = d.ID
 
-            domain_alias_list.append(title)
+            domain_alias_list.append(label)
         
         # tag = self.identifier
         # if self.organism != "":
@@ -2499,10 +2512,9 @@ class BGCProtein:
             # TODO: don't assume all domains are completely consecutive because
             # we allow for a small overlap. So some start positions may be
             # before the end position of the previous domain
-            for current_domain in range(len(self.domain_list)):
+            for current_domain, domain in enumerate(self.domain_list):
                 dstart, dend = domain_coordinates[current_domain]
-                domain = self.domain_list[current_domain]
-                
+
                 # General properties of the current domain: color and title
                 try:
                     color = ",".join([str(c) for c in hmmdb.colors[domain.ID]])

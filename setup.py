@@ -22,6 +22,13 @@ setup(name='BGClib',
       author='Jorge Navarro',
       author_email='j.navarro@westerdijkinstitute.nl',
       packages=['BGClib'],
-      package_data={'BGClib': ['data/*.tsv', 'data/Domain_models/*']},
+      package_data={'BGClib': ['data/*.tsv', 'data/Domain_models/*', '../BGCtoolkit.py']},
       keywords=['secondary metabolites', 'natural products', 'genome mining'],
+      classifiers=[
+            "Development Status :: 4 - Beta",
+            "Environment :: Console",
+            "Intended Audience :: Science/Research",
+            "Programming Language :: Python :: 3",
+            "Topic :: Scientific/Engineering :: Bio-Informatics",
+          ]
      )
