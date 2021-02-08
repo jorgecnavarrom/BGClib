@@ -42,7 +42,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
 from datetime import datetime
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -692,14 +692,18 @@ def fix_core_split_domains(bgc_col, prot_col):
 
 
 # Output: svg options
-def draw_svg_individual(args, o: Path, bgc_col: BGCCollection, \
-    prot_col: ProteinCollection, hmmdbs: HMM_DB, filter_bgc_prot) -> None:
+def draw_svg_individual(
+    o: Path,
+    bgc_col: BGCCollection,
+    prot_col: ProteinCollection,
+    filter_bgc_prot: list,
+    hmmdbs: HMM_DB,
+    svgopts: ArrowerOpts,
+    mirror: bool
+    ) -> None:
     """
     Draw individual SVGs per BGC or Protein
     """
-
-    mirror = args.mirror
-    svgopts = ArrowerOpts(args.svgcfg)
 
     filter_bgc = dict()
     filter_prot = set()
@@ -762,35 +766,42 @@ def draw_svg_individual(args, o: Path, bgc_col: BGCCollection, \
     return
 
 
-def draw_svg_stacked(args, o: Path, bgc_col: BGCCollection, \
-    prot_col: ProteinCollection, hmmdbs: HMM_DB, filter_bgc_prot):
+def draw_svg_stacked(
+    o: Path,
+    stacked_name: str,
+    bgc_col: BGCCollection,
+    prot_col: ProteinCollection,
+    filter_bgc_prot: list,
+    hmmdbs: HMM_DB,
+    svgopts: ArrowerOpts,
+    gaps: bool
+    ) -> None:
     """
     Draws a stacked BGC figure
     """
 
     # Discard "trivial" case of not having an ordered list of BGCs/proteins
     if len(filter_bgc_prot) == 0:
-        return draw_svg_stacked_simple(args, o, bgc_col, prot_col, hmmdbs)
+        return draw_svg_stacked_simple(o, stacked_name, bgc_col, prot_col, \
+            hmmdbs, svgopts)
 
-    filename = o / "{}.svg".format(args.stacked)
-    svgopts = ArrowerOpts(args.svgcfg)
-    gaps = args.gaps
+    filename = o / "{}.svg".format(stacked_name)
     thickness = svgopts.gene_contour_thickness
     
     # Read extra info for comparative fig.
-    if args.comparative:
-        comparative_figure_spacing = 1.0
-        with open(args.svgcfg) as f:
-            for line in f:
-                if line.startswith("comparative_figure_spacing"):
-                    try:
-                        comparative_figure_spacing = float(line.split("=")[1].strip())
-                    except:
-                        pass
-                    else:
-                        if comparative_figure_spacing < 0:
-                            comparative_figure_spacing = 1.0
-                    break
+    # if args.comparative:
+    #     comparative_figure_spacing = 1.0
+    #     with open(args.svgcfg) as f:
+    #         for line in f:
+    #             if line.startswith("comparative_figure_spacing"):
+    #                 try:
+    #                     comparative_figure_spacing = float(line.split("=")[1].strip())
+    #                 except:
+    #                     pass
+    #                 else:
+    #                     if comparative_figure_spacing < 0:
+    #                         comparative_figure_spacing = 1.0
+    #                 break
 
     # Read original filtering options and make two lists: one with BGCs and 
     # the other with the internal protein identifier of reference for 
@@ -819,7 +830,7 @@ def draw_svg_stacked(args, o: Path, bgc_col: BGCCollection, \
             bgc_lengths[bgc_id] = L
 
             if pid == "":
-                print("\tSVG (stacked, bgclist): Warning, {} has not reference Protein Id".format(bgc_id))
+                print("\tSVG (stacked, bgclist): Warning, {} has no reference Protein Id".format(bgc_id))
                 needs_mirroring[bgc_id] = False
                 bgc_distance_to_target[bgc_id] = -1
                 continue
@@ -948,14 +959,20 @@ def draw_svg_stacked(args, o: Path, bgc_col: BGCCollection, \
         f.write(etree.tostring(root, pretty_print=True))
         
 
-def draw_svg_stacked_simple(args, o, bgc_col, prot_col, hmmdbs) -> None:
+def draw_svg_stacked_simple(
+    o: Path,
+    stacked_name: str,
+    bgc_col: BGCCollection,
+    prot_col: ProteinCollection,
+    hmmdbs: HMM_DB,
+    svgopts: ArrowerOpts
+    ) -> None:
     """
     Draws a stacked BGC figure. 
     In this simple version, no order or alignment are given; all BGCs, then 
     proteins, will be drawn in arbitrary order
     """
-    filename = o / "{}.svg".format(args.stacked)
-    svgopts = ArrowerOpts(args.svgcfg)
+    filename = o / "{}.svg".format(stacked_name)
     thickness = svgopts.gene_contour_thickness
     
     # Now obtain a list of protein objects that will be used for alignment
@@ -1633,12 +1650,14 @@ if __name__ == "__main__":
         if args.stacked:
             print("SVG: Generating stacked figure")
             # Note: the HMM_DB object provides color data
-            draw_svg_stacked(args, o, bgc_collection, protein_collection, \
-                hmmdbs, filter_bgc_prot)
+            draw_svg_stacked(o, args.stacked, bgc_collection, \
+                protein_collection, filter_bgc_prot, hmmdbs, \
+                ArrowerOpts(args.svgcfg), args.gaps)
         else:
             print("SVG: Generating individual figures")
-            draw_svg_individual(args, o, bgc_collection, protein_collection, \
-                hmmdbs, filter_bgc_prot)
+            draw_svg_individual(o, bgc_collection, protein_collection, \
+                filter_bgc_prot, hmmdbs, ArrowerOpts(args.svgcfg), \
+                args.mirror)
 
     # Generic output
     if args.metadata and not (args.bgccase or args.proteincase):
