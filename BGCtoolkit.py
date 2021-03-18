@@ -42,7 +42,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
 from datetime import datetime
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -70,14 +70,15 @@ def CMD_parser():
         for .bgc and .bgccase files, inclusion rules by --include, --exclude\
         and --bgclist will be applied to the internal BGC identifier, not to \
         the name of the file.")
-    group_filtering.add_argument("--include", nargs='*', default=['region', 'cluster'], 
-        help="Specify string(s) to filter which BGCs will be included. In the \
+    default_include = ['region', 'cluster']
+    group_filtering.add_argument("--include", nargs='*', default=default_include, 
+        help=f"Specify string(s) to filter which BGCs will be included. In the \
         case of .gb or .gbk files, the filter is applied to the filename. For \
         data stored as .bgc or .bgccase files, the filter is applied to the \
         BGC(s) identifier. If the option is present but no arguments are \
         given, the filter will be ignored (all BGCs will be included). If the \
-        argument is not present, the default is to use the strings 'region' \
-        and 'cluster').", type=str)
+        argument is not present, the default is to use the strings: {default_include}", 
+        type=str)
     group_filtering.add_argument("--exclude", nargs='*', default=['final'], 
         help="Specify string(s) to filter which BGCs will be rejected. \
         Similar rules are applied as with --include. If the argument is not \
@@ -91,11 +92,11 @@ def CMD_parser():
         the final SVG figure. Any extra columns or rows starting with the '#' \
         character will be ignored.", type=Path)   
         
-    group_processing = parser.add_argument_group("Domain options")
+    group_processing = parser.add_argument_group("Annotation options")
     group_processing.add_argument("--hmms", nargs='*', help="List of paths to \
         .hmm file(s). This will also enable internal hmm models (use without \
         arguments to only use internal models).")
-    group_processing.add_argument("--update-domains", help="Use domain prediction \
+    group_processing.add_argument("--update_domains", help="Use domain prediction \
         on input, even if they were marked as already having domain prediction. \
         If new and old hits overlap, only the best-scoring hit will be kept.", \
         default=False, action="store_true")
@@ -110,6 +111,10 @@ def CMD_parser():
         be stored (e.g. to use afterwards when making SVG figures). Default \
         aliases are stored in the special file {}".format(internal_alias_file), \
         dest='alias_file')
+    group_processing.add_argument("--fungal_cbp", help="Uses internal \
+        domain-based rules to re-annotate all core biosynthetic protein types. \
+        Intended to be used only on fungal sets.", default=False, \
+        action="store_true")
 
     group_post_proc = parser.add_argument_group("Post-processing options")
 
@@ -563,11 +568,6 @@ def predict_domains(args, hmmdbs, bgc_collection, protein_collection):
     protein_collection_need_dom_pred.predict_domains(hmmdbs, cpus=hmmdbs.cores)
     print("\t...done!\n")
 
-    print("\nApplying classification rules")
-    bgc_collection_need_dom_pred.classify_proteins(cpus=hmmdbs.cores)
-    protein_collection_need_dom_pred.classify_proteins(cpus=hmmdbs.cores)
-    print("\t...done!\n")
-
     # Finally, the data we'll be processing
     bgc_collection.bgcs.update(bgc_collection_need_dom_pred.bgcs)
     protein_collection.proteins.update(protein_collection_need_dom_pred.proteins)
@@ -774,7 +774,8 @@ def draw_svg_stacked(
     filter_bgc_prot: list,
     hmmdbs: HMM_DB,
     svgopts: ArrowerOpts,
-    gaps: bool
+    gaps: bool,
+    warning: bool=False
     ) -> None:
     """
     Draws a stacked BGC figure
@@ -817,7 +818,8 @@ def draw_svg_stacked(
     for bgc_id, pid in filter_bgc_prot:
         if bgc_id != "":
             if bgc_id not in bgc_col.bgcs:
-                print("\tSVG (stacked, bgclist): --bgclist used but {} not found in BGC data".format(bgc_id))
+                if warning:
+                    print("\tSVG (stacked, bgclist): --bgclist used but {} not found in BGC data".format(bgc_id))
                 draw_order_bgcs.append(None)
                 continue
 
@@ -830,7 +832,8 @@ def draw_svg_stacked(
             bgc_lengths[bgc_id] = L
 
             if pid == "":
-                print("\tSVG (stacked, bgclist): Warning, {} has no reference Protein Id".format(bgc_id))
+                if warning:
+                    print("\tSVG (stacked, bgclist): Warning, {} has no reference Protein Id".format(bgc_id))
                 needs_mirroring[bgc_id] = False
                 bgc_distance_to_target[bgc_id] = -1
                 continue
@@ -1635,6 +1638,13 @@ if __name__ == "__main__":
         print("\tPreparing data")
 
         predict_domains(args, hmmdbs, bgc_collection, protein_collection)
+
+    if args.fungal_cbp:
+        print("\tRe-annotating fungal core biosynthetic genes")
+        bgc_collection.classify_proteins(cpus=hmmdbs.cores)
+        protein_collection.classify_proteins(cpus=hmmdbs.cores)
+        print("\t...done!\n")
+
 
     # Post-processing stage
     if args.merge:
