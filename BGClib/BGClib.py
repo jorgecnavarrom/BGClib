@@ -23,7 +23,7 @@ from Bio import SearchIO
 from Bio import SeqIO
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.2"
+__version__ = "0.7.3"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -171,7 +171,7 @@ role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "regulatory":"#33c1f0", # blue, rgb(51, 193, 240)
                "other":"#eff0f1", # light gray, rgb(239, 240, 241)
                "precursor":"#9797dc", # lilac, rgb(151,151,220)
-               "unknown":"#dcdcdc", # gray, rgb(220, 220, 220)
+               "unknown":"#eff0f1", # gray, rgb(220, 220, 220) dcdcdc
                "resistance":"#f0a1ac", # light red, rgb(240, 161, 172) 
                "biosynthetic-additional":"#f0986b"} # orange rgb(240, 152, 107)
 
@@ -506,14 +506,11 @@ class ArrowerOpts:
                                   "random", "roles", "domains", "none"}
         
         self.outline = True
-        self.draw_domains = True 
-        
+        self.show_domains = True
+        self.show_introns = True # Show the actual gap where the intron is
+
         self.original_orientation = True # If false, all arrows will point forward
         
-        self.intron_break = False # Show a dashed line where the intron breaks gene
-                                # This means that this is not an actual 
-        self.intron_regions = False # Show the actual gap where the intron is
-
         if cfg != "":
             self.load_options(cfg)
 
@@ -570,7 +567,7 @@ class ArrowerOpts:
                     value = value.replace("'", "").replace('"', '')
                     self.color_mode = value.lower()
                 elif option in {"outline", "draw_domains", "original_orientation", 
-                                "intron_break", "intron_regions"}:
+                                "intron_break", "show_regions"}:
                     value = value.capitalize()
                     if value in {"True","False"}:
                         if value == "True":
@@ -580,14 +577,12 @@ class ArrowerOpts:
                             
                         if option == "outline":
                             self.outline = value
-                        elif option == "draw_domains":
-                            self.draw_domains = value
+                        elif option == "show_domains":
+                            self.show_domains = value
                         elif option == "original_orientation":
                             self.original_orientation = value
-                        elif option == "intron_break":
-                            self.intron_break = value
-                        else:
-                            self.intron_regions = value
+                        elif option == "show_introns":
+                            self.show_introns = value
                     else:
                         truefalse_errors.append(option)
                 else:
@@ -978,7 +973,7 @@ class BGC:
         # unchanged). As we are mixing generic dna regions with only-coding regions
         # this is just a _representation_ of the BGC; not meant to be accurate
         intron_correction = 0.0
-        if not bgc_svg_options.intron_regions:
+        if not bgc_svg_options.show_introns:
             for locus in self.loci:
                 for p in locus.protein_list:
                     intron_correction += ((p.cds_regions[-1][1] - p.cds_regions[0][0] - 3) - p.length*3) / bgc_svg_options.scaling
@@ -1025,14 +1020,6 @@ class BGC:
         for locus in loci_list:
             L = locus.length/svg_options.scaling
             
-            # substract all non-coding regions (but intergenic space remains
-            # unchanged). As we are mixing generic dna regions with only-coding regions
-            # this is just a _representation_ of the BGC; not meant to be accurate
-            intron_correction = 0.0
-            if not svg_options.intron_regions:
-                for p in locus.protein_list:
-                    intron_correction += ((p.cds_regions[-1][1] - p.cds_regions[0][0] - 3) - p.length*3) / svg_options.scaling
-                L -= intron_correction
             line_attribs = {
                 "x1": str(int(Xoffset)),
                 "y1": str(int(yoffset + h + 0.5*H)),
@@ -1057,13 +1044,12 @@ class BGC:
                     else:
                         gene_length = (protein.length*3)/svg_options.scaling
                     gene_position = L - gene_position - gene_length
-                inner_tree = protein.xml_arrow(hmmdb, svg_options, Xoffset + gene_position, yoffset, mirror=mirror)
+                inner_tree = protein.xml_arrow2(hmmdb, svg_options, \
+                    Xoffset + gene_position, yoffset, mirror=mirror)
                 main_group.append(inner_tree)
                 
                 p += 1
-                if not svg_options.intron_regions:
-                    intron_offset += ((protein.cds_regions[-1][1] - protein.cds_regions[0][0] - 3) - protein.length*3) / svg_options.scaling
-        
+                
             Xoffset += L
             
             if l < len(self.loci):
@@ -1583,17 +1569,7 @@ class BGCProtein:
 
         return
     
-    # always try to have an identifier. Either the reference accession or the 
-    # original accession
-    #@property
-    #def accession(self):
-        #return self._accession
-    #@accession.setter
-    #def accession(self, acc):
-        #self._accession = acc
-        #if self.identifier == "":
-            #self.identifier = acc
-            
+           
     @property
     def ref_accession(self):
         return self._ref_accession
@@ -1617,16 +1593,6 @@ class BGCProtein:
         # draw standalone SVG arrow figures
         if len(self.cds_regions) == 0:
             self.cds_regions = ([0, 3*self.length], )
-    
-    
-    # TODO delete
-    # def get_annotations(self):
-    #     gca = ""
-    #     return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
-    #         self.parent_cluster, self.identifier, self.ref_accession, 
-    #         self.ncbi_id, self.ncbi_ipg_id, self.protein_type, "", "", 
-    #         self.compound_family, self.compound, self.source, self.organism, 
-    #         self.TaxId)
     
 
     def sequence80(self, start=0, end=None):
@@ -2017,7 +1983,7 @@ class BGCProtein:
         self.attempted_domain_prediction = False
 
 
-    # TODO polish code like in arrow_SVG
+    # TODO FIX
     def domain_SVG(self, filename, hmmdb, svg_options=ArrowerOpts()):
         """Creates an SVG figure with the domains as boxes
     
@@ -2035,8 +2001,8 @@ class BGCProtein:
         stripe_thickness = svg_options.stripe_thickness
         curve_radius = int(H/10)
         scaling = svg_options.scaling
-        intron_break = svg_options.intron_break
-        intron_regions = svg_options.intron_regions
+        intron_regions = svg_options.show_introns
+        intron_break = False
 
         # main node
         base_attribs = {"version":"1.1", 
@@ -2160,7 +2126,7 @@ class BGCProtein:
             try:
                 return role_colors[self.role]
             except KeyError:
-                return "#dcdcdc"
+                return "#eff0f1"
         elif mode == "domains":
             # colors based on protein domains. 
             # If role is 'biosynthetic' or 'precursor' use color or role
@@ -2192,7 +2158,7 @@ class BGCProtein:
             return "#ffffff"
         
 
-    def arrow_SVG(self, filename, hmmdb, svg_options=ArrowerOpts(), xoffset=0, yoffset=0):
+    def arrow_SVG(self, filename, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), xoffset=0, yoffset=0):
         """Creates an SVG figure with the domains as boxes
     
         in:
@@ -2785,7 +2751,11 @@ class BGCProtein:
                     # Move to next region if domain is not finished
                     if current_region < len(regions) and not next_domain:
                         current_region += 1
-                        start, end, region_type = regions[current_region]
+                        try:
+                            start, end, region_type = regions[current_region]
+                        except IndexError:
+                            print(f"Error drawing {self.identifier}")
+                            return main_group
                     
                 
                 # ready to draw domains
@@ -2958,6 +2928,276 @@ class BGCProtein:
             for intron in intron_elements:
                 main_group.append(intron)
                 
+
+        return main_group
+
+
+   # NOTE: experimental rewrite
+    def xml_arrow2(self, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), xoffset=0, yoffset=0, mirror=False, needs_class_data=True):
+        """Creates an arrow SVG figure (xml structure)
+        
+        Starting from upper left corner (X,Y), the vertices of the arrow are
+        (clockwise)
+        A, B, C, D (tip of the arrow), E, F, G
+        (not considering vertices created by intron regions)
+        But note that here the first coordinate to be annotated will be the one
+        in the bottom left corner (G or E, depending on whether the arrow is 
+        complete or will be a squeezed version)
+        
+        Domains are similar, except that b and c follow the slope of the arrow
+        head. Vertices:
+        a, b, c, d (if domain end matches the arrow's), e, f, g
+    
+        in:
+            options through an ArrowerOpts object
+                L: total arrow length. Will increase if considering introns
+                l: length of arrow head
+                H: height of arrow's body (A-G, B-F)
+                h: height of top/bottom arrow edge (B-C, E-F)
+                
+            an object of the HMM_DB class which contains domain information
+            
+            xoffset /yoffset: upper left corner of the canvas
+            
+            (svg_options.original_orientation): draw arrow according to strand information
+            mirror: draw arrow with the opposite direction of the strand orientation
+        out:
+            an etree tree
+            
+        X,Y: coordinate of the upper left corner of the arrow's tail (if it's
+        pointing forward). A = (X,Y) = (xoffset, yoffset+h)
+        
+        Note that scaling only happens on the x axis
+        """
+        
+        fill_color = self.arrow_colors(svg_options.color_mode, hmmdb)
+        
+        if mirror:
+            flip = self.forward
+        else:
+            flip = not self.forward and svg_options.original_orientation
+        
+        L = self.cds_regions[-1][1] - self.cds_regions[0][0]
+        
+        scaling = svg_options.scaling
+
+        H = svg_options.arrow_height
+        h = H/2
+        l = H * scaling # needs to be scaled along the x-axis
+        Y = h # X = 0 (xoffset)
+        
+        idm = svg_options.internal_domain_margin
+        show_introns = svg_options.show_introns
+        draw_domains = svg_options.show_domains
+
+        main_group = etree.Element("g")
+        
+        # add title
+        arrow_title = etree.Element("title")
+        
+        arrow_identifier = self.identifier
+        if self.protein_id:
+            arrow_identifier = f"{self.identifier} [{self.protein_id}]"
+        
+        # If only one domain and color_mode == 'domains', don't draw domains even
+        # if requested (instead, whole arrow will be filled with domain's color)
+        core_type = ""
+        if self.role == "biosynthetic":
+            core_type = f"\n{self.protein_type}"
+
+        d_info = ""
+        if svg_options.color_mode == "domains":
+            draw_domains = False
+                
+            try:
+                d_info_str = " + ".join([d.DE for d in self.domain_list])
+            except KeyError:
+                d_info_str = " + ".join([d.ID for d in self.domain_list])
+            d_info = f"\n{d_info_str}"
+        
+        arrow_title.text = f"{arrow_identifier}{core_type}{d_info}"        
+        main_group.append(arrow_title)
+        
+        # Objects that will hold each CDS element
+        domain_elements = []
+
+        # precalculate a couple of numbers
+        vertices = []
+        head_start = L - l # In local 'arrow coordinates'
+        if head_start <= 0:
+            head_start = 0
+        center = Y + h
+        Hl = H/l # alpha = (H*(L-start)/l) distance from center to colission with head
+        HL = H/L # for shorter arrows
+
+        #
+        # DRAW MAIN GENE AREA
+        vertices = list()
+        if head_start == 0:
+            # short arrow
+            C = [0, 0]
+            D = [L, center]
+            E = [0, Y + H + h]
+            vertices = [C, D, E]
+        else:
+            # full arrow
+            A = [0, Y]
+            B = [head_start, Y]
+            C = [head_start, 0]
+            D = [L, center]
+            E = [head_start, Y + H + h]
+            F = [head_start, Y + H]
+            G = [0, Y + H]
+            vertices = [A, B, C, D, E, F, G]
+
+        # flip if requested and gene is in the reverse strand
+        if flip:
+            for v in vertices:
+                v[0] = L - v[0]
+        
+        # rescale everything
+        for v in vertices:
+            v[0] = v[0]/scaling
+        
+        # shape properties
+        string_vertices = []
+        for v in vertices:
+            string_vertices.append(f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}")
+        
+        region_attribs = dict()
+        region_attribs["class"] = "exon"
+        region_attribs["points"] = " ".join(string_vertices)
+        region_attribs["fill"] = fill_color
+
+        if needs_class_data:
+            region_attribs["stroke-width"] = str(svg_options.gene_contour_thickness)
+            if svg_options.outline:
+                region_attribs["stroke"] = "#0a0a0a"
+                
+        gene = etree.Element("polygon", attrib = region_attribs)
+        main_group.append(gene)
+
+        #
+        # DRAW INTRONS
+        intron_regions = list()
+        intron_elements = list()
+        if show_introns and len(self.cds_regions) > 1:
+            # calculate regions. These will be useful also for drawing 'linker' 
+            # regions in domains
+            if self.forward:
+                cds_start = self.cds_regions[0][0]
+                for cds_num in range(len(self.cds_regions) - 1):
+                    intron_regions.append((self.cds_regions[cds_num][1] + 1 - cds_start, 
+                        self.cds_regions[cds_num+1][0] - 1 - cds_start))
+            else:
+                cds_end = self.cds_regions[-1][1] + 1
+                for cds_num in range(len(self.cds_regions)-1, 0, -1):
+                    intron_regions.append((cds_end - self.cds_regions[cds_num][0], 
+                        cds_end - self.cds_regions[cds_num-1][1] - 1))
+
+            if self.identifier.startswith("BGC0000121"):
+                if self.forward:
+                    print(f"--> {self.identifier}")
+                else:
+                    print(f"<-- {self.identifier}")
+                print(" ".join(f"({r[0]},{r[1]})" for r in self.cds_regions))
+                for r in intron_regions:
+                    print(f"\t{r[0]}\t{r[1]}")
+                print()
+
+            for intron in intron_regions:
+                start = intron[0]
+                end = intron[1]
+                vertices = list()
+
+                if start < head_start:
+                    G = [start, Y + H]
+                    vertices.append(G)
+                    A = [start, Y]
+                    vertices.append(A)
+                else:
+                    if head_start == 0:
+                        alpha = (HL*(L-start))
+                    else:
+                        alpha = (Hl*(L-start))
+                    Eprime = [start, center + alpha]
+                    vertices.append(Eprime)
+                    Cprime = [start, center - alpha]
+                    vertices.append(Cprime)
+
+                # draw right-most part of region
+                if end <= head_start:
+                    Aprime = [end, Y]
+                    vertices.append(Aprime)
+                    Gprime = [end, Y + H]
+                    vertices.append(Gprime)
+                else:
+                    if start < head_start:
+                        B = [head_start, Y]
+                        vertices.append(B)
+                        C = [head_start, Y-h]
+                        vertices.append(C)
+                    
+                    if head_start == 0:
+                        alpha = (HL*(L-end))
+                    else:
+                        alpha = (Hl*(L-end))
+                    Cprimeprime = [end, center - alpha]
+                    vertices.append(Cprimeprime)
+                    Eprimeprime = [end, center + alpha]
+                    vertices.append(Eprimeprime)
+                        
+                    if start < head_start:
+                        E = [head_start, Y + H + h]
+                        vertices.append(E)
+                        F = [head_start, Y + H]
+                        vertices.append(F)
+
+                # flip if requested and gene is in the reverse strand
+                if flip:
+                    for v in vertices:
+                        v[0] = L - v[0]
+                
+                # rescale everything
+                for v in vertices:
+                    v[0] = v[0]/scaling
+                
+                # shape properties
+                region_attribs = dict()
+                region_attribs["stroke-width"] = str(svg_options.gene_contour_thickness)
+                region_attribs["stroke-opacity"] = "0.8"
+                region_attribs["class"] = "intron"
+                region_attribs["fill"] = "#d8d8d8"
+                region_attribs["fill-opacity"] = "0.5"
+                # region_attribs["stroke-dasharray"] = "3,2"
+                if svg_options.outline:
+                    region_attribs["stroke"] = "#919191"
+
+                string_vertices = []
+                for v in vertices:
+                    string_vertices.append(f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}")
+                region_attribs["points"] = " ".join(string_vertices)
+                intron_element = etree.Element("polygon", attrib=region_attribs)
+
+                intron_elements.append(intron_element)
+
+        #
+        # DRAW DOMAINS 
+        domain_elements = list()
+        if draw_domains and len(self.domain_list) > 0:
+            if head_start == 0:
+                arrow_collision = L - ( (h-idm)/HL )
+            else:
+                arrow_collision = head_start + (h+idm)/Hl
+            
+
+            
+        # First draw
+        for domain_element in domain_elements:
+            main_group.append(domain_element)
+
+        for intron_element in intron_elements:
+            main_group.append(intron_element)
 
         return main_group
 
