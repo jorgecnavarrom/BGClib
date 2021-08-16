@@ -14,7 +14,6 @@ from multiprocessing import Pool, cpu_count
 from random import uniform
 from colorsys import hsv_to_rgb
 from colorsys import rgb_to_hsv
-from collections import defaultdict
 from lxml import etree
 from operator import itemgetter
 from copy import deepcopy
@@ -206,9 +205,11 @@ class HMM_DB:
     
     def __init__(self):
         self.db_list = []           # list of paths to hmm databases
-        self.alias = {}             # ID to alias
-        self.colors = {}            # ID to tuple(r,g,b)
-        self.color_outline = {}
+        self.alias = dict()         # ID to alias
+        self.colors = dict()        # ID to tuple(r,g,b)
+        self.colors_hex = dict()
+        self.color_outline = dict() # Darker version of self.colors. Precalculated
+        self.colors_outline_hex = dict()
         self.cores = 0              # for hmmer. Remember that it always uses an
                                     # extra core for reading the database
                                     
@@ -401,11 +402,16 @@ class HMM_DB:
                         continue
                     
                     hmm_ID, colors = line.strip().split("\t")
-                    self.colors[hmm_ID] = tuple(colors.split(","))
+                    rgb = [int(c) for c in colors.split(",")]
+                    r, g, b = rgb
+                    self.colors[hmm_ID] = tuple(rgb)
+                    self.colors_hex[hmm_ID] = f"#{r:02x}{g:02x}{b:02x}"
                     
-                    r, g, b = colors.split(",")
-                    h, s, v = rgb_to_hsv(int(r)/255.0, int(g)/255.0, int(b)/255.0)
+                    h, s, v = rgb_to_hsv(r/255.0, g/255.0, b/255.0)
                     self.color_outline[hmm_ID] = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h, s, 0.8*v))
+                    rgb_out = tuple(int(round(c * 255)) for c in hsv_to_rgb(h, s, 0.8*v))
+                    self.colors_outline_hex[hmm_ID] = f"#{rgb_out[0]:02x}{rgb_out[1]:02x}{rgb_out[2]:02x}"
+
         except FileNotFoundError:
             print("Could not open domain colors file ({})".format(str(colors_file)))
         
@@ -2244,12 +2250,12 @@ class BGCProtein:
         else:
             flip = not self.forward and original_orientation
         
-        L = self.length*3.0
-        if svg_options.intron_regions:
-            # seems like the stop codon is not included in the CDS info, so there's
-            # no need to substract the last codon (3 bases)
-            L = (self.cds_regions[-1][1] - self.cds_regions[0][0])
-        
+        # L = self.length*3.0
+        # if svg_options.intron_regions:
+        #     # seems like the stop codon is not included in the CDS info, so there's
+        #     # no need to substract the last codon (3 bases)
+        #     L = (self.cds_regions[-1][1] - self.cds_regions[0][0])
+        L = (self.cds_regions[-1][1] - self.cds_regions[0][0])
         
         scaling = svg_options.scaling
         
@@ -2261,9 +2267,9 @@ class BGCProtein:
         Y = h
         
         idm = svg_options.internal_domain_margin
-        intron_break = svg_options.intron_break
-        intron_regions = svg_options.intron_regions
-        draw_domains = svg_options.draw_domains
+        intron_break = False #svg_options.intron_break
+        intron_regions = True #svg_options.intron_regions
+        draw_domains = svg_options.show_domains
 
         main_group = etree.Element("g")
         
@@ -2950,8 +2956,8 @@ class BGCProtein:
     
         in:
             options through an ArrowerOpts object
-                L: total arrow length. Will increase if considering introns
-                l: length of arrow head
+                L: total arrow length
+                l: length of arrow head (45° angle)
                 H: height of arrow's body (A-G, B-F)
                 h: height of top/bottom arrow edge (B-C, E-F)
                 
@@ -2988,7 +2994,7 @@ class BGCProtein:
         
         idm = svg_options.internal_domain_margin
         show_introns = svg_options.show_introns
-        draw_domains = svg_options.show_domains
+        show_domains = svg_options.show_domains
 
         main_group = etree.Element("g")
         
@@ -3007,7 +3013,7 @@ class BGCProtein:
 
         d_info = ""
         if svg_options.color_mode == "domains":
-            draw_domains = False
+            show_domains = False
                 
             try:
                 d_info_str = " + ".join([d.DE for d in self.domain_list])
@@ -3017,9 +3023,6 @@ class BGCProtein:
         
         arrow_title.text = f"{arrow_identifier}{core_type}{d_info}"        
         main_group.append(arrow_title)
-        
-        # Objects that will hold each CDS element
-        domain_elements = []
 
         # precalculate a couple of numbers
         vertices = []
@@ -3082,8 +3085,8 @@ class BGCProtein:
         intron_regions = list()
         intron_elements = list()
         if show_introns and len(self.cds_regions) > 1:
-            # calculate regions. These will be useful also for drawing 'linker' 
-            # regions in domains
+            # calculate regions.
+            # Coordinates are relative to the start of the gene-arrow
             if self.forward:
                 cds_start = self.cds_regions[0][0]
                 for cds_num in range(len(self.cds_regions) - 1):
@@ -3184,18 +3187,130 @@ class BGCProtein:
         #
         # DRAW DOMAINS 
         domain_elements = list()
-        if draw_domains and len(self.domain_list) > 0:
+        if show_domains and len(self.domain_list) > 0:
+            # split each domain into dna regions
+            offset = 0
+
+            # In contrast with intron_regions, elements here will
+            # be a dictionary with two items: regions and ID
+            domain_regions = list()
+            for domain in self.domain_list:
+                # get cDNA coordinates
+                dstart = domain.ali_from * 3    # inclusive dstart
+                dend = (domain.ali_to + 1) * 3  # exclusive dend
+
+                # get genomic coordinates
+                offset = 0
+                regions = list()
+                for current_cds, cds in enumerate(self.cds_regions):
+                    if cds[1] < dstart:
+                        offset = self.cds_regions[current_cds+1][0] - cds[1] + 1
+                        dstart += offset
+                        dend += offset
+                    elif cds[0] > dend:
+                        if not regions:
+                            regions = [tuple([dstart, dend])]
+                        break
+                    else:
+                        pass
+                domain_regions.append({
+                    "ID": domain.ID,
+                    "DE": domain.DE,
+                    "AC": domain.AC,
+                    "alias": domain.alias,
+                    "regions": regions})
+
             if head_start == 0:
                 arrow_collision = L - ( (h-idm)/HL )
             else:
                 arrow_collision = head_start + (h+idm)/Hl
             
+            # get vertices of each domain
+            for domain in domain_regions:
+                ID = domain["ID"]
+                DE = domain["DE"]
+                alias = domain["alias"]
+                AC = domain["AC"]
+                regions = domain["regions"]
+                vertices_top = list()
+                vertices_bottom = list()
 
-            
-        # First draw
+                # NOTE: temporary. All regions should be annotated
+                if not regions:
+                    continue
+
+                # Blocky domain
+                if regions[-1][1] <= arrow_collision:
+                    for dbox_start, dbox_end in regions:
+                        a = [dbox_start, Y + idm]
+                        aprime = [dbox_end, Y + idm]
+                        g = [dbox_start, Y + H - idm]
+                        gprime = [dbox_end, Y + H - idm]
+                        
+                        vertices_top.append(a)
+                        vertices_top.append(aprime)
+                        
+                        vertices_bottom.append(gprime)
+                        vertices_bottom.append(g)
+                        
+                # ready to draw domains
+                del vertices[:]
+                vertices = vertices_top + vertices_bottom
+
+                # Flip if needed
+                if flip:
+                    for v in vertices:
+                        v[0] = L - v[0]
+
+                # Rescale
+                for v in vertices:
+                    v[0] = v[0]/scaling
+
+                # Make element
+                # General properties of the current domain: color and title
+                try:
+                    color = hmmdb.colors_hex[ID]
+                    color_outline = hmmdb.colors_outline_hex[ID]
+                except KeyError:
+                    color = "#969696"
+                    color_outline = "#d2d2d2"
+                
+                title = ""
+                title = DE
+                try:
+                    title = f"{title} [{hmmdb.alias[ID]}]"
+                except KeyError:
+                    if alias != "":
+                        title = f"{title} [{alias}]"
+                title = f"{title}\n"
+                if AC != "":
+                    title = f"{title} {AC} - "
+                title = f"{title}{ID}"
+                domain_title = etree.Element("title")
+                domain_title.text = title
+                
+                domain_attribs = {"class": f"domain,{ID}"}
+                domain_node_main = etree.Element("g", attrib=domain_attribs)
+                domain_node_main.append(domain_title)
+
+                string_vertices = []
+                for v in vertices:
+                    string_vertices.append(f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}")
+                domain_inner_attribs = {
+                    "points": " ".join(string_vertices),
+                    "fill": color,
+                    "stroke-linejoin":"round"
+                    }
+                domain_inner = etree.Element("polygon", attrib=domain_inner_attribs)
+                domain_node_main.append(domain_inner)
+                domain_elements.append(domain_node_main)
+
+
+        # First draw domains...
         for domain_element in domain_elements:
             main_group.append(domain_element)
 
+        # ...so that introns are in the upper layer
         for intron_element in intron_elements:
             main_group.append(intron_element)
 
