@@ -491,9 +491,9 @@ class ArrowerOpts:
     """
     
     def __init__(self, cfg=""):
-        self.scaling = 30                    # px per bp
+        self.scaling = 20                    # px per bp
         
-        self.arrow_height = 30               # H: Height of arrows' body
+        self.arrow_height = 40               # H: Height of arrows' body
         #self.arrow_head_height = 15          # h: Additional width of arrows' head
                                         #  (i.e. total arrow head = H + 2*aH)
                                         # internally, h = H/2 to preserve 45° angle
@@ -570,10 +570,11 @@ class ArrowerOpts:
                 elif option == "stripe_thickness":
                     self.stripe_thickness = int(value)
                 elif option == "color_mode":
-                    value = value.replace("'", "").replace('"', '')
-                    self.color_mode = value.lower()
-                elif option in {"outline", "draw_domains", "original_orientation", 
-                                "intron_break", "show_regions"}:
+                    value = value.replace("'", "").replace('"', '').lower()
+                    if value in self.valid_color_modes:
+                        self.color_mode = value
+                elif option in {"outline", "show_domains", "show_introns",
+                        "original_orientation"}:
                     value = value.capitalize()
                     if value in {"True","False"}:
                         if value == "True":
@@ -598,7 +599,6 @@ class ArrowerOpts:
                 if len(truefalse_errors) > 0:
                     print("ArrowerOpts configuration file: the following options must have a value of True or False {}".format(option))
                     
-            
         return True
     
 
@@ -975,16 +975,7 @@ class BGC:
         # length of the SVG figure
         # second term accounts for the inter-loci figure
         L = sum([locus.length/bgc_svg_options.scaling for locus in self.loci]) + (H*(len(self.loci)-1))
-        # substract all non-coding regions (but intergenic space remains
-        # unchanged). As we are mixing generic dna regions with only-coding regions
-        # this is just a _representation_ of the BGC; not meant to be accurate
-        intron_correction = 0.0
-        if not bgc_svg_options.show_introns:
-            for locus in self.loci:
-                for p in locus.protein_list:
-                    intron_correction += ((p.cds_regions[-1][1] - p.cds_regions[0][0] - 3) - p.length*3) / bgc_svg_options.scaling
-                    
-        
+
         # main node
         # Note: we are in dna space (so amino acid sequence must be scaled)
         # width, height, xoffset and yoffset must be corrected or the corners
@@ -994,7 +985,7 @@ class BGC:
         Yoffset = yoffset + thickness
         base_attribs = {"version":"1.1", 
                         "baseProfile":"full",
-                        "width":str(int(Xoffset + L + thickness - intron_correction)),
+                        "width":str(int(Xoffset + L + thickness)),
                         "height":str(int(Yoffset + 2*H + thickness))}
         root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
         
@@ -2974,6 +2965,10 @@ class BGCProtein:
         pointing forward). A = (X,Y) = (xoffset, yoffset+h)
         
         Note that scaling only happens on the x axis
+
+        needs_class_data: to be implemented. Highest level call (protein, BGC, 
+            BGC list) should define style classes for genes, introns and domains 
+            to save even more space
         """
         
         fill_color = self.arrow_colors(svg_options.color_mode, hmmdb)
@@ -2995,6 +2990,7 @@ class BGCProtein:
         idm = svg_options.internal_domain_margin
         show_introns = svg_options.show_introns
         show_domains = svg_options.show_domains
+        domain_contour_thickness = svg_options.domain_contour_thickness
 
         main_group = etree.Element("g")
         
@@ -3098,16 +3094,6 @@ class BGCProtein:
                     intron_regions.append((cds_end - self.cds_regions[cds_num][0], 
                         cds_end - self.cds_regions[cds_num-1][1] - 1))
 
-            if self.identifier.startswith("BGC0000121"):
-                if self.forward:
-                    print(f"--> {self.identifier}")
-                else:
-                    print(f"<-- {self.identifier}")
-                print(" ".join(f"({r[0]},{r[1]})" for r in self.cds_regions))
-                for r in intron_regions:
-                    print(f"\t{r[0]}\t{r[1]}")
-                print()
-
             for intron in intron_regions:
                 start = intron[0]
                 end = intron[1]
@@ -3194,6 +3180,23 @@ class BGCProtein:
             # In contrast with intron_regions, elements here will
             # be a dictionary with two items: regions and ID
             domain_regions = list()
+
+            # calculate regions.
+            # Coordinates are relative to the start of the gene-arrow
+            # Another option would be to use the intron regions, with the
+            # caveat that if the user doesn't choose to show_introns, those
+            # regions won't be calculated
+            forward_regions = list()
+            offset = self.cds_regions[0][0]
+            if self.forward:
+                for s, e in self.cds_regions:
+                    forward_regions.append(tuple([s-offset, e-offset]))
+            else:
+                end = self.cds_regions[-1][1]
+                for e, s in self.cds_regions[::-1]:
+                    forward_regions.append(tuple([end-s, end-e]))
+
+            # prepare domain regions
             for domain in self.domain_list:
                 # get cDNA coordinates
                 dstart = domain.ali_from * 3    # inclusive dstart
@@ -3202,17 +3205,27 @@ class BGCProtein:
                 # get genomic coordinates
                 offset = 0
                 regions = list()
-                for current_cds, cds in enumerate(self.cds_regions):
+                for current_cds, cds in enumerate(forward_regions):
+                    # CDS is before domain. Push domain forward
                     if cds[1] < dstart:
-                        offset = self.cds_regions[current_cds+1][0] - cds[1] + 1
+                        offset = forward_regions[current_cds+1][0] - cds[1] + 1
                         dstart += offset
                         dend += offset
-                    elif cds[0] > dend:
-                        if not regions:
-                            regions = [tuple([dstart, dend])]
+                    # CDS is after domain. Finish
+                    elif cds[0] >= dend:
+                        regions.append(tuple([dstart, dend]))
                         break
+                    # CDS end splits domain region
+                    elif cds[1] < dend:
+                        regions.append(tuple([dstart, cds[1]+1]))
+                        if current_cds < len(forward_regions) - 1:
+                            offset = forward_regions[current_cds+1][0] - cds[1] + 1
+                            dstart = forward_regions[current_cds+1][0]
+                            dend += offset
+                    # CDS overlaps completely with domains
                     else:
-                        pass
+                        regions.append(tuple([dstart, dend]))
+                        break
                 domain_regions.append({
                     "ID": domain.ID,
                     "DE": domain.DE,
@@ -3225,37 +3238,155 @@ class BGCProtein:
             else:
                 arrow_collision = head_start + (h+idm)/Hl
             
-            # get vertices of each domain
+            # "linker half height"
+            lhh = 0.125 * H
+            
+            # Work every domain
             for domain in domain_regions:
                 ID = domain["ID"]
                 DE = domain["DE"]
                 alias = domain["alias"]
                 AC = domain["AC"]
                 regions = domain["regions"]
+
+                vertices = list()
                 vertices_top = list()
                 vertices_bottom = list()
 
-                # NOTE: temporary. All regions should be annotated
-                if not regions:
-                    continue
+                # draw each domain segment
+                for r_num, (dbox_start, dbox_end) in enumerate(regions):
+                    # Case i) Full rectangle    
+                    if dbox_end <= arrow_collision:
+                        # Points for linker. Left
+                        if r_num > 0:
+                            x = [dbox_start, center - lhh]
+                            vertices_top.append(x)
 
-                # Blocky domain
-                if regions[-1][1] <= arrow_collision:
-                    for dbox_start, dbox_end in regions:
-                        a = [dbox_start, Y + idm]
+                            y = [dbox_start, center + lhh]
+                            vertices_bottom.append(y)
+
+                        A = [dbox_start, Y + idm]
                         aprime = [dbox_end, Y + idm]
-                        g = [dbox_start, Y + H - idm]
+                        vertices_top.extend([A, aprime])
+
+                        G = [dbox_start, Y + H - idm]
                         gprime = [dbox_end, Y + H - idm]
+                        vertices_bottom.extend([G, gprime])
                         
+                        # Points for linker. Right
+                        if r_num < len(regions)-1:
+                            xprime = [dbox_end, center - lhh]
+                            vertices_top.append(xprime)
+
+                            yprime = [dbox_end, center + lhh]
+                            vertices_bottom.append(yprime)
+                    
+                    # Case ii) Rectangle + trepezoid/triangle
+                    elif dbox_start < arrow_collision and dbox_end > arrow_collision:
+                        # Points for linker. Left
+                        if r_num > 0:
+                            x = [dbox_start, center - lhh]
+                            y = [dbox_start, center + lhh]
+                            vertices_top.append(x)
+                            vertices_bottom.append(y)
+
+                        a = [dbox_start, Y + idm]
+                        b = [arrow_collision, Y + idm]
                         vertices_top.append(a)
-                        vertices_top.append(aprime)
-                        
-                        vertices_bottom.append(gprime)
+                        vertices_top.append(b)
+
+                        g = [dbox_start, Y + H - idm]
+                        f = [arrow_collision, center + h - idm]
                         vertices_bottom.append(g)
+                        vertices_bottom.append(f)
+
+                        if dbox_end == L:
+                            d = [L, center]
+                            vertices_top.append(d)
+                        else:
+                            if head_start == 0:
+                                alpha = int(HL*(L-dbox_end))
+                            else:
+                                alpha = int(Hl*(L-dbox_end))
                         
+                            c = [dbox_end, center - alpha]
+                            vertices_top.append(c)
+
+                            e = [dbox_end, center + alpha]
+                            vertices_bottom.append(e)
+
+                            # Points for linker. Right
+                            if r_num < len(regions)-1:
+                                # peek into the next domain region to see how
+                                # thin the linker should be here
+                                dbox_start_prime = regions[r_num+1][0]
+                                if head_start == 0:
+                                    alpha1 = HL*(L-dbox_start_prime)
+                                else:
+                                    alpha1 = Hl*(L-dbox_start_prime)
+                                lhh_prime = min(lhh, alpha1)
+                                xprime = [dbox_end, center - lhh_prime]
+                                vertices_top.append(xprime)
+
+                                yprime = [dbox_end, center + lhh_prime]
+                                vertices_bottom.append(yprime)
+                        
+                    # Case iii) trapezoid
+                    else:
+                        if head_start == 0:
+                            alpha1 = HL*(L-dbox_start)
+                        else:
+                            alpha1 = Hl*(L-dbox_start)
+
+                        # Points for linker. Left
+                        if r_num > 0:
+                            lhh_prime = min(lhh, alpha1)
+                            x = [dbox_start, center - lhh_prime]
+                            vertices_top.append(x)
+
+                            y = [dbox_start, center + lhh_prime]
+                            vertices_bottom.append(y)
+
+                        bprime = [dbox_start, center - alpha1]
+                        vertices_top.append(bprime)
+
+                        fprime = [dbox_start, center + alpha1]
+                        vertices_bottom.append(fprime)
+
+                        if dbox_end == L:
+                            d = [L, center]
+                            vertices_top.append(d)
+                        else:
+                            if head_start == 0:
+                                alpha2 = HL*(L-dbox_end)
+                            else:
+                                alpha2 = Hl*(L-dbox_end)
+
+                            c = [dbox_end, center - alpha2]
+                            vertices_top.append(c)
+
+                            e = [dbox_end, center + alpha2]
+                            vertices_bottom.append(e)
+
+                            # Points for linker. Right
+                            if r_num < len(regions)-1:
+                                # peek into the next domain region to see how
+                                # thin the linker should be here
+                                dbox_start_prime = regions[r_num+1][0]
+                                if head_start == 0:
+                                    alpha1 = HL*(L-dbox_start_prime)
+                                else:
+                                    alpha1 = Hl*(L-dbox_start_prime)
+                                lhh_prime = min(lhh, alpha1)
+                                xprime = [dbox_end, center - lhh_prime]
+                                vertices_top.append(xprime)
+
+                                yprime = [dbox_end, center + lhh_prime]
+                                vertices_bottom.append(yprime)
+
                 # ready to draw domains
-                del vertices[:]
-                vertices = vertices_top + vertices_bottom
+                vertices += vertices_top
+                vertices += list(reversed(vertices_bottom))
 
                 # Flip if needed
                 if flip:
@@ -3299,6 +3430,8 @@ class BGCProtein:
                 domain_inner_attribs = {
                     "points": " ".join(string_vertices),
                     "fill": color,
+                    "stroke": color_outline,
+                    "stroke-width": str(domain_contour_thickness),
                     "stroke-linejoin":"round"
                     }
                 domain_inner = etree.Element("polygon", attrib=domain_inner_attribs)
