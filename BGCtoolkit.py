@@ -42,7 +42,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
 from datetime import datetime
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -155,9 +155,9 @@ def CMD_parser():
         this parameter is the filename (no extension).")
     # NOTE: if we have more than one comparison method, use 
     # "choices=['rock', 'paper', 'scissors']"
-    group_svg.add_argument("--comparative", default=False, action="store_true",
-        help="If --stacked and --bgclist are used, calculate protein similarity \
-        between each pair of BGCs and represent it as connecting bands.")
+    # group_svg.add_argument("--comparative", default=False, action="store_true",
+    #     help="If --stacked and --bgclist are used, calculate protein similarity \
+    #     between each pair of BGCs and represent it as connecting bands.")
     group_svg.add_argument("--gaps", default=False, action="store_true",
         help="If --stacked is used, toggle this option to leave gaps\
         when a particular BGC or protein is not found in the input data \
@@ -375,16 +375,11 @@ def read_alias_file(alias_file: Path) -> dict:
     return external_alias
 
 
-def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollection]:
+def get_files(inputfolders: list, files: list, include: list, exclude: list, filter_bgc_prot: list) -> Tuple[BGCCollection, ProteinCollection]:
     """
     Collect all data from the input, using filters defined by user to produce
      the collection of data to work with.
     """
-
-    inputfolders = args.inputfolders
-    files = args.files
-    include = args.include
-    exclude = args.exclude
 
     # If these words are found at the beginning of the filename (which can
     # typically happen in generic antiSMASH output), append the parent folder's
@@ -528,7 +523,7 @@ def get_files(args, filter_bgc_prot:list) -> Tuple[BGCCollection, ProteinCollect
     return bgc_col, final_prot_col, gbk_files
 
 
-def predict_domains(args, hmmdbs, bgc_collection, protein_collection):
+def predict_domains(clear_domains:bool, update_domains:bool, hmmdbs: HMM_DB, bgc_collection: BGCCollection, protein_collection: ProteinCollection):
     """
     Runs domain prediction on BGCs and Proteins depending or parameters
      Note that we're using their 'attempted_domain_prediction' attribute
@@ -541,7 +536,7 @@ def predict_domains(args, hmmdbs, bgc_collection, protein_collection):
 
     # if clear_domains: clear all data first, re-predict domains
     # Notice that the protein role and type attributes are NOT cleared
-    if args.clear_domains or args.update_domains:
+    if clear_domains or update_domains:
         # Need to convert generator to list b/c we're removing items in the loop
         for bgc_id in list(bgc_collection.bgcs.keys()):
             if args.clear_domains:
@@ -1625,7 +1620,8 @@ if __name__ == "__main__":
         print(" - Excluding all BGCs with the following:")
         print("\t{}".format("\n\t".join(args.exclude)))
     
-    bgc_collection, protein_collection, gbk_files = get_files(args, filter_bgc_prot)
+    bgc_collection, protein_collection, gbk_files = get_files(args.inputfolders, \
+        args.files, args.include, args.exclude, filter_bgc_prot)
     print(" ...done")
     if len(bgc_collection) + len(protein_collection) == 0:
         sys.exit("Stop: no valid BGCs or proteins found (check filters)")
@@ -1637,7 +1633,7 @@ if __name__ == "__main__":
         print("Domain prediction stage")
         print("\tPreparing data")
 
-        predict_domains(args, hmmdbs, bgc_collection, protein_collection)
+        predict_domains(args.clear_domains, args.update_domains, hmmdbs, bgc_collection, protein_collection)
 
     if args.fungal_cbp:
         print("\tRe-annotating fungal core biosynthetic genes")
