@@ -20,9 +20,10 @@ from copy import deepcopy
 from io import StringIO
 from Bio import SearchIO
 from Bio import SeqIO
+from Bio.SeqFeature import FeatureLocation
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.3"
+__version__ = "0.7.4"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -775,6 +776,7 @@ class BGC:
             for record in records:
                 locus = BGCLocus()
                 locus.length = len(record.seq)
+                current_biosynthetic_region = FeatureLocation(locus.length+1, locus.length+2)
                 
                 cds_num = 0
 
@@ -790,6 +792,7 @@ class BGC:
                             if feature.qualifiers["contig_edge"][0] == "True":
                                 self.contig_edge = True
                                 
+                        current_biosynthetic_region = feature.location
                         continue
                     
                     # antiSMASH = 5
@@ -804,7 +807,8 @@ class BGC:
                             # there's at least one annotation
                             if feature.qualifiers["contig_edge"][0] == "True":
                                 self.contig_edge = True
-                                
+
+                        current_biosynthetic_region = feature.location
                         continue
                                 
                     if feature.type == "CDS":
@@ -868,6 +872,9 @@ class BGC:
                         protein.gene = gene
                         protein.role = role
                         protein.protein_type = protein_type
+
+                        if cds_start in current_biosynthetic_region and cds_end in current_biosynthetic_region:
+                            protein.in_biosynthetic_region = True
                         
                         # TODO: check if the 'translation' annotation is really 
                         # there. If not, try to manually translate from dna
@@ -1542,6 +1549,7 @@ class BGCProtein:
         self.product = ""           # From NCBI's GenBank annotations
         self.role = "unknown"       # e.g. [biosynthetic, transporter, tailoring, 
                                     #   resistance, unknown]. See role_colors
+        self.in_biosynthetic_region = False # From e.g. antiSMASH predictions
         
         
         # self.compound_family = ""   # Compound family e.g. "emodin-like"
@@ -2436,7 +2444,7 @@ class BGCProtein:
                 intron_elements.append(intron_element)
 
         #
-        # DRAW DOMAINS 
+        # DOMAINS 
         domain_elements = list()
         if show_domains and len(self.domain_list) > 0:
             # split each domain into dna regions
@@ -2703,14 +2711,15 @@ class BGCProtein:
                 domain_node_main.append(domain_inner)
                 domain_elements.append(domain_node_main)
 
+        # Draw intron elements
+        for intron_element in intron_elements:
+            main_group.append(intron_element)
 
-        # First draw domains...
+        # Draw domains on top
         for domain_element in domain_elements:
             main_group.append(domain_element)
 
-        # ...so that introns are in the upper layer
-        for intron_element in intron_elements:
-            main_group.append(intron_element)
+        
 
         return main_group
 
