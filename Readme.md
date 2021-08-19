@@ -1,6 +1,6 @@
 # BGC lib
 
-This is the official repository of the **Biosynthetic Gene Cluster Library**, a Python library with classes and methods that facilitates manipulation and analysis of BGCs. It is currently focused on fungal BGCs.
+This is the official repository of the **Biosynthetic Gene Cluster Library**, a Python library with classes and methods that facilitates manipulation and analysis of BGCs.
 
 For more information on BGClib, see [here](./BGClib/Readme.md).
 
@@ -8,16 +8,33 @@ For more information on BGClib, see [here](./BGClib/Readme.md).
 
 # BGC Toolkit
 
-This companion script harnesses the capabilities of BGClib to ease the processing of certain BGC data.
+## What is it
+
+It is a tool to facilitate domain annotation of protein data from GenBank and fasta files. For this, it harnesses the capabilities of BGClib
 
 ## Features overview
 
+What can it do:
+
+* Extract protein sequences annotated with requested domains
+* Extract the subsequence of requested domains
+* Generate high quality SVG files
+
+Additionally, if working with biosynthetic gene clusters you can:
+
+* Use antiSMASH results as input to label proteins as **core biosynthetic proteins** (CBPs)
+* Extract protein (sub)sequences of CBPs
+* Print metadata of the files per BGC and CBP (e.g. protein id, CBP content, internal CBP identifiers)
+        
+And finally, if you're working with fungal biosynthetic gene clusters in particular, you also can:
+
+* Classify CBPs into more specific types using included hmm models (e.g. non-reducing PKS)
+
+Other features:
+
 * GenBank and binary [^1] input 
 * Input filters (default values tailored for antiSMASH output)
-* Domain prediction with the possibility of combining several hmm libraries.
-* Classify (fungal) core biosynthetic proteins. Distinguish between reducing and non-reducing PKS, NRPS/PKS and PKS/NRPS hybrids etc. (uses included hmm models, mostly from Pfam)
-* High quality SVG figures (see examples below)
-* Extract amino acid sequences of core biosynthetic proteins (and subsequences of A, C and KS domains)
+* Domain annotation using several hmm libraries.
 * Save as binary files [^1]
 
 [^1]: Currently uses Python's Pickle module for serialization of `BGC` or `BGCCollection` objects from BGClib
