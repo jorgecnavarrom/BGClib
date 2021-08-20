@@ -42,7 +42,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
 from datetime import datetime
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -92,12 +92,12 @@ def CMD_parser():
         the final SVG figure. Any extra columns or rows starting with the '#' \
         character will be ignored.", type=Path)   
         
-    group_processing = parser.add_argument_group("Annotation options")
+    group_processing = parser.add_argument_group("Domain annotation options")
     group_processing.add_argument("--hmms", nargs='*', help="List of paths to \
         .hmm file(s). This will also enable internal hmm models (use without \
         arguments to only use internal models).")
-    group_processing.add_argument("--update_domains", help="Use domain prediction \
-        on input, even if they were marked as already having domain prediction. \
+    group_processing.add_argument("--update_domains", help="Annotate domains, \
+        even if input already has annotations. \
         If new and old hits overlap, only the best-scoring hit will be kept.", \
         default=False, action="store_true")
     group_processing.add_argument("--clear_domains", help="Clean all domain data \
@@ -122,6 +122,7 @@ def CMD_parser():
         help="Try to fix successive domains of the same type that have been \
         split. This could be useful for phylogenetic analysis but will not \
         fix incorrect gene predictions. Use with care.")
+    # TODO:
     # group_post_proc.add_argument("--jsonfolders", nargs='+', type=Path, \
     #     help="Use MIBiG-style JSON files to annotate metadata (organism, \
     #     metabolites, literature)")
@@ -143,10 +144,10 @@ def CMD_parser():
 
     group_svg.add_argument("--svg", default=False, 
         action="store_true", help="Toggle to enable SVG output for each BGC.")
-    group_svg.add_argument("--svgcfg", type=Path,
-        default=(Path(__file__).parent/"SVG_arrow_options.cfg"),
-        help="Configuration file with SVG style. Default: \
-        'SVG_arrow_options.cfg'")
+    default_svg_cfg = Path(__file__).parent/"SVG_arrow_options.cfg"
+    group_svg.add_argument("--svgcfg", type=Path, default=default_svg_cfg,
+        help=f"Configuration file with SVG style. Default: \
+        '{default_svg_cfg}'")
     group_svg.add_argument("-m", "--mirror", default=False, 
         action="store_true", help="Toggle to mirror each BGC figure. Ignored \
         with --stacked or --bgclist")
@@ -1615,10 +1616,10 @@ if __name__ == "__main__":
     print("\nCollecting data and filtering")
     if len(args.include) > 0:
         print(" - Including only BGCs with the following:")
-        print(f"\t{'\n\t'.join(args.include)}")
+        print("\t{}".format('\n\t'.join(args.include)))
     if len(args.exclude) > 0:
         print(" - Excluding all BGCs with the following:")
-        print(f"\t{'\n\t'.join(args.exclude)}")
+        print("\t{}".format('\n\t'.join(args.exclude)))
     
     bgc_collection, protein_collection, gbk_files = get_files(args.inputfolders, \
         args.files, args.include, args.exclude, filter_bgc_prot)
