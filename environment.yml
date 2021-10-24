@@ -4,6 +4,6 @@ channels:
 dependencies:
   - python=3.8
   - hmmer
-  - biopython
+  - biopython=1.77
   - pylint
   - lxml
