@@ -1043,7 +1043,7 @@ class BGC:
                 gene_start = gene_start / svg_options.scaling
                 gene_position = gene_start-intron_offset
                 if mirror:
-                    if svg_options.intron_regions:
+                    if svg_options.show_introns:
                         gene_length = (protein.cds_regions[-1][1] - protein.cds_regions[0][0] - 3)/svg_options.scaling
                     else:
                         gene_length = (protein.length*3)/svg_options.scaling
@@ -2182,7 +2182,7 @@ class BGCProtein:
         
         # length of the SVG figure
         L = self.length*3/svg_options.scaling
-        if svg_options.intron_regions:
+        if svg_options.show_introns:
             L = (self.cds_regions[-1][1] - self.cds_regions[0][0])/svg_options.scaling
         
         # main node
