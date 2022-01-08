@@ -10,14 +10,14 @@ For more information on BGClib, see [here](./BGClib/Readme.md).
 
 ## What is it
 
-It is a tool to facilitate domain annotation of protein data from GenBank and fasta files. For this, it harnesses the capabilities of BGClib
+It is a tool that facilitates domain annotation of protein data from GenBank and fasta files. For this, it harnesses the capabilities of BGClib
 
 ## Features overview
 
 What can it do:
 
-* Extract protein sequences annotated with requested domains
-* Extract the subsequence of requested domains
+* ~~Extract protein sequences annotated with requested domains~~
+* ~~Extract the subsequence of requested domains~~
 * Generate high quality SVG files
 
 Additionally, if working with biosynthetic gene clusters you can:
@@ -32,9 +32,9 @@ And finally, if you're working with fungal biosynthetic gene clusters in particu
 
 Other features:
 
-* GenBank and binary [^1] input 
-* Input filters (default values tailored for antiSMASH output)
-* Domain annotation using several hmm libraries.
+* GenBank, fasta and binary [^1] input 
+* Input filters (default values tailored for antiSMASH output; based on file/BGC name)
+* Domain annotation using custom hmm libraries.
 * Save as binary files [^1]
 
 [^1]: Currently uses Python's Pickle module for serialization of `BGC` or `BGCCollection` objects from BGClib
@@ -93,12 +93,10 @@ It's a bit messy but we can define an order and align according to a specific ge
 
 ![cercosporin_stacked_algn](examples/output/cercosporin/cercosporin_MIBiG.svg "cercosporin aligned. color_mode=white")
 
-Neat.
-
 Finally, let's use three mycophenolic acid BGCs from MIBiG 2.0 with domain annotation (using version 33 of [Pfam](https://pfam.xfam.org/)):
 
 ```
-./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic\ acid/ --include --outputfolder examples/output/mycophenolic\ acid/ --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG.tsv --stacked mycophenolic_acid_MIBiG --hmm ~/Databases/pfam/33/Pfam-A.hmm
+./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic_acid/ --include --outputfolder examples/output/mycophenolic\ acid/ --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG.tsv --stacked mycophenolic_acid_MIBiG --hmm ~/Databases/pfam/33/Pfam-A.hmm
 ```
 
 ![mycophenolic_stacked_algn](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=white")
@@ -108,7 +106,7 @@ There is some questionable gene calling going on.
 Now with an alternative alignment to the genes encoding proteins containing domain DUF2236. We'll use a different file
 
 ```
-./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic\ acid/ --include --outputfolder examples/output/mycophenolic\ acid/ --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG_DUF2236.tsv --stacked mycophenolic_acid_MIBiG_DUF2236 --hmm ~/Databases/pfam/33/Pfam-A.hmm
+./BGCtoolkit.py --inputfolder ./examples/data/mycophenolic_acid/ --include --outputfolder examples/output/mycophenolic\ acid/ --svg --bgclist ./examples/data/mycophenolic\ acid/mycophenolic_acid_MIBiG_DUF2236.tsv --stacked mycophenolic_acid_MIBiG_DUF2236 --hmm ~/Databases/pfam/33/Pfam-A.hmm
 ```
 
 ![mycophenolic_stacked_algn2](examples/output/mycophenolic acid/mycophenolic_acid_MIBiG_DUF2236.svg "mycophenolic aligned v2. color_mode=white")
@@ -117,7 +115,7 @@ Domain colors are already defined (originally generated randomly) but you can ch
 
 Playing with the style file, `color_mode=domains` + `outline=False` will produce:
 
-![mycophenolic_stacked_algn2](examples/output/mycophenolic acid/alt_style/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=domains; outline=False")
+![mycophenolic_stacked_algn2](examples/output/mycophenolic_acid/alt_style/mycophenolic_acid_MIBiG.svg "mycophenolic aligned. color_mode=domains; outline=False")
 
 where the color of the arrows takes the color of the first domain (core biosynthetic genes will have their own pre-defined colors). Some of these options are experimental and will probably change in the future.
 
