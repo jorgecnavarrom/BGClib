@@ -74,10 +74,10 @@ Metadata at CBP level ([CBP Metadata](examples/AfumigatusAf293.metadata.CBPs.tsv
 
 | BGC | Core Biosynthetic Protein type | Protein identifier | Protein Id | Gene Id | Domain architecture |
 | --- | ------------------------------ | ------------------ | ---------- | ------- | ------------------- |
-| CM000169.1.region001 | rPKS | CM000169.1.region001~L0+CDS7 | EAL87813.1 | | `KS | KS_C | KS_Ce | AT | DH | CMeT | KR | T/ACP >` |
-|CM000169.1.region002 |NRPS | CM000169.1.region002~L0+CDS8 | EAL90366.1 | | `A | T/ACP | C | C | A | C | A | T/ACP | C | A | T/ACP | C | C | T/ACP | C | T/ACP >` |
-| CM000169.1.region004 | NRPS-like | CM000169.1.region004~L0+CDS5 | EAL90832.1 | | `DMAP_binding | A | A >` |
-| CM000169.1.region005 | NRPS-like | CM000169.1.region005~L0+CDS9 | EAL91049.1 | | `A | A_C >` |
+| CM000169.1.region001 | rPKS | CM000169.1.region001~L0+CDS7 | EAL87813.1 | | `KS \| KS_C \| KS_Ce \| AT \| DH \| CMeT \| KR \| T/ACP >` |
+|CM000169.1.region002 |NRPS | CM000169.1.region002~L0+CDS8 | EAL90366.1 | | `A \| T/ACP \| C \| C \| A \| C \| A \| T/ACP \| C \| A \| T/ACP \| C \| C \| T/ACP \| C \| T/ACP >` |
+| CM000169.1.region004 | NRPS-like | CM000169.1.region004~L0+CDS5 | EAL90832.1 | | `DMAP_binding \| A \| A >` |
+| CM000169.1.region005 | NRPS-like | CM000169.1.region005~L0+CDS9 | EAL91049.1 | | `A \| A_C >` |
 
 ## Summary
 
