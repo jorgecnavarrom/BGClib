@@ -60,12 +60,15 @@ BGGtoolkit can produce metadata from all the input files, such as:
 
 * [BGC Metadata](examples/AfumigatusAf293.metadata.BGCs.tsv):
 
+| BGC | antiSMASH products | Core Biosynthetic Protein content | Core Biosynthetic Protein IDs | Core Biosynthetic Protein Identifiers | Metabolites |
+| --- | ------------------ | --------------------------------- | ----------------------------- | ------------------------------------- | ----------- |
+| CM000169.1.region001 | T1PKS | rPKS | EAL87813.1 | CM000169.1.region001~L0+CDS7 |
+| CM000169.1.region002 | NRPS | NRPS | EAL90366.1 | CM000169.1.region002~L0+CDS8 |
+| CM000169.1.region003 | terpene |  |  |  |
+| CM000169.1.region004 | betalactone | NRPS-like | EAL90832.1 | CM000169.1.region004~L0+CDS5 |
+
 
 * [CBP Metadata](examples/AfumigatusAf293.metadata.CBPs.tsv):
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
 
 | BGC | Core Biosynthetic Protein type | Protein identifier | Protein Id | Gene Id | Domain architecture |
 | --- | ------------------------------ | ------------------ | ---------- | ------- | ------------------- |
