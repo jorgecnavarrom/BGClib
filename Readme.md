@@ -58,21 +58,41 @@ A quick overview of results using the [example output](https://fungismash.second
 
 BGGtoolkit can produce metadata from all the input files, such as:
 
-* Metadata at BGC level
+* [BGC Metadata](examples/AfumigatusAf293.metadata.BGCs.tsv):
 
-![Metadata BGC](examples/AfumigatusAf293.metadata.BGCs.tsv)
 
-* Metadata at core biosynthetic protein (CBP) level
+* [CBP Metadata](examples/AfumigatusAf293.metadata.CBPs.tsv):
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
-![Metadata CBP](examples/AfumigatusAf293.metadata.CBPs.tsv)
+| BGC | Core Biosynthetic Protein type | Protein identifier | Protein Id | Gene Id | Domain architecture |
+| --- | ------------------------------ | ------------------ | ---------- | ------- | ------------------- |
+| CM000169.1.region001 | rPKS | CM000169.1.region001~L0+CDS7 | EAL87813.1 | | `KS | KS_C | KS_Ce | AT | DH | CMeT | KR | T/ACP >` |
+|CM000169.1.region002 |NRPS | CM000169.1.region002~L0+CDS8 | EAL90366.1 | | `A | T/ACP | C | C | A | C | A | T/ACP | C | A | T/ACP | C | C | T/ACP | C | T/ACP >` |
+| CM000169.1.region004 | NRPS-like | CM000169.1.region004~L0+CDS5 | EAL90832.1 | | `DMAP_binding | A | A >` |
+| CM000169.1.region005 | NRPS-like | CM000169.1.region005~L0+CDS9 | EAL91049.1 | | `A | A_C >` |
 
-* And a summary of all the regions found, and their CBP compositions
+* And a [summary](examples/AfumigatusAf293.metadata.summary.txt) of all the regions found, and their CBP compositions:
 
-![Summary](examples/AfumigatusAf293.metadata.summary.txt)
+```
+AfumigatusAf293 summary file
+
+This collection contains
+* 37 BGCs
+* 0 Proteins
+
+Core Biosynthetic Composition count (BGCs):
+7       NRPS
+6       NRPS-like
+5       rPKS
+...
+```
 
 fungiSMASH results report an 80% similarity between region `CM000175.1.region001` and neosartoricin (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry, bottom, `CM000175.1.region001`):
 
 ![neosartoricin](examples/neosartoricin_gcf.svg)
 
-
+Where colored boxes represent genomic regions that will code for predicted domains. Introns are drawn by default.
 
