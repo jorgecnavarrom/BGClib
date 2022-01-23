@@ -93,9 +93,31 @@ Core Biosynthetic Composition count (BGCs):
 ...
 ```
 
-fungiSMASH results report a 80% similarity between region `CM000175.1.region001` and neosartoricin B (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry; bottom, `CM000175.1.region001`):
+* fungiSMASH results report a 80% similarity between region `CM000175.1.region001` and neosartoricin B (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry; bottom, `CM000175.1.region001`):
 
 ![neosartoricin](examples/neosartoricin_gcf.svg)
 
 Here, colored boxes represent genomic regions that will code for predicted domains. Introns are drawn by default.
+
+* Finally, the [sequences](examples/all_KS_domains.fasta) of all detected KS domains (and their [metadata](examples/all_KS_domains.fasta.metadata.tsv)) can be extracted:
+
+```
+>CM000170.1.region002~L0+CDS9_KS1 ProteinId:EAL94057.1 GeneId:
+SKIAIIGMSGRFPEADGIEAFWDLLYKGLDVHKKVPPERWDVDAHVDLTGTKRNTSKVPYGCWINEPGLFDARFFNMSPR
+EALQADPAQRLALLSAYEALEMAGFVPNSSPSTQRDRVGIFMGMTSDDYREINSGQDIDTYFIPGGNRAFTPGRINYYFK
+FSGPSVSVDTACSSSLAAIHLACNAIWRNDCDTAISGGVNLLTNPDNHAGLDRGHFLSRTGNCNTFDDGADGYCRADGVG
+TIVLKRLEDA
+>CM000169.1.region006~L0+CDS6_KS1 ProteinId:EAL91103.2 GeneId:
+PFNLDRFYHPTGSHHGTTNIRQAYLLSEDVRAFDAKFFSVPPGDAEAIDPQQRLLLEVTYEALESSGHTLADLSNSNTGA
+FVGLMSQDYFALNGQDVDSVPTYAASGTAASNASSRLSYFFNWHGPSMAIDTACSSNLVAVNEAVQALRNGTSRVAVACG
+TNLCLSAFTFITLSKLSMLSPTSRCHMWDADADGYARGEGVACVVLKTLSDA
+>CM000171.1.region002~L0+CDS2_KS1 ProteinId:EAL86536.1 GeneId:
+PIAVVGMGMRLPGGVRTVDDFWDALISQKDCSSEVPQTRYNIDAFYHPDKPQSVRTRRGYFLEDDCLQKADTNFLQWIPG
+FSTSELDPQQRLLLEVIWECMENAGQTGWRGKDIGCYVGVFGEDWHELTAKESQMIPRTHAFANGGFALSNRVSFEFDLK
+GPSLTIATACSSSLSALHEACQALQTGSCSSAIVAGTNMLLTPSMSVTMSENMVLSPDGLCKTFDADANGYARGEAVNAV
+YIKTLDKA
+...
+```
+
+This can be useful for making phylogenetic studies of the CBPs (sub)sequences, which can include characterized data (e.g. from MIBiG) in order to to study evolution and de-replicate BGCs for prioritization.
 
