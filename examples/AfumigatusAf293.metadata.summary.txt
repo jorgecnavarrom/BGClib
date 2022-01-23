@@ -1,0 +1,22 @@
+AfumigatusAf293 summary file
+
+This collection contains
+* 37 BGCs
+* 0 Proteins
+
+Core Biosynthetic Composition count (BGCs):
+7	NRPS
+6	NRPS-like
+5	rPKS
+4	Triterpene_synthase
+3	nrPKS
+2	NRPS, NRPS-like
+2	DMATS, NRPS
+1	nrPKS, other_PKS
+1	Meroterpenoid_synthase, UbiA-type_terpene, nrPKS
+1	DMATS
+1	Meroterpenoid_synthase, NRPS-like, UbiA-type_terpene, rPKS
+1	Squalene_synthase
+1	DMATS, nrPKS
+1	DMATS, NRPS-like, PKS-NRPS_hybrid, UbiA-type_terpene, rPKS
+1	Other

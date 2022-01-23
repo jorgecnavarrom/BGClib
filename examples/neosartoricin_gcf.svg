@@ -1,0 +1,225 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" width="2280" height="166">
+  <g>
+    <title>BGC0001144.1.region001</title>
+    <line x1="519" y1="40" x2="1279" y2="40" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>BGC0001144.1.region001~L0+CDS1 [EGD99348.1]
+nrPKS</title>
+      <polygon class="exon" points="1000.15,20.0 1240.05,20.0 1240.05,0 1280.05,40.0 1240.05,80.0 1240.05,60.0 1000.15,60.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1016.35,60.0 1016.35,20.0 1019.95,20.0 1019.95,60.0"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1075.55,60.0 1075.55,20.0 1078.3,20.0 1078.3,60.0"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1211.85,60.0 1211.85,20.0 1214.8,20.0 1214.8,60.0"/>
+      <g class="domain,SAT">
+        <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
+ PF16073.8 - SAT</title>
+        <polygon points="1004.2,23.0 1016.35,23.0 1016.35,35.0 1019.95,35.0 1019.95,23.0 1042.4,23.0 1042.4,57.0 1019.95,57.0 1019.95,45.0 1016.35,45.0 1016.35,57.0 1004.2,57.0" fill="#4d73b7" stroke="#3e5c92" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,ketoacyl-synt">
+        <title>Beta-ketoacyl synthase, N-terminal domain [KS]
+ PF00109.29 - ketoacyl-synt</title>
+        <polygon points="1063.4,23.0 1075.55,23.0 1075.55,35.0 1078.3,35.0 1078.3,23.0 1103.9,23.0 1103.9,57.0 1078.3,57.0 1078.3,45.0 1075.55,45.0 1075.55,57.0 1063.4,57.0" fill="#7074e4" stroke="#5a5db6" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,Ketoacyl-synt_C">
+        <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
+ PF02801.25 - Ketoacyl-synt_C</title>
+        <polygon points="1104.8,23.0 1123.1,23.0 1123.1,57.0 1104.8,57.0" fill="#d74e66" stroke="#ac3e52" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,KAsynt_C_assoc">
+        <title>Ketoacyl-synthetase C-terminal extension [KS_Ce]
+ PF16197.8 - KAsynt_C_assoc</title>
+        <polygon points="1124.6,23.0 1140.5,23.0 1140.5,57.0 1124.6,57.0" fill="#f096ac" stroke="#c0788a" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,Acyl_transf_1">
+        <title>Acyl transferase domain [AT]
+ PF00698.24 - Acyl_transf_1</title>
+        <polygon points="1146.8,23.0 1192.1,23.0 1192.1,57.0 1146.8,57.0" fill="#3bb0d1" stroke="#2f8da7" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,TIGR04532">
+        <title>PT_fungal_PKS: polyketide product template domain [PT]
+ TIGR04532 - TIGR04532</title>
+        <polygon points="1204.85,23.0 1211.85,23.0 1211.85,35.0 1214.8,35.0 1214.8,23.0 1256.05,23.0 1256.05,57.0 1214.8,57.0 1214.8,45.0 1211.85,45.0 1211.85,57.0 1204.85,57.0" fill="#388151" stroke="#2d6741" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,PP-binding">
+        <title>Phosphopantetheine attachment site [T/ACP]
+ PF00550.28 - PP-binding</title>
+        <polygon points="1270.0,29.95 1279.6,39.55 1279.6,40.45 1270.0,50.05" fill="#67bf58" stroke="#529946" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>BGC0001144.1.region001~L0+CDS2 [EGD99349.1]
+DMATS</title>
+      <polygon class="exon" points="983.9,20.0 958.35,20.0 958.35,0 918.35,40.0 958.35,80.0 958.35,60.0 983.9,60.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <g class="domain,Trp_DMAT">
+        <title>Tryptophan dimethylallyltransferase [DMAT]
+ PF11991.11 - Trp_DMAT</title>
+        <polygon points="981.05,23.0 935.35,23.0 927.5,31.0 927.5,49.0 935.35,57.0 981.05,57.0" fill="#c5c55d" stroke="#9e9e4a" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>BGC0001144.1.region001~L0+CDS3 [EGD99350.1]</title>
+      <polygon class="exon" points="800.95,20.0 774.9,20.0 774.9,0 734.9,40.0 774.9,80.0 774.9,60.0 800.95,60.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="775.05,60.0 775.05,20.0 774.9,20.0 774.9,0.0 771.05,3.85 771.05,76.15 774.9,80.0 774.9,60.0"/>
+      <g class="domain,FAD_binding_3">
+        <title>FAD binding domain
+ PF01494.22 - FAD_binding_3</title>
+        <polygon points="800.05,23.0 775.05,23.0 775.05,35.0 771.0,35.0 771.0,23.0 751.9,23.0 742.95,32.0 742.95,48.0 751.9,57.0 771.0,57.0 771.0,45.0 775.05,45.0 775.05,57.0 800.05,57.0" fill="#b6af3b" stroke="#928c2f" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>BGC0001144.1.region001~L0+CDS4 [EGD99351.1]</title>
+      <polygon class="exon" points="674.4,20.0 687.5,20.0 687.5,0 727.5,40.0 687.5,80.0 687.5,60.0 674.4,60.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="686.3,60.0 686.3,20.0 687.5,20.0 687.5,0.0 689.55,2.05 689.55,77.95 687.5,80.0 687.5,60.0"/>
+      <g class="domain,Lactamase_B">
+        <title>Metallo-beta-lactamase superfamily
+ PF00753.30 - Lactamase_B</title>
+        <polygon points="683.25,23.0 686.3,23.0 686.3,35.0 689.55,35.0 689.55,23.0 710.3,23.0 710.3,57.0 689.55,57.0 689.55,45.0 686.3,45.0 686.3,57.0 683.25,57.0" fill="#cec660" stroke="#a59e4d" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>BGC0001144.1.region001~L0+CDS5 [EGD99352.1]</title>
+      <polygon class="exon" points="520.0,20.0 592.05,20.0 592.05,0 632.05,40.0 592.05,80.0 592.05,60.0 520.0,60.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="537.0,60.0 537.0,20.0 540.85,20.0 540.85,60.0"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="565.8,60.0 565.8,20.0 567.1,20.0 567.1,60.0"/>
+      <g class="domain,Zn_clus">
+        <title>Fungal Zn(2)-Cys(6) binuclear cluster domain
+ PF00172.21 - Zn_clus</title>
+        <polygon points="522.25,23.0 527.05,23.0 527.05,57.0 522.25,57.0" fill="#79b24c" stroke="#618e3d" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <title>CM000175.1.region001</title>
+    <line x1="0" y1="122" x2="2278" y2="122" stroke="#464646" stroke-width="3"/>
+    <g>
+      <title>CM000175.1.region001~L0+CDS1 [EAL84879.1]</title>
+      <polygon class="exon" points="2012.3,102.0 2042.8,102.0 2042.8,82 2082.8,122.0 2042.8,162.0 2042.8,142.0 2012.3,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <g class="domain,LIP">
+        <title>Secretory lipase
+ PF03583.17 - LIP</title>
+        <polygon points="2036.15,105.0 2065.8,105.0 2076.35,116.0 2076.35,128.0 2065.8,139.0 2036.15,139.0" fill="#c53b87" stroke="#9e2f6c" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS2 [EAL84878.1]</title>
+      <polygon class="exon" points="1637.95,102.0 1650.0,102.0 1650.0,82 1690.0,122.0 1650.0,162.0 1650.0,142.0 1637.95,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1648.5,142.0 1648.5,102.0 1650.0,102.0 1650.0,82.0 1650.85,82.85 1650.85,161.15 1650.0,162.0 1650.0,142.0"/>
+      <g class="domain,Lactamase_B">
+        <title>Metallo-beta-lactamase superfamily
+ PF00753.30 - Lactamase_B</title>
+        <polygon points="1645.45,105.0 1648.5,105.0 1648.5,117.0 1650.85,117.0 1650.85,105.0 1670.25,105.0 1670.25,139.0 1650.85,139.0 1650.85,127.0 1648.5,127.0 1648.5,139.0 1645.45,139.0" fill="#cec660" stroke="#a59e4d" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS3 [EAL84877.1]</title>
+      <polygon class="exon" points="1485.0,102.0 1568.6,102.0 1568.6,82 1608.6,122.0 1568.6,162.0 1568.6,142.0 1485.0,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1513.4,142.0 1513.4,102.0 1516.95,102.0 1516.95,142.0"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1541.9,142.0 1541.9,102.0 1545.6,102.0 1545.6,142.0"/>
+      <g class="domain,Zn_clus">
+        <title>Fungal Zn(2)-Cys(6) binuclear cluster domain
+ PF00172.21 - Zn_clus</title>
+        <polygon points="1487.25,105.0 1491.75,105.0 1491.75,139.0 1487.25,139.0" fill="#79b24c" stroke="#618e3d" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,Fungal_trans">
+        <title>Fungal specific transcription factor domain
+ PF04082.21 - Fungal_trans</title>
+        <polygon points="1526.3,105.0 1541.9,105.0 1541.9,117.0 1545.6,117.0 1545.6,105.0 1558.15,105.0 1558.15,139.0 1545.6,139.0 1545.6,127.0 1541.9,127.0 1541.9,139.0 1526.3,139.0" fill="#33acc8" stroke="#298aa0" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS4 [EAL84876.1]</title>
+      <polygon class="exon" points="1331.2,102.0 1355.2,102.0 1355.2,82 1395.2,122.0 1355.2,162.0 1355.2,142.0 1331.2,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1357.1,160.1 1357.1,83.9 1359.7,86.5 1359.7,157.5"/>
+      <g class="domain,FAD_binding_3">
+        <title>FAD binding domain
+ PF01494.22 - FAD_binding_3</title>
+        <polygon points="1355.5,105.0 1357.1,105.0 1357.1,117.0 1359.7,117.0 1359.7,105.0 1378.2,105.0 1390.15,117.0 1390.15,127.0 1378.2,139.0 1359.7,139.0 1359.7,127.0 1357.1,127.0 1357.1,139.0 1355.5,139.0" fill="#b6af3b" stroke="#928c2f" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS5 [EAL84875.1]
+nrPKS</title>
+      <polygon class="exon" points="1000.15,102.0 1238.8,102.0 1238.8,82 1278.8,122.0 1238.8,162.0 1238.8,142.0 1000.15,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1015.6,142.0 1015.6,102.0 1018.3,102.0 1018.3,142.0"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1073.6,142.0 1073.6,102.0 1076.35,102.0 1076.35,142.0"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="1209.75,142.0 1209.75,102.0 1213.55,102.0 1213.55,142.0"/>
+      <g class="domain,SAT">
+        <title>Starter unit:ACP transacylase in aflatoxin biosynthesis [SAT]
+ PF16073.8 - SAT</title>
+        <polygon points="1002.55,105.0 1015.6,105.0 1015.6,117.0 1018.3,117.0 1018.3,105.0 1040.75,105.0 1040.75,139.0 1018.3,139.0 1018.3,127.0 1015.6,127.0 1015.6,139.0 1002.55,139.0" fill="#4d73b7" stroke="#3e5c92" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,ketoacyl-synt">
+        <title>Beta-ketoacyl synthase, N-terminal domain [KS]
+ PF00109.29 - ketoacyl-synt</title>
+        <polygon points="1061.45,105.0 1073.6,105.0 1073.6,117.0 1076.35,117.0 1076.35,105.0 1101.95,105.0 1101.95,139.0 1076.35,139.0 1076.35,127.0 1073.6,127.0 1073.6,139.0 1061.45,139.0" fill="#7074e4" stroke="#5a5db6" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,Ketoacyl-synt_C">
+        <title>Beta-ketoacyl synthase, C-terminal domain [KS_C]
+ PF02801.25 - Ketoacyl-synt_C</title>
+        <polygon points="1102.85,105.0 1121.15,105.0 1121.15,139.0 1102.85,139.0" fill="#d74e66" stroke="#ac3e52" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,KAsynt_C_assoc">
+        <title>Ketoacyl-synthetase C-terminal extension [KS_Ce]
+ PF16197.8 - KAsynt_C_assoc</title>
+        <polygon points="1122.65,105.0 1138.55,105.0 1138.55,139.0 1122.65,139.0" fill="#f096ac" stroke="#c0788a" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,Acyl_transf_1">
+        <title>Acyl transferase domain [AT]
+ PF00698.24 - Acyl_transf_1</title>
+        <polygon points="1144.85,105.0 1193.3,105.0 1193.3,139.0 1144.85,139.0" fill="#3bb0d1" stroke="#2f8da7" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,TIGR04532">
+        <title>PT_fungal_PKS: polyketide product template domain [PT]
+ TIGR04532 - TIGR04532</title>
+        <polygon points="1202.75,105.0 1209.75,105.0 1209.75,117.0 1213.55,117.0 1213.55,105.0 1254.8,105.0 1254.8,139.0 1213.55,139.0 1213.55,127.0 1209.75,127.0 1209.75,139.0 1202.75,139.0" fill="#388151" stroke="#2d6741" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+      <g class="domain,PP-binding">
+        <title>Phosphopantetheine attachment site [T/ACP]
+ PF00550.28 - PP-binding</title>
+        <polygon points="1268.9,112.1 1278.35,121.55 1278.35,122.45 1268.9,131.9" fill="#67bf58" stroke="#529946" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS6 [EAL84874.1]
+DMATS</title>
+      <polygon class="exon" points="976.1,102.0 948.0,102.0 948.0,82 908.0,122.0 948.0,162.0 948.0,142.0 976.1,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <g class="domain,Trp_DMAT">
+        <title>Tryptophan dimethylallyltransferase [DMAT]
+ PF11991.11 - Trp_DMAT</title>
+        <polygon points="970.85,105.0 925.0,105.0 917.9,113.0 917.9,131.0 925.0,139.0 970.85,139.0" fill="#c5c55d" stroke="#9e9e4a" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS7 [EAL84873.1]</title>
+      <polygon class="exon" points="830.8,102.0 838.2,102.0 838.2,82 878.2,122.0 838.2,162.0 838.2,142.0 830.8,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <g class="domain,Epimerase">
+        <title>NAD dependent epimerase/dehydratase family
+ PF01370.24 - Epimerase</title>
+        <polygon points="831.1,105.0 861.2,105.0 863.35,108.0 863.35,136.0 861.2,139.0 831.1,139.0" fill="#6266d6" stroke="#4e52ab" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS8 [EAL84872.1]</title>
+      <polygon class="exon" points="755.55,102.0 771.5,102.0 771.5,82 811.5,122.0 771.5,162.0 771.5,142.0 755.55,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="764.75,142.0 764.75,102.0 771.5,102.0 771.5,82.0 801.3,111.8 801.3,132.2 771.5,162.0 771.5,142.0"/>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS9 [EAL84871.1]</title>
+      <polygon class="exon" points="622.5,102.0 603.4,102.0 603.4,82 563.4,122.0 603.4,162.0 603.4,142.0 622.5,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <g class="domain,Transferase">
+        <title>Transferase family
+ PF02458.18 - Transferase</title>
+        <polygon points="597.45,105.0 580.4,105.0 574.8,111.0 574.8,133.0 580.4,139.0 597.45,139.0" fill="#3975be" stroke="#2e5e98" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g>
+      <title>CM000175.1.region001~L0+CDS10 [EAL84870.1]</title>
+      <polygon class="exon" points="108.2,102.0 167.65,102.0 167.65,82 207.65,122.0 167.65,162.0 167.65,142.0 108.2,142.0" fill="#ffffff" stroke-width="2" stroke="#0a0a0a"/>
+      <polygon stroke-width="2" stroke-opacity="0.8" class="intron" fill="#d8d8d8" fill-opacity="0.5" stroke="#919191" points="117.65,142.0 117.65,102.0 122.55,102.0 122.55,142.0"/>
+      <g class="domain,Zn_clus">
+        <title>Fungal Zn(2)-Cys(6) binuclear cluster domain
+ PF00172.21 - Zn_clus</title>
+        <polygon points="111.95,105.0 117.05,105.0 117.05,139.0 111.95,139.0" fill="#79b24c" stroke="#618e3d" stroke-width="1" stroke-linejoin="round"/>
+      </g>
+    </g>
+  </g>
+</svg>
