@@ -58,7 +58,9 @@ A quick overview of results using the [example output](https://fungismash.second
 
 BGGtoolkit can produce metadata from all the input files, such as:
 
-* [BGC Metadata](examples/AfumigatusAf293.metadata.BGCs.tsv):
+## BGC metadata
+
+Metadata at BGC level ([BGC Metadata](examples/AfumigatusAf293.metadata.BGCs.tsv)):
 
 | BGC | antiSMASH products | Core Biosynthetic Protein content | Core Biosynthetic Protein IDs | Core Biosynthetic Protein Identifiers | Metabolites |
 | --- | ------------------ | --------------------------------- | ----------------------------- | ------------------------------------- | ----------- |
@@ -68,7 +70,9 @@ BGGtoolkit can produce metadata from all the input files, such as:
 | CM000169.1.region004 | betalactone | NRPS-like | EAL90832.1 | CM000169.1.region004~L0+CDS5 |
 
 
-* [CBP Metadata](examples/AfumigatusAf293.metadata.CBPs.tsv):
+## CBP metadata
+
+Metadata at CBP level ([CBP Metadata](examples/AfumigatusAf293.metadata.CBPs.tsv)):
 
 | BGC | Core Biosynthetic Protein type | Protein identifier | Protein Id | Gene Id | Domain architecture |
 | --- | ------------------------------ | ------------------ | ---------- | ------- | ------------------- |
@@ -77,7 +81,9 @@ BGGtoolkit can produce metadata from all the input files, such as:
 | CM000169.1.region004 | NRPS-like | CM000169.1.region004~L0+CDS5 | EAL90832.1 | | `DMAP_binding | A | A >` |
 | CM000169.1.region005 | NRPS-like | CM000169.1.region005~L0+CDS9 | EAL91049.1 | | `A | A_C >` |
 
-* And a [summary](examples/AfumigatusAf293.metadata.summary.txt) of all the regions found, and their CBP compositions:
+## Summary
+
+Also, a [summary](examples/AfumigatusAf293.metadata.summary.txt) of all the regions found, and their CBP compositions:
 
 ```
 AfumigatusAf293 summary file
@@ -93,13 +99,17 @@ Core Biosynthetic Composition count (BGCs):
 ...
 ```
 
-* fungiSMASH results report a 80% similarity between region `CM000175.1.region001` and neosartoricin B (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry; bottom, `CM000175.1.region001`):
+## SVG Figures
+
+fungiSMASH results report a 80% similarity between region `CM000175.1.region001` and neosartoricin B (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry; bottom, `CM000175.1.region001`):
 
 ![neosartoricin](examples/neosartoricin_gcf.svg)
 
 Here, colored boxes represent genomic regions that will code for predicted domains. Introns are drawn by default.
 
-* Finally, the [sequences](examples/all_KS_domains.fasta) of all detected KS domains (and their [metadata](examples/all_KS_domains.fasta.metadata.tsv)) can be extracted:
+## Sequences
+
+Finally, the [sequences](examples/all_KS_domains.fasta) of all detected KS domains (and their [metadata](examples/all_KS_domains.fasta.metadata.tsv)) can be extracted:
 
 ```
 >CM000170.1.region002~L0+CDS9_KS1 ProteinId:EAL94057.1 GeneId:
