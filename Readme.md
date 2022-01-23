@@ -93,9 +93,9 @@ Core Biosynthetic Composition count (BGCs):
 ...
 ```
 
-fungiSMASH results report an 80% similarity between region `CM000175.1.region001` and neosartoricin (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry, bottom, `CM000175.1.region001`):
+fungiSMASH results report a 80% similarity between region `CM000175.1.region001` and neosartoricin B (cluster `BGC00001144` in [MIBiG](https://mibig.secondarymetabolites.org/repository/BGC0001144/index.html#r1c1)). Here's a comparison of both regions (top: MIBiG entry; bottom, `CM000175.1.region001`):
 
 ![neosartoricin](examples/neosartoricin_gcf.svg)
 
-Where colored boxes represent genomic regions that will code for predicted domains. Introns are drawn by default.
+Here, colored boxes represent genomic regions that will code for predicted domains. Introns are drawn by default.
 
