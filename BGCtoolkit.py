@@ -42,7 +42,7 @@ from BGClib import HMM_DB, BGC, BGCLocus, BGCCollection, ProteinCollection, \
 from datetime import datetime
 
 __author__ = "Jorge Navarro"
-__version__ = "0.3.6"
+__version__ = "0.3.7"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -808,8 +808,8 @@ def draw_svg_stacked(
     scaling = svgopts.scaling
     H = svgopts.arrow_height # used for loci spacing
     bgc_lengths = dict()
-    needs_mirroring = dict()
-    bgc_distance_to_target = dict()
+    needs_mirroring = list()
+    bgc_distance_to_target = list()
     start_to_target_max_offset = 0
     for bgc_id, pid in filter_bgc_prot:
         if bgc_id != "":
@@ -830,8 +830,8 @@ def draw_svg_stacked(
             if pid == "":
                 if warning:
                     print(f"\tSVG (stacked, bgclist): Warning, {bgc_id} has no reference Protein Id")
-                needs_mirroring[bgc_id] = False
-                bgc_distance_to_target[bgc_id] = -1
+                needs_mirroring.append(False)
+                bgc_distance_to_target.append(-1)
                 continue
 
             protein = None
@@ -839,7 +839,7 @@ def draw_svg_stacked(
                 for candidate_protein in locus.protein_list:
                     if pid == candidate_protein.protein_id \
                             or pid == candidate_protein.identifier:
-                        needs_mirroring[bgc_id] = not candidate_protein.forward
+                        needs_mirroring.append(not candidate_protein.forward)
                         protein = candidate_protein
 
                         # get start_to_target distance
@@ -851,13 +851,13 @@ def draw_svg_stacked(
                                 sum([locus.length/scaling for locus in bgc.loci[:locus_num]]) \
                                     + H * locus_num \
                                     + protein.cds_regions[0][0]/scaling 
-                            bgc_distance_to_target[bgc_id] = start_to_target
+                            bgc_distance_to_target.append(start_to_target)
                         else:
                             start_to_target = \
                                 sum([locus.length/scaling for locus in bgc.loci[locus_num+1:]]) \
                                     + H * (len(bgc.loci) - locus_num - 1) \
                                     + (locus.length - protein.cds_regions[-1][1])/scaling
-                            bgc_distance_to_target[bgc_id] = start_to_target
+                            bgc_distance_to_target.append(start_to_target)
 
                         if start_to_target > start_to_target_max_offset:
                             start_to_target_max_offset = start_to_target
@@ -867,8 +867,8 @@ def draw_svg_stacked(
             # Couldn't find protein specified by user; typo?
             if protein is None:
                 print(f"\tSVG (stacked, bgclist): Warning, cannot find reference Protein Id [{pid}] for {bgc_id}")
-                needs_mirroring[bgc_id] = False
-                bgc_distance_to_target[bgc_id] = -1
+                needs_mirroring.append(False)
+                bgc_distance_to_target.append(-1)
                 continue
 
         # got stand-alone protein, convert to BGC
@@ -904,19 +904,19 @@ def draw_svg_stacked(
 
             draw_order_bgcs.append(bgc)
             bgc_lengths[bgc.identifier] = L
-            needs_mirroring[bgc.identifier] = False
-            bgc_distance_to_target[bgc.identifier] = 0
+            needs_mirroring.append(False)
+            bgc_distance_to_target.append(0)
 
 
     # obtain max_L considering all the starting offsets
     max_L = 0
-    for bgc_id in bgc_distance_to_target:
-        if bgc_distance_to_target[bgc_id] == -1:
+    for distance in bgc_distance_to_target:
+        if distance == -1:
             max_L = max(max_L, bgc_lengths[bgc_id])
         else:
             max_L = max(max_L, bgc_lengths[bgc_id] \
                 + start_to_target_max_offset \
-                - bgc_distance_to_target[bgc_id])
+                - distance)
 
     # Start SVG internal structure
     row_height = 2*svgopts.arrow_height # one for the arrow, 0.5 + 0.5 for the head height
@@ -930,7 +930,7 @@ def draw_svg_stacked(
     # Add each figure
     Yoffset = 0
     rows = 0
-    for item in draw_order_bgcs:
+    for bgc_num, item in enumerate(draw_order_bgcs):
         Yoffset = rows * inner_row_height
 
         if item is None:
@@ -943,9 +943,9 @@ def draw_svg_stacked(
         
         # Marked BGCs with no reference Protein Id won't have offset
         Xoffset = 0
-        if bgc_distance_to_target[bgc_id] != -1:
-            Xoffset = start_to_target_max_offset - bgc_distance_to_target[bgc_id]
-        root.append(bgc.xml_BGC(Xoffset, Yoffset, hmmdbs, svgopts, needs_mirroring[bgc_id]))
+        if bgc_distance_to_target[bgc_num] != -1:
+            Xoffset = start_to_target_max_offset - bgc_distance_to_target[bgc_num]
+        root.append(bgc.xml_BGC(Xoffset, Yoffset, hmmdbs, svgopts, needs_mirroring[bgc_num]))
         rows += 1
             
         #Yoffset = rows * inner_bgc_height
