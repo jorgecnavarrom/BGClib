@@ -23,7 +23,7 @@ from Bio import SeqIO
 from Bio.SeqFeature import FeatureLocation
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.4"
+__version__ = "0.7.5"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -176,7 +176,7 @@ role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
                "biosynthetic-additional":"#f0986b"} # orange rgb(240, 152, 107)
 
 # Auxiliary functions
-def random_color_tuple(h_, s_, v_):
+def random_color_tuple(h_, s_, v_) -> str:
     """
     returns a random color in hex, with the hue, saturation and value being
     (possibly) bound by input parameters
@@ -185,8 +185,15 @@ def random_color_tuple(h_, s_, v_):
     https://en.wikipedia.org/wiki/HSL_and_HSV
     and http://stackoverflow.com/a/1586291
     
-    input:
-    h_, s_ and v_ are tuples of lower/upper numbers for hue/saturation/value
+    Parameters:
+    ----------
+    h_, s_, v_: tuple(int, int)
+        Tuples of lower/upper numbers for hue/saturation/value
+
+    Returns:
+    -------
+    color: str
+        A (hex) color
     """
     
     h = uniform(h_[0], h_[1])
@@ -335,23 +342,29 @@ class HMM_DB:
             # Have to read the complete file. This will take a few seconds...
             else:
                 with open(db_path, "r") as pfam:
-                    print("\tReading domain info from {} file".format(db_path.name))
-                    putindict = False
-                    # assuming that the order of the information never changes
+                    print(f"\tReading domain info from {db_path.name} file")
+                    
                     for line in pfam:
-                        if line[:4] == "NAME":
+                        if line.strip() == "//":
+                            # found new record
+                            if ID:
+                                db_ID_to_AC[ID] = AC
+                                db_ID_to_DE[ID] = DE
+
+                            # clear data in any case
+                            ID = ""
+                            AC = ""
+                            DE = ""
+                            continue
+
+                        if line[:4] not in {"NAME", "ACC ", "DESC"}: continue
+
+                        if line[:4] == "NAME": 
                             ID = line.strip()[6:]
-                        if line[:3] == "ACC":
-                            #AC = line.strip()[6:].split(".")[0]
-                            AC = line.strip()[6:]
-                        if line[:4] == "DESC":
+                        elif line[:3] == "ACC": 
+                            AC = line.strip()[6:].split(".")[0]
+                        elif line[:4] == "DESC": 
                             DE = line.strip()[6:]
-                            putindict = True
-                            
-                        if putindict:
-                            putindict = False
-                            db_ID_to_AC[ID] = AC
-                            db_ID_to_DE[ID] = DE
 
             # TODO domain_info_file is empty...?
             with open(domain_info_file, "w") as dif:
@@ -414,7 +427,7 @@ class HMM_DB:
                     self.colors_outline_hex[hmm_ID] = f"#{rgb_out[0]:02x}{rgb_out[1]:02x}{rgb_out[2]:02x}"
 
         except FileNotFoundError:
-            print("Could not open domain colors file ({})".format(str(colors_file)))
+            print(f"Could not open domain colors file ({colors_file})")
         
         return
 
@@ -773,6 +786,7 @@ class BGC:
             
             # traverse all possible records in the file. There's usually only 1
             locus_num = 0
+            aS5 = True # Whether the BGC prediction comes from antiSMASH 5+
             for record in records:
                 locus = BGCLocus()
                 locus.length = len(record.seq)
@@ -783,6 +797,7 @@ class BGC:
                 for feature in record.features:
                     # antiSMASH <= 4
                     if feature.type == "cluster":
+                        aS5 = False
                         if "product" in feature.qualifiers:
                             for product in feature.qualifiers["product"]:
                                 for p in product.replace(" ","").split("-"):
@@ -811,43 +826,45 @@ class BGC:
                         current_biosynthetic_region = feature.location
                         continue
                                 
-                    if feature.type == "CDS":
-                        cds_num += 1
+                    if feature.type != "CDS": continue
+                    
+                    cds_num += 1
+                    
+                    CDS = feature
+                    
+                    cds_start = max(0, int(CDS.location.start))
+                    cds_end = max(0, int(CDS.location.end))
+
+                    identifier = "{}~L{}+CDS{}".format(self.identifier, locus_num, cds_num)
+
+                    product = ""
+                    if "product" in CDS.qualifiers:
+                        product = ", ".join(CDS.qualifiers["product"])
                         
-                        CDS = feature
+                    # NOTE: JGI annotations have a non-standard qualifier:
+                    # "proteinId" or "proteinID", which is just a number (sometimes). 
+                    protein_id = ""
+                    # found in NCBI:
+                    if "protein_id" in CDS.qualifiers:
+                        protein_id = CDS.qualifiers["protein_id"][0]
                         
-                        cds_start = max(0, int(CDS.location.start))
-                        cds_end = max(0, int(CDS.location.end))
+                    # found in JGI
+                    elif "proteinID" in CDS.qualifiers:
+                        protein_id = CDS.qualifiers["proteinID"][0]
+                    elif "proteinId" in CDS.qualifiers:
+                        protein_id = CDS.qualifiers["proteinId"][0]
 
-                        identifier = "{}~L{}+CDS{}".format(self.identifier, locus_num, cds_num)
+                    gene = ""
+                    if "gene" in CDS.qualifiers:
+                        gene = CDS.qualifiers["gene"][0]
 
-                        product = ""
-                        if "product" in CDS.qualifiers:
-                            product = ", ".join(CDS.qualifiers["product"])
-                            
-                        # NOTE: JGI annotations have a non-standard qualifier:
-                        # "proteinId" or "proteinID", which is just a number (sometimes). 
-                        protein_id = ""
-                        # found in NCBI:
-                        if "protein_id" in CDS.qualifiers:
-                            protein_id = CDS.qualifiers["protein_id"][0]
-                            
-                        # found in JGI
-                        elif "proteinID" in CDS.qualifiers:
-                            protein_id = CDS.qualifiers["proteinID"][0]
-                        elif "proteinId" in CDS.qualifiers:
-                            protein_id = CDS.qualifiers["proteinId"][0]
+                    role = ""
+                    if "gene_kind" in CDS.qualifiers:
+                        role = CDS.qualifiers["gene_kind"][0]
 
-                        gene = ""
-                        if "gene" in CDS.qualifiers:
-                            gene = CDS.qualifiers["gene"][0]
-
-                        role = ""
-                        if "gene_kind" in CDS.qualifiers:
-                            role = CDS.qualifiers["gene_kind"][0]
-
-                        # TODO: test this. It's a bit tricky with antiSMASH 5 now with regions
-                        protein_type = ""
+                    # TODO: test this. It's a bit tricky with antiSMASH 5 now with regions
+                    protein_type = ""
+                    if aS5:
                         if role == "biosynthetic" and "gene_functions" in CDS.qualifiers:
                             protein_types = []
                             for x in CDS.qualifiers["gene_functions"]:
@@ -863,49 +880,63 @@ class BGC:
                                         #protein_type = x.split("type: ")[1]
                                 # as they're not informative. e.g.: 
                                 # /NRPS_PKS="type: Type I Iterative PKS"
+                    # TODO: partial compatibility with older antiSMASH results
+                    elif "sec_met" in CDS.qualifiers:
+                        sec_met = {}
+                        for item in CDS.qualifiers["sec_met"]:
+                            split_item = item.split(": ")
+                            if len(split_item) == 2:
+                                sec_met[split_item[0]] = split_item[1]
+                            else:
+                                sec_met[split_item[0]] = ": ".join(split_item[1:])
+                        if "Type" in sec_met:
+                            if sec_met["Type"] != "none" and sec_met["Kind"] == "biosynthetic":
+                                protein_type = sec_met["Type"]
+                                role = "biosynthetic"
 
-                        protein = BGCProtein()
-                        
-                        protein.identifier = identifier
-                        protein.product = product
-                        protein.protein_id = protein_id
-                        protein.gene = gene
-                        protein.role = role
-                        protein.protein_type = protein_type
 
-                        if cds_start in current_biosynthetic_region and cds_end in current_biosynthetic_region:
-                            protein.in_biosynthetic_region = True
-                        
-                        # TODO: check if the 'translation' annotation is really 
-                        # there. If not, try to manually translate from dna
-                        if "translation" not in CDS.qualifiers:
-                            print(" Warning. Skipping CDS without 'translation' qualifier: {}".format(identifier))
-                            continue
-                        protein.sequence = CDS.qualifiers["translation"][0]
-                        # TODO: verify sequence doesn't contain stop codons at the end (anywhere?)
+                    protein = BGCProtein()
+                    
+                    protein.identifier = identifier
+                    protein.product = product
+                    protein.protein_id = protein_id
+                    protein.gene = gene
+                    protein.role = role
+                    protein.protein_type = protein_type
 
-                        # TODO: verify that len(CDS.location.parts) == len(protein.sequence)
-                        
-                        # NOTE what happens if there is no strand info (strand=None)?
-                        if CDS.location.strand != 1:
-                            protein.forward = False
-                        
-                        protein.parent_cluster = self
-                        protein.parent_cluster_id = self.identifier
-                        protein.parent_locus = locus
-                        
-                        # TODO: detect overlapping CDS (e.g. gene annotation 
-                        #  errors, multiple splicing)
-                        del cds_list[:]
-                        for x in CDS.location.parts:
-                            cds_list.append((int(x.start), int(x.end)))
-                        protein.cds_regions = tuple(sorted(cds_list, key=itemgetter(0)))
+                    if cds_start in current_biosynthetic_region and cds_end in current_biosynthetic_region:
+                        protein.in_biosynthetic_region = True
+                    
+                    # TODO: check if the 'translation' annotation is really 
+                    # there. If not, try to manually translate from dna
+                    if "translation" not in CDS.qualifiers:
+                        print(" Warning. Skipping CDS without 'translation' qualifier: {}".format(identifier))
+                        continue
+                    protein.sequence = CDS.qualifiers["translation"][0]
+                    # TODO: verify sequence doesn't contain stop codons at the end (anywhere?)
 
-                        self.protein_list.append(protein)
-                        self.proteins[protein.identifier] = protein
-                        locus.identifier = "{}~{}".format(self.identifier, locus_num)
-                        locus.protein_list.append(protein)
-                        locus.gene_coordinates.append((cds_start,cds_end))
+                    # TODO: verify that len(CDS.location.parts) == len(protein.sequence)
+                    
+                    # NOTE what happens if there is no strand info (strand=None)?
+                    if CDS.location.strand != 1:
+                        protein.forward = False
+                    
+                    protein.parent_cluster = self
+                    protein.parent_cluster_id = self.identifier
+                    protein.parent_locus = locus
+                    
+                    # TODO: detect overlapping CDS (e.g. gene annotation 
+                    #  errors, multiple splicing)
+                    del cds_list[:]
+                    for x in CDS.location.parts:
+                        cds_list.append((int(x.start), int(x.end)))
+                    protein.cds_regions = tuple(sorted(cds_list, key=itemgetter(0)))
+
+                    self.protein_list.append(protein)
+                    self.proteins[protein.identifier] = protein
+                    locus.identifier = "{}~{}".format(self.identifier, locus_num)
+                    locus.protein_list.append(protein)
+                    locus.gene_coordinates.append((cds_start,cds_end))
 
                 self.loci.append(locus)
                 locus_num += 1
@@ -1245,6 +1276,8 @@ class ProteinCollection:
     # TODO: break work on sets of 3 cpus
     # TODO: evaluate whether hmmsearch is better than hmmscan
     # TODO: TEST!
+    # TODO: change to pyhmmer
+    # TODO: update data structures of parent clusters
     def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
         """
         Uses hmmscan to search the protein sequences for hmm models specified
@@ -1958,6 +1991,10 @@ class BGCProtein:
         elif self.domain_set & DMATS_domain:
             cbp_type = "DMATS"
             self.role = "biosynthetic"
+        elif "TIGR03443" in self.domain_set:
+            self.protein_type = "alpha-aminoadipate reductase"
+            self.role = "other"
+            return
         else:
             domain_signature = "~".join(x.ID for x in self.domain_list)
             try:
@@ -2481,7 +2518,16 @@ class BGCProtein:
                 for current_cds, cds in enumerate(forward_regions):
                     # CDS is before domain. Push domain forward
                     if cds[1] < dstart:
-                        offset = forward_regions[current_cds+1][0] - cds[1] + 1
+                        try:
+                            offset = forward_regions[current_cds+1][0] - cds[1] + 1
+                        except IndexError:
+                            print(f"Warning, domain {domain.AC} out of range {self.identifier} (incomplete GenBank?)")
+                            # print(self.identifier)
+                            # print(domain.AC)
+                            # print(cds, dstart, dend)
+                            # print(forward_regions)
+                            # print(current_cds)
+                            continue
                         dstart += offset
                         dend += offset
                     # CDS is after domain. Finish

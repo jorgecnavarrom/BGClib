@@ -1065,6 +1065,7 @@ Ax_dynein_light	197,63,158
 Axin_b-cat_bind	204,71,149
 AzlC	70,147,184
 AzlD	89,184,63
+alpha_am_amid	195,116,150
 B	66,179,133
 B-block_TFIIIC	65,223,85
 B1	134,184,62
@@ -16112,8 +16113,9 @@ Terminase_5	199,200,96
 Terminase_6	147,208,99
 Terminase_6C	95,217,89
 Terminase_GpA	64,212,71
-Terpene_synth	74,159,219
-Terpene_synth_C	219,91,215
+Terpene_synth	221,76,67
+Terpene_synth_C	219,91,68
+Terpene_syn_C_2	211,115,120
 TetM_leader	66,208,177
 TetR	207,93,190
 TetR_C	151,203,75
@@ -17682,7 +17684,7 @@ partial_CstF	201,76,136
 peroxidase	202,91,121
 phage_tail_N	179,56,66
 phiKZ_IP	153,218,59
-polyprenyl_synt	61,206,65
+polyprenyl_synt	154,110,111
 potato_inhibit	69,74,192
 preATP-grasp_3	188,74,145
 preSET_CXC	173,71,221
