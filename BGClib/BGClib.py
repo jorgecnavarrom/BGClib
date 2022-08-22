@@ -313,7 +313,14 @@ class HMM_DB:
                     if line[0] == "#" or line.strip() == "":
                         continue
                     
-                    ID, AC, DE = line.strip().split("\t")
+                    id_ac_de = line.strip().split("\t")
+                    ID = id_ac_de[0] # this line should always exist
+                    try:
+                        AC = id_ac_de[1]
+                        DE = id_ac_de[2]
+                    except IndexError:
+                        print(f"Warning, missing domain data: {line.strip()}")
+                        AC = DE = ""
                     
                     db_ID_to_AC[ID] = AC
                     db_ID_to_DE[ID] = DE
