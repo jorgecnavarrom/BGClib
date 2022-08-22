@@ -344,6 +344,9 @@ class HMM_DB:
                 with open(db_path, "r") as pfam:
                     print(f"\tReading domain info from {db_path.name} file")
                     
+                    ID = ""
+                    AC = ""
+                    DE = ""
                     for line in pfam:
                         if line.strip() == "//":
                             # found new record
