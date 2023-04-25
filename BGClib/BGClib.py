@@ -23,7 +23,7 @@ from Bio import SeqIO
 from Bio.SeqFeature import FeatureLocation
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.5"
+__version__ = "0.7.6"
 __maintainer__ = "Jorge Navarro"
 __email__ = "j.navarro@wi.knaw.nl"
 
@@ -2732,9 +2732,27 @@ class BGCProtein:
                     color = hmmdb.colors_hex[ID]
                     color_outline = hmmdb.colors_outline_hex[ID]
                 except KeyError:
-                    color = "#969696"
-                    color_outline = "#d2d2d2"
+                    # non-persistent way of having new colors. 
+                    # for persistance, need to keep a list of all the new
+                    # colors and at some point, append them to the color 
+                    # tsv file
+                    s_ = (0.45, 0.7)
+                    v_ = (0.5, 0.8)
+                    color = random_color_tuple((0.0, 1.0), s_, v_)
+
+                    # make darker outline. 
+                    # Convert: Hex -> RGB -> HSV, darken -> Hex
+                    r = int(f"0x{color[1:3]}",0)
+                    g = int(f"0x{color[3:5]}",0)
+                    b = int(f"0x{color[5:7]}",0)
+                    h, s, v = rgb_to_hsv(r/255.0, g/255.0, b/255.0)
+                    rgb_darker = tuple(int(round(c * 255)) for c in \
+                                       hsv_to_rgb(h, s, 0.8*v))
+                    color_outline = f"#{rgb_darker[0]:02x}{rgb_darker[1]:02x}{rgb_darker[2]:02x}"
                 
+                    hmmdb.colors_hex[ID] = color
+                    hmmdb.colors_outline_hex[ID] = color_outline
+
                 title = ""
                 title = DE
                 try:
