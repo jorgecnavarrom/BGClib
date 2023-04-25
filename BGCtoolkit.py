@@ -560,8 +560,8 @@ def predict_domains(clear_domains:bool, update_domains:bool, hmmdbs: HMM_DB, bgc
                 protein_collection_need_dom_pred.proteins[protein_identifier] = protein_collection.proteins.pop(protein_identifier)
 
     print("\tPredicting domains...")
-    bgc_collection_need_dom_pred.predict_domains(hmmdbs, cpus=hmmdbs.cores)
-    protein_collection_need_dom_pred.predict_domains(hmmdbs, cpus=hmmdbs.cores)
+    bgc_collection_need_dom_pred.predict_domains(hmmdbs, cpus=hmmdbs.cores, tc=True)
+    protein_collection_need_dom_pred.predict_domains(hmmdbs, cpus=hmmdbs.cores, tc=True)
     print("\t...done!\n")
 
     # Finally, the data we'll be processing
