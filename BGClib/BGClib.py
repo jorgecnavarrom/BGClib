@@ -2745,9 +2745,9 @@ class BGCProtein:
                     r = int(f"0x{color[1:3]}",0)
                     g = int(f"0x{color[3:5]}",0)
                     b = int(f"0x{color[5:7]}",0)
-                    h, s, v = rgb_to_hsv(r/255.0, g/255.0, b/255.0)
+                    h_, s_, v_ = rgb_to_hsv(r/255.0, g/255.0, b/255.0)
                     rgb_darker = tuple(int(round(c * 255)) for c in \
-                                       hsv_to_rgb(h, s, 0.8*v))
+                                       hsv_to_rgb(h_, s_, 0.8*v_))
                     color_outline = f"#{rgb_darker[0]:02x}{rgb_darker[1]:02x}{rgb_darker[2]:02x}"
                 
                     hmmdb.colors_hex[ID] = color
