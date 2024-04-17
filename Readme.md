@@ -1,4 +1,4 @@
-# BGC lib
+# BGClib
 
 This is the official repository of the **Biosynthetic Gene Cluster Library**, a Python library with classes and methods for manipulation and analysis of BGCs.
 
@@ -8,13 +8,9 @@ For more information on BGClib, see [here](./BGClib/Readme.md).
 
 # BGC Toolkit
 
-## What is it
-
-It is a tool that facilitates domain annotation of protein data from GenBank and fasta files. For this, it harnesses the capabilities of BGClib.
+This is a tool that facilitates domain annotation of protein data from GenBank and fasta files. For this, it harnesses the capabilities of BGClib.
 
 ## Features overview
-
-What can it do:
 
 * Annotate domains
 * Generate high quality SVG files
