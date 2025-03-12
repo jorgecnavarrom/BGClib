@@ -518,8 +518,8 @@ def get_files(inputfolders: list, files: list, include: list, exclude: list, fil
                     rbl.write("\n")
 
     # Finally, add the gbk files to the BGC collection
-    for identifier, gbk_path in gbk_files.items():
-        bgc_col.add_gbk(gbk_path, identifier)
+    for gbk_path in gbk_files.values():
+        bgc_col.add_gbk(gbk_path)
 
     return bgc_col, final_prot_col, gbk_files
 
@@ -740,7 +740,7 @@ def draw_svg_individual(
             m_info = "_m"
             
         bgc_name = o / f"{bgc_id}{coregenearch}{m_info}.svg"
-        bgc.BGC_SVG(bgc_name, hmmdbs, svgopts, mirror=m)
+        bgc.SVG(bgc_name, hmmdbs, svgopts, mirror=m)
 
     # Proteins. Id can be protein_id or identifier
     filtered_prot_col = ProteinCollection()
@@ -817,6 +817,8 @@ def draw_svg_stacked(
                 if warning:
                     print(f"\tSVG (stacked, bgclist): --bgclist used but {bgc_id} not found in BGC data")
                 draw_order_bgcs.append(None)
+                needs_mirroring.append(False)
+                bgc_distance_to_target.append(-1)
                 continue
 
             bgc = bgc_col.bgcs[bgc_id]

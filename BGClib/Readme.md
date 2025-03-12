@@ -1,6 +1,6 @@
 # BGC lib
 
-**Biosynthetic Gene Cluster Library** is a library with classes and methods that will allow easy manipulation and analysis of BGCs. 
+**Biosynthetic Gene Cluster Library** is a library with classes and methods that allow easy manipulation and analysis of BGCs. In a nutshell, it stores protein data from genomic loci that can be annotated with domain information.
 
 Some of its classes:
 

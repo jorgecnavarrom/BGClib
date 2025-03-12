@@ -7,7 +7,6 @@ Classes for data storage and analysis of Biosynthetic Gene Clusters
 
 """
 
-import sys
 from pathlib import Path
 from subprocess import PIPE, Popen
 from multiprocessing import Pool, cpu_count
@@ -21,11 +20,16 @@ from io import StringIO
 from Bio import SearchIO
 from Bio import SeqIO
 from Bio.SeqFeature import FeatureLocation
+import pickle
+# import pyhmmer
+from pyhmmer.hmmer import hmmpress
+from pyhmmer.plan7 import HMMFile
+# import gb_io # TODO. See BGC.load()
 
 __author__ = "Jorge Navarro"
-__version__ = "0.7.6"
+__version__ = "0.9.9"
 __maintainer__ = "Jorge Navarro"
-__email__ = "j.navarro@wi.knaw.nl"
+__email__ = "jorge.c.navarro.munoz@gmail.com"
 
 
 # Static data
@@ -67,92 +71,93 @@ precursor_domains = FAS_domains_A | FAS_domains_B
 hmmdbs_without_tc = {"FNP_terpene_models"}
 
 # TODO: choose colors for the last ones
-valid_CBP_types_fungal = {\
-        "nrPKS": "#76b7f4", # blue
-        "rPKS": "#2c9cdc", # darker blue
-        "t3PKS": "#3368c8", #007dfb", # a bit more dark blue
-        "NRPS": "#ffc755", # orange
-        "NRPS-like": "#ffeb87", # light orange / yellow
-        "other_PKS": "#80d8eb", # another blue. Intense-ish 
-        "unknown_PKS": "#aaffff", # lighter version of previous
-        "PKS-NRPS_hybrid": "#aa007f", # purple
-        "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
-        "NRPS-PKS_hybrid": "#a25fe6", # violet
-        "NIS": "#c20c28", # red blood
-        "Meroterpenoid_synthase": "#b42d2d", # shades of brown/dark orange
-        "Diterpene_synthase": "#ba5454", # shades of brown/dark orange
-        "Triterpene_synthase": "#e04d37", # shades of brown/dark orange
-        "Sesquiterpene_synthase": "#995358", # shades of brown/dark orange
-        "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # shades of brown/dark orange
-        "Carotenoid_synthase": "#f4815c", # shades of brown/dark orange
-        "Squalene_synthase": "#be480a", # shades of brown/dark orange
-        "UbiA-type_terpene": "#da746e", # shades of brown/dark orange
-        "Terpene_other": "#ca8a73", # shades of brown/dark orange
-        "DMATS": "#c5c55d" # "gold"
-    }
+valid_CBP_types_fungal = {
+    "nrPKS": "#76b7f4", # blue
+    "rPKS": "#2c9cdc", # darker blue
+    "t3PKS": "#3368c8", #007dfb", # a bit more dark blue
+    "NRPS": "#ffc755", # orange
+    "NRPS-like": "#ffeb87", # light orange / yellow
+    "other_PKS": "#80d8eb", # another blue. Intense-ish 
+    "unknown_PKS": "#aaffff", # lighter version of previous
+    "PKS-NRPS_hybrid": "#aa007f", # purple
+    "PKS-mmNRPS_hybrid": "#9a116f", # darkish purple
+    "NRPS-PKS_hybrid": "#a25fe6", # violet
+    "NIS": "#c20c28", # red blood
+    "Meroterpenoid_synthase": "#b42d2d", # shades of brown/dark orange
+    "Diterpene_synthase": "#ba5454", # shades of brown/dark orange
+    "Triterpene_synthase": "#e04d37", # shades of brown/dark orange
+    "Sesquiterpene_synthase": "#995358", # shades of brown/dark orange
+    "Sesquiterpene_bifunctional_synthase": "#f4f4fc", # shades of brown/dark orange
+    "Carotenoid_synthase": "#f4815c", # shades of brown/dark orange
+    "Squalene_synthase": "#be480a", # shades of brown/dark orange
+    "UbiA-type_terpene": "#da746e", # shades of brown/dark orange
+    "Terpene_other": "#ca8a73", # shades of brown/dark orange
+    "DMATS": "#c5c55d" # "gold"
+}
 
 # antiSMASH list retrieved 2020-08-19
-valid_CBP_types_antiSMASH = {\
-        'T1PKS': '#34b4eb',
-        'T2PKS': '#999999',
-        'T3PKS': '#3368c8',
-        'transAT-PKS': '#999999',
-        'transAT-PKS-like': '#999999', # "Trans-AT PKS fragment, with trans-AT domain not found"
-        'PpyS-KS': '#999999',
-        'hglE-KS': '#999999',
-        'CDPS': '#cccdac', # "tRNA-dependent cyclodipeptide synthases"
-        'PKS-like': '#999999',
-        'arylpolyene': '#cdc5c0',
-        'resorcinol': '#999999',
-        'ladderane': '#cdc69f',
-        'PUFA': '#999999',
-        'nrps': '#999999',
-        'nrps-like': '#999999',
-        'thioamide-NRP': '#999999',
-        'terpene': '#b44c3a',
-        'lanthipeptide': '#5b9950', # Obsolete: split into subclasses in antiSMASH6
-        'lipolanthine': '#999999',
-        'bacteriocin': '#70b598',
-        'betalactone': '#b8cdc5',
-        'thiopeptide': '#90b442',
-        'linaridin': '#999999',
-        'cyanobactin': '#999999',
-        'glycocin': '#999999',
-        'LAP': '#999999',
-        'lassopeptide': '#999999',
-        'sactipeptide': '#999999',
-        'bottromycin': '#999999',
-        'head_to_tail': '#999999',
-        'microviridin': '#31b568',
-        'proteusin': '#999999',
-        'blactam': '#999999',
-        'amglyccycl': '#999999',
-        'aminocoumarin': '#999999',
-        'siderophore': '#c20c28',
-        'ectoine': '#999999',
-        'butyrolactone': '#b1b0bc',
-        'indole': '#999999',
-        'nucleoside': '#999999',
-        'phosphoglycolipid': '#999999',
-        'melanin': '#999999',
-        'oligosaccharide': '#999999',
-        'furan': '#999999',
-        'hserlactone': '#bca8ad',
-        'phenazine': '#999999',
-        'phosphonate': '#f6f9d4',
-        'fused': '#999999',
-        'PBDE': '#999999',
-        'acyl_amino_acids': '#999999',
-        'tropodithietic-acid': '#999999',
-        'NAGGN': '#999999',
-        'RaS-RiPP': '#999999',
-        'fungal-RiPP': '#3cb5a1',
-        'TfuA-related': '#999999',
-        'other': '#999999',
-        'saccharide': '#999999',
-        'fatty_acid': '#999999',
-        'halogenated': '#999999'
-    }
+valid_CBP_types_antiSMASH = {
+    'T1PKS': '#34b4eb',
+    'T2PKS': '#999999',
+    'T3PKS': '#3368c8',
+    'transAT-PKS': '#999999',
+    # "Trans-AT PKS fragment, with trans-AT domain not found"
+    'transAT-PKS-like': '#999999', 
+    'PpyS-KS': '#999999',
+    'hglE-KS': '#999999',
+    'CDPS': '#cccdac', # "tRNA-dependent cyclodipeptide synthases"
+    'PKS-like': '#999999',
+    'arylpolyene': '#cdc5c0',
+    'resorcinol': '#999999',
+    'ladderane': '#cdc69f',
+    'PUFA': '#999999',
+    'nrps': '#999999',
+    'nrps-like': '#999999',
+    'thioamide-NRP': '#999999',
+    'terpene': '#b44c3a',
+    'lanthipeptide': '#5b9950', # Obsolete: split into subclasses in antiSMASH6
+    'lipolanthine': '#999999',
+    'bacteriocin': '#70b598',
+    'betalactone': '#b8cdc5',
+    'thiopeptide': '#90b442',
+    'linaridin': '#999999',
+    'cyanobactin': '#999999',
+    'glycocin': '#999999',
+    'LAP': '#999999',
+    'lassopeptide': '#999999',
+    'sactipeptide': '#999999',
+    'bottromycin': '#999999',
+    'head_to_tail': '#999999',
+    'microviridin': '#31b568',
+    'proteusin': '#999999',
+    'blactam': '#999999',
+    'amglyccycl': '#999999',
+    'aminocoumarin': '#999999',
+    'siderophore': '#c20c28',
+    'ectoine': '#999999',
+    'butyrolactone': '#b1b0bc',
+    'indole': '#999999',
+    'nucleoside': '#999999',
+    'phosphoglycolipid': '#999999',
+    'melanin': '#999999',
+    'oligosaccharide': '#999999',
+    'furan': '#999999',
+    'hserlactone': '#bca8ad',
+    'phenazine': '#999999',
+    'phosphonate': '#f6f9d4',
+    'fused': '#999999',
+    'PBDE': '#999999',
+    'acyl_amino_acids': '#999999',
+    'tropodithietic-acid': '#999999',
+    'NAGGN': '#999999',
+    'RaS-RiPP': '#999999',
+    'fungal-RiPP': '#3cb5a1',
+    'TfuA-related': '#999999',
+    'other': '#999999',
+    'saccharide': '#999999',
+    'fatty_acid': '#999999',
+    'halogenated': '#999999'
+}
 valid_CBP_types_antiSMASH_set = set(valid_CBP_types_antiSMASH.keys())
 
 
@@ -165,65 +170,76 @@ valid_CBP_types = valid_CBP_types_fungal.keys() | valid_CBP_types_antiSMASH
 # "other": "#fcdcdc", # very light pink
 # no_domains": "#ffffff", # white. For stuff like RiPPs (TODO)
 
-role_colors = {"biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
-               "tailoring":"#8fc889", # green, rgb(143, 200, 137)
-               "transport":"#f0d963", # yellow, rgb(240, 217, 99)
-               "regulatory":"#33c1f0", # blue, rgb(51, 193, 240)
-               "other":"#eff0f1", # light gray, rgb(239, 240, 241)
-               "precursor":"#9797dc", # lilac, rgb(151,151,220)
-               "unknown":"#eff0f1", # gray, rgb(220, 220, 220) dcdcdc
-               "resistance":"#f0a1ac", # light red, rgb(240, 161, 172) 
-               "biosynthetic-additional":"#f0986b"} # orange rgb(240, 152, 107)
+role_colors = {
+    "biosynthetic":"#f06c6e", # red, rgb(240, 108, 110)
+    "tailoring":"#8fc889", # green, rgb(143, 200, 137)
+    "transport":"#f0d963", # yellow, rgb(240, 217, 99)
+    "regulatory":"#33c1f0", # blue, rgb(51, 193, 240)
+    "other":"#eff0f1", # light gray, rgb(239, 240, 241)
+    "precursor":"#9797dc", # lilac, rgb(151,151,220)
+    "unknown":"#eff0f1", # gray, rgb(220, 220, 220) dcdcdc
+    "resistance":"#f0a1ac", # light red, rgb(240, 161, 172) 
+    "biosynthetic-additional":"#f0986b" # orange rgb(240, 152, 107)
+} 
 
 # Auxiliary functions
-def random_color_tuple(h_, s_, v_) -> str:
-    """
-    returns a random color in hex, with the hue, saturation and value being
-    (possibly) bound by input parameters
+def random_color_tuple(
+    h_:tuple[float, float], 
+    s_:tuple[float, float], 
+    v_:tuple[float, float]
+) -> str:
+    """Generates a random hex color given hsv bounds
+    
+    Args:
+        h_: hue. A tuple containing lower and upper bounds
+        s_: saturation
+        v_: value
+
+    Returns:
+        A random hex color
+
+    Each argument is a tuple of lower and upper bounds between 0.0 and 1.0. 
+    For hue, these bounds map to a complete round in the cylindrical model 
+    (e.g. 0.0 corresponds to red, 0.33 maps to 120° or green, etc.)
     
     Additional info:
     https://en.wikipedia.org/wiki/HSL_and_HSV
-    and http://stackoverflow.com/a/1586291
-    
-    Parameters:
-    ----------
-    h_, s_, v_: tuple(int, int)
-        Tuples of lower/upper numbers for hue/saturation/value
-
-    Returns:
-    -------
-    color: str
-        A (hex) color
+    https://stackoverflow.com/a/1586291       
     """
     
-    h = uniform(h_[0], h_[1])
-    s = uniform(s_[0], s_[1])
-    v = uniform(v_[0], v_[1])
-    
-    return "#{}".format("".join( hex(int(c * 255))[2:] for c in hsv_to_rgb(h, s, v) ))
+    h = uniform(*h_)
+    s = uniform(*s_)
+    v = uniform(*v_)
+
+    r, g, b = map(int, [c*255 for c in hsv_to_rgb(h, s, v)])
+
+    return f"#{int(r):02x}{int(g):02x}{int(b):02x}"
 
 
 
 # Classes definition
 class HMM_DB:
-    """
-    This class keeps information about HMM databases to be used by the other
-    classes
+    """Handles information about hmm databases
     """
     
     def __init__(self):
-        self.db_list = []           # list of paths to hmm databases
-        self.alias = dict()         # ID to alias
-        self.colors = dict()        # ID to tuple(r,g,b)
-        self.colors_hex = dict()
-        self.color_outline = dict() # Darker version of self.colors. Precalculated
-        self.colors_outline_hex = dict()
-        self.cores = 0              # for hmmer. Remember that it always uses an
-                                    # extra core for reading the database
+        self.db_path_list = []      # list of paths to hmm databases
+        self.alias = {}             # ID to alias
+        self.colors = {}            # ID to tuple(r,g,b)
+        self.colors_hex = {}        # ID to hex color
+        self.color_outline = {}     # Precalc. darker version of self.colors
+        self.colors_outline_hex = {}
+        self.cores = 0              # for hmmer. Remember that it always uses
+                                    # an extra core for reading the database
                                     
         self.ID_to_AC = {}          # ID: short name; AC: accession number (w/
         self.ID_to_DE = {}          # version); DE: description
-        self.ID_to_LENG = {}        
+            
+        self.ID_to_CL = {}          # Can be found in the Pfam-A.hmm.dat file
+        self.ID_to_TP = {}          # Family, Domain, Repeats, Motifs, Coiled-
+                                    # coils, Disordered. Also in dat file
+
+        self.clan_to_DE = {}        # Can be found in the Pfam-C file
         
         self.ID_to_role = {}        # manually assigned roles (see role_colors)
         self.domain_signature_to_protein_type = {}  # curated using annotated 
@@ -231,17 +247,24 @@ class HMM_DB:
                                                     # Domain Signature = tilde-
                                                     # separated domain_IDs
         
-        self.read_domain_colors(Path(__file__).parent / "data/domain_color_file_ID.tsv")
-        self.read_domain_roles(Path(__file__).parent / "data/SM_domain_roles.tsv")
-        self.read_protein_types(Path(__file__).parent / "data/protein_types.tsv")
-        self.read_domain_alias_file(Path(__file__).parent / "data/domains_alias.tsv")
+        self.read_domain_colors(
+            Path(__file__).parent / "data/domain_color_file_IDh.tsv"
+        )
+        self.read_domain_roles(
+            Path(__file__).parent / "data/SM_domain_roles.tsv"
+        )
+        self.read_protein_types(
+            Path(__file__).parent / "data/protein_types.tsv"
+        )
+        self.read_domain_alias_file(
+            Path(__file__).parent / "data/domains_alias.tsv"
+        )
         
         return
     
 
     def add_included_database(self):
-        """
-        Reads hmm profiles included in the library
+        """Reads hmm profiles included in the library
         """
         
         for hmm in (Path(__file__).parent).glob("data/Domain_models/*.hmm"):
@@ -252,189 +275,227 @@ class HMM_DB:
         return
     
     
-    def add_database(self, db_path):
-        #TODO rename db_path to db_hmm
-        """
-        Adds a database of hmm models. It also stores information about each
-        individual domain (linking its ID to Accession and Description)
+    # TODO: read clan description from Pfam-C if found
+    def add_database(self, db_path:Path) -> bool:
+        """Adds a database of hmm models
+
+        Args:
+            db_path: Path to a hmm file
         
-        For the latter, a local file will be kept in the same location as the 
-        hmm user database. This has the effect that, in order to work on previous
-        data (e.g. a pickled file with domains already predicted), and ensure
-        that the data hasn't changed (e.g. the pfam accession numbers), she will
-        have to point to the exact same hmm database.
-        
-        
-        input:
-            db_path: Path object that points to .hmm file
+        This method also:
+
+        * Verifies that the database is hmmpressed
+        * Stores information about each individual domain (linking its ID to 
+        Accession and Description). This information can come from three 
+        places. In order of priority:
+          - A .dat file (that also links ID to clan accession). Its presence is
+        automatically detected (Pfam)
+          - A .info file, generated from a previous run
+          - The hmm database itself. This method is slow as the whole file needs
+        to be read
         """
         
         if not db_path.is_file():
-            print("Not able to add hmm database (not a file. Wrong path?): {}".format(str(db_path)))
+            print(f"Not able to add hmm database (not a file. Wrong path?): "
+                + f"{db_path}")
             return False
         elif db_path.suffix.lower() != ".hmm":
-            print("Not able to add hmm datase (not a .hmm file)")
+            print(f"Not able to add hmm database (not a .hmm file): {db_path}")
             return False
+        
         # make sure database is already "pressed" for hmmscan
         try:
             assert Path(db_path.parent / (db_path.name + ".h3i")).is_file()
+            assert Path(db_path.parent / (db_path.name + ".h3f")).is_file()
+            assert Path(db_path.parent / (db_path.name + ".h3m")).is_file()
+            assert Path(db_path.parent / (db_path.name + ".h3p")).is_file()
         except AssertionError:
-            command = ["hmmpress", str(db_path)]
-            print(" Pressing hmm file with command {}".format(" ".join(command)))
-            proc_hmmpress = Popen(command, shell=False)
-            proc_hmmpress.wait()
+            with HMMFile(db_path) as hmm:
+                hmmpress(hmm, db_path)
             
+        # Make sure the files were generated
         try:
             assert Path(db_path.parent / (db_path.name + ".h3i")).is_file()
+            assert Path(db_path.parent / (db_path.name + ".h3f")).is_file()
+            assert Path(db_path.parent / (db_path.name + ".h3m")).is_file()
+            assert Path(db_path.parent / (db_path.name + ".h3p")).is_file()
         except AssertionError:
-            sys.exit("Not able to hmmpress the database file")
-            
-        """
-        check if there is a file in the same location as the database that we
-        have previously stored (*.domain_info.tsv) 
-        if there isn't:
-        check if in the hmmdb folder there is a .dat file (e.g. Pfam-A.hmm.dat)
-        if there is, 
-            read it for AC, DE
-        else
-            read the whole Pfam-A.hmm file
-        
-        """
-        
+            exit("Not able to hmmpress the database file")
+                    
         # save the domain info file in the same place as the database so it's 
         # accessible to the user
         domain_info_file = db_path.parent / (db_path.name + ".domain_info.tsv")
         db_ID_to_AC = {}
         db_ID_to_DE = {}
-        
-        if domain_info_file.is_file():
-            with open(domain_info_file, "r") as dif:
+        db_ID_to_TP = {}
+        db_ID_to_CL = {}
+        all_ids = set()
+
+        # first try the .dat file
+        dat_file = db_path.parent / (db_path.name + ".dat")
+        if dat_file.is_file():
+            # print(f"\tFound {dat_file.name} file")
+            with open(dat_file) as dat:
+                # Storing the whole file in mem. Shouldn't be too big
+                records = dat.read().split("//")
+                for record in records:
+                    if not record.strip():
+                        continue
+
+                    # example of record from Pfam:
+                    # STOCKHOLM 1.0
+                    #=GF ID   14-3-3
+                    #=GF AC   PF00244.26
+                    #=GF DE   14-3-3 protein
+                    #=GF GA   33.2; 33.2;
+                    #=GF TP   Repeat
+                    #=GF ML   223
+                    #=GF CL   CL0020
+                    
+                    # skip the STOCKHOLM line
+                    temp_dict = {}
+                    for line in record.strip().splitlines()[1:]:
+                        # Skip '#=GF ', then split only once
+                        code, value = line.strip()[5:].split(None, 1)
+                        temp_dict[code] = value
+
+                    assert temp_dict['ID'], "Error, found model without ID!" \
+                        + db_path
+
+                    id = temp_dict['ID']
+                    all_ids.add(id)
+                    db_ID_to_AC[id] = temp_dict.get('AC', "")
+                    db_ID_to_DE[id] = temp_dict.get('DE', '')
+                    db_ID_to_TP[id] = temp_dict.get('TP', '')
+                    db_ID_to_CL[id] = temp_dict.get('CL', '')
+
+        elif domain_info_file.is_file():
+            # print(f"\tFound {domain_info_file.name} file")
+            with open(domain_info_file) as dif:
                 for line in dif:
                     if line[0] == "#" or line.strip() == "":
                         continue
                     
-                    id_ac_de = line.strip().split("\t")
-                    ID = id_ac_de[0] # this line should always exist
-                    try:
-                        AC = id_ac_de[1]
-                        DE = id_ac_de[2]
-                    except IndexError:
-                        print(f"Warning, missing domain data: {line.strip()}")
-                        AC = DE = ""
+                    line = line.split('\t') # 'dirty' line with newline chars.
+                    if len(line) == 3:
+                        id, ac, de = line
+                        de = de.strip()
+                        tp = ''
+                        cl = ''
+                    elif len(line) == 5:
+                        id, ac, de, tp, cl = line
+                        cl = cl.strip()
+                    else:
+                        exit(f"Error while reading {domain_info_file}: " 
+                             + "There should be either 3 (old) or 5 columns")
+                    assert id, f"Error: found line in {domain_info_file} " \
+                        + "without ID (first column)"
                     
-                    db_ID_to_AC[ID] = AC
-                    db_ID_to_DE[ID] = DE
+                    all_ids.add(id)
+                    db_ID_to_AC[id] = ac
+                    db_ID_to_DE[id] = de
+                    db_ID_to_TP[id] = tp
+                    db_ID_to_CL[id] = cl
+                      
         else:
-            dat_file = db_path.parent / (db_path.name + ".dat")
-            # If the .dat file is found, it's much faster read
-            if dat_file.is_file():
-                print("\tFound {} file".format(db_path.name + ".dat"))
-                with open(dat_file, "r") as dat:
-                    putindict = False
-                    
-                    for line in dat:
-                        if line[5:7] == "ID":
-                            ID = line.strip()[10:]
-                        if line[5:7] == "AC":
-                            AC = line.strip()[10:]
-                        if line[5:7] == "DE":
-                            DE = line.strip()[10:]
-                            putindict = True
-                            
-                        if putindict:
-                            putindict = False
-                            db_ID_to_AC[ID] = AC
-                            db_ID_to_DE[ID] = DE
-                            
-            # Have to read the complete file. This will take a few seconds...
-            else:
-                with open(db_path, "r") as pfam:
-                    print(f"\tReading domain info from {db_path.name} file")
-                    
-                    ID = ""
-                    AC = ""
-                    DE = ""
-                    for line in pfam:
-                        if line.strip() == "//":
-                            # found new record
-                            if ID:
-                                db_ID_to_AC[ID] = AC
-                                db_ID_to_DE[ID] = DE
+            # Whole hmm file needs to be read, which can take a few moments.
+            # Also, no type (TP) or clan (CL) info is expected
+            with HMMFile(db_path) as hmm_db:
+                for hmm_model in hmm_db:
+                    id = hmm_model.name.decode()
+                    ac = hmm_model.accession.decode()
+                    de = hmm_model.description.decode()
 
-                            # clear data in any case
-                            ID = ""
-                            AC = ""
-                            DE = ""
-                            continue
+                    all_ids.add(id)
+                    db_ID_to_AC[id] = ac
+                    db_ID_to_DE[id] = de
 
-                        if line[:4] not in {"NAME", "ACC ", "DESC"}: continue
-
-                        if line[:4] == "NAME": 
-                            ID = line.strip()[6:]
-                        elif line[:3] == "ACC": 
-                            AC = line.strip()[6:].split(".")[0]
-                        elif line[:4] == "DESC": 
-                            DE = line.strip()[6:]
-
-            # TODO domain_info_file is empty...?
-            with open(domain_info_file, "w") as dif:
-                for ID in db_ID_to_AC:
-                    AC = db_ID_to_AC[ID]
-                    DE = db_ID_to_DE[ID]
-                    dif.write("{}\t{}\t{}\n".format(ID, AC, DE))
+        with open(domain_info_file, "w") as dif:
+            dif.write("#ID\tAC\tDE\tTP\tCL\n")
+            for id in sorted(all_ids):
+                ac = db_ID_to_AC.get(id, '')
+                de = db_ID_to_DE.get(id, '')
+                tp = db_ID_to_TP.get(id, '')
+                cl = db_ID_to_CL.get(id, '')
+                dif.write(f"{id}\t{ac}\t{de}\t{tp}\t{cl}\n")
         
         self.ID_to_AC.update(db_ID_to_AC)
         self.ID_to_DE.update(db_ID_to_DE)
-        self.db_list.append(db_path)
+        self.ID_to_TP.update(db_ID_to_TP)
+        self.ID_to_CL.update(db_ID_to_CL)
+
+        self.db_path_list.append(db_path)
         
         return True
 
 
-    def read_domain_alias_file(self, alias_file):
+    def read_domain_alias_file(self, alias_file: Path) -> None:
+        """Loads internal aliases for some key core biosynthetic domains
+        
+        Args:
+            alias_file: path to the internal file
+        """
+        
         try:
-            with open(alias_file, "r") as f:
+            with open(alias_file) as f:
                 for line in f:
                     if line[0] == "#" or line.strip() == "":
                         continue
                     
-                    line = line.split("\t")
+                    line = line.strip().split("\t")
                     hmm_ID = line[0]
                     hmm_alias = line[1]
                     
                     self.alias[hmm_ID] = hmm_alias
         except FileNotFoundError:
-            print("Could not open domain alias file ({})".format(alias_file))
+            print(f"Could not open domain alias file ({alias_file})")
 
         
-    def read_domain_colors(self, colors_file, append=True):
-        """
-        Expects the input file to be in a tsv with two columns:
-        hmm_ID \t r,g,b
+    def read_domain_colors(self, colors_file:Path, append=True) -> None:
+        """Loads domain color information
+
+        Args:
+            colors_file: Path to colors tsv file. It should have three columns:
+                hmm_ID, RGB, HEX.
         
-        input:
-            colors_file: a file with domain ID \t rgb colors
             append: toggle to false to reset all colors
+
+        Notes: RGB color should be a string with values for each color (0-255)
+            separated by a comma, e.g. 160,77,53.
+            HEX should be prefixed by a hash symbol, e.g. #a04d35. Case should
+            not matter
         """
         if not append:
             self.colors.clear()
             self.color_outline.clear()
         
         try:
-            with open(colors_file, "r") as f:
+            with open(colors_file) as f:
                 for line in f:
-                    if line[0] == "#" or line.strip() == "":
+                    line = line.strip()
+                    if line[0] == "#" or line == "":
                         continue
                     
-                    hmm_ID, colors = line.strip().split("\t")
-                    rgb = [int(c) for c in colors.split(",")]
-                    r, g, b = rgb
-                    self.colors[hmm_ID] = tuple(rgb)
-                    self.colors_hex[hmm_ID] = f"#{r:02x}{g:02x}{b:02x}"
+                    line = line.split("\t")
+                    hmm_ID = line[0]
+                    color_rgb = line[1]
                     
+                    r, g, b = map(int, color_rgb.split(","))
+                    self.colors[hmm_ID] = r, g, b
+
+                    try:
+                        color_hex = line[2]
+                    except IndexError:
+                        color_hex = f"#{r:02x}{g:02x}{b:02x}"
+                    self.colors_hex[hmm_ID] = color_hex
+                    
+                    # Generate darker outline by going to HSV space
                     h, s, v = rgb_to_hsv(r/255.0, g/255.0, b/255.0)
-                    self.color_outline[hmm_ID] = tuple(str(int(round(c * 255))) for c in hsv_to_rgb(h, s, 0.8*v))
-                    rgb_out = tuple(int(round(c * 255)) for c in hsv_to_rgb(h, s, 0.8*v))
-                    self.colors_outline_hex[hmm_ID] = f"#{rgb_out[0]:02x}{rgb_out[1]:02x}{rgb_out[2]:02x}"
+                    darkRGB = [int(c * 255) for c in hsv_to_rgb(h, s, 0.8*v)]
+
+                    self.color_outline[hmm_ID] = tuple(map(str, darkRGB))
+                    r, g, b = darkRGB
+                    self.colors_outline_hex[hmm_ID] = f"#{r:02x}{g:02x}{b:02x}"
 
         except FileNotFoundError:
             print(f"Could not open domain colors file ({colors_file})")
@@ -442,41 +503,46 @@ class HMM_DB:
         return
 
 
-    def read_domain_roles(self, domain_roles_file, append=True):
-        """
-        input:
-            domain_roles_file. A tsv file with two columns:
-            hmm_ID \t role
-            Where role is one of biosynthetic, tailoring, transport, 
-            regulation, other, unknown
+    def read_domain_roles(self, domain_roles_file:Path, append=True) -> None:
+        """Reads a file linking domains with biosynthetic pathway role
+
+        Args:
+            domain_roles_file: A tsv file with two columns: hmm_ID and role
+                Where role is one of biosynthetic, tailoring, transport, 
+                regulation, other, unknown
             
-        append:
-            If False, the ID_to_role will be erased. Otherwise values will only
-            be overwritten for previously assigned IDs
+            append: If False, current information stored in self.the ID_to_role
+                will be erased first. Otherwise values will only be overwritten
+                for previously assigned IDs
         """
         if not append:
             self.ID_to_role.clear()
         
         try:
-            with open(domain_roles_file, "r") as f:
+            with open(domain_roles_file) as f:
                 for line in f:
-                    if line[0] == "#" or line.strip() == "":
+                    line = line.strip()
+                    if line[0] == "#" or line == "":
                         continue
                     
-                    ID, role = line.strip().split("\t")
+                    # a potential third column may contain a comment
+                    line = line.split("\t")
+                    ID = line[0]
+                    role = line[1]
                     
                     if role not in role_colors:
-                        print("Warning. Found unknown role when loading domain role file:\n{}\t{}".format(ID, role))
+                        print("Warning. Found unknown role when loading "
+                            + f"domain role file:\n{ID}\t{role}")
                     
                     self.ID_to_role[ID] = role
         except FileNotFoundError:
-            print("Could not open domain role file({})".format(str(domain_roles_file)))
+            print(f"Could not open domain role file({domain_roles_file})")
             
         return
     
     
     # TODO is it possible to use and integrate interpro rules?
-    def read_protein_types(self, protein_types_file, append=True):
+    def read_protein_types(self, protein_types_file:Path, append=True) -> None:
         """
         input:
             protein_types_file: A tsv file with two columns:
@@ -492,57 +558,65 @@ class HMM_DB:
             self.ID_to_role.clear()
         
         try:
-            with open(protein_types_file, "r") as f:
+            with open(protein_types_file) as f:
                 for line in f:
-                    if line[0] == "#" or line.strip() == "":
+                    line = line.strip()
+                    if line[0] == "#" or line == "":
                         continue
                     
-                    stripped_line = line.strip().split("\t")
+                    stripped_line = line.split("\t")
                     domain_signature = stripped_line[0]
                     protein_type = stripped_line[1]
-                    self.domain_signature_to_protein_type[domain_signature] = protein_type
+                    self.domain_signature_to_protein_type[domain_signature] = \
+                        protein_type
         except FileNotFoundError:
-            print("Could not open protein types file({})".format(str(protein_types_file)))
+            print(f"Could not open protein types file({protein_types_file})")
             
         return
 
 
 
 class ArrowerOpts:
-    """
-    Options for Arrower-like figures. Colors are linked with domains so see the
-    HMM_DB class for them.
+    """Options for Arrower-like figures. 
+    
+    Colors are linked with domains so see the HMM_DB class for them.
     """
     
-    def __init__(self, cfg=""):
-        self.scaling = 20                    # px per bp
-        
-        self.arrow_height = 40               # H: Height of arrows' body
-        #self.arrow_head_height = 15          # h: Additional width of arrows' head
+    def __init__(self, cfg=None):
+        self.shape = 'Arrow'    # Options: 'Arrow' and 'Ribbon'
+        self.scaling = 20               # px per bp
+        self.topbottom_margin = 2      # upper/bottom space between fig and 
+                                        # border
+
+        self.arrow_height = 40          # H: Height of arrows' body
+        #self.arrow_head_height = 15    # h: Additional height of arrows' head
                                         #  (i.e. total arrow head = H + 2*aH)
-                                        # internally, h = H/2 to preserve 45° angle
+                                        # internally, h = H/2 to preserve 45° 
+                                        # angle
                                         
-        #self.arrow_head_length = 30        # Distance from start of head till end.
+        #self.arrow_head_length = 30    # Distance from start of head till tip.
         
-        self.gene_contour_thickness = 2      # note: thickness grows outwards
+        self.gene_contour_thickness = 2 # note: thickness grows outwards
         
         self.internal_domain_margin = 3
         self.domain_contour_thickness = 1
         
-        self.stripe_thickness = 3
+        self.stripe_thickness = 3       # genetic track line
                 
         self._color_mode = "white"
-        self.valid_color_modes = {"white", "gray", "random-pastel", "random-dark", 
-                                  "random", "roles", "domains", "none"}
+        self._valid_color_modes = {
+            "white", "gray", "random-pastel", "random-dark", "random", "roles",
+            "domains", "none"
+        }
         
         self.outline = True
         self.show_domains = True
-        self.show_introns = True # Show the actual gap where the intron is
+        self.show_introns = True # Show a gap where introns are
 
         self.original_orientation = True # If false, all arrows will point forward
         
-        if cfg != "":
-            self.load_options(cfg)
+        if cfg is not None:
+            self.load_options(Path(cfg))
 
         return
 
@@ -551,134 +625,210 @@ class ArrowerOpts:
         return self._color_mode
     @color_mode.setter
     def color_mode(self, cm):
-        if cm in self.valid_color_modes:
+        if cm in self._valid_color_modes:
             self._color_mode = cm
         else:
             print("Color mode not supported; defaulting to 'white'")
-            print("Valid color modes are ['{}']".format("', '".join(self.valid_color_modes)))
+            color_modes_txt = "', '".join(self._valid_color_modes)
+            print(f"Valid color modes are ['{color_modes_txt}']")
             self._color_mode = "white"
 
 
-    def load_options(self, cfg):
-        cfgf = Path(cfg)
+    def load_options(self, cfg:Path) -> None:
+        """Loads options for the figures from a config file
         
-        if not cfgf.is_file():
-            print("Error: Not possible to load options file for ArrowerOpts ({})".format(str(cfg)))
-            return False
+        Args:
+            cfg: a path object to the cfg file
+
+        The file itself consists on option/value pairs (separated by an equal
+        symbol). A file with the defaults should be included in the project
+
+        The config file can contain a limited number of options
+        """
+
+        try:
+            assert cfg.is_file()
+        except AssertionError:
+            raise FileNotFoundError("Arrower options file: not a valid file")
         
-        for line in open(cfgf, "r"):
+        # collect data
+        temp_options = {}
+        for line in open(cfg, "r"):
             if line[0] == "#" or line.strip() == "":
                 continue
             
             try:
                 option, value = line.strip().split("=")
             except ValueError:
-                print("ArrowerOpts configuration file: ignoring bad line ({})".format(line.strip()))
+                print(f"ArrowerOpts configuration file: ignoring bad line "
+                    + f"({line.strip()})")
                 continue
             else:
                 option = option.strip().lower()
                 value = value.strip()
+
+                temp_options[option] = value
+
+        # Check text-based values
+        if 'shape' in temp_options:
+            shape_value = temp_options['shape']
+            try:
+                assert shape_value in {'Arrow', 'Ribbon'}
+            except AssertionError:
+                raise ValueError("Arrower config file: Value for option "
+                    + "'shape' should be 'Arrow' or 'Ribbon'")
+            else:
+                self.shape = shape_value
+
+        if 'color_mode' in temp_options:
+            color_mode_value = temp_options['color_mode'].lower()
+            if color_mode_value == "grey":
+                color_mode_value = "gray"
+            try:
+                assert color_mode_value in self._valid_color_modes
+            except AssertionError:
+                vcm_text = ", ".join(self._valid_color_modes)
+                raise ValueError("Arrower config file: Value for option "
+                    + f"'color_mode' should be one of: {vcm_text}")
+            else:
+                self._color_mode = color_mode_value
+
+        # Check integer values
+        int_opts = {
+            'topbottom_margin', 'scaling', 'arrow_height', 
+            'gene_contour_thickness', 'internal_domain_margin', 
+            'domain_contour_thickness', 'stripe_thickness'
+        }
+        for option in int_opts:
+            if option in temp_options:
+                try:
+                    value = int(temp_options[option])
+                except ValueError as e:
+                    e.add_note("Arrower config file: value for option "
+                        + f"'{option}' could not be converted to an integer")
+                    raise
+
+                try:
+                    assert value > 0
+                except AssertionError:
+                    e.add_note("Arrower config file: value for option "
+                        + f"'{option}' should be positive!")
+                    raise
                 
-                truefalse_errors = []
-                
-                if option == "scaling":
-                    self.scaling = int(value)
-                elif option == "arrow_height":
-                    self.arrow_height = int(value)
-                elif option == "gene_contour_thickness":
-                    self.gene_contour_thickness = int(value)
-                elif option == "internal_domain_margin":
-                    self.internal_domain_margin = int(value)
-                elif option == "domain_contour_thickness":
-                    self.domain_contour_thickness = int(value)
-                elif option == "stripe_thickness":
-                    self.stripe_thickness = int(value)
-                elif option == "color_mode":
-                    value = value.replace("'", "").replace('"', '').lower()
-                    if value in self.valid_color_modes:
-                        self.color_mode = value
-                elif option in {"outline", "show_domains", "show_introns",
-                        "original_orientation"}:
-                    value = value.capitalize()
-                    if value in {"True","False"}:
-                        if value == "True":
-                            value = True
-                        else:
-                            value = False
-                            
-                        if option == "outline":
-                            self.outline = value
-                        elif option == "show_domains":
-                            self.show_domains = value
-                        elif option == "original_orientation":
-                            self.original_orientation = value
-                        elif option == "show_introns":
-                            self.show_introns = value
-                    else:
-                        truefalse_errors.append(option)
+                setattr(self, option, value)
+
+        # Check boolean values
+        bool_opts = {
+            'outline', 'show_domains', 'show_introns', 'original_orientation'
+        }
+        for option in bool_opts:
+            if option in temp_options:
+                value = temp_options[option].capitalize()
+                try:
+                    assert value in {'True', 'False'}
+                except AssertionError as e:
+                    e.add_note("Arrower config file: value for option "
+                        + f"'{option}' should be either True or False")
+                    raise
                 else:
-                    pass
-                    # print("ArrowerOpts configuration file: unknown option {}".format(option))
-                    
-                if len(truefalse_errors) > 0:
-                    print("ArrowerOpts configuration file: the following options must have a value of True or False {}".format(option))
-                    
-        return True
+                    setattr(self, option, value == 'True')
+
+        # Finally, warn if weird, unsupported or typo'd options were used
+        all_opts = {
+            'shape', 'color_mode'
+        }
+        all_opts.update(int_opts)
+        all_opts.update(bool_opts)
+        for opt in temp_options:
+            if opt not in all_opts:
+                print(f"Arrower config file: Warning, unknown option '{opt}'")
+                
+        return
     
 
 
 class BGCCollection:
-    """
-    This class will allow implementation of collection-wide functions such as 
-    single-step prediction of domains and comparisons between collections
+    """Stores a collection of BGCs and implements collection-wide functions
     """
     
     def __init__(self):
-        self.bgcs = {}
+        self.bgcs = {}  # key: BGC.identifier
         self.name = ""
+
+    @classmethod
+    def from_file(cls, collection_file:Path):
+        """Loads a collection from a file
+        
+        Args:
+            collection_file: (Path) path to a pickled collection (usually with
+                extension bgccase)
+
+        Returns:
+            A BGCCollection object
+        """
+
+        assert collection_file.is_file()
+
+        with open(collection_file, "rb") as dc:
+            collection_data = pickle.load(dc)
+
+        assert isinstance(collection_data, cls)
+
+        return collection_data
 
 
     def __len__(self):
         return len(self.bgcs)
     
 
-    def add_gbk(self, gbk, identifier=""):
-        """
-        Creates a BGC from a gbk file and adds it to the collection
+    def add_gbk(self, gbk) -> None:
+        """Creates a BGC from a gbk file and adds it to the collection
+
+        Args:
+            gbk: (str/Path) path to the gbk file
+            identifier: (str, optional) internal name for the BGC. By default,
+                the stem of the file will be used
         """
         
-        bgc = BGC(gbk, identifier)
+        bgc = BGC(gbk)
         if bgc.identifier in self.bgcs:
-            print("Warning: {} already in BGC Collection. Skipping".format(bgc.identifier))
+            print(f"Warning: {bgc.identifier} already in BGC Collection. "
+                + "Skipping")
         else:
             self.bgcs[bgc.identifier] = bgc
 
     
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
+    def predict_domains(
+        self, 
+        hmmdb: HMM_DB, 
+        cpus = 1, 
+        tc = True, 
+        filterdoms = True
+    ) -> None:
+        """Predict domains in the collections' protein sequences
+
+        Args:
+            hmmdb: An HMM_DB object pointing to a valid hmm database
+            cpus: Number of cpus for hmm detection
+            tc: (bool) Use trusted cutoffs (score of the lowest-scoring known\
+                true positive)
+            filterdoms: (bool) Keep only the highest-scoring domain if over-\
+                lapping predictions found   
+
+
+        Compile the protein sequences of the whole collection and predict 
+        domains. Assign predicted domains to each protein and filter
         """
-        Compile the protein sequences of the whole collection and apply hmmscan
-        on them to predict domains. Assign predicted domains to each protein
-        and filter
-        """
-        assert(isinstance(hmmdb, HMM_DB))
-        if domtblout_path != "":
-            assert(isinstance(domtblout_path, Path))
+        assert isinstance(hmmdb, HMM_DB)
         
+        # assume all proteins have identifiers
         pc = ProteinCollection()
-        
-        missing_identifier = False
         for bgc in self.bgcs.values():
-            # bgc = self.bgcs[b]
             for protein in bgc.protein_list:
-                if protein.identifier != "":
-                    pc.proteins[protein.identifier] = protein
-                else:
-                    missing_identifier = True
-        
-        if missing_identifier:
-            print("Warning: one or more proteins don't have a valid identifier")
+                assert protein.identifier
+                pc.proteins[protein.identifier] = protein
             
-        pc.predict_domains(hmmdb, domtblout_path, cpus, tc, filterdoms)
+        pc.predict_domains(hmmdb, cpus, tc, filterdoms)
         
         for bgc in self.bgcs.values():
             bgc.attempted_domain_prediction = True
@@ -687,10 +837,8 @@ class BGCCollection:
         return
 
 
-    def classify_proteins(self, cpus=1):
-        """
-        Once domains have been predicted, use them to assign protein type
-        and protein role for all proteins in the collection
+    def classify_proteins(self, cpus=1) -> None:
+        """Use domains to assign type and role for all proteins in collection
         """
         
         with Pool(cpus) as pool:
@@ -698,12 +846,15 @@ class BGCCollection:
                 pool.apply_async(bgc.classify_proteins())
             pool.close()
             pool.join()
+
         return
 
 
     def clear_domain_predictions(self, cpus=1):
-        """
-        Remove all domain annotations from the proteins in this collection
+        """Remove all domain annotations from the proteins in this collection
+
+        This also removes each BGC-level domain information (domain_set, 
+            domain_set_core and domain_set_complement)
         """
 
         with Pool(cpus) as pool:
@@ -711,15 +862,16 @@ class BGCCollection:
                 pool.apply_async(bgc.clear_domain_predictions())
             pool.close()
             pool.join()
+
+        return
     
 
     def clear_protein_roles(self):
-        """
-        Removes all protein role annotations from the collection.
+        """Removes all protein role annotations from the collection.
+
         Note that this may affect annotations imported from the original
         GenBank files
         """
-
 
         for bgc in self.bgcs.values():
             for protein in bgc.protein_list:
@@ -728,8 +880,8 @@ class BGCCollection:
 
 
 class BGC:
-    def __init__(self, gbkfile=None, identifier=""):
-        self.identifier = identifier        # usually the file name
+    def __init__(self, gbkfile=None):
+        self.identifier = ""        # usually the file name
         
         self.CBPtypes = []          # Core Biosynthetic Protein List: simple
                                     #  5'-3' ordered list of biosynthetic types
@@ -741,7 +893,7 @@ class BGC:
         self.products = set()       # All different 'product' qualifiers  
                                     #  annotated by antiSMASH
         self.contig_edge = False    # antiSMASH v4+ was not able to fully 
-                                    #  complete the extension phase. BGC *might*
+                                    #  complete the extension phase. BGC might
                                     #  be fragmented
     
         self.protein_list = []      # should also be present in loci
@@ -761,268 +913,387 @@ class BGC:
         
         # try to initialize object with GenBank content
         if gbkfile is not None:
-            self.load(gbkfile, identifier)
+            self.load(gbkfile)
         
         
-    def load(self, _gbk, _id):
+    def load(self, gbk) -> None:
         """
         Initializes the object by reading all CDS fields from a GenBank file
         
-        Input is intended to be a Path() object (but it should work with a string)
+        Args:
+            Input is intended to be a Path() object (but it should work with a 
+        string)
         """
+
+        _gbk = Path(gbk)
+        assert _gbk.is_file(), f"{gbk} not a valid file"
+        self.identifier = _gbk.stem
         
-        if isinstance(_gbk, Path):
-            gbk = _gbk
-        else:
-            gbk = Path(_gbk)
-        
-        if self.identifier == "":
-            self.identifier = gbk.stem
-        
+        # # TODO: get lineage? implement the rest of the parsing using gb-io
+        # for locus_num, record in enumerate(gb_io.iter(str(_gbk))):
+        #     # find organism properties
+        #     source_list = list(filter(
+        #         lambda feat: feat.kind == 'source', 
+        #         record.features
+        #     ))
+        #     self.organism = Organism()
+        #     if len(source_list) == 1:
+        #         ft = source_list[0]
+        #         print(ft.qualifiers)
+        #         # this seems ineficient:
+        #         quals = dict((q.key, q.value) for q in ft.qualifiers)
+        #         self.organism.taxid = quals['db_xref'].split(":")[-1]
+        #         self.organism.fullname = quals['organism']
+        #     elif len(source_list) > 1:
+        #         print(f"Warning: {_gbk} has more than one 'source' feature")
+            
+        #     print('info')
+        #     print(dir(record))
+        #     print(record.accession)
+        #     print(record.definition)
+        #     print(record.division)
+        #     print(record.name)
+        #     print("features:\n")
+        #     for feature in record.features:
+        #         print(feature.kind)
+        #         print(feature.location)
+        #         print(feature.qualifiers)
+
+        # exit()
         try:
             records = list(SeqIO.parse(str(gbk), "genbank"))
         except ValueError as e:
-            print("Error, not able to parse file {}: {}".format(str(gbk), str(e)))
-        else:
-            self.accession = records[0].id
-            self.definition = records[0].description
+            e.add_note(f"Error, not able to parse file {str(gbk)}: {e}")
+            raise
 
-            if records[0].annotations["organism"] != "":
-                self.organism = Organism()
-                self.organism.fullname = records[0].annotations["organism"]
-                self.organism.lineage = records[0].annotations["taxonomy"]
-            
-            cds_list = []
-            
-            # traverse all possible records in the file. There's usually only 1
-            locus_num = 0
-            aS5 = True # Whether the BGC prediction comes from antiSMASH 5+
-            for record in records:
-                locus = BGCLocus()
-                locus.length = len(record.seq)
-                current_biosynthetic_region = FeatureLocation(locus.length+1, locus.length+2)
+        self.accession = records[0].id
+        self.definition = records[0].description
+
+        if records[0].annotations["organism"] != "":
+            self.organism = Organism()
+            self.organism.fullname = records[0].annotations["organism"]
+            self.organism.lineage = records[0].annotations["taxonomy"]
+        
+        cds_list = []
+        aS5 = True # Whether the BGC prediction comes from antiSMASH 5+
+
+        # traverse all possible records in the file. There's usually only 1
+        for locus_num, record in enumerate(records):
+            # collect all biosynthetic regions' coordinates (probably only a 
+            # single one per gbk, but it's possible to read a whole genome's
+            # genbank), then traverse all CDS to see which need to be marked 
+            biosynthetic_regions = []
+            locus = BGCLocus()
+            locus.identifier = f"{self.identifier}~{locus_num}"
+            locus.length = len(record)
+            cds_num = 0
+
+            for feature in record.features:
+                if feature.type == 'source':
+                    if "db_xref" in feature.qualifiers:
+                        taxon = feature.qualifiers['db_xref'][0]
+                        taxon_id = taxon.strip().split(":")[-1]
+                        self.organism.taxid = taxon_id
+
+                # antiSMASH <= 4
+                if feature.type == "cluster":
+                    aS5 = False
+                    if "product" in feature.qualifiers:
+                        for product in feature.qualifiers["product"]:
+                            for p in product.replace(" ","").split("-"):
+                                self.products.add(p)
+                            
+                    if "contig_edge" in feature.qualifiers:
+                        if feature.qualifiers["contig_edge"][0] == "True":
+                            self.contig_edge = True
+                            
+                    biosynthetic_regions.append(feature.location)
+                    continue
                 
-                cds_num = 0
+                # antiSMASH = 5
+                if feature.type == "region":
+                    if "product" in feature.qualifiers:
+                        for product in feature.qualifiers["product"]:
+                            self.products.add(product)
+                            
+                    if "contig_edge" in feature.qualifiers:
+                        # there might be mixed contig_edge annotations
+                        # in multi-record files. Turn on contig_edge when
+                        # there's at least one annotation
+                        if feature.qualifiers["contig_edge"][0] == "True":
+                            self.contig_edge = True
 
-                for feature in record.features:
-                    # antiSMASH <= 4
-                    if feature.type == "cluster":
-                        aS5 = False
-                        if "product" in feature.qualifiers:
-                            for product in feature.qualifiers["product"]:
-                                for p in product.replace(" ","").split("-"):
-                                    self.products.add(p)
-                                
-                        if "contig_edge" in feature.qualifiers:
-                            if feature.qualifiers["contig_edge"][0] == "True":
-                                self.contig_edge = True
-                                
-                        current_biosynthetic_region = feature.location
-                        continue
+                    biosynthetic_regions.append(feature.location)
+                    continue
+                            
+                if feature.type != "CDS": continue
+                
+                cds_num += 1
+                
+                CDS = feature
+                
+                cds_start = max(0, int(CDS.location.start))
+                cds_end = max(0, int(CDS.location.end))
+
+                identifier = f"{self.identifier}~L{locus_num}+CDS{cds_num}"
+
+                product = ""
+                if "product" in CDS.qualifiers:
+                    product = ", ".join(CDS.qualifiers["product"])
                     
-                    # antiSMASH = 5
-                    if feature.type == "region":
-                        if "product" in feature.qualifiers:
-                            for product in feature.qualifiers["product"]:
-                                self.products.add(product)
-                                
-                        if "contig_edge" in feature.qualifiers:
-                            # there might be mixed contig_edge annotations
-                            # in multi-record files. Turn on contig_edge when
-                            # there's at least one annotation
-                            if feature.qualifiers["contig_edge"][0] == "True":
-                                self.contig_edge = True
-
-                        current_biosynthetic_region = feature.location
-                        continue
-                                
-                    if feature.type != "CDS": continue
+                # NOTE: JGI annotations have a non-standard qualifier:
+                # "proteinId" or "proteinID", which is just a number 
+                # (sometimes). 
+                protein_id = ""
+                # found in NCBI:
+                if "protein_id" in CDS.qualifiers:
+                    protein_id = CDS.qualifiers["protein_id"][0]
                     
-                    cds_num += 1
-                    
-                    CDS = feature
-                    
-                    cds_start = max(0, int(CDS.location.start))
-                    cds_end = max(0, int(CDS.location.end))
+                # found in JGI
+                elif "proteinID" in CDS.qualifiers:
+                    protein_id = CDS.qualifiers["proteinID"][0]
+                elif "proteinId" in CDS.qualifiers:
+                    protein_id = CDS.qualifiers["proteinId"][0]
 
-                    identifier = "{}~L{}+CDS{}".format(self.identifier, locus_num, cds_num)
+                gene = ""
+                if "gene" in CDS.qualifiers:
+                    gene = CDS.qualifiers["gene"][0]
 
-                    product = ""
-                    if "product" in CDS.qualifiers:
-                        product = ", ".join(CDS.qualifiers["product"])
-                        
-                    # NOTE: JGI annotations have a non-standard qualifier:
-                    # "proteinId" or "proteinID", which is just a number (sometimes). 
-                    protein_id = ""
-                    # found in NCBI:
-                    if "protein_id" in CDS.qualifiers:
-                        protein_id = CDS.qualifiers["protein_id"][0]
-                        
-                    # found in JGI
-                    elif "proteinID" in CDS.qualifiers:
-                        protein_id = CDS.qualifiers["proteinID"][0]
-                    elif "proteinId" in CDS.qualifiers:
-                        protein_id = CDS.qualifiers["proteinId"][0]
+                role = ""
+                if "gene_kind" in CDS.qualifiers:
+                    role = CDS.qualifiers["gene_kind"][0]
 
-                    gene = ""
-                    if "gene" in CDS.qualifiers:
-                        gene = CDS.qualifiers["gene"][0]
+                # TODO: test this. It's a bit tricky with antiSMASH 5 now 
+                # with regions
+                protein_type = ""
+                if aS5 and role == "biosynthetic" and "gene_functions" \
+                        in CDS.qualifiers:
+                    protein_types = []
+                    for x in CDS.qualifiers["gene_functions"]:
+                        if x.startswith("biosynthetic (rule-based-clusters)"):
+                            protein_types.append(x.split("biosynthetic (rule-based-clusters) ")[1].split(":")[0])
+                    if len(set(protein_types)) == 1:
+                        protein_type = protein_types[0]
+                    elif "NRPS_PKS" in CDS.qualifiers:
+                        protein_type = "PKS-NRPS_hybrid"
+                        # TODO delete these
+                        #for x in CDS.qualifiers["NRPS_PKS"]:
+                            #if x.startswith("type:"):
+                                #protein_type = x.split("type: ")[1]
+                        # as they're not informative. e.g.: 
+                        # /NRPS_PKS="type: Type I Iterative PKS"
+                # TODO: partial compatibility with older antiSMASH results
+                elif "sec_met" in CDS.qualifiers:
+                    sec_met = {}
+                    for item in CDS.qualifiers["sec_met"]:
+                        split_item = item.split(": ")
+                        if len(split_item) == 2:
+                            sec_met[split_item[0]] = split_item[1]
+                        else:
+                            sec_met[split_item[0]] = ": ".join(
+                                split_item[1:]
+                                )
+                    if "Type" in sec_met:
+                        if sec_met["Type"] != "none" \
+                                and sec_met["Kind"] == "biosynthetic":
+                            protein_type = sec_met["Type"]
+                            role = "biosynthetic"
 
-                    role = ""
-                    if "gene_kind" in CDS.qualifiers:
-                        role = CDS.qualifiers["gene_kind"][0]
-
-                    # TODO: test this. It's a bit tricky with antiSMASH 5 now with regions
-                    protein_type = ""
-                    if aS5:
-                        if role == "biosynthetic" and "gene_functions" in CDS.qualifiers:
-                            protein_types = []
-                            for x in CDS.qualifiers["gene_functions"]:
-                                if x.startswith("biosynthetic (rule-based-clusters)"):
-                                    protein_types.append(x.split("biosynthetic (rule-based-clusters) ")[1].split(":")[0])
-                            if len(set(protein_types)) == 1:
-                                protein_type = protein_types[0]
-                            elif "NRPS_PKS" in CDS.qualifiers:
-                                protein_type = "PKS-NRPS_hybrid"
-                                # TODO delete these
-                                #for x in CDS.qualifiers["NRPS_PKS"]:
-                                    #if x.startswith("type:"):
-                                        #protein_type = x.split("type: ")[1]
-                                # as they're not informative. e.g.: 
-                                # /NRPS_PKS="type: Type I Iterative PKS"
-                    # TODO: partial compatibility with older antiSMASH results
-                    elif "sec_met" in CDS.qualifiers:
-                        sec_met = {}
-                        for item in CDS.qualifiers["sec_met"]:
-                            split_item = item.split(": ")
-                            if len(split_item) == 2:
-                                sec_met[split_item[0]] = split_item[1]
-                            else:
-                                sec_met[split_item[0]] = ": ".join(split_item[1:])
-                        if "Type" in sec_met:
-                            if sec_met["Type"] != "none" and sec_met["Kind"] == "biosynthetic":
-                                protein_type = sec_met["Type"]
-                                role = "biosynthetic"
-
-
-                    protein = BGCProtein()
-                    
-                    protein.identifier = identifier
-                    protein.product = product
-                    protein.protein_id = protein_id
-                    protein.gene = gene
-                    protein.role = role
-                    protein.protein_type = protein_type
-
-                    if cds_start in current_biosynthetic_region and cds_end in current_biosynthetic_region:
-                        protein.in_biosynthetic_region = True
-                    
-                    # TODO: check if the 'translation' annotation is really 
-                    # there. If not, try to manually translate from dna
-                    if "translation" not in CDS.qualifiers:
-                        print(" Warning. Skipping CDS without 'translation' qualifier: {}".format(identifier))
-                        continue
+                protein = BGCProtein()
+                
+                protein.identifier = identifier
+                protein.product = product
+                protein.protein_id = protein_id
+                protein.gene = gene
+                protein.role = role
+                protein.protein_type = protein_type
+                
+                if "translation" not in CDS.qualifiers:
+                    # print(" Warning. Generating translation for " \
+                    #   + f"{identifier} (standard codon table)")
+                    # TODO: there should be a way to warn user without 
+                    # spamming terminal with prints
+                    protein.sequence = CDS.translate(record.seq)
+                else:
                     protein.sequence = CDS.qualifiers["translation"][0]
-                    # TODO: verify sequence doesn't contain stop codons at the end (anywhere?)
+                # TODO: verify sequence doesn't contain stop codons at the 
+                # end (anywhere?)
 
-                    # TODO: verify that len(CDS.location.parts) == len(protein.sequence)
-                    
-                    # NOTE what happens if there is no strand info (strand=None)?
-                    if CDS.location.strand != 1:
-                        protein.forward = False
-                    
-                    protein.parent_cluster = self
-                    protein.parent_cluster_id = self.identifier
-                    protein.parent_locus = locus
-                    
-                    # TODO: detect overlapping CDS (e.g. gene annotation 
-                    #  errors, multiple splicing)
-                    del cds_list[:]
-                    for x in CDS.location.parts:
-                        cds_list.append((int(x.start), int(x.end)))
-                    protein.cds_regions = tuple(sorted(cds_list, key=itemgetter(0)))
+                # TODO: verify that 
+                # len(CDS.location.parts) == len(protein.sequence)
+                
+                # NOTE what happens if no strand info (strand=None)?
+                if CDS.location.strand != 1:
+                    protein.forward = False
+                
+                protein.parent_cluster = self
+                protein.parent_cluster_id = self.identifier
+                protein.parent_locus = locus
+                
+                # TODO: detect overlapping CDS (e.g. gene annotation 
+                #  errors, multiple splicing)
+                del cds_list[:]
+                for x in CDS.location.parts:
+                    cds_list.append((int(x.start), int(x.end)))
+                protein.cds_regions = tuple(
+                    sorted(cds_list, key=itemgetter(0))
+                    )
 
-                    self.protein_list.append(protein)
-                    self.proteins[protein.identifier] = protein
-                    locus.identifier = "{}~{}".format(self.identifier, locus_num)
-                    locus.protein_list.append(protein)
-                    locus.gene_coordinates.append((cds_start,cds_end))
+                self.proteins[protein.identifier] = protein
+                locus.protein_list.append(protein)
+                locus.gene_coordinates.append((cds_start,cds_end))
 
-                self.loci.append(locus)
-                locus_num += 1
-    
+
+            # CDSs will probably be ordered, but not guaranteed
+            locus.protein_list.sort(key=lambda p: p.cds_regions[0][0])
+            self.protein_list.extend(locus.protein_list)
+
+            # Mark CDSs that are inside a biosynthetic region
+            biosynthetic_regions.sort(key=lambda r: r.start)
+            p_index = 0
+            for region in biosynthetic_regions:
+                for protein in locus.protein_list[p_index:]:
+                    cds_start = protein.cds_regions[0][0]
+                    cds_end = protein.cds_regions[-1][1]
+
+                    if cds_end <= region.start:
+                        # haven't reach region
+                        p_index += 1
+                        continue
+                    elif cds_start >= region.end:
+                        # beyond current region, skip to the next region, but
+                        # don't advance p_index
+                        break
+                    else:
+                        p_index += 1
+                        protein.in_biosynthetic_region = True
+
+            self.loci.append(locus)
+            locus_num += 1
+
         self.set_CBP_content()
 
         return
-
+    
     
     # TODO: finish
-    def load_fasta(self, fasta):
-        """
-        Creates faux BGCs from a fasta file.
+    def load_fasta(self, fasta: Path) -> None:
+        """Creates faux BGCs from a fasta file.
+        
         Each entry in the fasta file will be treated as a separate locus.
         Assumes that the fasta file contains a protein sequence.
         """
-        pass
+        return
     
     
-    def inter_loci_element(self, xoffset, yoffset, svg_options=ArrowerOpts()):
-        """
-        Draws the following SVG figure as xml code to link loci genomic stripes:
+    def inter_loci_element(
+            self, 
+            xoffset: float, 
+            yoffset: float, 
+            H: float,
+            track_thickness: int
+        ):
+        """Creates an inter-loci figure
+
+        Args:
+            xoffset (float): Offset X (increases when going to the right)
+            yoffset (float): Offset Y (increases when going down)
+            H (float): Arrow main body height
+            track_thickness (int): Thickness of the genomic track
+
+        Draws the following SVG figure as xml code to link loci genomic 
+        stripes:
         __/ /__
          / /
         
-        and returns the corresponding etree element
+        and returns the corresponding etree element.
+        
+        xoffset/yoffset correspond to position of point A in an arrow
         """
         
-        H = svg_options.arrow_height
         
         inter_loci_main = etree.Element("g")
         
         inter_loci_attribs = {
             "stroke": "#464646",
-            "stroke-width": str(svg_options.stripe_thickness)
+            "stroke-width": str(track_thickness)
             }
             
         # left
-        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset), int(yoffset + 0.5*H), int(xoffset+0.375*H), int(yoffset + 0.5*H))
-        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
+        inter_loci_attribs["d"] = f"M{int(xoffset)} {int(yoffset + 0.5*H)} " \
+            + f"L {int(xoffset+0.375*H)} {int(yoffset + 0.5*H)}"
+        inter_loci_main.append(
+            etree.Element("path", attrib=inter_loci_attribs)
+        )
         
         # right
-        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset+0.625*H), int(yoffset + 0.5*H), int(xoffset+H), int(yoffset + 0.5*H))
-        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
+        inter_loci_attribs["d"] = f"M{int(xoffset+0.625*H)} " \
+            + f"{int(yoffset + 0.5*H)} L {int(xoffset+H)} " \
+            + f"{int(yoffset + 0.5*H)}"
+        inter_loci_main.append(
+            etree.Element("path", attrib=inter_loci_attribs)
+        )
         
         # slash1
-        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset + 0.25*H), int(yoffset + 0.75*H), int(xoffset + 0.5*H), int(yoffset + 0.25*H))
-        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
+        inter_loci_attribs["d"] = f"M{int(xoffset + 0.25*H)} " \
+            + f"{int(yoffset + 0.75*H)} L {int(xoffset + 0.5*H)} " \
+            + f"{int(yoffset + 0.25*H)}"
+        inter_loci_main.append(
+            etree.Element("path", attrib=inter_loci_attribs)
+        )
         
         # slash2
-        inter_loci_attribs["d"] = "M{} {} L {} {}".format(int(xoffset + 0.5*H), int(yoffset + 0.75*H), int(xoffset + 0.75*H), int(yoffset + 0.25*H))
-        inter_loci_main.append(etree.Element("path", attrib=inter_loci_attribs))
+        inter_loci_attribs["d"] = f"M{int(xoffset + 0.5*H)} " \
+            + f"{int(yoffset + 0.75*H)} L {int(xoffset + 0.75*H)} " \
+            + f"{int(yoffset + 0.25*H)}"
+        inter_loci_main.append(
+            etree.Element("path", attrib=inter_loci_attribs)
+        )
         
         return inter_loci_main
     
 
     # TODO: implement the extra_label parameter. The main issue is how to 
-    # calculate the width of the text element to take into account for the SVG width
-    def BGC_SVG(self, filename, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), extra_label="", xoffset=0, yoffset=0, mirror = False):
-        """
-        Writes an SVG figure for the cluster
+    # calculate the width of the text element to take into account for the SVG 
+    # width
+    def SVG(
+            self, 
+            filepath: Path, 
+            hmmdb = HMM_DB(), 
+            svg_options = ArrowerOpts(), 
+            extra_label = "", 
+            xoffset = 0.0, 
+            yoffset = 0.0, 
+            mirror = False
+        ) -> None:
+        """Writes an SVG figure of the cluster
+
+        Args:
+            filepath (Path): Name of the output file including path. \
+                Pre-existance of subfolders is not checked
+            hmmdb (HMM_DB): If BGC's proteins are annotated and need to be \
+                painted, this object provides alias and color information
+            svg_options (ArrowerOpts): Object that includes all relevant \
+                drawing options
+            extra_label (str): [not used yet]
+            xoffset (float): Offset X (increases when going to the right)
+            yoffset (float): Offset Y (increases when going down)
+            mirror (bool): True: flip the figure horizontally
         """
         
         # Arrows need to be represented in their original orientation. 
         # Be careful as not to modify input svg options though
-        if svg_options.original_orientation:
-            bgc_svg_options = svg_options
-        else:
-            bgc_svg_options = deepcopy(svg_options)
-            bgc_svg_options.original_orientation = True
+        bgc_svg_options = deepcopy(svg_options)
+        bgc_svg_options.original_orientation = True
         
         H = bgc_svg_options.arrow_height
+        margin = bgc_svg_options.topbottom_margin
         
         # length of the SVG figure
         # second term accounts for the inter-loci figure
-        L = sum([locus.length/bgc_svg_options.scaling for locus in self.loci]) + (H*(len(self.loci)-1))
+        L = sum(
+            [locus.length/bgc_svg_options.scaling for locus in self.loci]
+            ) + H*(len(self.loci)-1)
 
         # main node
         # Note: we are in dna space (so amino acid sequence must be scaled)
@@ -1031,22 +1302,50 @@ class BGC:
         thickness = bgc_svg_options.gene_contour_thickness
         Xoffset = xoffset + thickness
         Yoffset = yoffset + thickness
-        base_attribs = {"version":"1.1", 
-                        "baseProfile":"full",
-                        "width":str(int(Xoffset + L + thickness)),
-                        "height":str(int(Yoffset + 2*H + thickness))}
-        root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
-        
-        inner_tree = self.xml_BGC(Xoffset, Yoffset, hmmdb, bgc_svg_options, mirror=mirror)
+        base_attribs = {
+            "version":"1.1", 
+            "baseProfile":"full",
+            "width":str(int(Xoffset + L + thickness))
+        }
+        root = etree.Element(
+            "svg", 
+            attrib=base_attribs, 
+            nsmap={None:'http://www.w3.org/2000/svg'}
+        )
+
+        fig_height = margin + thickness + H
+        if bgc_svg_options.shape == 'Arrow':
+            fig_height += H
+        root.set('height', str(int(Yoffset + fig_height)))
+
+        inner_tree = self.xml_BGC(
+            Xoffset, Yoffset + margin/2, hmmdb, bgc_svg_options, mirror
+            )
         root.append(inner_tree)
         
-        with open(filename, "bw") as f:
+        with open(filepath, "bw") as f:
             f.write(etree.tostring(root, pretty_print=True))
 
 
-    def xml_BGC(self, xoffset, yoffset, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), mirror = False):
-        """
-        Creates a BGC SVG figure (xml structure)
+    def xml_BGC(
+            self, 
+            xoffset = 0.0, 
+            yoffset = 0.0, 
+            hmmdb = HMM_DB(), 
+            svg_options = ArrowerOpts(), 
+            mirror = False
+        ):
+        """Creates the internal xml structure of a BGC SVG
+
+        Args:
+            hmmdb (HMM_DB): If BGC's proteins are annotated and need to be \
+                painted, this object provides alias and color information
+            svg_options (ArrowerOpts): Object that includes all relevant \
+                drawing options
+            extra_label (str): [not used yet]
+            xoffset (int): Offset X (increases when going to the right)
+            yoffset (int): Offset Y (increases when going down)
+            mirror (bool): True: flip the figure horizontally
         """
         main_group = etree.Element("g")
         
@@ -1055,63 +1354,74 @@ class BGC:
         main_group.append(bgc_title)
         
         H = svg_options.arrow_height
-        h = 0.5*H
+        track_thickness = svg_options.stripe_thickness
+        h = 0.5*H # body to head vertical tip
+        if svg_options.shape == "Ribbon":
+            h = 0
         
-        l = 1
+        current_locus = 1
         Xoffset = xoffset # start of each locus
         loci_list = self.loci
         if mirror:
             loci_list = reversed(self.loci)
+
+        # genomic track vertical position
+        y_str = str(int(yoffset + h + 0.5*H))
         for locus in loci_list:
             L = locus.length/svg_options.scaling
             
             line_attribs = {
                 "x1": str(int(Xoffset)),
-                "y1": str(int(yoffset + h + 0.5*H)),
+                "y1": y_str,
                 "x2": str(int(Xoffset+L)),
-                "y2": str(int(yoffset + h + 0.5*H)),
+                "y2": y_str,
                 "stroke": "#464646",
-                "stroke-width": str(int(svg_options.stripe_thickness))
+                "stroke-width": str(int(track_thickness))
                 }
             line = etree.Element("line", attrib=line_attribs)
             main_group.append(line)
             
-            p = 0
-            intron_offset = 0.0
             for protein in locus.protein_list:
-                gene_start, gene_end = locus.gene_coordinates[p]
+                gene_start = protein.cds_regions[0][0] 
+                gene_end = protein.cds_regions[-1][1]
                 
-                gene_start = gene_start / svg_options.scaling
-                gene_position = gene_start-intron_offset
+                gene_position = gene_start / svg_options.scaling
                 if mirror:
-                    if svg_options.show_introns:
-                        gene_length = (protein.cds_regions[-1][1] - protein.cds_regions[0][0] - 3)/svg_options.scaling
-                    else:
-                        gene_length = (protein.length*3)/svg_options.scaling
+                    gene_length = (
+                        gene_end - gene_start - 3
+                    )/svg_options.scaling
+                   
                     gene_position = L - gene_position - gene_length
-                inner_tree = protein.xml_arrow(hmmdb, svg_options, \
-                    Xoffset + gene_position, yoffset, mirror=mirror)
+                
+                inner_tree = protein.xml_arrow(
+                    hmmdb, 
+                    svg_options, 
+                    Xoffset + gene_position, 
+                    yoffset, 
+                    mirror=mirror
+                )
                 main_group.append(inner_tree)
                 
-                p += 1
                 
             Xoffset += L
             
-            if l < len(self.loci):
+            if current_locus < len(self.loci):
                 # draw inter-locus fig of length H
-                # NOTE: the mirror parameter will flip each individual locus, not
-                # the whole collection of them. This means that the inter-loci
-                # element is still drawn at the end of each locus
-                main_group.append(self.inter_loci_element(Xoffset, yoffset + 0.5*H, svg_options))
+                main_group.append(
+                    self.inter_loci_element(
+                        Xoffset, yoffset + h, H, track_thickness
+                    )
+                )
             
                 Xoffset += H
-            l += 1
+            current_locus += 1
         
         return main_group
 
 
     def classify_proteins(self):
-        """
+        """Assigns (SM) role and protein_type to every protein in BGC
+
         Uses predicted domains to classify (Secondary Metabolism) role and 
         protein_type of all its proteins.
         """
@@ -1125,9 +1435,14 @@ class BGC:
 
     
     def set_CBP_content(self):
+        """Annotates internal CBP-related variables
+
+        Role of proteins needs to be set beforehand
+        """
+        
         del self.CBPtypes[:]        # ordered list
-        self.CBPtypes_set.clear()   # a set of all CBTs
-        self.CBPcontent.clear()     # CBT to list of BGCProtein
+        self.CBPtypes_set.clear()   # set of all CBTs
+        self.CBPcontent.clear()     # dict, CBT to list of BGCProtein
         for protein in self.protein_list:
             if protein.role == "biosynthetic":
                 self.CBPtypes.append(protein.protein_type)
@@ -1138,30 +1453,37 @@ class BGC:
         self.CBPtypes_set = set(self.CBPtypes)
 
 
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
+    def predict_domains(
+            self, 
+            hmmdb: HMM_DB, 
+            cpus=1, 
+            tc=True, 
+            filterdoms=True
+            ):
+        """Annotate domains for this BGC
+
+        Args:
+            hmmdb: An HMM_DB object pointing to a valid hmm database
+            cpus: Number of cpus for hmm detection
+            tc: (bool) Use trusted cutoffs (score of the lowest-scoring known\
+                true positive)
+            filterdoms: (bool) Keep only the highest-scoring domain if over-\
+                lapping predictions found  
+
+        Make a a protein collection from the proteins in this BGC and annotate
+        their domains using the provided hmm databases
         """
-        Compile the protein sequences of the whole collection and apply hmmscan
-        on them to predict domains. Assign predicted domains to each protein
-        and filter
-        """
-        assert(isinstance(hmmdb, HMM_DB))
-        if domtblout_path != "":
-            assert(isinstance(domtblout_path, Path))
+        assert isinstance(hmmdb, HMM_DB)
         
         pc = ProteinCollection()
         
         missing_identifier = False
 
         for protein in self.protein_list:
-            if protein.identifier != "":
-                pc.proteins[protein.identifier] = protein
-            else:
-                missing_identifier = True
-        
-        if missing_identifier:
-            print("Warning: one or more proteins don't have a valid identifier")
+            assert protein.identifier
+            pc.proteins[protein.identifier] = protein
             
-        pc.predict_domains(hmmdb, domtblout_path, cpus, tc, filterdoms)
+        pc.predict_domains(hmmdb, cpus=cpus, tc=tc, filterdoms=filterdoms)
         
         self.attempted_domain_prediction = True
         self.calculate_domain_sets()
@@ -1169,7 +1491,17 @@ class BGC:
         return
     
 
-    def calculate_domain_sets(self):
+    def calculate_domain_sets(self) -> None:
+        """Annotates the domain set internal variables
+        
+        Three sets are created:
+        - `domain_set`: all domains in BGC
+        - `domain_set_core`: only domains found in proteins with 'biosynthetic'
+            role
+        - `domain_set_complement`: domains outside proteins with 'biosynthetic'
+            role
+        """
+        self.domain_set = set()
         for protein in self.protein_list:
             self.domain_set.update(protein.domain_set)
             if protein.role == "biosynthetic":
@@ -1179,20 +1511,24 @@ class BGC:
     
 
     def clear_domain_predictions(self):
-        """
-        Remove all domain information for all the proteins in this BGC
+        """Remove all domain information for all the BGC's proteins
         """
 
         for protein in self.protein_list:
             protein.domain_list = []
             protein.domain_set = set()
+
+        self.domain_set = set()
+        self.domain_set_core = set()
+        self.domain_set_complement = set()
         
         self.attempted_domain_prediction = False
 
 
 
 class BGCLocus:
-    """
+    """Organizes data that is split in different records in the same file
+
     BGC might be divided in more than one locus (because of sequencing, or, as
     is more often the case in fungi, because of genomics)
     
@@ -1201,18 +1537,17 @@ class BGCLocus:
     def __init__(self):
         self.identifier = ""        # e.g. "bgc~L01"
         self.protein_list = []
-        self.gene_coordinates = []  # a list of tuples. end-start might not match
-                                    # the corresponding protein length due to 
-                                    # splicing, but will be useful for inter-
-                                    # protein region length when making arrower
-                                    # figure.
+        self.gene_coordinates = []  # a list of tuples. end-start might not 
+                                    # match the corresponding protein length 
+                                    # due to splicing, but will be useful for 
+                                    # inter-protein region length when making 
+                                    # arrower figure.
         self.length = 0
 
 
 
 class ProteinCollection:
-    """
-    Intended for mass-prediction of domains
+    """Intended for mass-prediction of domains
     """
     
     def __init__(self, fastafile=None):
@@ -1243,39 +1578,42 @@ class ProteinCollection:
             header = random_string
             sequence = ""
             for line in f:
-                if line.strip() == "":
+                line = line.strip()
+
+                if line == "":
                     continue
                 
                 if line[0] == ">":
                     if header == "":
                         print("Warning: skipping headerless sequence")
-                        print(" ({}...)".format(sequence[:50]))
+                        print(f" ({sequence[:50]}...)")
                         sequence = ""
-                        header = line.strip()[1:]
+                        header = line[1:]
                         continue
                     
                     if header != random_string:
                         if header in self.proteins:
-                            print("Warning: {} already in Protein Collection. \
-                                  Skipping...".format(header))
-                            print(" ({}...)".format(sequence[:50]))
+                            print(f"Warning: {header} already in Protein "
+                                + "Collection. Skipping...")
+                            print(f" ({sequence[:50]}...)")
                         else:
                             protein = BGCProtein()
                             protein.identifier = header
                             protein.sequence = sequence
                             self.proteins[header] = protein
                     sequence = ""
-                    header = line.strip()[1:]
+                    header = line[1:]
                 else:
-                    sequence += line.strip()
+                    sequence += line
                     
         if header == "":
             print("Warning: skipping headerless sequence")
-            print(" ({}...)".format(sequence[:50]))
+            print(f" ({sequence[:50]}...)")
         else:
             if header in self.proteins:
-                print("Warning: {} already in Protein Collection. Skipping...".format(header))
-                print(" ({})".format(sequence[:50]))
+                print(f"Warning: {header} already in Protein Collection. "
+                    + "Skipping...")
+                print(f" ({sequence[:50]})")
             else:
                 protein = BGCProtein()
                 protein.identifier = header
@@ -1304,12 +1642,12 @@ class ProteinCollection:
             try:
                 assert not domtblout_path.is_file()
             except AssertionError:
-                sys.exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
+                exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
             
         protein_list = []
         for protein_id in self.proteins:
             protein = self.proteins[protein_id]
-            protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
+            protein_list.append(f">{protein.identifier}\n{protein.sequence}")
                     
         if len(protein_list) == 0:
             return
@@ -1318,7 +1656,7 @@ class ProteinCollection:
         #  * merge all hmmdbs and remove this loop
         #  * Divide the protein collection into groups where each group is cpus // 3
         #  * do "with Pool(groups) as pool"
-        for db in hmmdb.db_list:
+        for db in hmmdb.db_path_list:
             #command = ['hmmscan', '--cpu', str(cpus), '--noali', '--notextw']
             command = ['hmmscan', '--cpu', str(cpus), '--notextw', '--qformat', 'fasta']
             if tc and db.stem not in hmmdbs_without_tc:
@@ -1345,7 +1683,7 @@ class ProteinCollection:
                 # and the first part as the "id" but probably this isn't what 
                 # we want
                 if qresult.description != "<unknown description>":
-                    seq_identifier = "{} {}".format(qresult.id, qresult.description)
+                    seq_identifier = f"{qresult.id} {qresult.description}"
                 else:
                     seq_identifier = qresult.id
                                 
@@ -1435,87 +1773,18 @@ class ProteinCollection:
             pool.join()
     
         return
-
-
-    # # TODO: finish this. Challenge is target now is the query
-    # def predict_domains_search(self, hmmdb, domtblout_path="", cpus=1, tc=True):
-    #     """
-    #     Uses hmmsearch to search the protein sequences for hmm models specified
-        
-    #     input:
-    #         hmmdb: contains a list to all hmm databases
-    #         domtblout_path: where to store HMMER's output file (optional)
-    #         cpus: number of cpus to pass to HMMER. Remember it uses cpu + 1
-    #         tc: if true, use the model's Trusted Cutoff score (lower score of all
-    #             true positives)
-    #     """
-        
-    #     if domtblout_path != "":
-    #         try:
-    #             assert not domtblout_path.is_file()
-    #         except AssertionError:
-    #             sys.exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
-            
-    #     protein_list = []
-    #     for protein_id in self.proteins:
-    #         protein = self.proteins[protein_id]
-    #         protein_list.append(">{}\n{}".format(protein.identifier, protein.sequence))
-                    
-    #     if len(protein_list) == 0:
-    #         return
-        
-    #     for db in hmmdb.db_list:
-    #         command = ['hmmsearch', '--cpu', str(cpus), '--notextw']
-    #         if tc:
-    #             command.append('--cut_tc')
-    #         if domtblout_path != "":
-    #             path = str(domtblout_path / ("output_" + db.stem + ".domtable"))
-    #             command.extend(['--domtblout', path ])
-    #         dbpath = str(db)
-    #         command.extend([ dbpath, '-'])
-            
-    #         proc_hmmscan = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    #         out, err = proc_hmmscan.communicate(input="\n".join(protein_list).encode("utf-8"))
-            
-    #         # "SearchIO parses a search output file's contents into a hierarchy of four 
-    #         # nested objects: QueryResult, Hit, HSP, and HSPFragment"
-    #         # http://biopython.org/DIST/docs/api/Bio.SearchIO-module.html
-    #         results = SearchIO.parse(StringIO(out.decode()), 'hmmer3-text')
-    #         for qresult in results:
-    #             #print(qresult)
-    #             for hit in qresult:
-    #                 for hsp in hit:
-    #                     hspf = hsp[0] # access to HSPFragment
-
-    #                     seq_identifier = qresult.id
-    #                     hmm_id = hit.id
-    #                     ali_from = hspf.query_start
-    #                     ali_to = hspf.query_end
-    #                     hmm_from = hspf.hit_start
-    #                     hmm_to = hspf.hit_end
-    #                     env_from = hsp.env_start
-    #                     env_to = hsp.env_end
-                        
-    #                     Evalue = hsp.evalue
-    #                     score = hsp.bitscore
-                        
-    #                     domain = BGCDomain(self.proteins[seq_identifier], 
-    #                                        hmm_id, env_from, env_to, ali_from, 
-    #                                        ali_to, hmm_from, hmm_to, score, 
-    #                                        Evalue, algn_seq)
-                        
-    #                     self.proteins[seq_identifier].domain_list.append(domain)
-        
-    #     with Pool(cpus) as pool:
-    #         for p in self.proteins:
-    #             protein = self.proteins[p]
-    #             pool.apply_async(protein.filter_domains())
-    #             protein.attempted_domain_prediction = True
-    #         pool.close()
-    #         pool.join()
     
-    #     return
-    
+
+    def predict_domains_(self, hmmdb):
+        """Searches protein sequences against databases of hmm models
+        """
+
+        # Prepare databses:
+        hmms = []
+        for db in hmmdb.db_path_list:
+            with HMMFile(db) as hmm_file:
+                hmms.append(hmm_file.read())
+
 
     def classify_proteins(self, cpus=1):
         """
@@ -1547,10 +1816,9 @@ class ProteinCollection:
             seq_list = self.proteins.keys()
         for p_id in seq_list:
             p = self.proteins[p_id]
-            header = "{} ProteinId:{} GeneId:{}".format(p.identifier, \
-                p.protein_id, p.gene)
+            header = f"{p.identifier} ProteinId:{p.protein_id} GeneId:{p.gene}"
 
-            sequences.append(">{}\n{}".format(header, p.sequence80()))
+            sequences.append(f">{header}\n{p.sequence80()}")
 
         return "".join(sequences)
 
@@ -1562,7 +1830,7 @@ class BGCProtein:
     """
         
     def __init__(self):
-        self.parent_cluster = None  # Should point to an object of the BGC class
+        self.parent_cluster = None  # Parent BGC object
         self.parent_cluster_id = ""
         self.parent_locus = None    # Should point to an object of the BGCLocus class
         
@@ -1665,8 +1933,8 @@ class BGCProtein:
         part_two = ""
         remainder = length % 80
         if remainder > 0:
-            part_two = "{}\n".format(seq[-remainder:])
-        return "{}\n{}".format(part_one, part_two)
+            part_two = f"{seq[-remainder:]}\n"
+        return f"{part_one}\n{part_two}"
         
         
     # TODO rename to "get_fasta"?
@@ -1696,8 +1964,8 @@ class BGCProtein:
 
             molecules = ",".join(m.replace("/", "") for m in metabolite_list)
             
-        return ">{}|{}|{}|{}\n{}".format(self.identifier, self.protein_id, \
-            self.gene, molecules, self.sequence80(start, end))
+        return f">{self.identifier}|{self.protein_id}|{self.gene}|" \
+            f"{molecules}\n{self.sequence80(start, end)}"
 
 
     def domain_string(self, domain_alias, original_orientation=False, simple=True):
@@ -1740,14 +2008,19 @@ class BGCProtein:
 
         if original_orientation and not self.forward:
             if simple:
-                return "< {}".format(" | ".join(reversed(domain_alias_list)))
+                # Only Python 3.12+ can do this within the f-string
+                dom_list = " | ".join(reversed(domain_alias_list))
+                return f"< {dom_list}"
             else:
-                return "<--[{}]--|".format("]-[".join(reversed(domain_alias_list)))
+                dom_list = "]-[".join(reversed(domain_alias_list))
+                return f"<--[{dom_list}]--|"
         else:
             if simple:
-                return "{} >".format(" | ".join(domain_alias_list))
+                dom_list = " | ".join(domain_alias_list)
+                return f"{dom_list} >"
             else:
-                return "|--[{}]-->".format("]-[".join(domain_alias_list))
+                dom_list = "]-[".join(domain_alias_list)
+                return f"|--[{dom_list}]-->"
         
         
     def recursive_interval(self, interval_list):
@@ -2057,11 +2330,18 @@ class BGCProtein:
         intron_break = False
 
         # main node
-        base_attribs = {"version":"1.1", 
-                        "baseProfile":"full",
-                        "width":str(int(self.length/scaling)),
-                        "height":str(int(2*h + H))}
-        root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
+        base_attribs = {
+            "version":"1.1", 
+            "baseProfile":"full",
+            "width":str(int(self.length/scaling)),
+            "height":str(int(2*h + H))
+        }
+
+        root = etree.Element(
+            "svg", 
+            attrib=base_attribs, 
+            nsmap={None:'http://www.w3.org/2000/svg'}
+        )
         main_group = etree.SubElement(root, "g")
         
         # add title
@@ -2070,11 +2350,13 @@ class BGCProtein:
         main_group.append(title)
         
         # genomic locus line
-        genomic_locus_attribs = {"x1":"0", 
-                                 "y1":str(int(h+H/2)),
-                                 "x2":str(int(self.length/scaling)),
-                                 "y2":str(int(h+H/2)),
-                                 "style":"stroke:#0a0a0a; stroke-width:{}".format(stripe_thickness)}
+        genomic_locus_attribs = {
+            "x1":"0", 
+            "y1":str(int(h+H/2)),
+            "x2":str(int(self.length/scaling)),
+            "y2":str(int(h+H/2)),
+            "style":f"stroke:#0a0a0a; stroke-width:{stripe_thickness}"
+        }
         genomic_locus = etree.Element("line", attrib=genomic_locus_attribs)
         main_group.append(genomic_locus)
 
@@ -2096,13 +2378,15 @@ class BGCProtein:
             domain_title = etree.Element("title")
             domain_title.text = title
             
-            domain_box_attribs = {"x":str(int(domain.ali_from/scaling)),
-                                  "y":"0",
-                                  "rx":str(curve_radius),
-                                  "ry":str(curve_radius),
-                                  "width":str(int((domain.ali_to - domain.ali_from)/scaling)),
-                                  "height":str(int(2*H)),
-                                  "fill":"rgb({})".format(color)}
+            domain_box_attribs = {
+                "x":str(int(domain.ali_from/scaling)),
+                "y":"0",
+                "rx":str(curve_radius),
+                "ry":str(curve_radius),
+                "width":str(int((domain.ali_to - domain.ali_from)/scaling)),
+                "height":str(int(2*H)),
+                "fill":f"rgb({color})"
+            }
             domain_box = etree.Element("rect", attrib = domain_box_attribs)
             
             domain_node_main = etree.Element("g")
@@ -2129,14 +2413,18 @@ class BGCProtein:
                 
                 # intron background
                 if self.forward:
-                    intron_attribs = {"d":"M {:d} 0 L {:d} {:d}".format(current_x-offset, current_x-offset, 2*H),
-                                    "stroke":"#ffffff",
-                                    "stroke-width":"2"}
+                    intron_attribs = {
+                        "d":f"M {current_x-offset:d} 0 L {current_x-offset:d} {2*H:d}",
+                        "stroke":"#ffffff",
+                        "stroke-width":"2"
+                    }
                 else:
                     # if reverse, mirror position of introns
-                    intron_attribs = {"d":"M {:d} 0 L {:d} {:d}".format(l-current_x+offset, l-current_x+offset, 2*H),
-                                    "stroke":"#ffffff",
-                                    "stroke-width":"2"}
+                    intron_attribs = {
+                        "d":f"M {l-current_x+offset:d} 0 L {l-current_x+offset:d} {2*H:d}",
+                        "stroke":"#ffffff",
+                        "stroke-width":"2"
+                    }
                 intron_main.append(etree.Element("path", attrib=intron_attribs))
                 
                 # intron dashed line
@@ -2197,7 +2485,8 @@ class BGCProtein:
             if len(self.domain_list) > 0:
                 domain = self.domain_list[0]
                 try:
-                    color = "#{}".format("".join( hex(int(c))[2:] for c in hmmdb.colors[domain.ID] ))
+                    hex_color = "".join( hex(int(c))[2:] for c in hmmdb.colors[domain.ID] )
+                    color = f"#{hex_color}"
                 except KeyError:
                     color = "#eff0f1"
             else:
@@ -2250,12 +2539,50 @@ class BGCProtein:
             f.write(etree.tostring(root, pretty_print=True))
         
     
-    def xml_arrow(self, hmmdb=HMM_DB(), svg_options=ArrowerOpts(), xoffset=0, yoffset=0, mirror=False, needs_class_data=True):
-        """Creates an arrow SVG figure (xml structure)
+    def xml_arrow(
+            self, 
+            hmmdb = HMM_DB(), 
+            svg_options = ArrowerOpts(), 
+            xoffset = 0, 
+            yoffset = 0, 
+            mirror = False, 
+            needs_class_data = True
+        ):
+        """Creates an gene SVG figure (xml structure)
+
+        Args:
+            hmmdb (HMM_DB): If BGC's proteins are annotated and need to be \
+                painted, this object provides alias and color information
+            svg_options (ArrowerOpts): Object that includes all relevant \
+                drawing options
+            xoffset (int): Offset X (increases when going to the right)
+            yoffset (int): Offset Y (increases when going down)
+            mirror (bool): True: flip the figure horizontally
+            needs_class_data: to be implemented. Highest level call (protein, \
+                BGC, BGC list) should define style classes for genes, introns \
+                and domains to save even more space
+
+        Returns:
+            etree object
         
         Starting from upper left corner (X,Y), the vertices of the arrow are
-        (clockwise)
-        A, B, C, D (tip of the arrow), E, F, G
+        (clockwise): A, B, C, D (tip of the arrow), E, F, G
+                    C
+                    | \
+          (X,Y)A ___|  \
+                |   B   \ 
+                |       / D
+                |___F  /
+               G    | /
+                    |/
+                    E
+
+        Where A = (X,Y) = (xoffset, yoffset+h)
+
+        Shorter genes: C, D, E
+        Ribbons: A, B, D, F, G
+        Shorter Ribbons: A, D, G
+
         (not considering vertices created by intron regions)
         But note that here the first coordinate to be annotated will be the one
         in the bottom left corner (G or E, depending on whether the arrow is 
@@ -2265,30 +2592,13 @@ class BGCProtein:
         head. Vertices:
         a, b, c, d (if domain end matches the arrow's), e, f, g
     
-        in:
-            options through an ArrowerOpts object
-                L: total arrow length
-                l: length of arrow head (45° angle)
-                H: height of arrow's body (A-G, B-F)
-                h: height of top/bottom arrow edge (B-C, E-F)
-                
-            an object of the HMM_DB class which contains domain information
+        Other relevant numbers:
+            L: total arrow length
+            l: length of arrow head (45° angle)
+            H: height of arrow's body distance(A,G) == distance(B,F)
+            h: height of top/bottom arrow edge distance(B,C) == dist.(E,F)
             
-            xoffset /yoffset: upper left corner of the canvas
-            
-            (svg_options.original_orientation): draw arrow according to strand information
-            mirror: draw arrow with the opposite direction of the strand orientation
-        out:
-            an etree tree
-            
-        X,Y: coordinate of the upper left corner of the arrow's tail (if it's
-        pointing forward). A = (X,Y) = (xoffset, yoffset+h)
-        
         Note that scaling only happens on the x axis
-
-        needs_class_data: to be implemented. Highest level call (protein, BGC, 
-            BGC list) should define style classes for genes, introns and domains 
-            to save even more space
         """
         
         fill_color = self.arrow_colors(svg_options.color_mode, hmmdb)
@@ -2301,10 +2611,15 @@ class BGCProtein:
         L = self.cds_regions[-1][1] - self.cds_regions[0][0]
         
         scaling = svg_options.scaling
+        shape = svg_options.shape
 
         H = svg_options.arrow_height
-        h = H/2
-        l = H * scaling # needs to be scaled along the x-axis
+        H_scaled = H * scaling
+        h = 0
+        l = 0.5 * H_scaled # needs to be scaled along the x-axis
+        if shape == "Arrow":
+            h = H/2
+            l = H_scaled 
         Y = h # X = 0 (xoffset)
         
         idm = svg_options.internal_domain_margin
@@ -2321,8 +2636,9 @@ class BGCProtein:
         if self.protein_id:
             arrow_identifier = f"{self.identifier} [{self.protein_id}]"
         
-        # If only one domain and color_mode == 'domains', don't draw domains even
-        # if requested (instead, whole arrow will be filled with domain's color)
+        # If only one domain and color_mode == 'domains', don't draw domains 
+        # even if requested (instead, whole arrow will be filled with domain's 
+        # color)
         core_type = ""
         if self.role == "biosynthetic":
             core_type = f"\n{self.protein_type}"
@@ -2342,32 +2658,45 @@ class BGCProtein:
 
         # precalculate a couple of numbers
         vertices = []
+        
+        # This determines whether we have a normal arrow/ribbon or a squished
+        # triangle
         head_start = L - l # In local 'arrow coordinates'
         if head_start <= 0:
             head_start = 0
-        center = Y + h
-        Hl = H/l # alpha = (H*(L-start)/l) distance from center to colission with head
+        center = Y + 0.5*H
+
+        # alpha = (H*(L-start)/l) distance from center to colission with head
+        Hl = H/l 
         HL = H/L # for shorter arrows
 
         #
         # DRAW MAIN GENE AREA
         vertices = list()
+        D = [L, center]
         if head_start == 0:
             # short arrow
-            C = [0, 0]
-            D = [L, center]
-            E = [0, Y + H + h]
-            vertices = [C, D, E]
+            if shape == "Ribbon":
+                A = [0, Y]
+                G = [0, Y + H]
+                vertices = [A, D, G]
+            else:
+                C = [0, 0]
+                E = [0, Y + H + h]
+                vertices = [C, D, E]
         else:
             # full arrow
             A = [0, Y]
             B = [head_start, Y]
-            C = [head_start, 0]
-            D = [L, center]
-            E = [head_start, Y + H + h]
             F = [head_start, Y + H]
             G = [0, Y + H]
-            vertices = [A, B, C, D, E, F, G]
+
+            if shape == "Ribbon":
+                vertices = [A, B, D, F, G]
+            else:
+                C = [head_start, 0]
+                E = [head_start, Y + H + h]
+                vertices = [A, B, C, D, E, F, G]
 
         # flip if requested and gene is in the reverse strand
         if flip:
@@ -2375,21 +2704,26 @@ class BGCProtein:
                 v[0] = L - v[0]
         
         # rescale everything
+        rescale = 1 / scaling
         for v in vertices:
-            v[0] = v[0]/scaling
+            v[0] = v[0]*rescale
         
         # shape properties
         string_vertices = []
         for v in vertices:
-            string_vertices.append(f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}")
+            string_vertices.append(
+                f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}"
+            )
         
         region_attribs = dict()
-        region_attribs["class"] = "exon"
+        region_attribs["class"] = "gene"
         region_attribs["points"] = " ".join(string_vertices)
         region_attribs["fill"] = fill_color
 
         if needs_class_data:
-            region_attribs["stroke-width"] = str(svg_options.gene_contour_thickness)
+            region_attribs["stroke-width"] = str(
+                svg_options.gene_contour_thickness
+            )
             if svg_options.outline:
                 region_attribs["stroke"] = "#0a0a0a"
                 
@@ -2398,69 +2732,94 @@ class BGCProtein:
 
         #
         # DRAW INTRONS
-        intron_regions = list()
-        intron_elements = list()
+        intron_regions = []
+        intron_elements = []
         if show_introns and len(self.cds_regions) > 1:
-            # calculate regions.
+            # calculate intron (inter-CDS) regions.
             # Coordinates are relative to the start of the gene-arrow
             if self.forward:
                 cds_start = self.cds_regions[0][0]
                 for cds_num in range(len(self.cds_regions) - 1):
-                    intron_regions.append((self.cds_regions[cds_num][1] + 1 - cds_start, 
-                        self.cds_regions[cds_num+1][0] - 1 - cds_start))
+                    intron_regions.append(
+                        (self.cds_regions[cds_num][1] + 1 - cds_start, 
+                        self.cds_regions[cds_num+1][0] - 1 - cds_start)
+                    )
             else:
                 cds_end = self.cds_regions[-1][1] + 1
                 for cds_num in range(len(self.cds_regions)-1, 0, -1):
-                    intron_regions.append((cds_end - self.cds_regions[cds_num][0], 
-                        cds_end - self.cds_regions[cds_num-1][1] - 1))
+                    intron_regions.append(
+                        (cds_end - self.cds_regions[cds_num][0], 
+                        cds_end - self.cds_regions[cds_num-1][1] - 1)
+                    )
 
-            for intron in intron_regions:
-                start = intron[0]
-                end = intron[1]
-                vertices = list()
+            for intron_start, intron_end in intron_regions:
+                vertices = []
 
-                if start < head_start:
-                    G = [start, Y + H]
-                    vertices.append(G)
-                    A = [start, Y]
-                    vertices.append(A)
+                # draw left-most part of intron
+                if intron_start < head_start:
+                    g = [intron_start, Y + H]
+                    vertices.append(g)
+                    a = [intron_start, Y]
+                    vertices.append(a)
                 else:
                     if head_start == 0:
-                        alpha = (HL*(L-start))
+                        # squeezed triangle
+                        alpha = HL*(L-intron_start)
+                        if shape == "Ribbon":
+                            alpha *= 0.5
                     else:
-                        alpha = (Hl*(L-start))
-                    Eprime = [start, center + alpha]
-                    vertices.append(Eprime)
-                    Cprime = [start, center - alpha]
-                    vertices.append(Cprime)
+                        # full arrow/ribbon
+                        alpha = L-intron_start
+                        if shape == "Arrow":
+                            alpha *= Hl
+                        else:
+                            # alpha is scaled in arrows when dividing by L or
+                            # l, but not in ribbons
+                            alpha *= rescale
+                
+                    e_prime = [intron_start, center + alpha]
+                    vertices.append(e_prime)
+                    c_prime = [intron_start, center - alpha]
+                    vertices.append(c_prime)
 
                 # draw right-most part of region
-                if end <= head_start:
-                    Aprime = [end, Y]
-                    vertices.append(Aprime)
-                    Gprime = [end, Y + H]
-                    vertices.append(Gprime)
+                if intron_end <= head_start:
+                    # intron begins and ends before head_start; is a rectangle
+                    a_prime = [intron_end, Y]
+                    vertices.append(a_prime)
+                    g_prime = [intron_end, Y + H]
+                    vertices.append(g_prime)
                 else:
-                    if start < head_start:
-                        B = [head_start, Y]
-                        vertices.append(B)
-                        C = [head_start, Y-h]
-                        vertices.append(C)
+                    if (intron_start < head_start):
+                        b = [head_start, Y]
+                        vertices.append(b)
+                        c = [head_start, Y-h]
+                        vertices.append(c)
                     
                     if head_start == 0:
-                        alpha = (HL*(L-end))
+                        # squeezed triangle
+                        alpha = HL*(L-intron_end)
+                        if shape == "Ribbon":
+                            alpha *= 0.5
                     else:
-                        alpha = (Hl*(L-end))
-                    Cprimeprime = [end, center - alpha]
-                    vertices.append(Cprimeprime)
-                    Eprimeprime = [end, center + alpha]
-                    vertices.append(Eprimeprime)
+                        # full arrow/ribbon
+                        alpha = L-intron_end
+                        if shape == "Arrow":
+                            alpha *= Hl
+                        else:
+                            # alpha is scaled in arrows when dividing by L or
+                            # l, but not in ribbons
+                            alpha *= rescale
+                    c_primeprime = [intron_end, center - alpha]
+                    vertices.append(c_primeprime)
+                    e_primeprime = [intron_end, center + alpha]
+                    vertices.append(e_primeprime)
                         
-                    if start < head_start:
-                        E = [head_start, Y + H + h]
-                        vertices.append(E)
-                        F = [head_start, Y + H]
-                        vertices.append(F)
+                    if (intron_start < head_start):
+                        e = [head_start, Y + H + h]
+                        vertices.append(e)
+                        f = [head_start, Y + H]
+                        vertices.append(f)
 
                 # flip if requested and gene is in the reverse strand
                 if flip:
@@ -2469,30 +2828,37 @@ class BGCProtein:
                 
                 # rescale everything
                 for v in vertices:
-                    v[0] = v[0]/scaling
+                    v[0] = v[0]*rescale
                 
                 # shape properties
-                region_attribs = dict()
-                region_attribs["stroke-width"] = str(svg_options.gene_contour_thickness)
-                region_attribs["stroke-opacity"] = "0.8"
-                region_attribs["class"] = "intron"
-                region_attribs["fill"] = "#d8d8d8"
-                region_attribs["fill-opacity"] = "0.5"
+                region_attribs = {
+                    "stroke-width": str(svg_options.gene_contour_thickness),
+                    "stroke-opacity": "0.85",
+                    "class": "intron",
+                    "fill": "#e6e6e6",
+                    "fill-opacity": "0.5"
+                }
                 # region_attribs["stroke-dasharray"] = "3,2"
                 if svg_options.outline:
                     region_attribs["stroke"] = "#919191"
 
                 string_vertices = []
                 for v in vertices:
-                    string_vertices.append(f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}")
+                    string_vertices.append(
+                        f"{round(v[0]+xoffset, 2)},{round(v[1]+yoffset, 2)}"
+                    )
                 region_attribs["points"] = " ".join(string_vertices)
                 intron_element = etree.Element("polygon", attrib=region_attribs)
 
                 intron_elements.append(intron_element)
 
+        # Draw intron elements
+        for intron_element in intron_elements:
+            main_group.append(intron_element)
+
         #
         # DOMAINS 
-        domain_elements = list()
+        domain_elements = []
         if show_domains and len(self.domain_list) > 0:
             # split each domain into dna regions
             offset = 0
@@ -2516,7 +2882,8 @@ class BGCProtein:
                 for e, s in self.cds_regions[::-1]:
                     forward_regions.append(tuple([end-s, end-e]))
 
-            # prepare domain regions
+            # Convert a domain (start/end) into domain regions (broken 
+            # according to gene structure)
             for domain in self.domain_list:
                 # get cDNA coordinates
                 dstart = domain.ali_from * 3    # inclusive dstart
@@ -2524,14 +2891,18 @@ class BGCProtein:
 
                 # get genomic coordinates
                 offset = 0
-                regions = list()
+                regions = []
                 for current_cds, cds in enumerate(forward_regions):
                     # CDS is before domain. Push domain forward
                     if cds[1] < dstart:
                         try:
-                            offset = forward_regions[current_cds+1][0] - cds[1] + 1
+                            # advance the length of the incoming intron
+                            offset = forward_regions[current_cds+1][0] \
+                                - cds[1] + 1
                         except IndexError:
-                            print(f"Warning, domain {domain.AC} out of range {self.identifier} (incomplete GenBank?)")
+                            print(f"Warning, domain {domain.AC} out of range" \
+                                  + f" {self.identifier} (incomplete " \
+                                  + "GenBank?)")
                             # print(self.identifier)
                             # print(domain.AC)
                             # print(cds, dstart, dend)
@@ -2548,7 +2919,8 @@ class BGCProtein:
                     elif cds[1] < dend:
                         regions.append(tuple([dstart, cds[1]+1]))
                         if current_cds < len(forward_regions) - 1:
-                            offset = forward_regions[current_cds+1][0] - cds[1] + 1
+                            offset = forward_regions[current_cds+1][0] \
+                                - cds[1] + 1
                             dstart = forward_regions[current_cds+1][0]
                             dend += offset
                     # CDS overlaps completely with domains
@@ -2563,9 +2935,17 @@ class BGCProtein:
                     "regions": regions})
 
             if head_start == 0:
-                arrow_collision = L - ( (h-idm)/HL )
+                if shape == "Arrow":
+                    arrow_collision = L - ( (h-idm)/HL )
+                else:
+                    # derived from the relationship
+                    # beta/idm = L / 0.5H
+                    arrow_collision = 2 * idm * L / H
             else:
-                arrow_collision = head_start + (h+idm)/Hl
+                if shape == "Arrow":
+                    arrow_collision = head_start + (h+idm)/Hl
+                else:
+                    arrow_collision = head_start + (idm*scaling)
             
             # "linker half height"
             lhh = 0.125 * H
@@ -2578,9 +2958,9 @@ class BGCProtein:
                 AC = domain["AC"]
                 regions = domain["regions"]
 
-                vertices = list()
-                vertices_top = list()
-                vertices_bottom = list()
+                vertices = []
+                vertices_top = []
+                vertices_bottom = []
 
                 # draw each domain segment
                 for r_num, (dbox_start, dbox_end) in enumerate(regions):
@@ -2611,7 +2991,8 @@ class BGCProtein:
                             vertices_bottom.append(yprime)
                     
                     # Case ii) Rectangle + trepezoid/triangle
-                    elif dbox_start < arrow_collision and dbox_end > arrow_collision:
+                    elif dbox_start < arrow_collision \
+                            and dbox_end > arrow_collision:
                         # Points for linker. Left
                         if r_num > 0:
                             x = [dbox_start, center - lhh]
@@ -2625,7 +3006,8 @@ class BGCProtein:
                         vertices_top.append(b)
 
                         g = [dbox_start, Y + H - idm]
-                        f = [arrow_collision, center + h - idm]
+                        # f = [arrow_collision, center + h - idm]
+                        f = [arrow_collision, Y + H - idm]
                         vertices_bottom.append(g)
                         vertices_bottom.append(f)
 
@@ -2634,9 +3016,20 @@ class BGCProtein:
                             vertices_top.append(d)
                         else:
                             if head_start == 0:
-                                alpha = int(HL*(L-dbox_end))
+                                # squeezed triangle
+                                alpha = HL*(L-dbox_end)
+                                if shape == "Ribbon":
+                                    alpha *= 0.5
                             else:
-                                alpha = int(Hl*(L-dbox_end))
+                                # full arrow/ribbon
+                                alpha = L-dbox_end
+                                if shape == "Arrow":
+                                    alpha *= Hl
+                                else:
+                                    # alpha is scaled in arrows when dividing 
+                                    # by L or l, but not in ribbons
+                                    alpha *= rescale
+                            # alpha = int(alpha)
                         
                             c = [dbox_end, center - alpha]
                             vertices_top.append(c)
@@ -2663,9 +3056,20 @@ class BGCProtein:
                     # Case iii) trapezoid
                     else:
                         if head_start == 0:
+                            # squeezed triangle
                             alpha1 = HL*(L-dbox_start)
+                            if shape == "Ribbon":
+                                alpha1 *= 0.5
                         else:
-                            alpha1 = Hl*(L-dbox_start)
+                            # full arrow/ribbon
+                            alpha1 = L-dbox_start
+                            if shape == "Arrow":
+                                alpha1 *= Hl
+                            else:
+                                # alpha is scaled in arrows when dividing 
+                                # by L or l, but not in ribbons
+                                alpha1 *= rescale
+                        # alpha1 = int(alpha1)
 
                         # Points for linker. Left
                         if r_num > 0:
@@ -2688,8 +3092,14 @@ class BGCProtein:
                         else:
                             if head_start == 0:
                                 alpha2 = HL*(L-dbox_end)
+                                if shape == "Ribbon":
+                                    alpha2 *= 0.5
                             else:
-                                alpha2 = Hl*(L-dbox_end)
+                                alpha2 = (L-dbox_end)
+                                if shape == "Arrow":
+                                    alpha2 *= Hl
+                                else:
+                                    alpha2 *= rescale
 
                             c = [dbox_end, center - alpha2]
                             vertices_top.append(c)
@@ -2724,7 +3134,7 @@ class BGCProtein:
 
                 # Rescale
                 for v in vertices:
-                    v[0] = v[0]/scaling
+                    v[0] = v[0]*rescale
 
                 # Make element
                 # General properties of the current domain: color and title
@@ -2785,15 +3195,9 @@ class BGCProtein:
                 domain_node_main.append(domain_inner)
                 domain_elements.append(domain_node_main)
 
-        # Draw intron elements
-        for intron_element in intron_elements:
-            main_group.append(intron_element)
-
         # Draw domains on top
         for domain_element in domain_elements:
             main_group.append(domain_element)
-
-        
 
         return main_group
 
@@ -2805,22 +3209,25 @@ class BGCDomain:
         self.protein = protein
         self.ID = ID                # domain short name e.g. 'ketoacyl-synt'
         self.AC = AC                # domain accession. e.g. 'PF00109.27'
-        self.DE = DE                # domain description. e.g. 'Beta-ketoacyl synthase, N-terminal domain'
+        self.DE = DE                # domain description. e.g. 
+                                   #'Beta-ketoacyl synthase, N-terminal domain'
         self.alias = alias          # domain alias e.g. 'KS'
         self.ali_from = ali_from    # Position in target sequence at which the 
         self.ali_to = ali_to        #   hit starts/ends
         self.hmm_from = hmm_from    # Position in the hmm at which the hit 
         self.hmm_to = hmm_to        #   starts/ends
         self.hmm_size = hmm_size    # Size of the hmm model
-        self.score = score          # Only depends on profile HMM and target seq.
-        self.Evalue = Evalue        # Based on score and DB size
-        self.algn_seq = algn_seq    # Sequence of hit, aligned to the hmm profile
+        self.score = score          # Only depends on profile HMM & target seq.
+        self.Evalue = Evalue        # Depends on score and DB size
+        self.algn_seq = algn_seq    # Sequence of hit, aligned to hmm profile
         
     def get_sequence(self):
         return self.protein.sequence[self.ali_from:self.ali_to]
 
     def get_aligned_sequence(self):
-        return "{}{}{}".format("-"*self.hmm_from, self.algn_seq, "-"*(self.hmm_size-self.hmm_to))
+        dashfrom = "-"*self.hmm_from
+        dashto = "-"*(self.hmm_size-self.hmm_to)
+        return f"{dashfrom}{self.algn_seq}{dashto}"
 
 
 
@@ -2835,7 +3242,7 @@ class Organism:
 
 class Metabolite:
     def __init__(self):
-        self.name = ""                  # e.g. "1,3,6,8-tetrahydroxynaphthalene"
+        self.name = ""                  # e.g "1,3,6,8-tetrahydroxynaphthalene"
         self.alias = []                 # Alternative names e.g. "THN"
         self.database = {}              # Key=database (PubChem, 
                                         #  ChemSpider, etc.). Item=id
