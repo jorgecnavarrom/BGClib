@@ -2,3 +2,6 @@ BGClib/__pycache__
 BGClib/data/Domain_models/*.h3*
 temp/
 .venv/
+build/
+dist/
+.DS_Store
