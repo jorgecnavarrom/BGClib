@@ -912,16 +912,25 @@ def draw_svg_stacked(
 
     # obtain max_L considering all the starting offsets
     max_L = 0
-    for distance in bgc_distance_to_target:
+    assert len(bgc_distance_to_target) == len(draw_order_bgcs)
+    for distance, bgc in zip(bgc_distance_to_target, draw_order_bgcs):
+        if bgc is None:
+            continue
+
         if distance == -1:
-            max_L = max(max_L, bgc_lengths[bgc_id])
+            max_L = max(max_L, bgc_lengths[bgc.identifier])
         else:
-            max_L = max(max_L, bgc_lengths[bgc_id] \
+            max_L = max(max_L, bgc_lengths[bgc.identifier] \
                 + start_to_target_max_offset \
                 - distance)
 
     # Start SVG internal structure
-    row_height = 2*svgopts.arrow_height # one for the arrow, 0.5 + 0.5 for the head height
+    # row_height = 2*svgopts.arrow_height 
+    # one for the arrow
+    row_height = svgopts.arrow_height
+    if svgopts.shape != 'Ribbon':
+        row_height *= 2 # Double height for the arrow head (0.5 + 0.5)
+
     inner_row_height = row_height + thickness
     base_attribs = {"version":"1.1", 
                     "baseProfile":"full", 
@@ -930,14 +939,16 @@ def draw_svg_stacked(
     root = etree.Element("svg", attrib=base_attribs, nsmap={None:'http://www.w3.org/2000/svg'})
     
     # Add each figure
-    Yoffset = 0
+    Yoffset = svgopts.topbottom_margin
     rows = 0
     for bgc_num, item in enumerate(draw_order_bgcs):
-        Yoffset = rows * inner_row_height
+        # Yoffset = rows * (inner_row_height + svgopts.topbottom_margin)
+        
 
         if item is None:
             if gaps:
                 rows += 1
+                Yoffset += (inner_row_height + svgopts.topbottom_margin)
             continue
         else:
             bgc = item
@@ -949,11 +960,16 @@ def draw_svg_stacked(
             Xoffset = start_to_target_max_offset - bgc_distance_to_target[bgc_num]
         root.append(bgc.xml_BGC(Xoffset, Yoffset, hmmdbs, svgopts, needs_mirroring[bgc_num]))
         rows += 1
-            
+        
+        Yoffset += (inner_row_height + svgopts.topbottom_margin)
         #Yoffset = rows * inner_bgc_height
     
     # Now that we now how many BGCs were actually drawn, add height property
-    root.attrib["height"] = str(int(thickness + rows*(row_height+thickness)))
+    root.attrib["height"] = str(int(
+        2*svgopts.topbottom_margin
+        + thickness 
+        + rows*(inner_row_height + svgopts.topbottom_margin)
+        ))
     
     # Write SVG
     with open(filename, "bw") as f:

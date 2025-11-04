@@ -63,9 +63,9 @@ Terpene_domains =  Terpene_meroterpenoid_domains | Terpene_diterpene_domains \
 DMATS_domain = {"Trp_DMAT"}
 
 # Precursors
-FAS_domains_A = {"Fas_alpha_ACP" ,"FAS_I_H", "ACPS"}
-FAS_domains_B = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
-precursor_domains = FAS_domains_A | FAS_domains_B
+FAS2 = {"Fas_alpha_ACP" ,"FAS_I_H", "ACPS"}
+FAS1 = {"DUF1729", "FAS_meander", "MaoC_dehydrat_N", "MaoC_dehydratas"}
+precursor_domains = FAS1 | FAS2
 
 # TODO: add PT domain in this set until we have a better model?
 hmmdbs_without_tc = {"FNP_terpene_models"}
@@ -1626,7 +1626,8 @@ class ProteinCollection:
     # TODO: TEST!
     # TODO: change to pyhmmer
     # TODO: update data structures of parent clusters
-    def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
+    # def predict_domains(self, hmmdb, domtblout_path="", cpus=1, tc=True, filterdoms=True):
+    def predict_domains(self, hmmdb, cpus=1, tc=True, filterdoms=True):
         """
         Uses hmmscan to search the protein sequences for hmm models specified
         
@@ -1637,12 +1638,12 @@ class ProteinCollection:
             tc: if true, use the model's Trusted Cutoff score (lower score of all
                 true positives)
         """
-        
-        if domtblout_path != "":
-            try:
-                assert not domtblout_path.is_file()
-            except AssertionError:
-                exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
+        domtblout_path = "" # TODO: remove this variable?
+        # if domtblout_path != "":
+        #     try:
+        #         assert not domtblout_path.is_file()
+        #     except AssertionError:
+        #         exit("BGClib.ProteinCollection.predict_domains: domtblout_path should not be a file")
             
         protein_list = []
         for protein_id in self.proteins:
@@ -2178,12 +2179,12 @@ class BGCProtein:
         if self.domain_set & precursor_domains:
             self.role = "precursor"
             
-            if self.domain_set & FAS_domains_A & FAS_domains_B:
+            if self.domain_set & FAS2 & FAS1:
                 self.protein_type = "Fatty Acid Synthase"
-            elif self.domain_set & FAS_domains_A:
-                self.protein_type = "Fatty Acid Synthase A"
-            elif self.domain_set & FAS_domains_B:
-                self.protein_type = "Fatty Acid Synthase B"
+            elif self.domain_set & FAS1:
+                self.protein_type = "Fatty Acid Synthase beta-chain"
+            elif self.domain_set & FAS2:
+                self.protein_type = "Fatty Acid Synthase alpha-chain"
             else:
                 # shouldn't really happen
                 self.protein_type = "unknown_precursor"
@@ -2482,6 +2483,21 @@ class BGCProtein:
                     color = "#d59d7c"
                 return color
             
+            # TODO: remove! this is a hack
+            if self.domain_set & FAS1:
+                return "#66BF7F"
+            elif self.domain_set & FAS2:
+                return "#7CC159"
+            
+            if self.protein_type in {
+                "Fatty Acid Synthase beta-chain",
+                "Fatty Acid Synthase alpha-chain"
+                }:
+                if self.protein_type == "Fatty Acid Synthase beta-chain":
+                    return "#66BF7F"
+                else:
+                    return "#7CC159"
+            
             if len(self.domain_list) > 0:
                 domain = self.domain_list[0]
                 try:
@@ -2568,9 +2584,9 @@ class BGCProtein:
         Starting from upper left corner (X,Y), the vertices of the arrow are
         (clockwise): A, B, C, D (tip of the arrow), E, F, G
                     C
-                    | \
-          (X,Y)A ___|  \
-                |   B   \ 
+                    | \\
+          (X,Y)A ___|  \\
+                |   B   \\ 
                 |       / D
                 |___F  /
                G    | /

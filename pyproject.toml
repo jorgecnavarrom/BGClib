@@ -1,0 +1,21 @@
+[project]
+name = "BGClib"
+description = "Classes and methods for manipulation and analysis of BGCs"
+authors = [
+  {name = "Jorge Navarro", email = "jorgecnavarromunoz@gmail.com"},
+]
+version = "0.7.6"
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "AGPL-3.0-or-later"}
+
+dependencies = [
+  "biopython==1.83",
+  "hmmer >= 3.4",
+  #"gb-io>=0.3.3",
+  "pyhmmer>=0.10.14",
+  "lxml>=5.1.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/jorgecnavarrom/BGClib"
