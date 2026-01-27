@@ -195,9 +195,9 @@ class hmmDB:
             # Also, no type (TP) or clan (CL) info is expected
             with HMMFile(db_path) as hmm_db:
                 for hmm_model in hmm_db:
-                    id = hmm_model.name.decode()
-                    ac = hmm_model.accession.decode()
-                    de = hmm_model.description.decode()
+                    id = hmm_model.name
+                    ac = hmm_model.accession
+                    de = hmm_model.description
 
                     all_ids.add(id)
                     db_ID_to_AC[id] = ac
